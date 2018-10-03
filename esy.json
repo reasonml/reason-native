@@ -1,0 +1,13 @@
+{
+    "name": "reason-native-dev",
+    "version": "0.0.0",
+    "dependencies": {
+
+    },
+    "devDependencies": {
+        "ocaml": "~4.6.0"
+    },
+    "esy": {
+
+    }
+}
