@@ -1,0 +1,43 @@
+{
+  "name": "@reason-native/console",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "pesy",
+    "release": {
+      "releasedBinaries": [
+        "ConsoleApp.exe"
+      ]
+    }
+  },
+  "buildDirs": {
+    "test": {
+      "require": ["console.lib"],
+      "main": "TestConsole",
+      "name": "TestConsole.exe"
+    },
+    "library": {
+      "name": "console.lib",
+      "cNames": ["nativeChannels"],
+      "namespace": "Console",
+      "jsooFlags": ["--pretty"],
+      "jsooFiles": ["nativeChannels.js"]
+    }
+  },
+  "scripts": {
+    "test": "esy x TestConsole.exe",
+    "buildJs": "esy x dune build --profile=release test/TestConsole.bc.js",
+    "testJs": "node _build/default/test/TestConsole.bc.js"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "^3.3.0",
+    "refmterr": "*",
+    "ocaml": "^4.3.0",
+    "pesy": "*"
+  },
+  "devDependencies": {
+    "@esy-ocaml/merlin": "*",
+    "ocaml": "~4.6.0"
+  }
+}
