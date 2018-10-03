@@ -1,0 +1,8 @@
+(executable
+   ; !!!! This dune file is generated from the package.json file. Do NOT modify by hand.
+   ; !!!! Instead, edit the package.json and then rerun 'esy pesy' at the project root.
+   ; The entrypoint module
+   (name TestConsole)  ;  From package.json main field
+   (public_name TestConsole.exe)  ;  From package.json name field
+   (libraries  console.lib ) ;  From package.json require field (array of strings)
+  )
