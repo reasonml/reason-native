@@ -1,0 +1,9 @@
+(library
+   ; !!!! This dune file is generated from the package.json file. Do NOT modify by hand.
+   ; !!!! Instead, edit the package.json and then rerun 'esy pesy' at the project root.
+   ; The namespace other code see this as
+   (name Chalk)
+   (public_name chalk.lib)
+   (libraries  str )
+   (c_names )  ; From package.json cNames field
+  )
