@@ -1,0 +1,94 @@
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+
+cache_key: &cache_key
+  dependencies-{{ arch }}-{{ checksum "package.json" }}-{{ checksum "esy.lock.json" }}
+
+steps: &steps
+- checkout
+
+- run:
+    name: Setup environment variables
+    command: |
+      echo 'export NPM_CONFIG_PREFIX="$HOME/.npm-global"' >> $BASH_ENV
+      echo 'export PATH="$NPM_CONFIG_PREFIX/bin:$PATH"' >> $BASH_ENV
+      echo "export RELEASE_OS=$(uname | tr '[A-Z]' '[a-z]')" >> $BASH_ENV
+
+- run:
+    name: Ensure rsync is installed
+    command: |
+      if [ "$RELEASE_OS" = "linux" ]; then
+        sudo apt-get install -qy rsync;
+      fi
+
+# Download and cache dependencies
+- restore_cache:
+    keys:
+    - *cache_key
+
+- run: npm install -g esy@latest
+- run: esy install
+- run: esy build
+
+- save_cache:
+    paths:
+      - ~/.esy
+    key: *cache_key
+
+- run:
+    name: Run esy test
+    command: esy test
+- run:
+    name: Run the main binary
+    command: esy x ChalkApp.exe
+- run:
+    name: Show all libraries including this package lib
+    command: esy ls-libs
+- run:
+    name: Test Creation of Prebuilt Binary Releases
+    command: esy release
+- run:
+    name: Preparing release tarball
+    command: mv "_release/$(cd _release && npm pack 2>/dev/null)" _release/chalk.tgz
+- run:
+    name: Installing release
+    command: npm install -g ./_release/chalk.tgz
+- run:
+    name: Testing installed release
+    command: "ChalkApp.exe"
+
+
+- store_artifacts:
+    path: _release/chalk.tgz
+    destination: chalk.tgz
+
+environment: &environment
+- TERM: dumb
+
+working_directory: &working_directory
+  ~/repo
+
+version: 2
+jobs:
+  macos:
+    macos:
+      xcode: "9.2.0"
+
+    working_directory: *working_directory
+    environment: *environment
+    steps: *steps
+
+  linux:
+    docker:
+    - image: circleci/node:8-stretch-browsers
+
+    working_directory: *working_directory
+    environment: *environment
+    steps: *steps
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+    - linux
+    - macos
+

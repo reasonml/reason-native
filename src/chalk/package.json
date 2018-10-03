@@ -1,0 +1,39 @@
+{
+  "name": "@reason-native/chalk",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "pesy",
+    "release": {
+      "releasedBinaries": [
+        "ChalkApp.exe"
+      ]
+    }
+  },
+  "buildDirs": {
+    "test": {
+      "require": ["chalk.lib"],
+      "main": "TestChalk",
+      "name": "TestChalk.exe"
+    },
+    "library": {
+      "name": "chalk.lib",
+      "require": ["str"],
+      "namespace": "Chalk"
+    }
+  },
+  "scripts": {
+    "test": "esy x TestChalk.exe"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "refmterr": "*",
+    "ocaml": ">= 4.2.0  <= 4.7.0",
+    "pesy": "*"
+  },
+  "devDependencies": {
+    "@esy-ocaml/merlin": "*",
+    "ocaml": "~4.6.0"
+  }
+}
