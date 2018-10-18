@@ -18,6 +18,41 @@ type colorName =
   | CyanBright
   | WhiteBright;
 
+type color = {
+  black: chalker,
+  red: chalker,
+  green: chalker,
+  yellow: chalker,
+  blue: chalker,
+  magenta: chalker,
+  cyan: chalker,
+  white: chalker,
+  blackBright: chalker,
+  redBright: chalker,
+  greenBright: chalker,
+  yellowBright: chalker,
+  blueBright: chalker,
+  magentaBright: chalker,
+  cyanBright: chalker,
+  whiteBright: chalker,
+};
+
+type modifier = {
+  bold: chalker,
+  dim: chalker,
+  italic: chalker,
+  underline: chalker,
+  inverse: chalker,
+  hidden: chalker,
+  strikethrough: chalker,
+};
+
+let length: string => int;
+
+let modifier: modifier;
+let color: color;
+let bg: color;
+
 let bold: chalker;
 let dim: chalker;
 let italic: chalker;
