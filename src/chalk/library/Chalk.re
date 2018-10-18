@@ -80,6 +80,19 @@ let color: color = {
   whiteBright: createChalker(Ansi.color.whiteBright),
 };
 
+let lengthRegex = {
+  let start = "\027\\[";
+  let middle = "[0-9]+";
+  let stop = "m";
+  Str.regexp(start ++ middle ++ stop);
+};
+
+let length = (s: string): int => {
+  let parts = Str.split(lengthRegex, s);
+  let noColor = String.concat("", parts);
+  String.length(noColor);
+};
+
 let black = color.black;
 
 let red = color.red;
