@@ -1,3 +1,6 @@
+/***
+ * Copyright 2004-present Facebook. All Rights Reserved.
+ */
 type chalker = string => string;
 
 type colorName =

@@ -1,3 +1,6 @@
+/***
+ * Copyright 2004-present Facebook. All Rights Reserved.
+ */
 let makeCodesRegex = codes => {
   let start = "\027\\[";
   let openParen = "\\(";
@@ -90,12 +93,24 @@ let rec reduceTokens = (style: Ansi.style, str, tokens) =>
       String.concat("", [str, style.start, text, style.stop]),
       rest,
     )
-  | _ =>
-    raise(
-      ParsingError(
-        "Unexpected sequence of tokens while parsing string for Chalk",
+  /* This case should only be hit when the user's input is a string containing
+   * ANSI escape sequences that Chalk also uses */
+  | [Starts(escapeCodes) | Stops(escapeCodes), Text(text), ...rest] =>
+    reduceTokens(
+      style,
+      String.concat(
+        "",
+        /* persist input escape codes by applying them to the inner text,
+         * and then also after the stop code in case the stop code
+         * for the style conflicts with the escape codes from user input */
+        [str, style.start, escapeCodes, text, style.stop, escapeCodes],
       ),
+      rest,
     )
+  /* This case should only be hit when the user's input
+   * is a string containing ANSI escape sequences that Chalk also uses */
+  | [Starts(escapeCodes) | Stops(escapeCodes), ...rest] =>
+    reduceTokens(style, String.concat("", [str, escapeCodes]), rest)
   };
 
 let createChalker = (style: Ansi.style, str) =>
