@@ -1,0 +1,11 @@
+
+; !!!! This dune file is generated from the package.json file by pesy. If you modify it by hand
+; !!!! your changes will be undone! Instead, edit the package.json and then rerun 'esy pesy' at the project root.
+; !!!! If you want to stop using pesy and manage this file by hand, change pacakge.json's 'esy.build' command to: refmterr dune build -p  test-runner
+(executable
+   ; The entrypoint module
+   (name TestTestRunner)  ;  From package.json main field
+   ; The name of the executable (runnable via esy x TestTestRunner.exe) 
+   (public_name TestTestRunner.exe)  ;  From package.json name field
+   (libraries  test-runner.lib ) ;  From package.json require field (array of strings)
+)

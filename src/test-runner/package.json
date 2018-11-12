@@ -1,0 +1,37 @@
+{
+  "name": "test-runner",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "pesy"
+  },
+  "buildDirs": {
+    "test": {
+      "require": ["test-runner.lib"],
+      "main": "TestTestRunner",
+      "name": "TestTestRunner.exe"
+    },
+    "library": {
+      "name": "test-runner.lib",
+      "namespace": "TestRunner",
+      "require": ["chalk.lib, file-context-printer.lib, core_extended"]
+    }
+  },
+  "scripts": {
+    "test": "esy x TestTestRunner.exe"
+  },
+  "//": "TODO publish @reason-native/chalk, @reason-native/file-context-printer and reference npm version",
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "@opam/core_extended": "*",
+    "refmterr": "*",
+    "ocaml": ">= 4.2.0  <= 4.7.0",
+    "@reason-native/chalk": "link:../chalk",
+    "@reason-native/file-context-printer": "link:../file-context-printer",
+    "pesy": "*"
+  },
+  "devDependencies": {
+    "@esy-ocaml/merlin": "*"
+  }
+}
