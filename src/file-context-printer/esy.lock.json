@@ -1,5 +1,5 @@
 {
-  "hash": "8db32573de015ca4912814a79b1d1fd5",
+  "hash": "648ada9d0d6af1c0c0b1bf37eb675d89",
   "root": "root@path:./package.json",
   "node": {
     "root@path:./package.json": {
@@ -12,8 +12,8 @@
       },
       "dependencies": [
         "@esy-ocaml/merlin@3.0.5005", "@esy-ocaml/reason@3.3.7",
-        "@opam/dune@opam:1.5.1", "ocaml@4.6.7", "pesy@0.3.14",
-        "refmterr@3.1.9"
+        "@opam/dune@opam:1.5.1", "@opam/re@opam:1.7.3",
+        "@reason-native/chalk@link:../chalk", "ocaml@4.6.7", "pesy@0.3.14"
       ]
     },
     "refmterr@3.1.9": {
@@ -51,6 +51,19 @@
         "opam": null
       },
       "dependencies": []
+    },
+    "@reason-native/chalk@link:../chalk": {
+      "record": {
+        "name": "@reason-native/chalk",
+        "version": "link:../chalk",
+        "source": "link:../chalk",
+        "files": [],
+        "opam": null
+      },
+      "dependencies": [
+        "@esy-ocaml/reason@3.3.7", "@opam/dune@opam:1.5.1", "ocaml@4.6.7",
+        "pesy@0.3.14", "refmterr@3.1.9"
+      ]
     },
     "@opam/yojson@opam:1.4.1": {
       "record": {

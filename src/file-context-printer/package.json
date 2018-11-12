@@ -1,0 +1,33 @@
+{
+    "name": "@reason-native/file-context-printer",
+    "version": "0.0.0",
+    "esy": {
+      "build": "pesy"
+    },
+    "buildDirs": {
+      "library": {
+        "name": "file-context-printer.lib",
+        "require": ["str", "re", "chalk.lib"]
+      },
+      "test": {
+        "require": ["file-context-printer.lib"],
+        "main": "Test",
+        "name": "TestFCP.exe"
+      }
+    },
+    "scripts": {
+    },
+    "//": "TODO publish @reason-native/chalk and reference npm version",
+    "dependencies": {
+      "@opam/dune": "*",
+      "@esy-ocaml/reason": "*",
+      "ocaml": ">= 4.2.0  <= 4.7.0",
+      "pesy": "*",
+      "@opam/re": "*",
+      "@reason-native/chalk": "link:../chalk"
+    },
+    "devDependencies": {
+      "@esy-ocaml/merlin": "*",
+      "ocaml": "~4.6.0"
+    }
+  }

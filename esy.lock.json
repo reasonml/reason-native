@@ -1,0 +1,27 @@
+{
+  "hash": "2a78e85bc6c0acf34a3c4df9faf2563e",
+  "root": "root@path:./esy.json",
+  "node": {
+    "root@path:./esy.json": {
+      "record": {
+        "name": "root",
+        "version": "path:./esy.json",
+        "source": "path:./esy.json",
+        "files": [],
+        "opam": null
+      },
+      "dependencies": [ "ocaml@4.6.7" ]
+    },
+    "ocaml@4.6.7": {
+      "record": {
+        "name": "ocaml",
+        "version": "4.6.7",
+        "source":
+          "archive:https://registry.npmjs.org/ocaml/-/ocaml-4.6.7.tgz#sha1:5bfdf7f9b7752646c2a5ad3c9e4021180eeab704",
+        "files": [],
+        "opam": null
+      },
+      "dependencies": []
+    }
+  }
+}
