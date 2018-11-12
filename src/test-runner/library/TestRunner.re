@@ -4,28 +4,13 @@
 open Collections;
 open MatcherUtils;
 open SnapshotIO;
+open Option.Infix;
 
 module FCP =
   FileContextPrinter.Make({
     let linesBefore = 3;
     let linesAfter = 3;
   });
-
-let (>>=) = (o, f) =>
-  switch (o) {
-  | Some(x) => f(x)
-  | None => None
-};
-let (|?:) = (o, default) =>
-  switch (o) {
-  | Some(value) => value
-  | None => default
-};
-let (>>|) = (opt, fn) =>
-  switch (opt) {
-  | Some(value) => Some(fn(value))
-  | None => None
-};
 
 module Test = {
   type testResult =
