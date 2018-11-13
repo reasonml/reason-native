@@ -2,18 +2,8 @@
     "name": "@reason-native/file-context-printer",
     "version": "0.0.0",
     "esy": {
-      "build": "pesy"
-    },
-    "buildDirs": {
-      "library": {
-        "name": "file-context-printer.lib",
-        "require": ["str", "re", "chalk.lib"]
-      },
-      "test": {
-        "require": ["file-context-printer.lib"],
-        "main": "Test",
-        "name": "TestFCP.exe"
-      }
+      "build": "refmterr dune build -p file-context-printer",
+      "install": "esy-installer file-context-printer.install"
     },
     "scripts": {
     },
@@ -22,9 +12,8 @@
       "@opam/dune": "*",
       "@esy-ocaml/reason": "*",
       "ocaml": ">= 4.2.0  <= 4.7.0",
-      "pesy": "*",
       "@opam/re": "*",
-      "@reason-native/chalk": "link:../chalk"
+      "@reason-native/chalk": "*"
     },
     "devDependencies": {
       "@esy-ocaml/merlin": "*",

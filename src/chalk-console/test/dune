@@ -5,4 +5,5 @@
    (name TestChalkConsole)  ;  From package.json main field
    (public_name TestChalkConsole.exe)  ;  From package.json name field
    (libraries  chalk-console.lib ) ;  From package.json require field (array of strings)
+   (package chalk-console)
   )

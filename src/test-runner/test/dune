@@ -5,7 +5,8 @@
 (executable
    ; The entrypoint module
    (name TestTestRunner)  ;  From package.json main field
-   ; The name of the executable (runnable via esy x TestTestRunner.exe) 
+   ; The name of the executable (runnable via esy x TestTestRunner.exe)
    (public_name TestTestRunner.exe)  ;  From package.json name field
    (libraries  test-runner.lib ) ;  From package.json require field (array of strings)
+   (package test-runner)
 )

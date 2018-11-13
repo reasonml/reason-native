@@ -5,7 +5,7 @@
    (name Console)
    (public_name console.lib)
    (c_names  nativeChannels )  ; From package.json cNames field
-   (js_of_ocaml 
+   (js_of_ocaml
      (flags ( --pretty ))  ; From package.json jsooFlags field
      (javascript_files  nativeChannels.js )  ; From package.json jsooFiles field
    )

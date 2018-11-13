@@ -3,24 +3,8 @@
   "version": "0.0.0",
   "description": "My Project",
   "esy": {
-    "build": "pesy",
-    "release": {
-      "releasedBinaries": [
-        "ChalkConsoleApp.exe"
-      ]
-    }
-  },
-  "buildDirs": {
-    "test": {
-      "require": ["chalk-console.lib"],
-      "main": "TestChalkConsole",
-      "name": "TestChalkConsole.exe"
-    },
-    "library": {
-      "name": "chalk-console.lib",
-      "namespace": "ChalkConsole",
-      "require": ["console.lib", "chalk.lib"]
-    }
+    "build": "refmterr dune build -p chalk-console",
+    "install": "esy-installer chalk-console.install"
   },
   "scripts": {
     "test": "esy x TestChalkConsole.exe"
@@ -31,8 +15,7 @@
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
-    "ocaml": "~4.2.3",
-    "pesy": "*"
+    "ocaml": ">= 4.2.0  <= 4.7.0"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",

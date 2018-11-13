@@ -3,26 +3,8 @@
   "version": "0.0.0",
   "description": "My Project",
   "esy": {
-    "build": "pesy",
-    "release": {
-      "releasedBinaries": [
-        "ConsoleApp.exe"
-      ]
-    }
-  },
-  "buildDirs": {
-    "test": {
-      "require": ["console.lib"],
-      "main": "TestConsole",
-      "name": "TestConsole.exe"
-    },
-    "library": {
-      "name": "console.lib",
-      "cNames": ["nativeChannels"],
-      "namespace": "Console",
-      "jsooFlags": ["--pretty"],
-      "jsooFiles": ["nativeChannels.js"]
-    }
+    "build": "refmterr dune build -p console",
+    "install": "esy-installer console.install"
   },
   "scripts": {
     "test": "esy x TestConsole.exe",
@@ -33,8 +15,7 @@
     "@opam/dune": "*",
     "@esy-ocaml/reason": "^3.3.0",
     "refmterr": "*",
-    "ocaml": "^4.3.0",
-    "pesy": "*"
+    "ocaml": ">= 4.2.0  <= 4.7.0"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",

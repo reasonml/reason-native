@@ -5,7 +5,8 @@
 (executable
    ; The entrypoint module
    (name Test)  ;  From package.json main field
-   ; The name of the executable (runnable via esy x TestFCP.exe) 
+   ; The name of the executable (runnable via esy x TestFCP.exe)
    (public_name TestFCP.exe)  ;  From package.json name field
    (libraries  file-context-printer.lib ) ;  From package.json require field (array of strings)
+   (package file-context-printer)
 )

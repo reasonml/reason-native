@@ -3,19 +3,8 @@
   "version": "0.0.0",
   "description": "My Project",
   "esy": {
-    "build": "pesy"
-  },
-  "buildDirs": {
-    "test": {
-      "require": ["test-runner.lib"],
-      "main": "TestTestRunner",
-      "name": "TestTestRunner.exe"
-    },
-    "library": {
-      "name": "test-runner.lib",
-      "namespace": "TestRunner",
-      "require": ["chalk.lib, file-context-printer.lib, core_extended"]
-    }
+    "build": "refmterr dune build -p test-runner",
+    "install": "esy-installer test-runner.install"
   },
   "scripts": {
     "test": "esy x TestTestRunner.exe"
@@ -27,9 +16,8 @@
     "@opam/core_extended": "*",
     "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
-    "@reason-native/chalk": "link:../chalk",
-    "@reason-native/file-context-printer": "link:../file-context-printer",
-    "pesy": "*"
+    "@reason-native/chalk": "*",
+    "@reason-native/file-context-printer": "*"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*"
