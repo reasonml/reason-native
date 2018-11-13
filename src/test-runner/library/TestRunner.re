@@ -55,6 +55,10 @@ module Describe = {
   and describeFn = (string, describeUtils => unit) => unit;
 };
 
+module type TestRunner = {
+  let rootDescribe: Describe.rootDescribeFn;
+}
+
 module Make = (TestSnapshotIO: SnapshotIO) => {
   module TestSnapshot = Snapshot.Make(TestSnapshotIO);
 
