@@ -1,0 +1,7 @@
+
+(executable
+   (name TestRunnerTest)
+   (public_name TestRunnerTest.exe)
+   (libraries  test-runner.test )
+   (package test-runner)
+)
