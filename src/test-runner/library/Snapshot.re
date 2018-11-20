@@ -137,7 +137,11 @@ module Make = (IO: SnapshotIO) => {
         ];
     };
 
-    String.concat("\n", messages^);
+    if (List.length(messages^) > 0) {
+      Some(String.concat("\n", messages^));
+    } else {
+      None;
+    };
   };
 
   let removeUnusedSnapshots = state =>

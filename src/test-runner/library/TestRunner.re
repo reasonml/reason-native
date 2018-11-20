@@ -53,7 +53,7 @@ module Describe = {
       ~describeName: option(string),
       describeUtils => unit
     ) =>
-    unit
+    list(MIntMap.t(Test.testSpec))
   and describeFn = (string, describeUtils => unit) => unit;
 };
 
@@ -152,9 +152,9 @@ module Make = (UserConfig: FrameworkConfig) => {
       let describeName = describeName |?: "root describe";
       let printSnapshotStatus = () =>
         if (isRootDescribe) {
-          print_endline(
-            TestSnapshot.getSnapshotStatus(state.snapshotState^),
-          );
+          let _ = state.snapshotState^
+          |> TestSnapshot.getSnapshotStatus
+          >>| print_endline;
         };
       let testHashes = state.testHashes;
       /* This will generate unique IDs for tests within this describe. */
@@ -296,19 +296,23 @@ module Make = (UserConfig: FrameworkConfig) => {
           ();
         };
       /* Prepend the original describe name before the next one when nesting */
-      let describeFn = (describeName2, fn) =>
-        rootDescribe(
-          ~config,
-          ~isRootDescribe=false,
-          ~state=Some(state),
-          ~describeName=
-            Some(
-              isRootDescribe ?
-                describeName2 :
-                describeName ++ ancestrySeparator ++ describeName2,
-            ),
-          fn,
-        );
+      let testMaps = ref([]);
+      let describeFn = (describeName2, fn) => {
+        let resultMap =
+          rootDescribe(
+            ~config,
+            ~isRootDescribe=false,
+            ~state=Some(state),
+            ~describeName=
+              Some(
+                isRootDescribe ?
+                  describeName2 :
+                  describeName ++ ancestrySeparator ++ describeName2,
+              ),
+            fn,
+          );
+        testMaps := testMaps^ @ resultMap;
+      };
       let utils = {describe: describeFn, test: testFn};
       /* Gather all the tests */
       fn(utils);
@@ -471,9 +475,28 @@ module Make = (UserConfig: FrameworkConfig) => {
             |> String.concat("\n\n")
             |> print_endline;
           printSnapshotStatus();
-          /* Exit with non-zero exit code since there were test failures */
-          exit(1);
         };
+      };
+      if (isRootDescribe) {
+        failed :=
+          List.fold_left(
+            (num, m) => {
+              let failures = ref(0);
+              m
+              |> MIntMap.values
+              |> List.iter(spec =>
+                   switch (spec.testResult) {
+                   | Pending
+                   | Passed => ()
+                   | Failed(_)
+                   | Exception(_) => incr(failures)
+                   }
+                 );
+              num + failures^;
+            },
+            0,
+            testMaps^,
+          );
       };
       if (failed^ === 0 && isRootDescribe) {
         /* mark pending and failed tests as checked so we don't delete their associated snapshots */
@@ -496,27 +519,32 @@ module Make = (UserConfig: FrameworkConfig) => {
         TestSnapshot.removeUnusedSnapshots(state.snapshotState^);
       };
       printSnapshotStatus();
+      if (failed^ > 0 && isRootDescribe) {
+        exit(1);
+      };
+      testMaps^ @ [testMap];
     };
 
   let testFixtures = ref([]);
   let describe = (name, describeBlock) =>
     testFixtures := testFixtures^ @ [(name, describeBlock)];
   let run = (config: RunConfig.t) => {
-    rootDescribe(
-      ~config={
-        updateSnapshots: config.updateSnapshots,
-        snapshotDir: UserConfig.config.snapshotDir,
-        updateSnapshotsFlag: UserConfig.config.updateSnapshotsFlag,
-      },
-      ~isRootDescribe=true,
-      ~state=None,
-      ~describeName=None,
-      ({describe}) =>
-      List.iter(
-        ((name, describeBlock)) => describe(name, describeBlock),
-        testFixtures^,
-      )
-    );
+    let _ =
+      rootDescribe(
+        ~config={
+          updateSnapshots: config.updateSnapshots,
+          snapshotDir: UserConfig.config.snapshotDir,
+          updateSnapshotsFlag: UserConfig.config.updateSnapshotsFlag,
+        },
+        ~isRootDescribe=true,
+        ~state=None,
+        ~describeName=None,
+        ({describe}) =>
+        List.iter(
+          ((name, describeBlock)) => describe(name, describeBlock),
+          testFixtures^,
+        )
+      );
     ();
   };
 };
