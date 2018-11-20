@@ -36,6 +36,8 @@ module Describe = {
     updateSnapshots: bool,
     updateSnapshotsFlag: string,
     snapshotDir: string,
+    printer: RunConfig.printer,
+    onTestFrameworkFailure: unit => unit,
   };
   type describeState = {
     testHashes: MStringSet.t,
@@ -148,13 +150,18 @@ module Make = (UserConfig: FrameworkConfig) => {
               ),
             ),
         };
+      open RunConfig;
+
+      let {printEndline, printString, printNewline, flush } = config.printer;
 
       let describeName = describeName |?: "root describe";
       let printSnapshotStatus = () =>
         if (isRootDescribe) {
-          let _ = state.snapshotState^
-          |> TestSnapshot.getSnapshotStatus
-          >>| print_endline;
+          let _ =
+            state.snapshotState^
+            |> TestSnapshot.getSnapshotStatus
+            >>| printEndline;
+          ();
         };
       let testHashes = state.testHashes;
       /* This will generate unique IDs for tests within this describe. */
@@ -356,18 +363,17 @@ module Make = (UserConfig: FrameworkConfig) => {
           let diff = prev^ - updateLength;
           if (diff > 0) {
             /* This moves back `diff` columns then clears to end of line */
-            print_string(
+            printString(
               "\027[" ++ string_of_int(diff) ++ "D\027[K",
             );
           };
-          print_string("\r" ++ update);
+          printString("\r" ++ update);
           flush(stdout);
           prev := updateLength;
         };
 
         let _ =
-          isRootDescribe ?
-            () : print_endline(Chalk.whiteBright(describeName));
+          isRootDescribe ? () : printEndline(Chalk.whiteBright(describeName));
 
         update(true);
         let _ =
@@ -389,7 +395,7 @@ module Make = (UserConfig: FrameworkConfig) => {
             },
             testMap,
           );
-        print_newline();
+        printNewline();
 
         let getStackInfo = (optLoc: option(Printexc.location), trace: string) => {
           let stackInfo =
@@ -423,7 +429,7 @@ module Make = (UserConfig: FrameworkConfig) => {
         };
 
         if (failed^ > 0) {
-          print_newline();
+          printNewline();
           let _ =
             testMap
             |> MIntMap.toList
@@ -473,7 +479,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                })
             |> List.filter(res => res != "")
             |> String.concat("\n\n")
-            |> print_endline;
+            |> printEndline;
           printSnapshotStatus();
         };
       };
@@ -520,7 +526,7 @@ module Make = (UserConfig: FrameworkConfig) => {
       };
       printSnapshotStatus();
       if (failed^ > 0 && isRootDescribe) {
-        exit(1);
+        config.onTestFrameworkFailure();
       };
       testMaps^ @ [testMap];
     };
@@ -535,6 +541,8 @@ module Make = (UserConfig: FrameworkConfig) => {
           updateSnapshots: config.updateSnapshots,
           snapshotDir: UserConfig.config.snapshotDir,
           updateSnapshotsFlag: UserConfig.config.updateSnapshotsFlag,
+          printer: config.printer,
+          onTestFrameworkFailure: config.onTestFrameworkFailure
         },
         ~isRootDescribe=true,
         ~state=None,
