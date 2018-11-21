@@ -1,0 +1,44 @@
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 6, characters 24-58:[22m
+[2m# [22m[2mError: Signature mismatch:[22m
+[2m# [22m[2m       Modules do not match:[22m
+[2m# [22m[2m         sig type wrongArity = int end[22m
+[2m# [22m[2m       is not included in[22m
+[2m# [22m[2m         Sig[22m
+[2m# [22m[2m       Type declarations do not match:[22m
+[2m# [22m[2m         type wrongArity = int[22m
+[2m# [22m[2m       is not included in[22m
+[2m# [22m[2m         type 'a wrongArity[22m
+[2m# [22m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 3, characters 2-20:[22m
+[2m# [22m[2m         Expected declaration[22m
+[2m# [22m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 7, characters 2-23:[22m
+[2m# [22m[2m         Actual declaration[22m
+[2m# [22m[2m       They have different arities.[22m
+
+
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml[24m[39m[2m[4m:6:24-8:3[24m[22m 
+
+[2m3 ┆ [22m[2m  [22m[35m[2mtype[22m[39m[2m 'a wrongArity[22m
+[2m4 ┆ [22m[2mend[22m
+[2m5 ┆ [22m
+[31m[2m6 ┆ [22m[39m[35m[2mmodule[22m[39m[2m [22m[34m[2mMyModule[22m[39m[2m : [22m[34m[2mSig[22m[39m[2m = [22m[31m[1m[4mstruct[24m[22m[39m
+[31m[2m7 ┆ [22m[39m  [31m[1m[4mtype wrongArity = int[24m[22m[39m
+[31m[2m8 ┆ [22m[39m[31m[1m[4mend[24m[22m[39m
+[2m9 ┆ [22m
+
+[1mThis module contains a type definition with the wrong number of type parameters [22m
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml[39m[2m:3[22m
+  the signature required that the type be defined as:
+
+  [32m[1mtype wrongArity('a);[22m[39m
+
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml[39m[2m:7[22m
+  your module defined the type to be:
+
+  [31m[1mtype wrongArity = int;[22m[39m
+
+
+
+

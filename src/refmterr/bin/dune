@@ -1,0 +1,22 @@
+(
+  executable 
+
+    ; The public name of the binary (name by which it is ran). Choosing same name
+    ; as main module name.
+    (public_name berror.exe)
+    (package refmterr)
+
+    ; The main module that will become the binary.
+    (name berror)
+    (ocamlopt_flags (-g -verbose))
+
+    ; Depends on:
+    ; - 2 local libraries defined in this project.
+    ; - 1 library flow parser, defined in package dependency flow_parser.
+    (libraries refmterr.lib re.pcre unix)
+)
+
+(install
+ (section bin)
+ (package refmterr)
+ (files (refmterr as refmterr)))

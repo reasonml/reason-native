@@ -1,0 +1,14 @@
+  > Unformatted Error Output:
+  > File "ast-utils/JSParser.re", line 279, characters 15-28:
+  > Error: The field Literal.value belongs to the record type Ast.Literal.t
+  >        but a field was expected belonging to the record type
+  >          Ast.StringLiteral.t
+
+Error: ast-utils/JSParser.re:279 15-28
+276 ¦     Statement.ImportDeclaration.importKind,
+277 ¦     Statement.ImportDeclaration.source: (
+278 ¦       _,
+279 ¦       {Literal.value: Literal.String(source)},
+280 ¦     ),
+281 ¦   }),
+282 ¦ )) =>
