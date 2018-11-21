@@ -1,5 +1,5 @@
 (
-  executable 
+  executable
 
     ; The public name of the binary (name by which it is ran). Choosing same name
     ; as main module name.

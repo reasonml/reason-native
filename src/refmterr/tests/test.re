@@ -134,7 +134,7 @@ let forEachTest = (i, (dirname, fileCount, indicesWithInterfaces, indicesWithRea
     ignore(
       Sys.command(
         Printf.sprintf(
-          "%s 2>&1 | ./_esy/default/build/install/default/bin/berror.exe --path-to-refmttype refmttype > %s",
+          "%s 2>&1 | ../../_esy/default/build/install/default/bin/berror.exe --path-to-refmttype refmttype > %s",
           cmd,
           actualOutputName,
         ),

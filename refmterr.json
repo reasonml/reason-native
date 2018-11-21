@@ -1,0 +1,25 @@
+{
+    "name": "refmterr",
+    "version": "3.1.7",
+    "description": "Reason Formatting of Errors",
+    "dependencies": {
+      "@opam/dune": "*",
+      "@opam/re": "*",
+      "@esy-ocaml/reason": "^3.0.0",
+      "ocaml": " >= 4.2.0  < 4.8.0",
+      "@reason-native/chalk": "*",
+      "@reason-native/console": "*"
+    },
+    "author": {
+      "name": "chenglou"
+    },
+    "devDependencies": {
+      "@esy-ocaml/merlin": "*",
+      "ocaml": "~4.6.0",
+      "@esy-ocaml/reason": "3.3.3"
+    },
+    "esy": {
+        "build": "refmterr dune build -p refmterr",
+        "install": "esy-installer refmterr.install"
+      }
+  }
