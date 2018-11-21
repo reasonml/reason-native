@@ -1,0 +1,19 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_IncompatibleType/type_IncompatibleType_6.ml", line 3, characters 32-39:[0m
+[2m# [0m[2mError: This expression has type string but an expression was expected of type[0m
+[2m# [0m[2m         string -> 'a -> 'b[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_IncompatibleType/type_IncompatibleType_6.ml[0m[4m[2m[39m:3 32-39[0m [1m[31m[0m
+
+[2m1 ┆ [0m[2m[35mlet[0m[2m[39m iTakeAFunction f a = f [0m[2m[32m"yes"[0m[2m[39m a[0m
+[2m2 ┆ [0m
+[2m[31m3 ┆ [0m[2m[35mlet[0m[2m[39m () = ignore (iTakeAFunction [0m[4m[1m[31m"rebel"[0m[2m[39m)[0m
+
+[1mThis type doesn't match what is expected.[0m
+
+  This type: [31m[0m[1m[31mstring[0m[31m[0m
+  Expecting: [32m[0m[1m[32m(string, 'a) => 'b[0m[32m[0m
+
+
+

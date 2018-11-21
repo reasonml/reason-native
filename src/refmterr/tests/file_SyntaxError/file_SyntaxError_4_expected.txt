@@ -1,0 +1,17 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/file_SyntaxError/file_SyntaxError_4.ml", line 5, characters 23-24:[0m
+[2m# [0m[2mError: Syntax error[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/file_SyntaxError/file_SyntaxError_4.ml[0m[4m[2m[39m:5 23-24[0m [1m[31m[0m
+
+[2m2 ┆ [0m[2m[39m  path: [0m[2m[33mstring[0m[2m[39m;[0m
+[2m3 ┆ [0m[2m[39m  messages: message [0m[2m[33mlist[0m[2m[39m;[0m
+[2m4 ┆ [0m[2m[39m}[0m
+[2m[31m5 ┆ [0m[2m[35mtype[0m[2m[39m output = file [0m[2m[33mlist[0m[4m[1m[31m;[0m
+
+This is a syntax error.
+Make sure all imperative statements, as well as let/type bindings have exactly one semicolon separating them.
+Note: the location indicated might not be accurate.
+
+

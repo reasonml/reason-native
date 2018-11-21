@@ -1,0 +1,22 @@
+
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_IncompatibleType/type_IncompatibleType_9.ml", line 2, characters 31-54:[0m
+[2m# [0m[2mError: This pattern matches values of type string -> string[0m
+[2m# [0m[2m       but a pattern was expected which matches values of type string[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_IncompatibleType/type_IncompatibleType_9.ml[0m[4m[2m[39m:2 31-54[0m [1m[31m[0m
+
+[2m1 ┆ [0m
+[2m[31m2 ┆ [0m[2m[35mlet[0m[2m[39m x : [0m[2m[33mstring[0m[2m[39m -> [0m[2m[33mstring[0m[2m[39m = fun [0m[4m[1m[31m(ss : string -> string)[0m[2m[39m -> ss[0m
+[2m3 ┆ [0m
+[2m4 ┆ [0m
+[2m5 ┆ [0m
+
+[1mThis pattern type doesn't match what is expected.[0m
+
+  This type: [31mstring[0m[1m[31m => string[0m[31m[0m
+  Expecting: [32mstring[0m[1m[32m[0m[32m[0m
+
+
+

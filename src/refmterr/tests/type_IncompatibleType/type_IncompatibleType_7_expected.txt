@@ -1,0 +1,34 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_IncompatibleType/type_IncompatibleType_7.ml", line 15, characters 13-16:[0m
+[2m# [0m[2mError: This expression has type Abc.myInt -> Def.myFloat[0m
+[2m# [0m[2m       but an expression was expected of type Abc.myString -> Def.myBool[0m
+[2m# [0m[2m       Type Abc.myInt = int is not compatible with type Abc.myString = string [0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_IncompatibleType/type_IncompatibleType_7.ml[0m[4m[2m[39m:15 13-16[0m [1m[31m[0m
+
+[2m12 ┆ [0m
+[2m13 ┆ [0m[2m[35mlet[0m[2m[39m dec (f: [0m[2m[34mAbc[0m[2m[39m.myString -> [0m[2m[34mDef[0m[2m[39m.myBool) = [0m[2m[34m1[0m
+[2m14 ┆ [0m
+[2m[31m15 ┆ [0m[2m[35mlet[0m[2m[39m () = dec [0m[4m[1m[31minc[0m
+
+[1mThis type doesn't match what is expected.[0m
+
+  This type: [31mAbc.[0m[1m[31mmyInt => Def.myFloat[0m[31m[0m
+  Expecting: [32mAbc.[0m[1m[32mmyString => Def.myBool[0m[32m[0m
+
+
+[1mThe contradicting part:[0m
+
+  The type:   
+    [31mAbc.[0m[1m[31mmyInt[0m[31m[0m[2m
+    Equals
+    [0m[31m[0m[1m[31mint[0m[31m[0m
+
+  Contradicts:
+    [32mAbc.[0m[1m[32mmyString[0m[32m[0m[2m
+    Equals
+    [0m[32m[0m[1m[32mstring[0m[32m[0m
+
+
+

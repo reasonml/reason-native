@@ -1,0 +1,42 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_IncompatibleType/type_IncompatibleType_8.ml", line 4, characters 391-398:[0m
+[2m# [0m[2mError: This expression has type int * int * int * int * int[0m
+[2m# [0m[2m       but an expression was expected of type[0m
+[2m# [0m[2m         reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak *[0m
+[2m# [0m[2m         reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak *[0m
+[2m# [0m[2m         reallyReallyLongNameWillBreak[0m
+[2m# [0m[2m       Type int is not compatible with type reallyReallyLongNameWillBreak [0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_IncompatibleType/type_IncompatibleType_8.ml[0m[4m[2m[39m:4 391-398[0m [1m[31m[0m
+
+[2m 1 ┆ [0m
+[2m 2 ┆ [0m[2m[35mtype[0m[2m[39m reallyReallyLongNameWillBreak[0m
+[2m 3 ┆ [0m[2m[35mlet[0m[2m[39m numbers = ([0m[2m[34m0[0m[2m[39m, [0m[2m[34m2[0m[2m[39m, [0m[2m[34m3[0m[2m[39m, [0m[2m[34m4[0m[2m[39m, [0m[2m[34m5[0m[2m[39m)[0m
+[2m[31m 4 ┆ [0m[2m[35mlet[0m[2m[39m thisFunction (f: (reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak) -> (reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak * reallyReallyLongNameWillBreak) -> unit [0m[2m[33mlist[0m[2m[39m -> [0m[2m[33mstring[0m[2m[39m [0m[2m[33mlist[0m[2m[39m -> 'args) args = f [0m[4m[1m[31mnumbers[0m[2m[39m numbers [(); ()] [[0m[2m[32m"anotherString"[0m[2m[39m] ()[0m
+[2m 5 ┆ [0m
+[2m 6 ┆ [0m[2m[35mlet[0m[2m[39m result = thisFunction (fun aa c u -> aa[0m[2m[31m + [0m[2m[39mb +c)[0m
+[2m 7 ┆ [0m
+
+[1mThis type doesn't match what is expected.[0m
+
+  This type:
+    [31m([0m[1m[31mint, int, int, int, int[0m[31m)[0m
+
+  Expecting:
+    [32m([0m[1m[32m
+      reallyReallyLongNameWillBreak,
+      reallyReallyLongNameWillBreak,
+      reallyReallyLongNameWillBreak,
+      reallyReallyLongNameWillBreak,
+      reallyReallyLongNameWillBreak
+    [0m[32m)[0m
+
+
+[1mThe contradicting part:[0m
+
+  The type:    [31m[0m[1m[31mint[0m[31m[0m
+  Contradicts: [32m[0m[1m[32mreallyReallyLongNameWillBreak[0m[32m[0m
+
+
+

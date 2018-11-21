@@ -1,0 +1,18 @@
+[2m[1m[39m# Unformatted Warning Output:[0m
+[2m# [0m[2mFile "tests/warning_PatternNotExhaustive/warning_PatternNotExhaustive_2.ml", line 8, characters 12-38:[0m
+[2m# [0m[2mWarning 8: this pattern-matching is not exhaustive.[0m
+
+
+[7m[1m[33m WARNING [0m [4m[36mtests/warning_PatternNotExhaustive/warning_PatternNotExhaustive_2.ml[0m[4m[2m[39m:8:12-9:13[0m [1m[33m [Warning Code 8] [0m
+
+[2m5 ┆ [0m[2m[39m  | [0m[2m[34mNihao[0m[2m[39m of [0m[2m[33mint[0m
+[2m6 ┆ [0m[2m[39m  | [0m[2m[34mLongAssGreetingInSomeSuperObscureLanguageIWannaHaveALineBreakHere[0m
+[2m7 ┆ [0m
+[2m[31m8 ┆ [0m[2m[35mlet[0m[2m[39m say a = [0m[4m[1m[31mmatch a with[0m
+[2m[31m9 ┆ [0m[4m[1m[31m| Hello -> ()[0m
+
+
+
+Here is an example of a case that is not matched:
+(Goodbye|LongAssGreetingInSomeSuperObscureLanguageIWannaHaveALineBreakHere|
+Hola _|Nihao _)

@@ -1,0 +1,17 @@
+[2m[1m[39m# Unformatted Warning Output:[0m
+[2m# [0m[2mFile "tests/warning_OptionalArgumentNotErased/warning_OptionalArgumentNotErased_2.ml", line 1, characters 18-31:[0m
+[2m# [0m[2mWarning 16: this optional argument cannot be erased.[0m
+
+
+[7m[1m[33m WARNING [0m [4m[36mtests/warning_OptionalArgumentNotErased/warning_OptionalArgumentNotErased_2.ml[0m[4m[2m[39m:1 18-31[0m [1m[33m [Warning Code 16] [0m
+
+[2m[31m1 ┆ [0m[2m[35mlet[0m[2m[39m eat aNumber ?([0m[4m[1m[31mwithFork=true[0m[2m[39m) =[0m
+[2m2 ┆ [0m[2m[39m  [0m[2m[32m"Hello, world!"[0m
+[2m3 ┆ [0m
+[2m4 ┆ [0m[2m[35mlet[0m[2m[39m () = print_endline (eat [0m[2m[34m1[0m[2m[39m [0m[2m[33m~withFork[0m[2m[39m:false)[0m
+
+[1m[31mwithFork[0m is an optional argument at last position; calling the function by omitting withFork might be confused with currying.
+
+The solution is usually to provide a final non-named argument, or a final unit() argument if necessary.
+
+

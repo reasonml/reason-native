@@ -1,0 +1,21 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_RecordFieldNotBelong/type_RecordFieldNotBelong_3.ml", line 13, characters 21-25:[0m
+[2m# [0m[2mError: This expression has type point[0m
+[2m# [0m[2m       The field dogs does not belong to type point[0m
+[2m# [0m[2mHint: Did you mean dog?[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_RecordFieldNotBelong/type_RecordFieldNotBelong_3.ml[0m[4m[2m[39m:13 21-25[0m [1m[31m[0m
+
+[2m10 ┆ [0m[2m[39m  dog = [0m[2m[32m"hi"[0m[2m[39m;[0m
+[2m11 ┆ [0m[2m[39m}[0m
+[2m12 ┆ [0m
+[2m[31m13 ┆ [0m[2m[35mlet[0m[2m[39m result = myPoint.[0m[4m[1m[31mdogs[0m
+
+[1mThis field[0m [1m[31mdogs[0m [1mdoesn't belong to the record.[0m
+
+[1mThe record expression has type: point[0m
+
+Did you mean [33mdog[0m?
+
+

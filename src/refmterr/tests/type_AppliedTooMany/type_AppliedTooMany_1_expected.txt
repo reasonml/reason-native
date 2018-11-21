@@ -1,0 +1,16 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_AppliedTooMany/type_AppliedTooMany_1.ml", line 3, characters 24-36:[0m
+[2m# [0m[2mError: This function has type 'a -> (int -> 'b) -> string[0m
+[2m# [0m[2m       It is applied to too many arguments; maybe you forgot a `;'.[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_AppliedTooMany/type_AppliedTooMany_1.ml[0m[4m[2m[39m:3 24-36[0m [1m[31m[0m
+
+[2m1 ┆ [0m[2m[35mlet[0m[2m[39m omNomNomArgs a b = (ignore (b [0m[2m[34m1[0m[2m[39m)); [0m[2m[32m"hello world!"[0m
+[2m2 ┆ [0m
+[2m[31m3 ┆ [0m[2m[35mlet[0m[2m[39m () = print_endline ([0m[4m[1m[31momNomNomArgs[0m[2m[39m [0m[2m[34m1[0m[2m[39m (fun x -> [0m[2m[32m"a"[0m[2m[39m) [0m[2m[34m1[0m[2m[39m)[0m
+
+This function has type ('a, int => 'b) => string
+It accepts only 2 arguments. You gave more. Maybe you forgot a ; somewhere?
+
+

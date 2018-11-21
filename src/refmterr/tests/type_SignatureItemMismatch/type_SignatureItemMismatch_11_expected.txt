@@ -1,0 +1,37 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_11.ml", line 1:[0m
+[2m# [0m[2mError: The implementation tests/type_SignatureItemMismatch/type_SignatureItemMismatch_11.ml[0m
+[2m# [0m[2m       does not match the interface tests/type_SignatureItemMismatch/type_SignatureItemMismatch_11.cmi:[0m
+[2m# [0m[2m       Type declarations do not match:[0m
+[2m# [0m[2m         type wrongArity = float[0m
+[2m# [0m[2m       is not included in[0m
+[2m# [0m[2m         type 'a wrongArity = int[0m
+[2m# [0m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_11.mli", line 1, characters 0-24:[0m
+[2m# [0m[2m         Expected declaration[0m
+[2m# [0m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_11.ml", line 2, characters 0-23:[0m
+[2m# [0m[2m         Actual declaration[0m
+[2m# [0m[2m       They have different arities.[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_11.ml[0m[4m[2m[39m:1 0-0[0m [1m[31m[0m
+
+[2m[31m1 ┆ [0m[4m[1m[31m[0m[2m[39m(* [0m[2m[34mTest[0m[2m[39m wrongly specified [0m[2m[35mtype[0m[2m[39m but from interface *)[0m
+[2m2 ┆ [0m[2m[35mtype[0m[2m[39m wrongArity = float[0m
+[2m3 ┆ [0m[2m[35mtype[0m[2m[39m wrongType = float[0m
+
+[1mThis module contains a type definition with the wrong number of type parameters [0m
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_11.mli[0m[2m:1[0m
+  the signature required that the type be defined as:
+
+  [1m[32mtype wrongArity('a) = int;[0m
+
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_11.ml[0m[2m:2[0m
+  your module defined the type to be:
+
+  [1m[31mtype wrongArity = float;[0m
+
+
+
+

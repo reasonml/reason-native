@@ -1,0 +1,14 @@
+[2m[1m[39m# Unformatted Warning Output:[0m
+[2m# [0m[2mFile "tests/warning_PatternUnused/warning_PatternUnused_1.ml", line 8, characters 2-3:[0m
+[2m# [0m[2mWarning 11: this match case is unused.[0m
+
+
+[7m[1m[33m WARNING [0m [4m[36mtests/warning_PatternUnused/warning_PatternUnused_1.ml[0m[4m[2m[39m:8 2-3[0m [1m[33m [Warning Code 11] [0m
+
+[2m5 ┆ [0m[2m[35mlet[0m[2m[39m say a = match a with[0m
+[2m6 ┆ [0m[2m[39m| [0m[2m[34mHello[0m[2m[39m -> ()[0m
+[2m7 ┆ [0m[2m[39m| [0m[2m[34mGoodbye[0m[2m[39m -> ()[0m
+[2m[31m8 ┆ [0m[2m[39m| [0m[4m[1m[31m_[0m[2m[39m -> ()[0m
+
+
+

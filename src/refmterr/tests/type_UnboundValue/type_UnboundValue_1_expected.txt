@@ -1,0 +1,13 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_UnboundValue/type_UnboundValue_1.ml", line 1, characters 21-27:[0m
+[2m# [0m[2mError: Unbound value perhap[0m
+[2m# [0m[2mHint: Did you mean perhaps?[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_UnboundValue/type_UnboundValue_1.ml[0m[4m[2m[39m:1 21-27[0m [1m[31m[0m
+
+[2m[31m1 ┆ [0m[2m[35mlet[0m[2m[39m callMe perhaps = [0m[4m[1m[31mperhap[0m[2m[39m [0m[2m[34m1[0m
+
+The value named [1m[31mperhap[0m can't be found. Did you mean [33mperhaps[0m?
+
+

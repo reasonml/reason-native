@@ -1,0 +1,74 @@
+[2m[1m[39m# Unformatted Warning Output:[0m
+[2m# [0m[2mFile "tests/type_IncompatibleType/type_IncompatibleType_4.ml", line 14, characters 44-55:[0m
+[2m# [0m[2mWarning 40: this record of type TopNotchModule.myRecord contains fields that are [0m
+[2m# [0m[2mnot visible in the current scope: nihao.[0m
+[2m# [0m[2mThey will not be selected if the type becomes unknown.[0m
+
+
+[7m[1m[33m WARNING [0m [4m[36mtests/type_IncompatibleType/type_IncompatibleType_4.ml[0m[4m[2m[39m:14 44-55[0m [1m[33m [Warning Code 40] [0m
+
+[2m11 ┆ [0m[2m[39m  end[0m
+[2m12 ┆ [0m[2m[39mend[0m
+[2m13 ┆ [0m
+[2m[31m14 ┆ [0m[2m[35mlet[0m[2m[39m asd: [0m[2m[34mTopNotchModule[0m[2m[39m.jeSuisStrings = ([[[[0m[4m[1m[31m{nihao = 1}[0m[2m[39m]]]: [0m[2m[34mTopNotchModule[0m[2m[39m.[0m[2m[34mNested[0m[2m[39m.wow)[0m
+
+
+
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_IncompatibleType/type_IncompatibleType_4.ml", line 14, characters 40-86:[0m
+[2m# [0m[2mError: This expression has type[0m
+[2m# [0m[2m         TopNotchModule.Nested.wow = TopNotchModule.myRecordListListList list[0m
+[2m# [0m[2m       but an expression was expected of type[0m
+[2m# [0m[2m         TopNotchModule.jeSuisStrings = TopNotchModule.jeSuisString list list[0m
+[2m# [0m[2m       Type[0m
+[2m# [0m[2m         TopNotchModule.myRecordListListList =[0m
+[2m# [0m[2m           TopNotchModule.myRecordListList list[0m
+[2m# [0m[2m       is not compatible with type TopNotchModule.jeSuisString list [0m
+[2m# [0m[2m       Type[0m
+[2m# [0m[2m         TopNotchModule.myRecordListList = TopNotchModule.myRecordList list[0m
+[2m# [0m[2m       is not compatible with type TopNotchModule.jeSuisString = string [0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_IncompatibleType/type_IncompatibleType_4.ml[0m[4m[2m[39m:14 40-86[0m [1m[31m[0m
+
+[2m11 ┆ [0m[2m[39m  end[0m
+[2m12 ┆ [0m[2m[39mend[0m
+[2m13 ┆ [0m
+[2m[31m14 ┆ [0m[2m[35mlet[0m[2m[39m asd: [0m[2m[34mTopNotchModule[0m[2m[39m.jeSuisStrings = [0m[4m[1m[31m([[[{nihao = 1}]]]: TopNotchModule.Nested.wow)[0m
+
+[1mThis type doesn't match what is expected.[0m
+
+  This type:
+    [31mTopNotchModule.[0m[1m[31mNested.wow[0m[31m[0m[2m
+    Equals
+    [0m[31mlist([0m[1m[31mTopNotchModule.myRecordListListList[0m[31m)[0m
+
+  Expecting:
+    [32mTopNotchModule.[0m[1m[32mjeSuisStrings[0m[32m[0m[2m
+    Equals
+    [0m[32mlist([0m[1m[32mlist(TopNotchModule.jeSuisString)[0m[32m)[0m
+
+
+[1mThe contradicting parts:[0m
+
+  The type:   
+    [31m[0m[1m[31mTopNotchModule.myRecordListListList[0m[31m[0m[2m
+    Equals
+    [0m[31m[0m[1m[31mlist(TopNotchModule.myRecordListList)[0m[31m[0m
+
+  Contradicts:
+    [32m[0m[1m[32mlist(TopNotchModule.jeSuisString)[0m[32m[0m
+
+
+  The type:   
+    [31mTopNotchModule.[0m[1m[31mmyRecordListList[0m[31m[0m[2m
+    Equals
+    [0m[31m[0m[1m[31mlist(TopNotchModule.myRecordList)[0m[31m[0m
+
+  Contradicts:
+    [32mTopNotchModule.[0m[1m[32mjeSuisString[0m[32m[0m[2m
+    Equals
+    [0m[32m[0m[1m[32mstring[0m[32m[0m
+
+
+

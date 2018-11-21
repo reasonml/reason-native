@@ -1,0 +1,16 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/file_IllegalCharacter/file_IllegalCharacter_1.ml", line 2, characters 2-3:[0m
+[2m# [0m[2mError: Illegal character (\\)[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/file_IllegalCharacter/file_IllegalCharacter_1.ml[0m[4m[2m[39m:2 2-3[0m [1m[31m[0m
+
+[2m1 ┆ [0m[2m[35mlet[0m[2m[39m () =[0m
+[2m[31m2 ┆ [0m[2m[39m  [0m[4m[1m[31m\[0m[2m[39mhahaha look at me[0m
+[2m3 ┆ [0m[2m[39m  roaming free[0m
+[2m4 ┆ [0m[2m[39m  this is a haiku[0m
+[2m5 ┆ [0m[2m[39m  kidding it's not[0m
+
+The character `\\` is illegal.
+
+

@@ -1,0 +1,44 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_10.ml", line 7, characters 24-85:[0m
+[2m# [0m[2mError: Signature mismatch:[0m
+[2m# [0m[2m       Modules do not match:[0m
+[2m# [0m[2m         sig type wrongArity = float type wrongType = float end[0m
+[2m# [0m[2m       is not included in[0m
+[2m# [0m[2m         Sig[0m
+[2m# [0m[2m       Type declarations do not match:[0m
+[2m# [0m[2m         type wrongArity = float[0m
+[2m# [0m[2m       is not included in[0m
+[2m# [0m[2m         type 'a wrongArity = int[0m
+[2m# [0m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_10.ml", line 3, characters 2-26:[0m
+[2m# [0m[2m         Expected declaration[0m
+[2m# [0m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_10.ml", line 8, characters 2-25:[0m
+[2m# [0m[2m         Actual declaration[0m
+[2m# [0m[2m       They have different arities.[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_10.ml[0m[4m[2m[39m:7:24-10:3[0m [1m[31m[0m
+
+[2m 4 ┆ [0m[2m[39m  [0m[2m[35mtype[0m[2m[39m wrongType = [0m[2m[33mint[0m
+[2m 5 ┆ [0m[2m[39mend[0m
+[2m 6 ┆ [0m
+[2m[31m 7 ┆ [0m[2m[35mmodule[0m[2m[39m [0m[2m[34mMyModule[0m[2m[39m : [0m[2m[34mSig[0m[2m[39m = [0m[4m[1m[31mstruct[0m
+[2m[31m 8 ┆ [0m  [4m[1m[31mtype wrongArity = float[0m
+[2m[31m 9 ┆ [0m  [4m[1m[31mtype wrongType = float[0m
+[2m[31m10 ┆ [0m[4m[1m[31mend[0m
+
+[1mThis module contains a type definition with the wrong number of type parameters [0m
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_10.ml[0m[2m:3[0m
+  the signature required that the type be defined as:
+
+  [1m[32mtype wrongArity('a) = int;[0m
+
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_10.ml[0m[2m:8[0m
+  your module defined the type to be:
+
+  [1m[31mtype wrongArity = float;[0m
+
+
+
+

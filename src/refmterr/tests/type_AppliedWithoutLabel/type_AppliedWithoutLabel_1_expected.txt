@@ -1,0 +1,15 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_AppliedWithoutLabel/type_AppliedWithoutLabel_1.ml", line 4, characters 6-7:[0m
+[2m# [0m[2mError: The function applied to this argument has type a:'a -> b:'b -> unit[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_AppliedWithoutLabel/type_AppliedWithoutLabel_1.ml[0m[4m[2m[39m:4 6-7[0m [1m[31m[0m
+
+[2m1 ┆ [0m[2m[35mlet[0m[2m[39m f [0m[2m[33m~a[0m[2m[39m [0m[2m[33m~b[0m[2m[39m c = ()[0m
+[2m2 ┆ [0m
+[2m3 ┆ [0m[2m[35mlet[0m[2m[39m () =[0m
+[2m[31m4 ┆ [0m[2m[39m  f [0m[2m[34m1[0m[2m[39m [0m[4m[1m[31m2[0m
+
+
+
+This argument cannot be applied without label

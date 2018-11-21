@@ -1,0 +1,18 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_RecordFieldNotBelong/type_RecordFieldNotBelong_1.ml", line 9, characters 23-24:[0m
+[2m# [0m[2mError: This record pattern is expected to have type asd[0m
+[2m# [0m[2m       The field b does not belong to type asd[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_RecordFieldNotBelong/type_RecordFieldNotBelong_1.ml[0m[4m[2m[39m:9 23-24[0m [1m[31m[0m
+
+[2m6 ┆ [0m[2m[35mtype[0m[2m[39m lol =[0m
+[2m7 ┆ [0m[2m[39m  | [0m[2m[34mSomething[0m[2m[39m of asd[0m
+[2m8 ┆ [0m
+[2m[31m9 ┆ [0m[2m[35mlet[0m[2m[39m bla ([0m[2m[34mSomething[0m[2m[39m {a; [0m[4m[1m[31mb[0m[2m[39m}) = [0m[2m[34m1[0m
+
+[1mThis field[0m [1m[31mb[0m [1mdoesn't belong to the record.[0m
+
+[1mThe record pattern has type: asd[0m
+
+

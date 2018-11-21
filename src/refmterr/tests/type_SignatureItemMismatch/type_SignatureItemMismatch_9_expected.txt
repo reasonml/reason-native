@@ -1,0 +1,43 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml", line 6, characters 24-59:[0m
+[2m# [0m[2mError: Signature mismatch:[0m
+[2m# [0m[2m       Modules do not match:[0m
+[2m# [0m[2m         sig type wrongType = float end[0m
+[2m# [0m[2m       is not included in[0m
+[2m# [0m[2m         Sig[0m
+[2m# [0m[2m       Type declarations do not match:[0m
+[2m# [0m[2m         type wrongType = float[0m
+[2m# [0m[2m       is not included in[0m
+[2m# [0m[2m         type wrongType = int[0m
+[2m# [0m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml", line 3, characters 2-22:[0m
+[2m# [0m[2m         Expected declaration[0m
+[2m# [0m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml", line 7, characters 2-24:[0m
+[2m# [0m[2m         Actual declaration[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml[0m[4m[2m[39m:6:24-8:3[0m [1m[31m[0m
+
+[2m3 ┆ [0m[2m[39m  [0m[2m[35mtype[0m[2m[39m wrongType = [0m[2m[33mint[0m
+[2m4 ┆ [0m[2m[39mend[0m
+[2m5 ┆ [0m
+[2m[31m6 ┆ [0m[2m[35mmodule[0m[2m[39m [0m[2m[34mMyModule[0m[2m[39m : [0m[2m[34mSig[0m[2m[39m = [0m[4m[1m[31mstruct[0m
+[2m[31m7 ┆ [0m  [4m[1m[31mtype wrongType = float[0m
+[2m[31m8 ┆ [0m[4m[1m[31mend[0m
+[2m9 ┆ [0m
+
+[1mThis module contains a type definition that contradicts its signature[0m
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml[0m[2m:3[0m
+  the signature required that the type be defined as:
+
+  [1m[32mtype wrongType = int;[0m
+
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml[0m[2m:7[0m
+  your module defined the type to be:
+
+  [1m[31mtype wrongType = float;[0m
+
+
+
+

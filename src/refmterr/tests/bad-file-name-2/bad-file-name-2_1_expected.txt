@@ -1,0 +1,26 @@
+[2m[1m[39m# Unformatted Warning Output:[0m
+[2m# [0m[2mFile "tests/bad-file-name-2/bad-file-name-2_1.ml", line 1:[0m
+[2m# [0m[2mWarning 24: bad source file name: "Bad-file-name-2_1" is not a valid module name.[0m
+
+
+[7m[1m[33m WARNING [0m [4m[36mtests/bad-file-name-2/bad-file-name-2_1.ml[0m[4m[2m[39m:1 0-0[0m [1m[33m [Warning Code 24] [0m
+
+[2m[31m1 ┆ [0m[4m[1m[31m[0m[2m[39masd[0m
+
+File name potentially invalid. The OCaml ecosystem's build systems usually turn file names into module names by simply upper-casing the first letter. In this case, `Bad-file-name-2_1.ml` contains `-`, which doesn't form a legal module name.
+Note: some build systems might e.g. turn kebab-case into CamelCase module, which is why this isn't a hard error.
+
+
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/bad-file-name-2/bad-file-name-2_1.ml", line 1, characters 0-3:[0m
+[2m# [0m[2mError: Unbound value asd[0m
+[2m# [0m[2mHint: Did you mean asr?[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/bad-file-name-2/bad-file-name-2_1.ml[0m[4m[2m[39m:1 0-3[0m [1m[31m[0m
+
+[2m[31m1 ┆ [0m[4m[1m[31masd[0m
+
+The value named [1m[31masd[0m can't be found. Did you mean [33masr[0m?
+
+

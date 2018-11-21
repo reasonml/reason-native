@@ -1,0 +1,18 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_AppliedTooMany/type_AppliedTooMany_2.ml", line 3, characters 21-33:[0m
+[2m# [0m[2mError: This function has type[0m
+[2m# [0m[2m         string ->[0m
+[2m# [0m[2m         string -> string -> string -> string -> string -> string -> string[0m
+[2m# [0m[2m       It is applied to too many arguments; maybe you forgot a `;'.[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_AppliedTooMany/type_AppliedTooMany_2.ml[0m[4m[2m[39m:3 21-33[0m [1m[31m[0m
+
+[2m1 ┆ [0m[2m[35mlet[0m[2m[39m longFunction a b c d e f g = a ^ b ^ c ^ d ^ e ^ f ^ g[0m
+[2m2 ┆ [0m
+[2m[31m3 ┆ [0m[2m[35mlet[0m[2m[39m evenLongerCall = [0m[4m[1m[31mlongFunction[0m[2m[39m [0m[2m[32m"a"[0m[2m[39m [0m[2m[32m"a"[0m[2m[39m [0m[2m[32m"a"[0m[2m[39m [0m[2m[32m"a"[0m[2m[39m [0m[2m[32m"a"[0m[2m[39m [0m[2m[32m"a"[0m[2m[39m [0m[2m[32m"a"[0m[2m[39m [0m[2m[32m"a"[0m
+
+This function has type (string, string, string, string, string, string, string) => string
+It accepts only 7 arguments. You gave more. Maybe you forgot a ; somewhere?
+
+

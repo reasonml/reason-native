@@ -1,0 +1,17 @@
+[2m[1m[39m# Unformatted Warning Output:[0m
+[2m# [0m[2mFile "tests/warning_OptionalArgumentNotErased/warning_OptionalArgumentNotErased_1.ml", line 2, characters 11-15:[0m
+[2m# [0m[2mWarning 16: this optional argument cannot be erased.[0m
+
+
+[7m[1m[33m WARNING [0m [4m[36mtests/warning_OptionalArgumentNotErased/warning_OptionalArgumentNotErased_1.ml[0m[4m[2m[39m:2 11-15[0m [1m[33m [Warning Code 16] [0m
+
+[2m1 ┆ [0m[2m[39m(* the spacing matters here to test the regex that extracts bcD' *)[0m
+[2m[31m2 ┆ [0m[2m[35mlet[0m[2m[39m asd a ?[0m[4m[1m[31mbcD'[0m[2m[39m= [0m[2m[32m"asd"[0m
+[2m3 ┆ [0m
+[2m4 ┆ [0m[2m[35mlet[0m[2m[39m () = print_endline (asd [0m[2m[34m1[0m[2m[39m [0m[2m[33m~bcD[0m[2m[39m':[0m[2m[34m1[0m[2m[39m)[0m
+
+[1m[31mbcD'[0m is an optional argument at last position; calling the function by omitting bcD' might be confused with currying.
+
+The solution is usually to provide a final non-named argument, or a final unit() argument if necessary.
+
+

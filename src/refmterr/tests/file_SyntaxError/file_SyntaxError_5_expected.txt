@@ -1,0 +1,18 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/file_SyntaxError/file_SyntaxError_5.ml", line 4, characters 0-4:[0m
+[2m# [0m[2mError: Syntax error[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/file_SyntaxError/file_SyntaxError_5.ml[0m[4m[2m[39m:4 0-4[0m [1m[31m[0m
+
+[2m1 ┆ [0m[2m[35mlet[0m[2m[39m () = [0m[2m[33mif[0m[2m[39m true then[0m
+[2m2 ┆ [0m[2m[39m  print_endline [0m[2m[32m"gosh"[0m[2m[39m;[0m
+[2m3 ┆ [0m[2m[39m  print_endline [0m[2m[32m"so much functional purity"[0m
+[2m[31m4 ┆ [0m[4m[1m[31melse[0m
+[2m5 ┆ [0m[2m[39m  print_endline [0m[2m[32m"that I cant even"[0m
+
+This is a syntax error.
+Did you happen to have put a semicolon on the line before else? Also, `then` accepts a single expression. If you've put many, wrap them in parentheses.
+Note: the location indicated might not be accurate.
+
+

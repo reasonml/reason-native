@@ -1,0 +1,30 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/file_SyntaxError/file_SyntaxError_7.re", line 20, characters 22-23:[0m
+[2m# [0m[2mError: 1499: <syntax error>[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/file_SyntaxError/file_SyntaxError_7.re[0m[4m[2m[39m:20 22-23[0m [1m[31m[0m
+
+[2m17 ┆ [0m[2m[39m    fun[0m
+[2m18 ┆ [0m[2m[39m    | [0m[2m[34mReact[0m[2m[39m.[0m[2m[34mChanged[0m[2m[39m(s)[0m[2m[31m => [0m[2m[39ms,[0m
+[2m19 ┆ [0m[2m[39m    [0m[2m[34mReact[0m[2m[39m.[0m[2m[34mOne[0m[2m[39m([0m[2m[34mDom[0m[2m[39m.div([0m[2m[33m~className[0m[2m[39m=[0m[2m[32m"helloClass"[0m[2m[39m, [0m[2m[34mEmpty[0m[2m[39m)),[0m
+[2m[31m20 ┆ [0m[2m[39m  ) : [0m[2m[34mReact[0m[2m[39m.elem(tree)[0m[4m[1m[31m;[0m
+[2m21 ┆ [0m[2m[39m};[0m
+
+
+
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/file_SyntaxError/file_SyntaxError_7.re", line 1:[0m
+[2m# [0m[2mError: Error while running external preprocessor[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/file_SyntaxError/file_SyntaxError_7.re[0m[4m[2m[39m:1 0-0[0m [1m[31m[0m
+
+[2m[31m 1 ┆ [0m[4m[1m[31m[0m[2m[35mmodule[0m[2m[39m [0m[2m[34mInput[0m[2m[39m: {[0m
+[2m 2 ┆ [0m[2m[39m  /*[0m
+[2m 3 ┆ [0m[2m[39m   * [0m[2m[34mComponents[0m[2m[39m that don't accept [0m[2m[34mChildren[0m[2m[39m, would not have parameterized[0m
+[2m 4 ┆ [0m[2m[39m   * `element`. [0m[2m[34mChild[0m[2m[39m-accepting components would.[0m
+
+
+
+

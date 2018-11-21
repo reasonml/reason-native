@@ -1,0 +1,14 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/file_SyntaxError/file_SyntaxError_2.ml", line 1, characters 20-21:[0m
+[2m# [0m[2mError: Syntax error: operator expected.[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/file_SyntaxError/file_SyntaxError_2.ml[0m[4m[2m[39m:1 20-21[0m [1m[31m[0m
+
+[2m[31m1 ┆ [0m[2m[35mlet[0m[2m[39m a = (print_char [0m[4m[1m[31m'[0m[2m[39ma)[0m
+
+This is a syntax error: operator expected.
+
+Note: the location indicated might not be accurate.
+
+

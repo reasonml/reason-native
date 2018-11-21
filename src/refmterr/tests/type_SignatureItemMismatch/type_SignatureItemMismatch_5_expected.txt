@@ -1,0 +1,52 @@
+[2m[1m[39m# Unformatted Error Output:[0m
+[2m# [0m[2mFile "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 6, characters 24-59:[0m
+[2m# [0m[2mError: Signature mismatch:[0m
+[2m# [0m[2m       Modules do not match:[0m
+[2m# [0m[2m         sig val hasWrongType : 'a -> int end[0m
+[2m# [0m[2m       is not included in[0m
+[2m# [0m[2m         Sig[0m
+[2m# [0m[2m       Values do not match:[0m
+[2m# [0m[2m         val hasWrongType : 'a -> int[0m
+[2m# [0m[2m       is not included in[0m
+[2m# [0m[2m         val hasWrongType :[0m
+[2m# [0m[2m           stringParam:string ->[0m
+[2m# [0m[2m           intParam:int ->[0m
+[2m# [0m[2m           unitParam:unit -> anotherStringParam:string -> unit[0m
+[2m# [0m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 3, characters 2-109:[0m
+[2m# [0m[2m         Expected declaration[0m
+[2m# [0m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 7, characters 6-18:[0m
+[2m# [0m[2m         Actual declaration[0m
+
+
+[7m[1m[31m ERROR [0m [4m[36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml[0m[4m[2m[39m:6:24-8:3[0m [1m[31m[0m
+
+[2m3 ┆ [0m[2m[39m  val hasWrongType: stringParam:[0m[2m[33mstring[0m[2m[39m -> intParam:[0m[2m[33mint[0m[2m[39m -> unitParam:unit -> anotherStringParam:[0m[2m[33mstring[0m[2m[39m -> unit[0m
+[2m4 ┆ [0m[2m[39mend[0m
+[2m5 ┆ [0m
+[2m[31m6 ┆ [0m[2m[35mmodule[0m[2m[39m [0m[2m[34mMyModule[0m[2m[39m : [0m[2m[34mSig[0m[2m[39m = [0m[4m[1m[31mstruct[0m
+[2m[31m7 ┆ [0m  [4m[1m[31mlet hasWrongType s = 0[0m
+[2m[31m8 ┆ [0m[4m[1m[31mend[0m
+[2m9 ┆ [0m
+
+[1mThis module doesn't match its signature because the[0m [1mvalue[0m [1m[31mhasWrongType[0m [1mhas the wrong type[0m
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml[0m[2m:3[0m
+  the signature required that [1mhasWrongType[0m be of type:
+
+[1m[32m  (
+    ~stringParam: string,
+    ~intParam: int,
+    ~unitParam: unit,
+    ~anotherStringParam: string
+  ) =>
+  unit[0m
+
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml[0m[2m:7[0m
+  your module defined [1mhasWrongType[0m having type:
+
+[1m[31m  'a => int[0m
+
+
+
+

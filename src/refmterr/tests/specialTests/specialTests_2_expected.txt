@@ -1,0 +1,4 @@
+File "_none_", line 1:
+Error: Cannot find file nonexistentFile.cmo
+[1m[31mError:[0m Cannot find file [4m[1m[31mnonexistentFile.cmo[0m.
+Cmo files are artifacts the compiler looks for when compiling/linking dependent files.
