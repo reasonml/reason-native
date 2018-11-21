@@ -1,0 +1,9 @@
+[36mtests/warning_PatternNotExhaustive/warning_PatternNotExhaustive_1.ml:5:12-6:13
+[0m2 |   | Hello
+3 |   | Goodbye
+4 | 
+5 | let say a = [33;4mmatch a with[0m
+6 | [33;4m| Hello -> ()[0m
+
+[33mWarning[0m 8: this match doesn't cover all possible values of the variant.
+The case `Goodbye` is not matched
