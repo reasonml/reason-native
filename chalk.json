@@ -13,10 +13,11 @@
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
-    "ocaml": ">= 4.2.0  <= 4.7.0",
+    "ocaml": ">= 4.2.0  <= 4.7.0"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0"
+    "ocaml": "~4.6.0",
+    "@reason-native/test-runner": "*"
   }
 }
