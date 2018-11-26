@@ -31,49 +31,6 @@ let readLines = (file: string) : list(string) => {
     String.concat("\n", readLines(file));
 
   /**
-   * Recursively makes sure a directory exists.
-   */
-  let rec mkdirp = (dirPath: string) : unit =>
-    if (Sys.file_exists(dirPath)) {
-      /* The directory exists, stop recursing but check error cases */
-      if (Sys.is_directory(dirPath)) {
-        ();
-          /* All good */
-      } else {
-        /* This means something like 'foo/bar' is a file, but we are trying
-           to create the directory 'foo/bar/baz' since 'bar' is a file not a
-           directory this will obviously fail. Here we call out the case
-           explicitly and try to provide a helpful error message. */
-        failwith(
-          Printf.sprintf(
-            "'%s' exists but is not a directory, aborting",
-            dirPath,
-          ),
-        );
-      };
-    } else {
-      mkdirp(Filename.dirname(dirPath));
-      /* 493 = 0o755 */
-      Unix.mkdir(dirPath, 493);
-      ();
-    };
-
-  /**
-   * Very simple wrapper around a `rm -rf <path>` command.
-   */
-  let rmrf = (path: string) : unit =>
-    Core_extended.Std.Shell.run("rm", ["-rf", path]);
-
-  /**
-   * Writes a file at the given path containing the given contents.
-   */
-  let writeFile = (filePath: string, contents: string) => {
-    let outFile = open_out(filePath);
-    output_string(outFile, contents);
-    close_out(outFile);
-  };
-
-  /**
    * TODO: Allow passing a serializer and file descriptor the child fn can write
    * its return value to.
    */
