@@ -1,4 +1,6 @@
 
 (library (name Refmterr)
-   (public_name refmterr.lib)
-   (libraries re.pcre unix chalk.lib))
+    (public_name refmterr.lib)
+    ; We're using ppx
+    (preprocess (pps ppx_deriving_yojson))
+    (libraries yojson ppx_deriving_yojson ppx_deriving_yojson.runtime re.pcre unix chalk.lib))

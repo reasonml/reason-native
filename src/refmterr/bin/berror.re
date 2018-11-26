@@ -17,6 +17,8 @@ let refmttypePath = ref(None);
 
 let raiseExceptionDuringParse = ref(None);
 
+let rawOutput = ref(false);
+
 let options = [
   (
     "--path-to-refmttype",
@@ -28,6 +30,11 @@ let options = [
     Arg.String(x => raiseExceptionDuringParse := Some(x)),
     "Intentionally raise exception during parsing in order to test resilience",
   ),
+  (
+    "--raw-output",
+    Arg.Set(rawOutput),
+    "Output raw json parsed from errors"
+  )
 ];
 
 let () =
@@ -55,4 +62,5 @@ Refmterr.TerminalEntry.parseFromStdin(
   ~refmttypePath=refmttypePath^,
   ~customLogOutputProcessors=[prettifyGlobalBuildStores],
   ~customErrorParsers=[],
+  ~rawOutput=rawOutput^,
 );

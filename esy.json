@@ -20,7 +20,13 @@
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
+<<<<<<< HEAD
     "@opam/re": "*"
+=======
+    "@opam/re": "*",
+    "@opam/yojson": "*",
+    "@opam/ppx_deriving_yojson": "*"
+>>>>>>> Initial refmterr support for --output-raw
   },
   "devDependencies": {
     "@opam/merlin": "*",
