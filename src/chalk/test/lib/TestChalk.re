@@ -30,7 +30,6 @@ describe("Chalk.length", ({test}) => {
   );
 });
 describe("Chalk.length fuzz testing", ({test}) => {
-  ();
   let allChalkers = [|
     modifier.bold,
     modifier.dim,
