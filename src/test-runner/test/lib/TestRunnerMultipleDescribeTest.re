@@ -7,7 +7,6 @@ module MakeInnterTestFramework = () =>
   TestRunner.Make({
     let config =
       TestRunner.TestFrameworkConfig.initialize({
-        updateSnapshotsFlag: "-u",
         snapshotDir: "unused",
         projectDir:
           Filename.(
