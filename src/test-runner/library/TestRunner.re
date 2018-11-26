@@ -36,6 +36,8 @@ module Describe = {
     updateSnapshots: bool,
     updateSnapshotsFlag: string,
     snapshotDir: string,
+    printer: RunConfig.printer,
+    onTestFrameworkFailure: unit => unit,
   };
   type describeState = {
     testHashes: MStringSet.t,
@@ -53,7 +55,7 @@ module Describe = {
       ~describeName: option(string),
       describeUtils => unit
     ) =>
-    unit
+    list(MIntMap.t(Test.testSpec))
   and describeFn = (string, describeUtils => unit) => unit;
 };
 
@@ -148,13 +150,18 @@ module Make = (UserConfig: FrameworkConfig) => {
               ),
             ),
         };
+      open RunConfig;
+
+      let {printEndline, printString, printNewline, flush } = config.printer;
 
       let describeName = describeName |?: "root describe";
       let printSnapshotStatus = () =>
         if (isRootDescribe) {
-          print_endline(
-            TestSnapshot.getSnapshotStatus(state.snapshotState^),
-          );
+          let _ =
+            state.snapshotState^
+            |> TestSnapshot.getSnapshotStatus
+            >>| printEndline;
+          ();
         };
       let testHashes = state.testHashes;
       /* This will generate unique IDs for tests within this describe. */
@@ -296,19 +303,23 @@ module Make = (UserConfig: FrameworkConfig) => {
           ();
         };
       /* Prepend the original describe name before the next one when nesting */
-      let describeFn = (describeName2, fn) =>
-        rootDescribe(
-          ~config,
-          ~isRootDescribe=false,
-          ~state=Some(state),
-          ~describeName=
-            Some(
-              isRootDescribe ?
-                describeName2 :
-                describeName ++ ancestrySeparator ++ describeName2,
-            ),
-          fn,
-        );
+      let testMaps = ref([]);
+      let describeFn = (describeName2, fn) => {
+        let resultMap =
+          rootDescribe(
+            ~config,
+            ~isRootDescribe=false,
+            ~state=Some(state),
+            ~describeName=
+              Some(
+                isRootDescribe ?
+                  describeName2 :
+                  describeName ++ ancestrySeparator ++ describeName2,
+              ),
+            fn,
+          );
+        testMaps := testMaps^ @ resultMap;
+      };
       let utils = {describe: describeFn, test: testFn};
       /* Gather all the tests */
       fn(utils);
@@ -352,18 +363,17 @@ module Make = (UserConfig: FrameworkConfig) => {
           let diff = prev^ - updateLength;
           if (diff > 0) {
             /* This moves back `diff` columns then clears to end of line */
-            print_string(
+            printString(
               "\027[" ++ string_of_int(diff) ++ "D\027[K",
             );
           };
-          print_string("\r" ++ update);
+          printString("\r" ++ update);
           flush(stdout);
           prev := updateLength;
         };
 
         let _ =
-          isRootDescribe ?
-            () : print_endline(Chalk.whiteBright(describeName));
+          isRootDescribe ? () : printEndline(Chalk.whiteBright(describeName));
 
         update(true);
         let _ =
@@ -385,7 +395,7 @@ module Make = (UserConfig: FrameworkConfig) => {
             },
             testMap,
           );
-        print_newline();
+        printNewline();
 
         let getStackInfo = (optLoc: option(Printexc.location), trace: string) => {
           let stackInfo =
@@ -419,7 +429,7 @@ module Make = (UserConfig: FrameworkConfig) => {
         };
 
         if (failed^ > 0) {
-          print_newline();
+          printNewline();
           let _ =
             testMap
             |> MIntMap.toList
@@ -469,11 +479,30 @@ module Make = (UserConfig: FrameworkConfig) => {
                })
             |> List.filter(res => res != "")
             |> String.concat("\n\n")
-            |> print_endline;
+            |> printEndline;
           printSnapshotStatus();
-          /* Exit with non-zero exit code since there were test failures */
-          exit(1);
         };
+      };
+      if (isRootDescribe) {
+        failed :=
+          List.fold_left(
+            (num, m) => {
+              let failures = ref(0);
+              m
+              |> MIntMap.values
+              |> List.iter(spec =>
+                   switch (spec.testResult) {
+                   | Pending
+                   | Passed => ()
+                   | Failed(_)
+                   | Exception(_) => incr(failures)
+                   }
+                 );
+              num + failures^;
+            },
+            0,
+            testMaps^,
+          );
       };
       if (failed^ === 0 && isRootDescribe) {
         /* mark pending and failed tests as checked so we don't delete their associated snapshots */
@@ -496,27 +525,34 @@ module Make = (UserConfig: FrameworkConfig) => {
         TestSnapshot.removeUnusedSnapshots(state.snapshotState^);
       };
       printSnapshotStatus();
+      if (failed^ > 0 && isRootDescribe) {
+        config.onTestFrameworkFailure();
+      };
+      testMaps^ @ [testMap];
     };
 
   let testFixtures = ref([]);
   let describe = (name, describeBlock) =>
     testFixtures := testFixtures^ @ [(name, describeBlock)];
   let run = (config: RunConfig.t) => {
-    rootDescribe(
-      ~config={
-        updateSnapshots: config.updateSnapshots,
-        snapshotDir: UserConfig.config.snapshotDir,
-        updateSnapshotsFlag: UserConfig.config.updateSnapshotsFlag,
-      },
-      ~isRootDescribe=true,
-      ~state=None,
-      ~describeName=None,
-      ({describe}) =>
-      List.iter(
-        ((name, describeBlock)) => describe(name, describeBlock),
-        testFixtures^,
-      )
-    );
+    let _ =
+      rootDescribe(
+        ~config={
+          updateSnapshots: config.updateSnapshots,
+          snapshotDir: UserConfig.config.snapshotDir,
+          updateSnapshotsFlag: UserConfig.config.updateSnapshotsFlag,
+          printer: config.printer,
+          onTestFrameworkFailure: config.onTestFrameworkFailure
+        },
+        ~isRootDescribe=true,
+        ~state=None,
+        ~describeName=None,
+        ({describe}) =>
+        List.iter(
+          ((name, describeBlock)) => describe(name, describeBlock),
+          testFixtures^,
+        )
+      );
     ();
   };
 };
