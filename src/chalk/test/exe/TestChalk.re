@@ -1,3 +1,1 @@
-ChalkTestLib.TestFramework.run(
-  TestRunner.RunConfig.(initialize() |> updateSnapshots(false)),
-);
+ChalkTestLib.TestFramework.cli();
