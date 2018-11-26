@@ -1,0 +1,43 @@
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml", line 6, characters 24-59:[22m
+[2m# [22m[2mError: Signature mismatch:[22m
+[2m# [22m[2m       Modules do not match:[22m
+[2m# [22m[2m         sig type wrongType = float end[22m
+[2m# [22m[2m       is not included in[22m
+[2m# [22m[2m         Sig[22m
+[2m# [22m[2m       Type declarations do not match:[22m
+[2m# [22m[2m         type wrongType = float[22m
+[2m# [22m[2m       is not included in[22m
+[2m# [22m[2m         type wrongType = int[22m
+[2m# [22m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml", line 3, characters 2-22:[22m
+[2m# [22m[2m         Expected declaration[22m
+[2m# [22m[2m       File "tests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml", line 7, characters 2-24:[22m
+[2m# [22m[2m         Actual declaration[22m
+
+
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml[24m[39m[2m[4m:6:24-8:3[24m[22m 
+
+[2m3 ┆ [22m[2m  [22m[35m[2mtype[22m[39m[2m wrongType = [22m[33m[2mint[22m[39m
+[2m4 ┆ [22m[2mend[22m
+[2m5 ┆ [22m
+[31m[2m6 ┆ [22m[39m[35m[2mmodule[22m[39m[2m [22m[34m[2mMyModule[22m[39m[2m : [22m[34m[2mSig[22m[39m[2m = [22m[31m[1m[4mstruct[24m[22m[39m
+[31m[2m7 ┆ [22m[39m  [31m[1m[4mtype wrongType = float[24m[22m[39m
+[31m[2m8 ┆ [22m[39m[31m[1m[4mend[24m[22m[39m
+[2m9 ┆ [22m
+
+[1mThis module contains a type definition that contradicts its signature[22m
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml[39m[2m:3[22m
+  the signature required that the type be defined as:
+
+  [32m[1mtype wrongType = int;[22m[39m
+
+
+  At [36mtests/type_SignatureItemMismatch/type_SignatureItemMismatch_9.ml[39m[2m:7[22m
+  your module defined the type to be:
+
+  [31m[1mtype wrongType = float;[22m[39m
+
+
+
+

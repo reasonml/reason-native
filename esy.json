@@ -9,7 +9,8 @@
             "esy-installer test-runner.install",
             "esy-installer console.install",
             "esy-installer chalk-console.install",
-            "esy-installer file-context-printer.install"
+            "esy-installer file-context-printer.install",
+            "esy-installer refmterr.install"
         ]
     },
     "scripts": {
@@ -23,6 +24,8 @@
         "@opam/re": "*"
     },
     "devDependencies": {
-        "@opam/merlin": "*"
+        "@opam/merlin": "*",
+        "ocaml": "~4.6.0",
+        "@esy-ocaml/reason": "3.3.3"
     }
 }

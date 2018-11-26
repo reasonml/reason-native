@@ -1,7 +1,0 @@
-
-(library
-   (name TestRunnerTestLib)
-   (public_name test-runner.test)
-   (ocamlopt_flags -linkall -g)
-   (libraries  test-runner.lib )
-)

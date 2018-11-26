@@ -1,0 +1,17 @@
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/type_IncompatibleType/type_IncompatibleType_2.ml", line 1, characters 4-8:[22m
+[2m# [22m[2mError: This expression has type bool but an expression was expected of type[22m
+[2m# [22m[2m         'a ref[22m
+
+
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/type_IncompatibleType/type_IncompatibleType_2.ml[24m[39m[2m[4m:1 4-8[24m[22m 
+
+[31m[2m1 ┆ [22m[39m[33m[2mif[22m[39m[2m ![22m[31m[1m[4mtrue[24m[22m[39m[2m then [22m[32m[2m"asd"[22m[39m[2m [22m[33m[2melse[22m[39m[2m [22m[32m[2m"a"[22m[39m
+
+[1mThis type doesn't match what is expected.[22m
+
+  This type: [31m[1mbool[22m[39m
+  Expecting: [32m[1mref('a)[22m[39m
+
+
+

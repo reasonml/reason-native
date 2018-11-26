@@ -1,0 +1,17 @@
+  > Unformatted Error Output:
+  > File "ast-utils/JSParser.re", line 222, characters 17-47:
+  > Error: Unbound record field Expression.Object.Property.key
+
+Error: ast-utils/JSParser.re:222 17-47
+219 ¦ | Expression.Object.Property((
+220 ¦     entry_loc,
+221 ¦     {
+222 ¦       Expression.Object.Property.key:
+223 ¦         Expression.Object.Property.Identifier((_, key)),
+224 ¦       Expression.Object.Property.value:
+225 ¦         (value_loc, _) as value_node,
+
+Record field Expression; can't be found in any record type.
+
+Record fields must be "in scope". That means you need to `open TheModule` where the record type is defined.
+Alternatively, instead of opening a module, you can prefix the record field name like {TheModule.x: 0, y: 100}.

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Makes sure our dollar-at subshell failure translates to this wrapper script's
+# failure.  That way it blocks the build registering as success!
+set -o pipefail
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+SCRIPTDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+SOURCE="$(readlink "$SOURCE")"
+[[ $SOURCE != /* ]] && SOURCE="$SCRIPTDIR/$SOURCE"
+done
+SCRIPTDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+# exec "$@" 2>&1 |
+#
+("$@") 2>&1 | ${SCRIPTDIR}/berror.exe --path-to-refmttype refmttype
+
