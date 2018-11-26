@@ -1,0 +1,7 @@
+
+(executable
+   (name TestChalk)
+   (public_name TestChalk.exe)
+   (libraries  chalk.test )
+   (package chalk)
+)
