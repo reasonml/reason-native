@@ -1,6 +1,6 @@
 module Make = (Styl: Stylish.StylishSig) => {
   module Printer = Printer.Make(Styl);
-  
+
   open BetterErrorsTypes;
   open Helpers;
   open Printer;

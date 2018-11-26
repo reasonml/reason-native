@@ -4,9 +4,9 @@ open BetterErrorsTypes;
 open Index;
 open Helpers;
 
-let parseFromStdin = (~refmttypePath, ~customLogOutputProcessors, ~customErrorParsers) => {
+let parseFromStdin = (~refmttypePath, ~customLogOutputProcessors, ~customErrorParsers, ~rawOutput) => {
   let reverseErrBuffer = {contents: []};
-  let prettyPrintParsedResult = TerminalReporter.prettyPrintParsedResult(~refmttypePath);
+  let prettyPrintParsedResult = TerminalReporter.prettyPrintParsedResult(~refmttypePath, ~rawOutput);
   let forEachLine = (line) =>
     switch (
       reverseErrBuffer.contents,

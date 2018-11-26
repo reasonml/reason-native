@@ -1,6 +1,6 @@
 module Range =
   struct
-    type t = ((int* int)* (int* int))
+    type t = ((int* int)* (int* int)) [@@deriving yojson]
     let emptyRange = ((0, 0), (0, 0))
   end
 module NuclideDiagnostic =
