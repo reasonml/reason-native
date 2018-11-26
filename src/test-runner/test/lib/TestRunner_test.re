@@ -1,66 +1,10 @@
 /**
  * Copyright 2004-present Facebook. All Rights Reserved.
  */
-module type SnapshotDir = {let snapshotDir: string;};
+open TestRunnerOutputSnapshotTest;
+open TestFramework;
 
-module MakeTestFramework =
-       (SnapshotDir: SnapshotDir)
-       : TestRunner.TestFramework =>
-  TestRunner.Make({
-    let config =
-      TestRunner.TestFrameworkConfig.initialize({
-        updateSnapshotsFlag: "-u",
-        snapshotDir:
-          Filename.(
-            Sys.executable_name
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> (dir => Filename.concat(dir, "src"))
-            |> (dir => Filename.concat(dir, "test-runner"))
-            |> (dir => Filename.concat(dir, "test"))
-            |> (dir => Filename.concat(dir, "lib"))
-            |> (dir => Filename.concat(dir, SnapshotDir.snapshotDir))
-          ),
-        projectDir: "",
-      });
-  });
-
-open TestRunner.Describe;
-open TestRunner.Test;
-
-let testRunnerOutputSnapshotTest = (testName, describeUtils, testFn) =>
-  describeUtils.test(
-    testName,
-    testUtils => {
-      let blankSpaceRegex = Str.regexp_string(" ");
-      module TestFramework =
-        MakeTestFramework({
-          let snapshotDir =
-            "__snapshots__test_runner_test_"
-            ++ Str.global_replace(blankSpaceRegex, "_", testName);
-        });
-      let (stdout, _, _) =
-        IO.captureOutput(() => {
-          TestFramework.describe(testName, utils =>
-            testFn(utils)
-          );
-          TestFramework.run(
-            TestRunner.RunConfig.(initialize() |> updateSnapshots(false)),
-          );
-          ();
-        });
-      testUtils.expect.string(stdout).toMatchSnapshot();
-    },
-  );
-
-TestFramework.describe("TestRunner", describeUtils => {
-  let {test} = describeUtils;
-
+describe("TestRunner", describeUtils => {
   testRunnerOutputSnapshotTest(
     "failing tests",
     describeUtils,
@@ -121,7 +65,6 @@ TestFramework.describe("TestRunner", describeUtils => {
       );
     },
   );
-
   testRunnerOutputSnapshotTest(
     "passing tests",
     describeUtils,
@@ -136,7 +79,6 @@ TestFramework.describe("TestRunner", describeUtils => {
       });
     },
   );
-
   testRunnerOutputSnapshotTest(
     "string operations", describeUtils, ({describe}) =>
     describe("Inner describe 2", ({test}) =>
@@ -170,7 +112,7 @@ TestFramework.describe("TestRunner", describeUtils => {
   );
   testRunnerOutputSnapshotTest(
     "nested describes", describeUtils, ({describe}) =>
-    describe("Root", ({describe}) => {
+    describe("Root", ({describe, test}) => {
       describe("Describe 1", ({test}) => {
         test("Inner test 1.1", ({expect}) => {
           expect.string("foo").toEqual("foo");
@@ -213,7 +155,6 @@ TestFramework.describe("TestRunner", describeUtils => {
       });
     })
   );
-
   testRunnerOutputSnapshotTest(
     "exceptions in tests", describeUtils, ({describe}) =>
     describe("test framework handling of exceptions", ({test}) => {
