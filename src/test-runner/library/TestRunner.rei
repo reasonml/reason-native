@@ -17,8 +17,9 @@ module RunConfig: {
 };
 
 module type TestFramework = {
-  let run: RunConfig.t => unit;
   let describe: Describe.describeFn;
+  let run: RunConfig.t => unit;
+  let cli: unit => unit;
 };
 
 type requiredConfiguration = TestFrameworkConfig.requiredConfiguration;
