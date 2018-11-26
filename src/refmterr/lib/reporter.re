@@ -82,21 +82,46 @@ module Make = (Styl: Stylish.StylishSig) => {
           /* Have to process from the end content first because it changes the
            * range. */
           /* Note: ~last/endColumn /endColumn is not really the last index to highlight but one beyond it. */
-          let highlightedEnd = highlightSource(~dim=true, stringSlice(~first=endColumn, currLine));
+          let highlightedEnd =
+            highlightSource(
+              ~dim=true,
+              stringSlice(~first=endColumn, currLine),
+            );
           let highlightedMiddle =
-            red(~bold=true, ~underline=true, ~dim=false, stringSlice(~first=startColumn, ~last=endColumn, currLine));
-          let highlightedBeginning = highlightSource(~dim=true, stringSlice(~last=startColumn, currLine));
-          let highlighted = highlightedBeginning ++ highlightedMiddle ++ highlightedEnd;
+            red(
+              ~bold=true,
+              ~underline=true,
+              ~dim=false,
+              stringSlice(~first=startColumn, ~last=endColumn, currLine),
+            );
+          let highlightedBeginning =
+            highlightSource(
+              ~dim=true,
+              stringSlice(~last=startColumn, currLine),
+            );
+          let highlighted =
+            highlightedBeginning ++ highlightedMiddle ++ highlightedEnd;
           revResult.contents = [
-            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep) ++ highlighted,
+            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep)
+            ++ highlighted,
             ...revResult.contents,
           ];
         } else if (i == startRow) {
-          let highlightedEnd = red(~bold=true, ~underline=true, stringSlice(~first=startColumn, currLine));
-          let highlightedBeginning = highlightSource(~dim=true, stringSlice(~last=startColumn, currLine));
-          let highlighted = highlightedBeginning ++  highlightedEnd;
+          let highlightedEnd =
+            red(
+              ~bold=true,
+              ~underline=true,
+              stringSlice(~first=startColumn, currLine),
+            );
+          let highlightedBeginning =
+            highlightSource(
+              ~dim=true,
+              stringSlice(~last=startColumn, currLine),
+            );
+          let highlighted = highlightedBeginning ++ highlightedEnd;
           revResult.contents = [
-            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep) ++ highlighted,
+            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep)
+            ++ highlighted,
             ...revResult.contents,
           ];
         } else if (i == endRow) {
@@ -104,13 +129,15 @@ module Make = (Styl: Stylish.StylishSig) => {
           let endStr = stringSlice(~first=endColumn, currLine);
           let beginningStr = stringSlice(~last=endColumn, currLine);
           /* In the middle of the error. */
-          let (white, trimmedBeginningStr) = splitLeadingWhiteSpace(beginningStr);
+          let (white, trimmedBeginningStr) =
+            splitLeadingWhiteSpace(beginningStr);
           let highlightedBeginningStr =
             white ++ red(~bold=true, ~underline=true, trimmedBeginningStr);
           let highlightedEndStr = highlightSource(~dim=true, endStr);
           let highlighted = highlightedBeginningStr ++ highlightedEndStr;
           revResult.contents = [
-            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep) ++ highlighted,
+            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep)
+            ++ highlighted,
             ...revResult.contents,
           ];
         } else {
@@ -125,7 +152,8 @@ module Make = (Styl: Stylish.StylishSig) => {
         };
       } else {
         revResult.contents = [
-          dim(pad(string_of_int(i + 1), lineNumWidth) ++ sep) ++ highlightSource(~dim=true, currLine),
+          dim(pad(string_of_int(i + 1), lineNumWidth) ++ sep)
+          ++ highlightSource(~dim=true, currLine),
           ...revResult.contents,
         ];
       };
@@ -150,21 +178,19 @@ module Make = (Styl: Stylish.StylishSig) => {
         sp(
           "%s %s%s %s",
           labelColor(~invert=true, ~bold=true, label),
-          cyan(
+          cyan(~underline=true, sp("%s", filePath)),
+          highlight(
+            ~dim=true,
             ~underline=true,
-            sp("%s", filePath),
+            sp(":%d %d-%d", startRow + 1, startColumn, endColumn),
           ),
-          highlight(~dim=true, ~underline=true, sp(":%d %d-%d", startRow + 1, startColumn, endColumn)),
           labelColor(~bold=true, warningCodeStr),
         );
       } else {
         sp(
           "%s %s%s %s",
           labelColor(~invert=true, ~bold=true, label),
-          cyan(
-            ~underline=true,
-            filePath
-          ),
+          cyan(~underline=true, filePath),
           highlight(
             ~dim=true,
             ~underline=true,
@@ -200,23 +226,32 @@ module Make = (Styl: Stylish.StylishSig) => {
     );
 
   let prettyPrintParsedResult =
-      (~originalRevLines: list(string), ~rawOutput: bool, ~refmttypePath, result: result)
+      (
+        ~originalRevLines: list(string),
+        ~rawOutput: bool,
+        ~refmttypePath,
+        result: result,
+      )
       : list(string) => {
-    let prettyResult = switch (result) {
+    let prettyResult =
+      switch (result) {
       | Unparsable => originalRevLines
       /* output the line without any decoration around. We previously had some
-        cute little ascii red x mark to say "we couldn't parse this but there's
-        probably an error". But it's very possible that this line's a continuation
-        of a previous error, just that we couldn't parse it. So we try to bolt this
-        line right after our supposedly parsed and pretty-printed error to make them
-        look like one printed error. */
+         cute little ascii red x mark to say "we couldn't parse this but there's
+         probably an error". But it's very possible that this line's a continuation
+         of a previous error, just that we couldn't parse it. So we try to bolt this
+         line right after our supposedly parsed and pretty-printed error to make them
+         look like one printed error. */
       /* the effing length we'd go for better errors... someone gimme a cookie */
       | ErrorFile(NonexistentFile) =>
         /* this case is never reached because we don't ever return `ErrorFile NonexistentFile` from
-          `ParseError.specialParserThatChecksWhetherFileEvenExists` */
+           `ParseError.specialParserThatChecksWhetherFileEvenExists` */
         originalRevLines
       | ErrorFile(Stdin(original)) => [
-          sp("%s (from stdin - see message above)", red(~bold=true, "Error:")),
+          sp(
+            "%s (from stdin - see message above)",
+            red(~bold=true, "Error:"),
+          ),
           original,
         ]
       | ErrorFile(CommandLine(moduleName)) => [
@@ -278,32 +313,43 @@ module Make = (Styl: Stylish.StylishSig) => {
           [""],
           [""],
           indent(dim("# "), List.map(dim, originalRevLines)),
-          [highlight(~dim=true, ~bold=true, "# Unformatted Warning Output:")],
+          [
+            highlight(~dim=true, ~bold=true, "# Unformatted Warning Output:"),
+          ],
         ])
       };
-    switch (rawOutput) {
-    | true =>
+    rawOutput ?
       {
-        let originalRevLinesJson = `List(List.map(x => `String(x), originalRevLines));
-        switch (BetterErrorsTypes.result_to_yojson(result)) {
-        | `List([err_type, err_data]) => [Yojson.Safe.to_string(`Assoc([
-            ("type", err_type),
-            ("originallines", originalRevLinesJson),
-            ("data", err_data)
-          ]))]
-        | `List([err_type]) => [Yojson.Safe.to_string(`Assoc([
-          ("type", err_type),
+        let originalRevLinesJson =
+          `List(List.map(x => `String(x), originalRevLines));
+        let prettyResultJson =
+          `List(List.map(x => `String(x), prettyResult));
+        let basicPayload = [
           ("originallines", originalRevLinesJson),
-        ]))]
+          ("prettyResult", prettyResultJson),
+        ];
+        switch (BetterErrorsTypes.result_to_yojson(result)) {
+        | `List([err_type, err_data]) => [
+            Yojson.Safe.to_string(
+              `Assoc([
+                ("type", err_type),
+                ("data", err_data),
+                ...basicPayload,
+              ]),
+            ),
+          ]
+        | `List([err_type]) => [
+            Yojson.Safe.to_string(
+              `Assoc([("type", err_type), ...basicPayload]),
+            ),
+          ]
         | e =>
           /* This should never happen */
-          {
-            print_endline(Yojson.Safe.to_string(e))
-            raise(Yojson_result_parse_not_list)
-          }
-        }
-      }
-    | false => prettyResult
-    }
-  }
-}
+
+          print_endline(Yojson.Safe.to_string(e));
+          raise(Yojson_result_parse_not_list);
+        };
+      } :
+      prettyResult;
+  };
+};
