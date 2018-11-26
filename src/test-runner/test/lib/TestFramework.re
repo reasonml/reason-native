@@ -15,7 +15,6 @@ let projectDir =
 include TestRunner.Make({
   let config =
     TestRunner.TestFrameworkConfig.initialize({
-      updateSnapshotsFlag: "-u",
       snapshotDir:
         Filename.(
           projectDir
