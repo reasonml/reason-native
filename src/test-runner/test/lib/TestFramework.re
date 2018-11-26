@@ -20,6 +20,7 @@ include TestRunner.Make({
         Filename.(
           projectDir
           |> (dir => Filename.concat(dir, "test"))
+          |> (dir => Filename.concat(dir, "lib"))
           |> (dir => Filename.concat(dir, "__snapshots__"))
         ),
       projectDir,

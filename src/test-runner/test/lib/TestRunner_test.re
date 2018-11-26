@@ -23,6 +23,7 @@ module MakeTestFramework =
             |> (dir => Filename.concat(dir, "src"))
             |> (dir => Filename.concat(dir, "test-runner"))
             |> (dir => Filename.concat(dir, "test"))
+            |> (dir => Filename.concat(dir, "lib"))
             |> (dir => Filename.concat(dir, SnapshotDir.snapshotDir))
           ),
         projectDir: "",
