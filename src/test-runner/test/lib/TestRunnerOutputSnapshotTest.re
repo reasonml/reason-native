@@ -9,7 +9,6 @@ module MakeTestFramework =
   TestRunner.Make({
     let config =
       TestRunner.TestFrameworkConfig.initialize({
-        updateSnapshotsFlag: "-u",
         snapshotDir:
           Filename.(
             Sys.executable_name

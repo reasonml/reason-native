@@ -60,8 +60,9 @@ module Describe = {
 };
 
 module type TestFramework = {
-  let run: RunConfig.t => unit;
   let describe: Describe.describeFn;
+  let run: RunConfig.t => unit;
+  let cli: unit => unit;
 };
 
 module type FrameworkConfig = {let config: TestFrameworkConfig.t;};
@@ -534,13 +535,14 @@ module Make = (UserConfig: FrameworkConfig) => {
   let testFixtures = ref([]);
   let describe = (name, describeBlock) =>
     testFixtures := testFixtures^ @ [(name, describeBlock)];
+
   let run = (config: RunConfig.t) => {
     let _ =
       rootDescribe(
         ~config={
           updateSnapshots: config.updateSnapshots,
           snapshotDir: UserConfig.config.snapshotDir,
-          updateSnapshotsFlag: UserConfig.config.updateSnapshotsFlag,
+          updateSnapshotsFlag: "-u",
           printer: config.printer,
           onTestFrameworkFailure: config.onTestFrameworkFailure
         },
@@ -554,5 +556,10 @@ module Make = (UserConfig: FrameworkConfig) => {
         )
       );
     ();
+  };
+  let cli = () => {
+    let shouldUpdateSnapshots = Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
+    let config = RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
+    run(config);
   };
 };
