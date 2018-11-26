@@ -13,5 +13,5 @@ done
 SCRIPTDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # exec "$@" 2>&1 |
 #
-("$@") 2>&1 | ${SCRIPTDIR}/berror.exe --path-to-refmttype refmttype
+("$@") 2>&1 | ${SCRIPTDIR}/berror.exe --path-to-refmttype refmttype --raw-output
 
