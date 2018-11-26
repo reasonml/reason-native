@@ -3,12 +3,13 @@
 */
 open MatcherTypes;
 
-/* toThrowException is explicitly not included on "not" as the expected behavior
-* is difficult to articulate. Jest will pass if it throws an exception other than the
-* one it is not supposed to throw as well as if no exception is thrown. I assert that
-* .not.toThrow is more intuitive and meets most use cases and as a result we should hold off
-* on adding .not for specific exceptions until compelling use cases are brought forward
-*/
+/*
+ * toThrowException is explicitly not included on "not" as the expected behavior
+ * is difficult to articulate. Jest will pass if it throws an exception other than the
+ * one it is not supposed to throw as well as if no exception is thrown. I assert that
+ * .not.toThrow is more intuitive and meets most use cases and as a result we should hold off
+ * on adding .not for specific exceptions until compelling use cases are brought forward
+ */
 type fnMatchers = {toThrow: unit => unit};
 type fnMatchersWithNot = {
   not: fnMatchers,
