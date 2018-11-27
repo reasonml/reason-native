@@ -1,9 +1,9 @@
 /**
- * Chalk.
- * https://gist.github.com/kyldvs/24793e33e0d88f7396e50a6aedcbda87
- *
- * Copyright 2004-present Facebook. All Rights Reserved.
- */
+ * Copyright (c) Facebook, Inc. Co and its affiliates.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */;
+
 open CreateChalker;
 
 type chalker = string => string;

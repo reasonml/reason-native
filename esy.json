@@ -2,6 +2,7 @@
     "name": "reason-native-dev",
     "version": "0.0.0",
     "description": "My Project",
+    "license": "MIT",
     "esy": {
         "build": "refmterr dune build --profile=release",
         "install": [
