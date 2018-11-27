@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) Facebook, Inc. Co and its affiliates.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */;
 /*
  * Useful variant for various descriptions of errors (is the problem in an
  * expression, or in a pattern?)
