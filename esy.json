@@ -20,9 +20,7 @@
     "@opam/dune": "*",
     "@opam/re": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
-    "refmterr": "*",
-    "@opam/yojson": "*",
-    "@opam/ppx_deriving_yojson": "*"
+    "refmterr": "*"
   },
   "devDependencies": {
     "@opam/merlin": "*",

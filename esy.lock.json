@@ -1,5 +1,5 @@
 {
-  "hash": "16670129a7eec3659a98e683c4ee697f",
+  "hash": "c5f1b022f4c2d5b5e4b17f6dad3a6c36",
   "root": "root@path:./esy.json",
   "node": {
     "root@path:./esy.json": {
@@ -13,8 +13,7 @@
       "dependencies": [
         "@esy-ocaml/reason@3.3.3", "@opam/core_extended@opam:v0.11.0",
         "@opam/dune@opam:1.5.1", "@opam/merlin@opam:3.2.2",
-        "@opam/ppx_deriving_yojson@opam:3.1", "@opam/re@opam:1.7.3",
-        "@opam/yojson@opam:1.4.1", "ocaml@4.6.9", "refmterr@3.1.10"
+        "@opam/re@opam:1.7.3", "ocaml@4.6.9", "refmterr@3.1.10"
       ]
     },
     "refmterr@3.1.10": {
@@ -382,26 +381,6 @@
         "@opam/jbuilder@opam:transition",
         "@opam/ocaml-migrate-parsetree@opam:1.1.0",
         "@opam/ppxlib@opam:0.3.1", "@opam/typerep@opam:v0.11.0",
-        "ocaml@4.6.9"
-      ]
-    },
-    "@opam/ppx_tools@opam:5.1+4.06.0": {
-      "record": {
-        "name": "@opam/ppx_tools",
-        "version": "opam:5.1+4.06.0",
-        "source":
-          "archive:https://github.com/ocaml-ppx/ppx_tools/archive/5.1+4.06.0.tar.gz#md5:6ba2e9690b1f579ba562b86022d1c308",
-        "files": [],
-        "opam": {
-          "name": "ppx_tools",
-          "version": "5.1+4.06.0",
-          "opam":
-            "opam-version: \"2.0\"\nname: \"ppx_tools\"\nversion: \"5.1+4.06.0\"\nsynopsis: \"Tools for authors of ppx rewriters and other syntactic tools\"\nmaintainer: \"alain.frisch@lexifi.com\"\nauthors: \"Alain Frisch <alain.frisch@lexifi.com>\"\nlicense: \"MIT\"\ntags: \"syntax\"\nhomepage: \"https://github.com/ocaml-ppx/ppx_tools\"\nbug-reports: \"https://github.com/ocaml-ppx/ppx_tools/issues\"\ndepends: [\n  \"ocaml\" {>= \"4.06.0\" & < \"4.08\"}\n  \"ocamlfind\" {>= \"1.5.0\"}\n]\nflags: light-uninstall\nbuild: [make \"all\"]\ninstall: [make \"install\"]\nremove: [\"ocamlfind\" \"remove\" \"ppx_tools\"]\ndev-repo: \"git://github.com/ocaml-ppx/ppx_tools.git\"\nurl {\n  src: \"https://github.com/ocaml-ppx/ppx_tools/archive/5.1+4.06.0.tar.gz\"\n  checksum: \"md5=6ba2e9690b1f579ba562b86022d1c308\"\n}",
-          "override": null
-        }
-      },
-      "dependencies": [
-        "@esy-ocaml/substs@0.0.1", "@opam/ocamlfind@opam:1.8.0",
         "ocaml@4.6.9"
       ]
     },
@@ -774,93 +753,6 @@
         "@opam/jbuilder@opam:transition",
         "@opam/ocaml-migrate-parsetree@opam:1.1.0",
         "@opam/ppxlib@opam:0.3.1", "ocaml@4.6.9"
-      ]
-    },
-    "@opam/ppx_deriving_yojson@opam:3.1": {
-      "record": {
-        "name": "@opam/ppx_deriving_yojson",
-        "version": "opam:3.1",
-        "source":
-          "archive:https://github.com/ocaml-ppx/ppx_deriving_yojson/archive/v3.1.tar.gz#md5:83128c06b0569309351886d9fd0dbb74",
-        "files": [
-          {
-            "name": "ppx_deriving_yojson-3.1.patch",
-            "content":
-              "--- ./pkg/build.ml\n+++ ./pkg/build.ml\n@@ -3,7 +3,7 @@\n #use \"topkg.ml\"\n \n let ocamlbuild =\n-  \"ocamlbuild -use-ocamlfind -classic-display -plugin-tag 'package(cppo_ocamlbuild)'\"\n+  \"ocamlbuild -use-ocamlfind -classic-display -plugin-tag \" ^ Filename.quote \"package(cppo_ocamlbuild)\"\n \n let () =\n   Pkg.describe \"ppx_deriving_yojson\" ~builder:(`Other (ocamlbuild, \"_build\")) [\n"
-          },
-          {
-            "name": "patch-topkg-ppx_deriving_yojson.3.1",
-            "content":
-              "--- ./pkg/topkg.ml\n+++ ./pkg/topkg.ml\n@@ -152,7 +152,63 @@\n module Exts : Exts = struct\n   let interface = [\".mli\"; \".cmi\"; \".cmti\"]\n   let interface_opt = \".cmx\" :: interface\n-  let c_library = if Sys.win32 then [\".lib\"] else [\".a\"]\n+  let c_library =\n+    match Sys.win32 with\n+    | false -> [\".a\"]\n+    | true ->\n+      let input_line ch =\n+        try\n+          let s = input_line ch in\n+          let len = String.length s in\n+          if len > 0 && Sys.os_type = \"Win32\" && s.[len-1] = '\\r' then\n+            Some (String.sub s 0 (pred len))\n+          else\n+            Some s\n+        with\n+        | End_of_file -> None\n+      in\n+      let rec get_ext_lib ch =\n+        match input_line ch with\n+        | None -> \".a\"\n+        | Some s ->\n+          let len = String.length s in\n+          if len < 11 || s.[0] <> 'e' || String.sub s 0 9 <> \"ext_lib: \" then\n+            get_ext_lib ch\n+          else\n+            String.sub s 9 (len - 9)\n+      in\n+      let get_ext_lib fln =\n+        let ch = open_in fln in\n+        let ch_closed = ref false in\n+        try\n+          let res = get_ext_lib ch in\n+          ch_closed := true;\n+          close_in ch ;\n+          res\n+        with\n+        | x when !ch_closed = false ->\n+          close_in_noerr ch;\n+          raise x\n+      in\n+      let e_null = if Sys.win32 then \" 2>NUL\" else \" 2>/dev/null\" in\n+      let fln = Filename.temp_file \"get_ext\" \".txt\" in\n+      let cleanup = lazy (try Sys.remove fln with Sys_error _ -> ()) in\n+      try\n+        let qfln = Filename.quote fln in\n+        let cmd = \"ocamlfind ocamlc -config > \" ^ qfln ^ e_null in\n+        let ec = Sys.command cmd in\n+        if ec <> 0 then (\n+          let cmd = \"ocamlc -config > \" ^ qfln ^ e_null in\n+          let ec = Sys.command cmd in\n+          if ec <> 0 then\n+            failwith (Printf.sprintf \"couldn't call ocamlc -config\");\n+        );\n+        let res = get_ext_lib fln in\n+        Lazy.force cleanup;\n+        [res]\n+      with\n+      | x -> Lazy.force cleanup; raise x\n+\n   let c_dll_library = if Sys.win32 then [\".dll\"] else [\".so\"]\n   let library = [\".cma\"; \".cmxa\"; \".cmxs\"] @ c_library\n   let module_library = (interface_opt @ library)\n@@ -258,7 +314,9 @@\n     let src, dst =\n       if not auto then src, dst else\n       let dst = match dst with\n-      | None -> Some (Filename.basename src)\n+      | None ->\n+        let src = if Sys.os_type <> \"Win32\" then src else src ^ \".exe\" in\n+        Some (Filename.basename src)\n       | Some _ as dst -> dst\n       in\n       let src = if Env.native then src ^ \".native\" else src ^ \".byte\" in\n"
-          }
-        ],
-        "opam": {
-          "name": "ppx_deriving_yojson",
-          "version": "3.1",
-          "opam":
-            "opam-version: \"2.0\"\nname: \"ppx_deriving_yojson\"\nversion: \"3.1\"\nsynopsis: \"JSON codec generator for OCaml >=4.02\"\ndescription: \"\"\"\nppx_deriving_yojson is a ppx_deriving plugin that provides\na JSON codec generator.\"\"\"\nmaintainer: \"whitequark <whitequark@whitequark.org>\"\nauthors: \"whitequark <whitequark@whitequark.org>\"\nlicense: \"MIT\"\ntags: [\"syntax\" \"json\"]\nhomepage: \"https://github.com/whitequark/ppx_deriving_yojson\"\ndoc: \"http://whitequark.github.io/ppx_deriving_yojson\"\nbug-reports: \"https://github.com/whitequark/ppx_deriving_yojson/issues\"\ndepends: [\n  \"ocaml\"\n  \"yojson\"\n  \"result\"\n  \"ppx_deriving\" {>= \"4.0\" & < \"5.0\"}\n  \"ocamlfind\" {build}\n  \"ocamlbuild\" {build}\n  \"cppo\" {build}\n  \"cppo_ocamlbuild\" {build}\n  \"ounit\" {with-test}\n  \"ppx_import\" {with-test & >= \"1.1\"}\n]\nconflicts: [\n  \"ppx_deriving\" {= \"4.2\"}\n]\nbuild: [\n  [\n    \"ocaml\"\n    \"pkg/build.ml\"\n    \"native=%{ocaml:native}%\"\n    \"native-dynlink=%{ocaml:native-dynlink}%\"\n  ]\n  [\n    \"ocamlbuild\"\n    \"-classic-display\"\n    \"-use-ocamlfind\"\n    \"src_test/test_ppx_yojson.byte\"\n    \"--\"\n  ] {with-test}\n]\nsubsts: \"pkg/META\"\ndev-repo: \"git://github.com/whitequark/ppx_deriving_yojson.git\"\nurl {\n  src: \"https://github.com/ocaml-ppx/ppx_deriving_yojson/archive/v3.1.tar.gz\"\n  checksum: \"md5=83128c06b0569309351886d9fd0dbb74\"\n}",
-          "override": {
-            "build": [
-              [
-                "bash", "-c",
-                "#{os == 'windows' ? 'patch -p1 < ppx_deriving_yojson-3.1.patch' : 'true'}"
-              ],
-              [
-                "bash", "-c",
-                "#{os == 'windows' ? 'patch -p1 < patch-topkg-ppx_deriving_yojson.3.1' : 'true'}"
-              ],
-              [
-                "ocaml", "pkg/build.ml", "native=true", "native-dynlink=true"
-              ]
-            ]
-          }
-        }
-      },
-      "dependencies": [
-        "@esy-ocaml/substs@0.0.1", "@opam/cppo@opam:1.6.5",
-        "@opam/cppo_ocamlbuild@opam:1.6.0", "@opam/ocamlbuild@opam:0.12.0",
-        "@opam/ocamlfind@opam:1.8.0", "@opam/ppx_deriving@opam:4.2.1",
-        "@opam/result@opam:1.3", "@opam/yojson@opam:1.4.1", "ocaml@4.6.9"
-      ]
-    },
-    "@opam/ppx_deriving@opam:4.2.1": {
-      "record": {
-        "name": "@opam/ppx_deriving",
-        "version": "opam:4.2.1",
-        "source":
-          "archive:https://github.com/ocaml-ppx/ppx_deriving/archive/v4.2.1.tar.gz#md5:2195fccf2a527c3ff9ec5b4e36e2f0a8",
-        "files": [
-          {
-            "name": "ppx_deriving-4.2.1.patch",
-            "content":
-              "--- ./pkg/topkg.ml\n+++ ./pkg/topkg.ml\n@@ -152,7 +152,63 @@\n module Exts : Exts = struct\n   let interface = [\".mli\"; \".cmi\"; \".cmti\"]\n   let interface_opt = \".cmx\" :: interface\n-  let c_library = if Sys.win32 then [\".lib\"] else [\".a\"]\n+  let c_library =\n+    match Sys.win32 with\n+    | false -> [\".a\"]\n+    | true ->\n+      let input_line ch =\n+        try\n+          let s = input_line ch in\n+          let len = String.length s in\n+          if len > 0 && Sys.os_type = \"Win32\" && s.[len-1] = '\\r' then\n+            Some (String.sub s 0 (pred len))\n+          else\n+            Some s\n+        with\n+        | End_of_file -> None\n+      in\n+      let rec get_ext_lib ch =\n+        match input_line ch with\n+        | None -> \".a\"\n+        | Some s ->\n+          let len = String.length s in\n+          if len < 11 || s.[0] <> 'e' || String.sub s 0 9 <> \"ext_lib: \" then\n+            get_ext_lib ch\n+          else\n+            String.sub s 9 (len - 9)\n+      in\n+      let get_ext_lib fln =\n+        let ch = open_in fln in\n+        let ch_closed = ref false in\n+        try\n+          let res = get_ext_lib ch in\n+          ch_closed := true;\n+          close_in ch ;\n+          res\n+        with\n+        | x when !ch_closed = false ->\n+          close_in_noerr ch;\n+          raise x\n+      in\n+      let e_null = if Sys.win32 then \" 2>NUL\" else \" 2>/dev/null\" in\n+      let fln = Filename.temp_file \"get_ext\" \".txt\" in\n+      let cleanup = lazy (try Sys.remove fln with Sys_error _ -> ()) in\n+      try\n+        let qfln = Filename.quote fln in\n+        let cmd = \"ocamlfind ocamlc -config > \" ^ qfln ^ e_null in\n+        let ec = Sys.command cmd in\n+        if ec <> 0 then (\n+          let cmd = \"ocamlc -config > \" ^ qfln ^ e_null in\n+          let ec = Sys.command cmd in\n+          if ec <> 0 then\n+            failwith (Printf.sprintf \"couldn't call ocamlc -config\");\n+        );\n+        let res = get_ext_lib fln in\n+        Lazy.force cleanup;\n+        [res]\n+      with\n+      | x -> Lazy.force cleanup; raise x\n+\n   let c_dll_library = if Sys.win32 then [\".dll\"] else [\".so\"]\n   let library = [\".cma\"; \".cmxa\"; \".cmxs\"] @ c_library\n   let module_library = (interface_opt @ library)\n@@ -258,7 +314,9 @@\n     let src, dst =\n       if not auto then src, dst else\n       let dst = match dst with\n-      | None -> Some (Filename.basename src)\n+      | None ->\n+        let src = if Sys.os_type <> \"Win32\" then src else src ^ \".exe\" in\n+        Some (Filename.basename src)\n       | Some _ as dst -> dst\n       in\n       let src = if Env.native then src ^ \".native\" else src ^ \".byte\" in\n"
-          }
-        ],
-        "opam": {
-          "name": "ppx_deriving",
-          "version": "4.2.1",
-          "opam":
-            "opam-version: \"2.0\"\nname: \"ppx_deriving\"\nversion: \"4.2.1\"\nsynopsis: \"Type-driven code generation for OCaml >=4.02\"\ndescription: \"\"\"\nppx_deriving provides common infrastructure for generating\ncode based on type definitions, and a set of useful plugins\nfor common tasks.\"\"\"\nmaintainer: \"whitequark <whitequark@whitequark.org>\"\nauthors: \"whitequark <whitequark@whitequark.org>\"\nlicense: \"MIT\"\ntags: \"syntax\"\nhomepage: \"https://github.com/whitequark/ppx_deriving\"\ndoc: \"https://whitequark.github.io/ppx_deriving\"\nbug-reports: \"https://github.com/whitequark/ppx_deriving/issues\"\ndepends: [\n  \"ocaml\" {> \"4.03.0\"}\n  \"ocamlbuild\" {build}\n  \"ocamlfind\" {build & >= \"1.6.0\"}\n  \"cppo\" {build}\n  \"cppo_ocamlbuild\" {build}\n  \"ocaml-migrate-parsetree\"\n  \"ppx_derivers\"\n  \"ppx_tools\" {>= \"4.02.3\"}\n  \"result\"\n  \"ounit\" {with-test}\n]\navailable: opam-version >= \"1.2\"\nbuild: [\n  [\n    \"ocaml\"\n    \"pkg/build.ml\"\n    \"native=%{ocaml:native-dynlink}%\"\n    \"native-dynlink=%{ocaml:native-dynlink}%\"\n  ]\n  [\n    \"ocamlbuild\"\n    \"-classic-display\"\n    \"-use-ocamlfind\"\n    \"src_test/test_ppx_deriving.byte\"\n    \"--\"\n  ] {with-test}\n  [make \"doc\"] {with-doc}\n]\nsubsts: \"pkg/META\"\ndev-repo: \"git+https://github.com/whitequark/ppx_deriving.git\"\nurl {\n  src: \"https://github.com/ocaml-ppx/ppx_deriving/archive/v4.2.1.tar.gz\"\n  checksum: \"md5=2195fccf2a527c3ff9ec5b4e36e2f0a8\"\n}",
-          "override": {
-            "build": [
-              [
-                "bash", "-c",
-                "#{os == 'windows' ? 'patch -p1 < ppx_deriving-4.2.1.patch' : 'true'}"
-              ],
-              [
-                "ocaml", "pkg/build.ml", "native=true", "native-dynlink=true"
-              ]
-            ]
-          }
-        }
-      },
-      "dependencies": [
-        "@esy-ocaml/substs@0.0.1", "@opam/cppo@opam:1.6.5",
-        "@opam/cppo_ocamlbuild@opam:1.6.0",
-        "@opam/ocaml-migrate-parsetree@opam:1.1.0",
-        "@opam/ocamlbuild@opam:0.12.0", "@opam/ocamlfind@opam:1.8.0",
-        "@opam/ppx_derivers@opam:1.0", "@opam/ppx_tools@opam:5.1+4.06.0",
-        "@opam/result@opam:1.3", "ocaml@4.6.9"
       ]
     },
     "@opam/ppx_derivers@opam:1.0": {
@@ -1457,27 +1349,6 @@
         }
       },
       "dependencies": [ "@esy-ocaml/substs@0.0.1", "ocaml@4.6.9" ]
-    },
-    "@opam/cppo_ocamlbuild@opam:1.6.0": {
-      "record": {
-        "name": "@opam/cppo_ocamlbuild",
-        "version": "opam:1.6.0",
-        "source":
-          "archive:https://github.com/mjambon/cppo/archive/v1.6.0.tar.gz#md5:aee411b3546bc5d198c71ae9185cade4",
-        "files": [],
-        "opam": {
-          "name": "cppo_ocamlbuild",
-          "version": "1.6.0",
-          "opam":
-            "opam-version: \"2.0\"\nname: \"cppo_ocamlbuild\"\nversion: \"1.6.0\"\nsynopsis: \"ocamlbuild support for cppo, OCaml-friendly source preprocessor\"\nmaintainer: \"martin@mjambon.com\"\nauthors: \"Martin Jambon\"\nlicense: \"BSD-3-Clause\"\nhomepage: \"http://mjambon.com/cppo.html\"\nbug-reports: \"https://github.com/mjambon/cppo/issues\"\ndepends: [\n  \"ocaml\"\n  \"jbuilder\" {build & >= \"1.0+beta10\"}\n  \"ocamlbuild\"\n  \"ocamlfind\"\n  \"cppo\" {>= \"1.6.0\"}\n]\nbuild: [\n  [\"jbuilder\" \"subst\" \"-p\" name] {pinned}\n  [\"jbuilder\" \"build\" \"-p\" name \"-j\" jobs]\n]\ndev-repo: \"git+https://github.com/mjambon/cppo.git\"\nurl {\n  src: \"https://github.com/mjambon/cppo/archive/v1.6.0.tar.gz\"\n  checksum: \"md5=aee411b3546bc5d198c71ae9185cade4\"\n}",
-          "override": null
-        }
-      },
-      "dependencies": [
-        "@esy-ocaml/substs@0.0.1", "@opam/cppo@opam:1.6.5",
-        "@opam/jbuilder@opam:transition", "@opam/ocamlbuild@opam:0.12.0",
-        "@opam/ocamlfind@opam:1.8.0", "ocaml@4.6.9"
-      ]
     },
     "@opam/cppo@opam:1.6.5": {
       "record": {
