@@ -13,7 +13,6 @@
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
-    "@opam/core_extended": "*",
     "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
     "@reason-native/chalk": "*",
