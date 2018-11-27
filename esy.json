@@ -5,10 +5,8 @@
   "esy": {
     "build": "refmterr dune build --profile=release",
     "install": [
-      "esy-installer chalk.install",
-      "esy-installer test-runner.install",
-      "esy-installer console.install",
-      "esy-installer chalk-console.install",
+      "esy-installer chalk.install", "esy-installer test-runner.install",
+      "esy-installer console.install", "esy-installer chalk-console.install",
       "esy-installer file-context-printer.install",
       "esy-installer refmterr.install"
     ]
@@ -18,7 +16,9 @@
     "@esy-ocaml/reason": "*",
     "@opam/core_extended": "*",
     "@opam/dune": "*",
+    "@opam/ppx_deriving_yojson": "3.1",
     "@opam/re": "*",
+    "@opam/yojson": "1.4.1",
     "ocaml": ">= 4.2.0  <= 4.7.0",
     "refmterr": "*"
   },

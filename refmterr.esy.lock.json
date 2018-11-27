@@ -1,5 +1,5 @@
 {
-  "hash": "ecec6495da74a32847d062ee0aa16a7c",
+  "hash": "6c8005127e1cbe734c22fe29a1ae69c0",
   "root": "root@path:./refmterr.json",
   "node": {
     "root@path:./refmterr.json": {
@@ -13,7 +13,22 @@
       "dependencies": [
         "@esy-ocaml/merlin@3.0.5005", "@esy-ocaml/reason@3.3.3",
         "@opam/dune@opam:1.5.1", "@opam/ppx_deriving_yojson@opam:3.1",
-        "@opam/re@opam:1.7.3", "@opam/yojson@opam:1.4.1", "ocaml@4.6.9"
+        "@opam/re@opam:1.7.3", "@opam/yojson@opam:1.4.1", "ocaml@4.6.9",
+        "refmterr@3.1.10"
+      ]
+    },
+    "refmterr@3.1.10": {
+      "record": {
+        "name": "refmterr",
+        "version": "3.1.10",
+        "source":
+          "archive:https://registry.npmjs.org/refmterr/-/refmterr-3.1.10.tgz#sha1:7c3e238022acb5de4e2254ab506d70eee13c0a46",
+        "files": [],
+        "opam": null
+      },
+      "dependencies": [
+        "@esy-ocaml/reason@3.3.3", "@opam/dune@opam:1.5.1",
+        "@opam/re@opam:1.7.3", "ocaml@4.6.9"
       ]
     },
     "ocaml@4.6.9": {
