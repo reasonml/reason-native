@@ -1,31 +1,20 @@
- /**
- * Copyright 2004-present Facebook. All Rights Reserved.
- */
+/**
+ * Copyright (c) Facebook, Inc. Co and its affiliates.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */;
 open Collections;
 open MatcherUtils;
 open SnapshotIO;
+open Option.Infix;
+include TestFrameworkConfig;
+include RunConfig;
 
 module FCP =
   FileContextPrinter.Make({
     let linesBefore = 3;
     let linesAfter = 3;
   });
-
-let (>>=) = (o, f) =>
-  switch (o) {
-  | Some(x) => f(x)
-  | None => None
-};
-let (|?:) = (o, default) =>
-  switch (o) {
-  | Some(value) => value
-  | None => default
-};
-let (>>|) = (opt, fn) =>
-  switch (opt) {
-  | Some(value) => Some(fn(value))
-  | None => None
-};
 
 module Test = {
   type testResult =
@@ -49,6 +38,8 @@ module Describe = {
     updateSnapshots: bool,
     updateSnapshotsFlag: string,
     snapshotDir: string,
+    printer: RunConfig.printer,
+    onTestFrameworkFailure: unit => unit,
   };
   type describeState = {
     testHashes: MStringSet.t,
@@ -63,15 +54,24 @@ module Describe = {
       ~config: describeConfig,
       ~isRootDescribe: bool=?,
       ~state: option(describeState)=?,
-      string,
+      ~describeName: option(string),
       describeUtils => unit
     ) =>
-    unit
+    list(MIntMap.t(Test.testSpec))
   and describeFn = (string, describeUtils => unit) => unit;
 };
 
-module Make = (TestSnapshotIO: SnapshotIO) => {
-  module TestSnapshot = Snapshot.Make(TestSnapshotIO);
+module type TestFramework = {
+  let describe: Describe.describeFn;
+  let run: RunConfig.t => unit;
+  let cli: unit => unit;
+};
+
+module type FrameworkConfig = {let config: TestFrameworkConfig.t;};
+
+module Make = (UserConfig: FrameworkConfig) => {
+  module TestSnapshot = Snapshot.Make(SnapshotIO.FileSystemSnapshotIO);
+  module TestSnapshotIO = SnapshotIO.FileSystemSnapshotIO;
 
   let escape = (s: string): string => {
     let lines = Str.split(Str.regexp("\n"), s);
@@ -129,39 +129,42 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
       ~config: Describe.describeConfig,
       ~isRootDescribe=true,
       ~state=None,
-      describeName,
+      ~describeName: option(string),
       fn,
     ) => {
       open Test;
       open Describe;
       module StackTrace =
         StackTrace.Make({
-          let baseDir =
-            config.snapshotDir |> Filename.dirname |> Filename.dirname;
+          let baseDir = UserConfig.config.projectDir;
           let exclude = ["TestRunner.re", "Matcher"];
           let formatLink = Chalk.cyan;
           let formatText = Chalk.dim;
         });
       let state =
-        switch (state) {
-        | Some(state) => state
-        | None => {
-            testHashes: MStringSet.empty(),
-            snapshotState:
-              ref(
-                TestSnapshot.initializeState(
-                  ~snapshotDir=config.snapshotDir,
-                  ~updateSnapshots=config.updateSnapshots,
-                ),
+        state
+        |?: {
+          testHashes: MStringSet.empty(),
+          snapshotState:
+            ref(
+              TestSnapshot.initializeState(
+                ~snapshotDir=config.snapshotDir,
+                ~updateSnapshots=config.updateSnapshots,
               ),
-          }
+            ),
         };
+      open RunConfig;
 
+      let {printEndline, printString, printNewline, flush } = config.printer;
+
+      let describeName = describeName |?: "root describe";
       let printSnapshotStatus = () =>
         if (isRootDescribe) {
-          print_endline(
-            TestSnapshot.getSnapshotStatus(state.snapshotState^),
-          );
+          let _ =
+            state.snapshotState^
+            |> TestSnapshot.getSnapshotStatus
+            >>| printEndline;
+          ();
         };
       let testHashes = state.testHashes;
       /* This will generate unique IDs for tests within this describe. */
@@ -180,7 +183,7 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
         };
       };
       /* Convert describeName to something reasonable for a file name. */
-      let describeFileName = sanitizeName(describeName);
+      let describeFileName = describeName |> sanitizeName;
       /* Create the test function we will pass around. */
       let testFn: Test.testFn =
         (testName, usersTest) => {
@@ -222,7 +225,6 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
           let updateTestResult = updateTestResult(testID);
           let snapshotPrefix =
             Filename.concat(config.snapshotDir, describeFileName);
-
           module TestSnapshotMatcher =
             SnapshotMatchers.Make(
               {
@@ -298,27 +300,35 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
           let _ =
             MIntMap.set(
               testID,
-              {testID, name: testName, runTest, testResult: Pending},
+              {testID, name: testTitle, runTest, testResult: Pending},
               testMap,
             );
           ();
         };
       /* Prepend the original describe name before the next one when nesting */
-      let describeFn = (describeName2, fn) =>
-        rootDescribe(
-          ~config,
-          ~isRootDescribe=false,
-          ~state=Some(state),
-          describeName ++ ancestrySeparator ++ describeName2,
-          fn,
-        );
+      let testMaps = ref([]);
+      let describeFn = (describeName2, fn) => {
+        let resultMap =
+          rootDescribe(
+            ~config,
+            ~isRootDescribe=false,
+            ~state=Some(state),
+            ~describeName=
+              Some(
+                isRootDescribe ?
+                  describeName2 :
+                  describeName ++ ancestrySeparator ++ describeName2,
+              ),
+            fn,
+          );
+        testMaps := testMaps^ @ resultMap;
+      };
       let utils = {describe: describeFn, test: testFn};
       /* Gather all the tests */
       fn(utils);
       /* Now run them */
       let total = ref(MIntMap.size(testMap));
       let failed = ref(0);
-
       if (total^ > 0) {
         let pending = ref(total^);
         let passed = ref(0);
@@ -356,15 +366,18 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
           let diff = prev^ - updateLength;
           if (diff > 0) {
             /* This moves back `diff` columns then clears to end of line */
-            print_string(
+            printString(
               "\027[" ++ string_of_int(diff) ++ "D\027[K",
             );
           };
-          print_string("\r" ++ update);
+          printString("\r" ++ update);
           flush(stdout);
           prev := updateLength;
         };
-        print_endline(Chalk.whiteBright(describeName));
+
+        let _ =
+          isRootDescribe ? () : printEndline(Chalk.whiteBright(describeName));
+
         update(true);
         let _ =
           MIntMap.forEach(
@@ -385,32 +398,41 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
             },
             testMap,
           );
-        print_newline();
+        printNewline();
 
         let getStackInfo = (optLoc: option(Printexc.location), trace: string) => {
-          let stackInfo = (optLoc
-            >>| (l: Printexc.location) => FCP.print(
-              l.filename,
-              (
-                (l.line_number, l.start_char),
-                (l.line_number, l.end_char),
-              ),
-            ))
-            >>| ((optFileContext) => switch(optFileContext) {
-              | Some(context) => String.concat("", [
-                "\n\n",
-                indent(context, ~indent=stackIndent),
-                "\n\n",
-                indent(trace, ~indent=stackIndent)
-              ])
-              | None => ""
-            })
+          let stackInfo =
+            optLoc
+            >>| (
+              (l: Printexc.location) =>
+                FCP.print(
+                  l.filename,
+                  (
+                    (l.line_number, l.start_char),
+                    (l.line_number, l.end_char),
+                  ),
+                )
+            )
+            >>| (
+              optFileContext =>
+                switch (optFileContext) {
+                | Some(context) =>
+                  String.concat(
+                    "\n\n",
+                    [
+                      indent(context, ~indent=stackIndent),
+                      indent(trace, ~indent=stackIndent),
+                    ],
+                  )
+                | None => ""
+                }
+            )
             |?: "";
-            stackInfo;
+          stackInfo;
         };
 
         if (failed^ > 0) {
-          print_newline();
+          printNewline();
           let _ =
             testMap
             |> MIntMap.toList
@@ -423,36 +445,28 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
                      let titleBullet = "• ";
                      let title =
                        Chalk.bold(
-                         failFormatter(
-                           titleIndent
-                           ++ titleBullet
-                           ++ describeName
-                           ++ ancestrySeparator
-                           ++ name
-                           ++ "\n",
-                         ),
+                         failFormatter(titleIndent ++ titleBullet ++ name),
                        );
 
+                     let exceptionMessage =
+                       String.concat(
+                         "",
+                         [
+                           indent("Exception ", ~indent=messageIndent),
+                           Chalk.dim(Printexc.to_string(e)),
+                           "\n",
+                         ],
+                       );
                      String.concat(
-                       "",
-                       [
-                         title,
-                         indent("Exception ", ~indent=messageIndent),
-                         Chalk.dim(Printexc.to_string(e)),
-                         getStackInfo(loc, trace)
-                       ],
+                       "\n",
+                       [title, exceptionMessage, getStackInfo(loc, trace)],
                      );
                    | {testResult: Failed(message, loc, stack), name} =>
                      let titleBullet = "• ";
                      let title =
                        Chalk.bold(
                          failFormatter(
-                           titleIndent
-                           ++ titleBullet
-                           ++ describeName
-                           ++ ancestrySeparator
-                           ++ name
-                           ++ "\n",
+                           titleIndent ++ titleBullet ++ name ++ "\n",
                          ),
                        );
                      String.concat(
@@ -460,7 +474,7 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
                        [
                          title,
                          indent(message, ~indent=messageIndent),
-                         getStackInfo(loc, stack)
+                         getStackInfo(loc, stack),
                        ],
                      );
                    };
@@ -468,11 +482,30 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
                })
             |> List.filter(res => res != "")
             |> String.concat("\n\n")
-            |> print_endline;
+            |> printEndline;
           printSnapshotStatus();
-          /* Exit with non-zero exit code since there were test failures */
-          exit(1);
         };
+      };
+      if (isRootDescribe) {
+        failed :=
+          List.fold_left(
+            (num, m) => {
+              let failures = ref(0);
+              m
+              |> MIntMap.values
+              |> List.iter(spec =>
+                   switch (spec.testResult) {
+                   | Pending
+                   | Passed => ()
+                   | Failed(_)
+                   | Exception(_) => incr(failures)
+                   }
+                 );
+              num + failures^;
+            },
+            0,
+            testMaps^,
+          );
       };
       if (failed^ === 0 && isRootDescribe) {
         /* mark pending and failed tests as checked so we don't delete their associated snapshots */
@@ -495,5 +528,40 @@ module Make = (TestSnapshotIO: SnapshotIO) => {
         TestSnapshot.removeUnusedSnapshots(state.snapshotState^);
       };
       printSnapshotStatus();
+      if (failed^ > 0 && isRootDescribe) {
+        config.onTestFrameworkFailure();
+      };
+      testMaps^ @ [testMap];
     };
+
+  let testFixtures = ref([]);
+  let describe = (name, describeBlock) =>
+    testFixtures := testFixtures^ @ [(name, describeBlock)];
+
+  let run = (config: RunConfig.t) => {
+    let _ =
+      rootDescribe(
+        ~config={
+          updateSnapshots: config.updateSnapshots,
+          snapshotDir: UserConfig.config.snapshotDir,
+          updateSnapshotsFlag: "-u",
+          printer: config.printer,
+          onTestFrameworkFailure: config.onTestFrameworkFailure
+        },
+        ~isRootDescribe=true,
+        ~state=None,
+        ~describeName=None,
+        ({describe}) =>
+        List.iter(
+          ((name, describeBlock)) => describe(name, describeBlock),
+          testFixtures^,
+        )
+      );
+    ();
+  };
+  let cli = () => {
+    let shouldUpdateSnapshots = Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
+    let config = RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
+    run(config);
+  };
 };

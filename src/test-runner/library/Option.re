@@ -1,25 +1,44 @@
 /**
- * Copyright 2004-present Facebook. All Rights Reserved.
- */
+ * Copyright (c) Facebook, Inc. Co and its affiliates.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */;
+let isSome = (o: option('a)): bool =>
+  switch (o) {
+  | Some(_) => true
+  | None => false
+  };
+let isNone = (o: option('a)): bool =>
+  switch (o) {
+  | Some(_) => false
+  | None => true
+  };
+let valuex = (o: option('a)): 'a =>
+  switch (o) {
+  | Some(value) => value
+  | None => Errors.fatal("Expected option to have value but got None")
+  };
+let valueOr = (default: 'a, o: option('a)): 'a =>
+  switch (o) {
+  | Some(value) => value
+  | None => default
+  };
+let toBool = valueOr(false);
 
-let isSome = (o: option('a)) : bool =>
+module Infix = {
+  let (>>=) = (o, f) =>
     switch (o) {
-    | Some(_) => true
-    | None => false
+    | Some(x) => f(x)
+    | None => None
     };
-let isNone = (o: option('a)) : bool =>
-    switch (o) {
-    | Some(_) => false
-    | None => true
-    };
-let valuex = (o: option('a)) : 'a =>
-    switch (o) {
-    | Some(value) => value
-    | None => Errors.fatal("Expected option to have value but got None")
-    };
-let valueOr = (default: 'a, o: option('a)) : 'a =>
+  let (|?:) = (o, default) =>
     switch (o) {
     | Some(value) => value
     | None => default
     };
-let toBool = valueOr(false);
+  let (>>|) = (opt, fn) =>
+    switch (opt) {
+    | Some(value) => Some(fn(value))
+    | None => None
+    };
+};

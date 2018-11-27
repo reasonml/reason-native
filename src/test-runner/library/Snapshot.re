@@ -1,6 +1,8 @@
 /**
- * Copyright 2004-present Facebook. All Rights Reserved.
- */
+ * Copyright (c) Facebook, Inc. Co and its affiliates.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */;
 open SnapshotIO;
 open Collections;
 type state = {
@@ -137,7 +139,11 @@ module Make = (IO: SnapshotIO) => {
         ];
     };
 
-    String.concat("\n", messages^);
+    if (List.length(messages^) > 0) {
+      Some(String.concat("\n", messages^));
+    } else {
+      None;
+    };
   };
 
   let removeUnusedSnapshots = state =>

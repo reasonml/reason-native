@@ -1,4 +1,3 @@
-TestRunner › TestRunner › passing tests
-\027[97mRoot Describe\027[39m
+TestRunner › passing tests
+\027[97mpassing tests\027[39m
 \r[2/2] Pending  \027[2m[0/2] Passed\027[22m  \027[2m[0/2] Failed\027[22m\r[1/2] Pending  \027[2m[1/2] Passed\027[22m  \027[2m[0/2] Failed\027[22m\r\027[2m[0/2] Pending\027[22m  \027[32m[2/2] Passed\027[39m  \027[2m[0/2] Failed\027[22m
-

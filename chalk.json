@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0"
+    "ocaml": "~4.6.0",
+    "@reason-native/test-runner": "*"
   }
 }

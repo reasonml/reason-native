@@ -1,0 +1,2 @@
+Chalk.length › ANSI escape sequences should be applied inside chalkers and persisted outside of them
+\027[2moo\027[22m\027[2m\027[32mhello \027[39m\027[22m\027[2m\027[32m\027[4mworld!\027[39m\027[22m\027[2m\027[4munchalked o_O\027[22m\027[4m reset to prevent underlines on the rest of stdout \027[0m
