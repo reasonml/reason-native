@@ -539,11 +539,9 @@ module Make = (UserConfig: FrameworkConfig) => {
   let describe = (name, describeBlock) =>
     testFixtures := testFixtures^ @ [(name, describeBlock)];
 
-  let run = (config: RunConfig.t) => {
-    let prevBacktraceStatus = Printexc.backtrace_status();
-    Printexc.record_backtrace(true);
-    let _ =
-      try (
+  let run = (config: RunConfig.t) =>
+    Util.withBacktrace(() =>
+      ignore(
         rootDescribe(
           ~config={
             updateSnapshots: config.updateSnapshots,
@@ -560,14 +558,9 @@ module Make = (UserConfig: FrameworkConfig) => {
             ((name, describeBlock)) => describe(name, describeBlock),
             testFixtures^,
           )
-        )
-      ) {
-      | e =>
-        Printexc.record_backtrace(prevBacktraceStatus);
-        raise(e);
-      };
-    Printexc.record_backtrace(prevBacktraceStatus);
-  };
+        ),
+      )
+    );
 
   let cli = () => {
     let shouldUpdateSnapshots = Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
