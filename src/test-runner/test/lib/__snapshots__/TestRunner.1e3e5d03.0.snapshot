@@ -32,17 +32,17 @@ TestRunner › failing tests
       \027[31m\"bacon\"\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.toEqualFile\027[39m\027[22m
-    Exception \027[2m(Sys_error \"tests/testFiles/foo.txt: No such file or directory\")\027[22m
+    Exception \027[2mSys_error(\"tests/testFiles/foo.txt: No such file or directory\")\027[22m
 
 
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.not.toEqualFile\027[39m\027[22m
-    Exception \027[2m(Sys_error \"tests/testFiles/simple.txt: No such file or directory\")\027[22m
+    Exception \027[2mSys_error(\"tests/testFiles/simple.txt: No such file or directory\")\027[22m
 
 
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.file.not.toEqualFile\027[39m\027[22m
-    Exception \027[2m(Sys_error \"tests/testFiles/simple.txt: No such file or directory\")\027[22m
+    Exception \027[2mSys_error(\"tests/testFiles/simple.txt: No such file or directory\")\027[22m
 
 
 
