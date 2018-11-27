@@ -561,6 +561,7 @@ module Make = (UserConfig: FrameworkConfig) => {
     ();
   };
   let cli = () => {
+    Printexc.record_backtrace(true);
     let shouldUpdateSnapshots = Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
     let config = RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
     run(config);
