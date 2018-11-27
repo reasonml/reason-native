@@ -540,28 +540,36 @@ module Make = (UserConfig: FrameworkConfig) => {
     testFixtures := testFixtures^ @ [(name, describeBlock)];
 
   let run = (config: RunConfig.t) => {
-    let _ =
-      rootDescribe(
-        ~config={
-          updateSnapshots: config.updateSnapshots,
-          snapshotDir: UserConfig.config.snapshotDir,
-          updateSnapshotsFlag: "-u",
-          printer: config.printer,
-          onTestFrameworkFailure: config.onTestFrameworkFailure
-        },
-        ~isRootDescribe=true,
-        ~state=None,
-        ~describeName=None,
-        ({describe}) =>
-        List.iter(
-          ((name, describeBlock)) => describe(name, describeBlock),
-          testFixtures^,
-        )
-      );
-    ();
-  };
-  let cli = () => {
+    let prevBacktraceStatus = Printexc.backtrace_status();
     Printexc.record_backtrace(true);
+    let _ =
+      try (
+        rootDescribe(
+          ~config={
+            updateSnapshots: config.updateSnapshots,
+            snapshotDir: UserConfig.config.snapshotDir,
+            updateSnapshotsFlag: "-u",
+            printer: config.printer,
+            onTestFrameworkFailure: config.onTestFrameworkFailure,
+          },
+          ~isRootDescribe=true,
+          ~state=None,
+          ~describeName=None,
+          ({describe}) =>
+          List.iter(
+            ((name, describeBlock)) => describe(name, describeBlock),
+            testFixtures^,
+          )
+        )
+      ) {
+      | e =>
+        Printexc.record_backtrace(prevBacktraceStatus);
+        raise(e);
+      };
+    Printexc.record_backtrace(prevBacktraceStatus);
+  };
+
+  let cli = () => {
     let shouldUpdateSnapshots = Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
     let config = RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
     run(config);
