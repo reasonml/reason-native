@@ -1,0 +1,12 @@
+errs
+asd.js
+_build/
+.*
+.merlin
+a.out
+tests
+*.install
+.git
+*.png
+
+yarn-error.log

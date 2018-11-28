@@ -1,0 +1,24 @@
+{
+  "name": "test-runner",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "refmterr dune build -p test-runner",
+    "install": "esy-installer test-runner.install"
+  },
+  "scripts": {
+    "test": "esy x TestTestRunner.exe"
+  },
+  "//": "TODO publish @reason-native/chalk, @reason-native/file-context-printer and reference npm version",
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "refmterr": "*",
+    "ocaml": ">= 4.2.0  <= 4.7.0",
+    "@reason-native/chalk": "*",
+    "@reason-native/file-context-printer": "*"
+  },
+  "devDependencies": {
+    "@esy-ocaml/merlin": "*"
+  }
+}

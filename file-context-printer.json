@@ -1,0 +1,22 @@
+{
+    "name": "@reason-native/file-context-printer",
+    "version": "0.0.0",
+    "esy": {
+      "build": "refmterr dune build -p file-context-printer",
+      "install": "esy-installer file-context-printer.install"
+    },
+    "scripts": {
+    },
+    "//": "TODO publish @reason-native/chalk and reference npm version",
+    "dependencies": {
+      "@opam/dune": "*",
+      "@esy-ocaml/reason": "*",
+      "ocaml": ">= 4.2.0  <= 4.7.0",
+      "@opam/re": "*",
+      "@reason-native/chalk": "*"
+    },
+    "devDependencies": {
+      "@esy-ocaml/merlin": "*",
+      "ocaml": "~4.6.0"
+    }
+  }

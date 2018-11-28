@@ -1,0 +1,24 @@
+{
+  "name": "@reason-native/console",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "refmterr dune build -p console",
+    "install": "esy-installer console.install"
+  },
+  "scripts": {
+    "test": "esy x TestConsole.exe",
+    "buildJs": "esy x dune build --profile=release test/TestConsole.bc.js",
+    "testJs": "node _build/default/test/TestConsole.bc.js"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "^3.3.0",
+    "refmterr": "*",
+    "ocaml": ">= 4.2.0  <= 4.7.0"
+  },
+  "devDependencies": {
+    "@esy-ocaml/merlin": "*",
+    "ocaml": "~4.6.0"
+  }
+}
