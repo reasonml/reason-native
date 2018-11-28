@@ -1,20 +1,28 @@
 # test-runner
 
-
 [![CircleCI](https://circleci.com/gh/yourgithubhandle/test-runner/tree/master.svg?style=svg)](https://circleci.com/gh/yourgithubhandle/test-runner/tree/master)
 
-## Getting Started
+## Installation
 
-Install test-runner using [`esy`](https://esy.sh/)
-
+We recommend that you use [`esy`](https://esy.sh/) to handle your package management. To install esy using npm, run
 ```bash
-esy add @reason-native/test-runner
+npm install -g esy
 ```
 
-Or manually add it as a dev dependency to your package.json and run
-```bash
-esy install
+Add it as a dev dependency to your package.json (or esy.json) and run ```esy install```
+
+**package.json**
 ```
+...
+
+devDependencies": {
+    ...
+    "@esy-ocaml/test-runner": "*",
+    ...
+},
+...
+```
+## Creating a test project
 
 Let's start by creating a library for our tests inside a directory called test and create a dune file to handle building our code (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
 ```
@@ -30,10 +38,11 @@ Let's start by creating a library for our tests inside a directory called test a
 (library
    (name MyLibTest)
    (public_name my-lib.test)
-   ; the linkall flag ensures that all of our tests are compiled and the -g flag emits debugging information
+   ; the linkall flag ensures that all of our tests are compiled and the
+   ; -g flag emits debugging information
    (ocamlopt_flags -linkall -g)
-   ; you will want to depend on the library you are testing as well,
-   ; however for the purposes of this example we are only depending on the test runner itself
+   ; you will want to depend on the library you are testing as well, however for
+   ; the purposes of this example we are only depending on the test runner itself
    (libraries test-runner.lib )
 )
 ```
