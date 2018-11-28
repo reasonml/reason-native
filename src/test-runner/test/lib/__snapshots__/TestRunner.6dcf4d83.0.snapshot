@@ -14,7 +14,7 @@ TestRunner › exceptions in tests
       \027[31mfoo\027[39m\027[32mbar\027[39m
 
 \027[1m\027[31m  \226\128\162 exceptions in tests \226\128\186 test framework handling of exceptions \226\128\186 uninlineable exception output\027[39m\027[22m
-    Exception \027[2m(Invalid_argument \"I'm invalid :(\")\027[22m
+    Exception \027[2mInvalid_argument(\"I'm invalid :(\")\027[22m
 
       \027[2m165 \226\148\134 \027[22m\027[2m  expect.\027[22m\027[33m\027[2mstring\027[22m\027[39m\027[2m(\027[22m\027[32m\027[2m\"foo\"\027[22m\027[39m\027[2m).toEqual(\027[22m\027[32m\027[2m\"bar\"\027[22m\027[39m\027[2m)\027[22m
       \027[2m166 \226\148\134 \027[22m\027[2m);\027[22m

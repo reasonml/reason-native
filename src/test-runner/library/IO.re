@@ -62,10 +62,23 @@ let readLines = (file: string) : list(string) => {
     };
 
   /**
-   * Very simple wrapper around a `rm -rf <path>` command.
+   * Implements `rm -rf <path>` behaviour.
    */
-  let rmrf = (path: string) : unit =>
-    Core_extended.Std.Shell.run("rm", ["-rf", path]);
+  let rmrf = (path: string) : unit => {
+    let rec visit = (path) =>
+      if (Sys.is_directory(path)) {
+        Array.iter(
+          name => visit(Filename.concat(path, name)),
+          Sys.readdir(path)
+        );
+        Unix.rmdir(path);
+      } else {
+        Unix.unlink(path);
+      };
+    if (Sys.file_exists(path)) {
+      visit(path);
+    }
+  };
 
   /**
    * Writes a file at the given path containing the given contents.

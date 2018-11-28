@@ -21,7 +21,6 @@
         "@esy-ocaml/reason": "*",
         "refmterr": "*",
         "ocaml": ">= 4.2.0  <= 4.7.0",
-        "@opam/core_extended": "*",
         "@opam/re": "*"
     },
     "devDependencies": {

@@ -539,27 +539,29 @@ module Make = (UserConfig: FrameworkConfig) => {
   let describe = (name, describeBlock) =>
     testFixtures := testFixtures^ @ [(name, describeBlock)];
 
-  let run = (config: RunConfig.t) => {
-    let _ =
-      rootDescribe(
-        ~config={
-          updateSnapshots: config.updateSnapshots,
-          snapshotDir: UserConfig.config.snapshotDir,
-          updateSnapshotsFlag: "-u",
-          printer: config.printer,
-          onTestFrameworkFailure: config.onTestFrameworkFailure
-        },
-        ~isRootDescribe=true,
-        ~state=None,
-        ~describeName=None,
-        ({describe}) =>
-        List.iter(
-          ((name, describeBlock)) => describe(name, describeBlock),
-          testFixtures^,
-        )
-      );
-    ();
-  };
+  let run = (config: RunConfig.t) =>
+    Util.withBacktrace(() =>
+      ignore(
+        rootDescribe(
+          ~config={
+            updateSnapshots: config.updateSnapshots,
+            snapshotDir: UserConfig.config.snapshotDir,
+            updateSnapshotsFlag: "-u",
+            printer: config.printer,
+            onTestFrameworkFailure: config.onTestFrameworkFailure,
+          },
+          ~isRootDescribe=true,
+          ~state=None,
+          ~describeName=None,
+          ({describe}) =>
+          List.iter(
+            ((name, describeBlock)) => describe(name, describeBlock),
+            testFixtures^,
+          )
+        ),
+      )
+    );
+
   let cli = () => {
     let shouldUpdateSnapshots = Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
     let config = RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
