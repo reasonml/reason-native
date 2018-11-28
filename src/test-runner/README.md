@@ -132,4 +132,4 @@ esy x TestRunnerTest.exe
 ```
 
 ## License
-@reason-native/test-runner is MIT licensed, as found in the LICENSE file.
+@reason-native/test-runner is MIT licensed, as found in the LICENSE file at the root of the reason-native repository.
