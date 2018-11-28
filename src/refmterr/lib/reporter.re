@@ -9,7 +9,7 @@ module Make = (Styl: Stylish.StylishSig) => {
   module ReportError = ReportError.Make(Styl);
   module ReportWarning = ReportWarning.Make(Styl);
 
-  exception Yojson_result_parse_not_list;
+  exception Yojson_result_parse_not_list(string);
 
   open BetterErrorsTypes;
   open Helpers;
@@ -351,9 +351,7 @@ module Make = (Styl: Stylish.StylishSig) => {
           ]
         | e =>
           /* This should never happen */
-
-          print_endline(Yojson.Safe.to_string(e));
-          raise(Yojson_result_parse_not_list);
+          raise(Yojson_result_parse_not_list(Yojson.Safe.to_string(e)));
         };
       } :
       prettyResult;
