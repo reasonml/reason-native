@@ -2,6 +2,7 @@
   "name": "reason-native-dev",
   "version": "0.0.0",
   "description": "My Project",
+  "license": "MIT",
   "esy": {
     "build": "refmterr dune build --profile=release",
     "install": [
@@ -15,14 +16,13 @@
   },
   "scripts": {},
   "dependencies": {
-    "@esy-ocaml/reason": "*",
-    "@opam/core_extended": "*",
     "@opam/dune": "*",
-    "@opam/ppx_deriving_yojson": "3.1",
-    "@opam/re": "*",
-    "@opam/yojson": "1.4.1",
+    "@esy-ocaml/reason": "*",
+    "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
-    "refmterr": "*"
+    "@opam/re": "*",
+    "@opam/ppx_deriving_yojson": "3.1",
+    "@opam/yojson": "1.4.1"
   },
   "devDependencies": {
     "@opam/merlin": "*",
