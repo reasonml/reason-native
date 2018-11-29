@@ -6,7 +6,7 @@
  */;
 open TestFramework;
 
-module MakeInnterTestFramework = () =>
+module MakeInnterTestFramework = (()) =>
   TestRunner.Make({
     let config =
       TestRunner.TestFrameworkConfig.initialize({
@@ -35,10 +35,12 @@ describe("Multiple TestFramework.describes", ({test}) => {
 
   let testCombinationOfPassingAndFailingDescribes = combination =>
     test(
-      "Pass: [" ++ boolListToString(combination) ++ "] should all be called and exit with code 1 if any are false",
+      "Pass: ["
+      ++ boolListToString(combination)
+      ++ "] should all be called and exit with code 1 if any are false",
       ({expect}) => {
         module InnerTestFramework =
-          MakeInnterTestFramework();
+          MakeInnterTestFramework({});
         let numCalls = ref(0);
         let i = ref(0);
         List.iter(
@@ -47,10 +49,13 @@ describe("Multiple TestFramework.describes", ({test}) => {
             let describeName =
               "InnerTestFramework describe " ++ string_of_int(i^);
             InnerTestFramework.describe(describeName, ({test: innerTest}) =>
-              innerTest("inner test " ++ string_of_int(i^), ({expect}) => {
-                incr(numCalls);
-                expect.bool(true).toBe(pass);
-              })
+              innerTest(
+                "inner test " ++ string_of_int(i^),
+                ({expect}) => {
+                  incr(numCalls);
+                  expect.bool(true).toBe(pass);
+                },
+              )
             );
           },
           combination,
@@ -67,13 +72,16 @@ describe("Multiple TestFramework.describes", ({test}) => {
                  printNewline: _ => (),
                  flush: _ => (),
                })
-            |> onTestFrameworkFailure(() => { onFrameworkFailureCalled := true; })
+            |> onTestFrameworkFailure(() => onFrameworkFailureCalled := true)
           ),
         );
 
         expect.int(numCalls^).toBe(List.length(combination));
-        let shouldOnFrameworkFailureBeCalled = combination |> List.exists(entry => entry == false);
-        expect.bool(onFrameworkFailureCalled^).toBe(shouldOnFrameworkFailureBeCalled);
+        let shouldOnFrameworkFailureBeCalled =
+          combination |> List.exists(entry => entry == false);
+        expect.bool(onFrameworkFailureCalled^).toBe(
+          shouldOnFrameworkFailureBeCalled,
+        );
       },
     );
 

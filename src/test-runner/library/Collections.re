@@ -36,7 +36,7 @@ module Set = {
     /* Standard JavaScript Set methods */
     let size: t => int = Set_Impl.cardinal;
     let add: (value, t) => t = Set_Impl.add;
-    let clear: t => t = (_) => Set_Impl.empty;
+    let clear: t => t = _ => Set_Impl.empty;
     let delete: (value, t) => t = Set_Impl.remove;
     let entries: t => list((value, value)) =
       set => set |> toList |> List.map(el => (el, el));
@@ -60,12 +60,10 @@ module Set = {
 };
 
 module IntSet =
-  Set.Make(
-    {
-      type t = int;
-      let compare = compare;
-    },
-  );
+  Set.Make({
+    type t = int;
+    let compare = compare;
+  });
 
 module StringSet = Set.Make(String);
 
@@ -129,12 +127,10 @@ module MutableSet = {
 };
 
 module MIntSet =
-  MutableSet.Make(
-    {
-      type t = int;
-      let compare = compare;
-    },
-  );
+  MutableSet.Make({
+    type t = int;
+    let compare = compare;
+  });
 
 module MStringSet = MutableSet.Make(String);
 
@@ -164,7 +160,7 @@ module Map = {
       map => map |> Map_Impl.bindings |> Array.of_list;
     /* Standard JavaScript Set methods */
     let size: t('value) => int = Map_Impl.cardinal;
-    let clear: t('value) => t('value) = (_) => Map_Impl.empty;
+    let clear: t('value) => t('value) = _ => Map_Impl.empty;
     let delete: (key, t('value)) => t('value) = Map_Impl.remove;
     let entries: t('value) => list((key, 'value)) = toList;
     let forEach: (('value, key) => unit, t('value)) => t('value) =
@@ -208,12 +204,10 @@ module Map = {
 };
 
 module IntMap =
-  Map.Make(
-    {
-      type t = int;
-      let compare = compare;
-    },
-  );
+  Map.Make({
+    type t = int;
+    let compare = compare;
+  });
 
 module StringMap = Map.Make(String);
 
@@ -287,11 +281,9 @@ module MutableMap = {
 };
 
 module MIntMap =
-  MutableMap.Make(
-    {
-      type t = int;
-      let compare = compare;
-    },
-  );
+  MutableMap.Make({
+    type t = int;
+    let compare = compare;
+  });
 
 module MStringMap = MutableMap.Make(String);

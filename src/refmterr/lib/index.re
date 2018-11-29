@@ -19,27 +19,29 @@ open Helpers;
    expected, since you get easy column count through 3 - 0 */
 /* we'll use 0-indexed. It's a reporter (printer)'s job to normalize to
    1-indexed if it desires so */
-let normalizeCompilerLineColsToRange = (~fileLines, ~lineRaw, ~col1Raw, ~col2Raw) => {
+let normalizeCompilerLineColsToRange =
+    (~fileLines, ~lineRaw, ~col1Raw, ~col2Raw) => {
   /* accept strings to constraint usage to parse directly from raw data */
   let line = int_of_string(lineRaw);
   let fileLength = List.length(fileLines);
   let isOCamlBeingBadAndPointingToALineBeyondFileLength = line > fileLength;
   let (col1, col2) =
     if (isOCamlBeingBadAndPointingToALineBeyondFileLength) {
-      let lastDamnReachableSpotInTheFile = String.length(List.nth(fileLines, fileLength - 1));
-      (lastDamnReachableSpotInTheFile - 1, lastDamnReachableSpotInTheFile)
+      let lastDamnReachableSpotInTheFile =
+        String.length(List.nth(fileLines, fileLength - 1));
+      (lastDamnReachableSpotInTheFile - 1, lastDamnReachableSpotInTheFile);
     } else {
       switch (col1Raw, col2Raw) {
       | (Some(a), Some(b)) => (int_of_string(a), int_of_string(b))
       /* some error msgs don't have column numbers; we normal them to 0 here */
       | _ => (0, 0)
-      }
+      };
     };
   let startRow =
     if (isOCamlBeingBadAndPointingToALineBeyondFileLength) {
-      fileLength - 1
+      fileLength - 1;
     } else {
-      line - 1
+      line - 1;
     };
   let currentLine = List.nth(fileLines, startRow);
   let numberOfCharsBetweenStartAndEndColumn = col2 - col1;
@@ -47,39 +49,55 @@ let normalizeCompilerLineColsToRange = (~fileLines, ~lineRaw, ~col1Raw, ~col2Raw
     /* +1 bc ocaml looooves to count new line as a char below when the error
        spans multiple lines*/
     String.length(currentLine) - col1 + 1;
-  if (numberOfCharsBetweenStartAndEndColumn <= numberOfCharsLeftToCoverOnStartingRow) {
-    ((startRow, col1), (startRow, col2))
+  if (numberOfCharsBetweenStartAndEndColumn
+      <= numberOfCharsLeftToCoverOnStartingRow) {
+    ((startRow, col1), (startRow, col2));
   } else {
     let howManyCharsLeftToCoverOnSubsequentLines =
-      ref(numberOfCharsBetweenStartAndEndColumn - numberOfCharsLeftToCoverOnStartingRow);
+      ref(
+        numberOfCharsBetweenStartAndEndColumn
+        - numberOfCharsLeftToCoverOnStartingRow,
+      );
     let suddenlyFunctionalProgrammingOutOfNowhere =
       fileLines
       |> Helpers.listDrop(startRow + 1)
       |> List.map(String.length)
-      |> Helpers.listTakeWhile(
-           (numberOfCharsOnThisLine) =>
-             if (howManyCharsLeftToCoverOnSubsequentLines^ > numberOfCharsOnThisLine) {
-               howManyCharsLeftToCoverOnSubsequentLines :=
-                 howManyCharsLeftToCoverOnSubsequentLines^ - numberOfCharsOnThisLine - 1;
-               true
-             } else {
-               false
-             }
+      |> Helpers.listTakeWhile(numberOfCharsOnThisLine =>
+           if (howManyCharsLeftToCoverOnSubsequentLines^
+               > numberOfCharsOnThisLine) {
+             howManyCharsLeftToCoverOnSubsequentLines :=
+               howManyCharsLeftToCoverOnSubsequentLines^
+               - numberOfCharsOnThisLine
+               - 1;
+             true;
+           } else {
+             false;
+           }
          );
     let howManyMoreRowsCoveredSinceStartRow =
       1 + List.length(suddenlyFunctionalProgrammingOutOfNowhere);
     (
       (startRow, col1),
-      (startRow + howManyMoreRowsCoveredSinceStartRow, howManyCharsLeftToCoverOnSubsequentLines^)
-    )
-  }
+      (
+        startRow + howManyMoreRowsCoveredSinceStartRow,
+        howManyCharsLeftToCoverOnSubsequentLines^,
+      ),
+    );
+  };
 };
 
 /* has the side-effect of reading the file */
-let extractFromFileMatch = (fileMatch) =>
+let extractFromFileMatch = fileMatch =>
   Re.Pcre.(
-    switch fileMatch {
-    | [Delim(_), Group(_, filePath), Group(_, lineNum), col1, col2, Text(body)] =>
+    switch (fileMatch) {
+    | [
+        Delim(_),
+        Group(_, filePath),
+        Group(_, lineNum),
+        col1,
+        col2,
+        Text(body),
+      ] =>
       let cachedContent = Helpers.fileLinesOfExn(filePath);
       /* sometimes there's only line, but no characters */
       let (col1Raw, col2Raw) =
@@ -87,9 +105,9 @@ let extractFromFileMatch = (fileMatch) =>
         | (Group(_, c1), Group(_, c2)) =>
           /* bug: https://github.com/mmottl/pcre-ocaml/issues/5 */
           if (String.trim(c1) == "" || String.trim(c2) == "") {
-            (None, None)
+            (None, None);
           } else {
-            (Some(c1), Some(c2))
+            (Some(c1), Some(c2));
           }
         | _ => (None, None)
         };
@@ -100,42 +118,42 @@ let extractFromFileMatch = (fileMatch) =>
           ~fileLines=cachedContent,
           ~lineRaw=lineNum,
           ~col1Raw,
-          ~col2Raw
+          ~col2Raw,
         ),
         /* important, otherwise leaves random blank lines that defies some of
            our regex logic, maybe */
-        String.trim(body)
-      )
+        String.trim(body),
+      );
     | _ => raise(invalid_arg("Couldn't extract error"))
     }
   );
 
 /* debug helper */
 let printFullSplitResult =
-  List.iteri(
-    (i, x) => {
-      print_int(i);
-      print_endline("");
-      Re.Pcre.(
-        switch x {
-        | Delim(a) => print_endline("Delim " ++ a)
-        | Group(_, a) => print_endline("Group " ++ a)
-        | Text(a) => print_endline("Text " ++ a)
-        | NoGroup => print_endline("NoGroup")
-        }
-      )
-    }
-  );
+  List.iteri((i, x) => {
+    print_int(i);
+    print_endline("");
+    Re.Pcre.(
+      switch (x) {
+      | Delim(a) => print_endline("Delim " ++ a)
+      | Group(_, a) => print_endline("Group " ++ a)
+      | Text(a) => print_endline("Text " ++ a)
+      | NoGroup => print_endline("NoGroup")
+      }
+    );
+  });
 
 let fileR =
   Re.Pcre.regexp(
     ~flags=[Re.Pcre.(`MULTILINE)],
-    {|^File "([\s\S]+?)", line (\d+)(?:, characters (\d+)-(\d+))?:$|}
+    {|^File "([\s\S]+?)", line (\d+)(?:, characters (\d+)-(\d+))?:$|},
   );
 
-let hasErrorOrWarningR = Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], {|^(Error|Warning \d+): |});
+let hasErrorOrWarningR =
+  Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], {|^(Error|Warning \d+): |});
 
-let hasIndentationR = Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], {|^       +|});
+let hasIndentationR =
+  Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], {|^       +|});
 
 /* TODO: make the below work. the "Here is an example..." is followed by even more lines of hints */
 /* let hasHintRStr = {|^(Hint: Did you mean |Here is an example of a value that is not matched:)|} */
@@ -147,7 +165,10 @@ let argCannotBeAppliedWithLabelRStr = {|^This argument cannot be applied with la
 let hasHintR = Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], hasHintRStr);
 
 let argCannotBeAppliedWithLabelR =
-  Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], argCannotBeAppliedWithLabelRStr);
+  Re.Pcre.regexp(
+    ~flags=[Re.Pcre.(`MULTILINE)],
+    argCannotBeAppliedWithLabelRStr,
+  );
 
 let notVisibleInCurrentScopeStr = {|^not visible in the current scope|};
 
@@ -165,12 +186,24 @@ let parse = (~customLogOutputProcessors, ~customErrorParsers, err) => {
   let err = String.trim(err);
   try (
     switch (Re.Pcre.full_split(~rex=fileR, err)) {
-    | [Re.Pcre.Delim(_), Group(_, filePath), Group(_, lineNum), col1, col2, Text(body)] =>
+    | [
+        Re.Pcre.Delim(_),
+        Group(_, filePath),
+        Group(_, lineNum),
+        col1,
+        col2,
+        Text(body),
+      ] =>
       /* important, otherwise leaves random blank lines that defies some of
          our regex logic, maybe */
       let body = String.trim(body);
       let errorCapture = get_match_maybe({|^Error: ([\s\S]+)|}, body);
-      switch (ParseError.specialParserThatChecksWhetherFileEvenExists(filePath, errorCapture)) {
+      switch (
+        ParseError.specialParserThatChecksWhetherFileEvenExists(
+          filePath,
+          errorCapture,
+        )
+      ) {
       | Some(err) => err
       | None =>
         let cachedContent = Helpers.fileLinesOfExn(filePath);
@@ -180,9 +213,9 @@ let parse = (~customLogOutputProcessors, ~customErrorParsers, err) => {
           | (Group(_, c1), Group(_, c2)) =>
             /* bug: https://github.com/mmottl/pcre-ocaml/issues/5 */
             if (String.trim(c1) == "" || String.trim(c2) == "") {
-              raise(Invalid_argument("HUHUHUH"))
+              raise(Invalid_argument("HUHUHUH"));
             } else {
-              (Some(c1), Some(c2))
+              (Some(c1), Some(c2));
             }
           | _ => (None, None)
           };
@@ -191,12 +224,15 @@ let parse = (~customLogOutputProcessors, ~customErrorParsers, err) => {
             ~fileLines=cachedContent,
             ~lineRaw=lineNum,
             ~col1Raw,
-            ~col2Raw
+            ~col2Raw,
           );
         let warningCapture =
           switch (execMaybe({|^Warning (\d+): ([\s\S]+)|}, body)) {
           | None => (None, None)
-          | Some(capture) => (getSubstringMaybe(capture, 1), getSubstringMaybe(capture, 2))
+          | Some(capture) => (
+              getSubstringMaybe(capture, 1),
+              getSubstringMaybe(capture, 2),
+            )
           };
         switch (errorCapture, warningCapture) {
         | (Some(errorBody), (None, None)) =>
@@ -205,7 +241,12 @@ let parse = (~customLogOutputProcessors, ~customErrorParsers, err) => {
             cachedContent,
             range,
             parsedContent:
-              ParseError.parse(~customErrorParsers, ~errorBody, ~cachedContent, ~range)
+              ParseError.parse(
+                ~customErrorParsers,
+                ~errorBody,
+                ~cachedContent,
+                ~range,
+              ),
           })
         | (None, (Some(code), Some(warningBody))) =>
           let code = int_of_string(code);
@@ -215,26 +256,32 @@ let parse = (~customLogOutputProcessors, ~customErrorParsers, err) => {
             range,
             parsedContent: {
               code,
-              warningType: ParseWarning.parse(code, warningBody, filePath, cachedContent, range)
-            }
-          })
+              warningType:
+                ParseWarning.parse(
+                  code,
+                  warningBody,
+                  filePath,
+                  cachedContent,
+                  range,
+                ),
+            },
+          });
         | _ => raise(Invalid_argument(err))
-        }
-      }
+        };
+      };
     /* not an error, not a warning. False alarm? */
     | _ => Unparsable
     }
   ) {
   | _ => Unparsable
-  }
+  };
 };
 
-let line_stream_of_channel = (channel) =>
-  Stream.from(
-    (_) =>
-      try (Some(input_line(channel))) {
-      | End_of_file => None
-      }
+let line_stream_of_channel = channel =>
+  Stream.from(_ =>
+    try (Some(input_line(channel))) {
+    | End_of_file => None
+    }
   );
 
 /* entry point, for convenience purposes for now. Theoretically the parser and
@@ -242,4 +289,4 @@ let line_stream_of_channel = (channel) =>
       What about errors of the form:
 
    */
-let revBufferToStr = (revBuffer) => String.concat("\n", List.rev(revBuffer));
+let revBufferToStr = revBuffer => String.concat("\n", List.rev(revBuffer));

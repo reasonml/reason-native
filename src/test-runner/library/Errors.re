@@ -8,7 +8,7 @@
  * Wraps a string at the given number of columns. Will only break on spaces or
  * tab charachters. Does nothing if the string already contains new lines.
  */
-let wrapString = (cols: int, message: string) : string =>
+let wrapString = (cols: int, message: string): string =>
   /* Never attempt to wrap a message that already has new lines */
   if (String.contains(message, '\n')) {
     message;
@@ -45,21 +45,21 @@ let wrapString = (cols: int, message: string) : string =>
     String.trim(message);
   };
 
-let info = (~prefix=true, ~color=true, ~wrap=true, message: string) : unit => {
+let info = (~prefix=true, ~color=true, ~wrap=true, message: string): unit => {
   let message = prefix ? "[Info] " ++ message : message;
   let message = wrap ? wrapString(120, message) : message;
   let message = color ? Chalk.blue(message) : message;
   prerr_endline(message);
 };
 
-let warn = (~prefix=true, ~color=true, ~wrap=true, message: string) : unit => {
+let warn = (~prefix=true, ~color=true, ~wrap=true, message: string): unit => {
   let message = prefix ? "[Warn] " ++ message : message;
   let message = wrap ? wrapString(120, message) : message;
   let message = color ? Chalk.yellow(message) : message;
   prerr_endline(message);
 };
 
-let error = (~prefix=true, ~color=true, ~wrap=true, message: string) : unit => {
+let error = (~prefix=true, ~color=true, ~wrap=true, message: string): unit => {
   let message = prefix ? "[Error] " ++ message : message;
   let message = wrap ? wrapString(120, message) : message;
   let message = color ? Chalk.red(message) : message;
@@ -67,8 +67,7 @@ let error = (~prefix=true, ~color=true, ~wrap=true, message: string) : unit => {
 };
 
 let fatal =
-    (~prefix=true, ~color=true, ~wrap=true, ~errorCode=1, message: string)
-    : 'a => {
+    (~prefix=true, ~color=true, ~wrap=true, ~errorCode=1, message: string): 'a => {
   let message = prefix ? "[Fatal] " ++ message : message;
   let message = wrap ? wrapString(120, message) : message;
   let message = color ? Chalk.red(message) : message;

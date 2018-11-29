@@ -17,9 +17,12 @@ describe("FnMatchers", describeUtils => {
   test("should catch exceptions", ({expect}) =>
     expect.fn(() => raise(Not_found)).toThrow()
   );
-  test("Specific exception", ({expect}) => {
-    expect.fn(() => raise(Invalid_argument("that's oddly specific"))).toThrowException(Invalid_argument("that's oddly specific"));
-  });
+  test("Specific exception", ({expect}) =>
+    expect.fn(() => raise(Invalid_argument("that's oddly specific"))).
+      toThrowException(
+      Invalid_argument("that's oddly specific"),
+    )
+  );
   testRunnerOutputSnapshotTest(
     "FnMatchers failure output",
     describeUtils,
@@ -31,12 +34,15 @@ describe("FnMatchers", describeUtils => {
         expect.fn(() => raise(Invalid_argument("the earth is flat"))).not.
           toThrow()
       );
-      test("Expect the wrong exception", ({expect}) => {
-        expect.fn(() => raise(Invalid_argument("with some message"))).toThrowException(Invalid_argument("with some other message"));
-      });
-      test("Expect an exception that doesn't throw", ({expect}) => {
-        expect.fn(() => ()).toThrowException(Not_found);
-      });
+      test("Expect the wrong exception", ({expect}) =>
+        expect.fn(() => raise(Invalid_argument("with some message"))).
+          toThrowException(
+          Invalid_argument("with some other message"),
+        )
+      );
+      test("Expect an exception that doesn't throw", ({expect}) =>
+        expect.fn(() => ()).toThrowException(Not_found)
+      );
     },
   );
 });

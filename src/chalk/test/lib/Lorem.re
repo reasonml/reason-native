@@ -457,7 +457,7 @@ let words = [|
   "Aliquam",
   "erat",
   "volutpat.",
-  ""
+  "",
 |];
 
-let getRandomWord = () : string => words[Random.int(Array.length(words))];
+let getRandomWord = (): string => words[Random.int(Array.length(words))];

@@ -20,12 +20,15 @@ module Make = (Styl: Stylish.StylishSig) => {
   ];
 
   let tokenRegex =
-    String.concat("|", List.map(((rStr, _)) => "(" ++ rStr ++ ")", tokens));
+    String.concat(
+      "|",
+      List.map(((rStr, _)) => "(" ++ rStr ++ ")", tokens),
+    );
 
   /*
-  * This is so much more complicated because highlighting doesn't support
-  * nesting right now.
-  */
+   * This is so much more complicated because highlighting doesn't support
+   * nesting right now.
+   */
   let highlightTokens = (~dim, ~bold, ~underline, txt, tokens) => {
     let rex = Re.Pcre.regexp(tokenRegex);
     let splitted = Re.Pcre.full_split(~rex, txt);
@@ -54,7 +57,12 @@ module Make = (Styl: Stylish.StylishSig) => {
             if (i mod 2 === 0) {
               highlightTokens(~dim, ~underline, ~bold, chunk, tokens);
             } else {
-              Styl.highlight(~dim, ~underline, ~color=Styl.green, "\"" ++ chunk ++ "\"");
+              Styl.highlight(
+                ~dim,
+                ~underline,
+                ~color=Styl.green,
+                "\"" ++ chunk ++ "\"",
+              );
             },
           splitOnQuotes,
         );

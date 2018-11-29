@@ -41,6 +41,6 @@ module RunConfig = {
 
   let onTestFrameworkFailure = (onTestFrameworkFailure, config) => {
     ...config,
-    onTestFrameworkFailure
-  }
+    onTestFrameworkFailure,
+  };
 };

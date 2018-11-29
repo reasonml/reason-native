@@ -56,15 +56,15 @@ let moreThanOneSpace = Re.Pcre.regexp({|\s[\s]*|});
 let subOneSpace = _ => " ";
 
 /*
-* Collapses multiple spaces into a single space.
-*/
+ * Collapses multiple spaces into a single space.
+ */
 let collapseSpacing = s =>
   Re.Pcre.substitute(~rex=moreThanOneSpace, ~subst=subOneSpace, s);
 
 /*
-* Replaces the common module alias names with their conceptual counterparts
-* (double underscores become dot).
-*/
+ * Replaces the common module alias names with their conceptual counterparts
+ * (double underscores become dot).
+ */
 let removeModuleAlias = s =>
   Re.Pcre.substitute(~rex=doubleUnder, ~subst=subDot, s);
 
@@ -129,20 +129,20 @@ let optionMap = (f, a) =>
 let listFilterMap = (f, lst) =>
   List.map(f, lst)
   |> List.filter(
-      fun
-      | Some(_) => true
-      | None => false,
-    )
+       fun
+       | Some(_) => true
+       | None => false,
+     )
   |> List.map(optionGet);
 
 let listFindMap = (f, lst) =>
   lst
   |> List.find(a =>
-      switch (f(a)) {
-      | Some(_) => true
-      | None => false
-      }
-    )
+       switch (f(a)) {
+       | Some(_) => true
+       | None => false
+       }
+     )
   |> f
   |> optionGet;
 
@@ -272,7 +272,7 @@ let sub = (sep, cb, str) => {
   Re.Pcre.substitute(~rex, ~subst=cb, str);
 };
 
-let rec splitInto = (~chunckSize, l: list('a)) : list(list('a)) =>
+let rec splitInto = (~chunckSize, l: list('a)): list(list('a)) =>
   if (List.length(l) <= chunckSize || chunckSize == 0) {
     [l];
   } else {
@@ -287,36 +287,36 @@ let mapcat = (sep, f, l) => String.concat(sep, List.map(f, l));
 let sp = Printf.sprintf;
 
 /*
-* Returns whether or not the string has newlines. Only looks for \n so just
-* use this for non-critical things.
-*/
+ * Returns whether or not the string has newlines. Only looks for \n so just
+ * use this for non-critical things.
+ */
 let hasNewline = str =>
   switch (String.index_from(str, 0, '\n')) {
   | exception _ => false
   | _ => true
   };
 
-  let isWhiteChar = c => c === ' ' || c === '\n' || c === '\t' || c === '\r';
+let isWhiteChar = c => c === ' ' || c === '\n' || c === '\t' || c === '\r';
 
-  let isWordBoundary = c => c === '.' || c === ',' || c === '(' || c === ')';
+let isWordBoundary = c => c === '.' || c === ',' || c === '(' || c === ')';
 
-  /*
-  * prevIndex is the index before the search start location. (or after if inc is
-  * negative)
-  */
-  let nextNonWhiteChar = (s, inc, prevIndex) => {
-    let res = {contents: None};
-    let i = {contents: prevIndex + inc};
-    let len = String.length(s);
-    while (res.contents === None && i.contents < len && i.contents > (-1)) {
-      if (isWhiteChar(s.[i.contents])) {
-        i.contents = i.contents + inc;
-      } else {
-        res.contents = Some(i.contents);
-      };
+/*
+ * prevIndex is the index before the search start location. (or after if inc is
+ * negative)
+ */
+let nextNonWhiteChar = (s, inc, prevIndex) => {
+  let res = {contents: None};
+  let i = {contents: prevIndex + inc};
+  let len = String.length(s);
+  while (res.contents === None && i.contents < len && i.contents > (-1)) {
+    if (isWhiteChar(s.[i.contents])) {
+      i.contents = i.contents + inc;
+    } else {
+      res.contents = Some(i.contents);
     };
-    res.contents;
   };
+  res.contents;
+};
 
 /*
  * Returns the (aStartLen, aEndLen, bStartLen, bEndLen) of string a that
@@ -338,8 +338,8 @@ let findCommonEnds = (aStr, bStr) => {
   let continuePrefix = {contents: true};
   let continueSuffix = {contents: true};
   while (continuePrefix.contents
-        && aPrefixLen.contents <= aLen
-        && bPrefixLen.contents <= bLen) {
+         && aPrefixLen.contents <= aLen
+         && bPrefixLen.contents <= bLen) {
     let nextNonwhiteA = nextNonWhiteChar(aStr, 1, aPrefixLen.contents - 1);
     let nextNonwhiteB = nextNonWhiteChar(bStr, 1, bPrefixLen.contents - 1);
     switch (nextNonwhiteA, nextNonwhiteB) {
@@ -364,7 +364,7 @@ let findCommonEnds = (aStr, bStr) => {
       continuePrefix.contents = false;
     | (Some(na), Some(nb)) =>
       /* Or if we didn't merely increment within a word, mark the end of
-      * previous word as prefix  */
+       * previous word as prefix  */
       if (na > aPrefixLen.contents + 1 && nb > bPrefixLen.contents + 1) {
         aPrefixLenBoundary.contents = aPrefixLen.contents;
         bPrefixLenBoundary.contents = bPrefixLen.contents;
@@ -382,23 +382,23 @@ let findCommonEnds = (aStr, bStr) => {
     };
   };
   while (continueSuffix.contents
-        && aSuffixLen.contents < aLen
-        - aPrefixLenBoundary.contents
-        && bSuffixLen.contents < bLen
-        - bPrefixLenBoundary.contents) {
+         && aSuffixLen.contents < aLen
+         - aPrefixLenBoundary.contents
+         && bSuffixLen.contents < bLen
+         - bPrefixLenBoundary.contents) {
     let nextNonwhiteA =
       nextNonWhiteChar(aStr, -1, aLen - aSuffixLen.contents);
     let nextNonwhiteB =
       nextNonWhiteChar(bStr, -1, bLen - bSuffixLen.contents);
     switch (nextNonwhiteA, nextNonwhiteB) {
     /* I think these first three cases would have been caught by the prefix
-    * finding portion */
+     * finding portion */
     | (None, None)
     | (None, Some(_))
     | (Some(_), None) => continueSuffix.contents = false
     | (Some(na), Some(nb)) =>
       /* Or if we didn't merely increment within a word, mark the end of
-      * previous word as prefix  */
+       * previous word as prefix  */
       if (na < aSuffixLen.contents - 1 && nb < bSuffixLen.contents - 1) {
         aSuffixLenBoundary.contents = aSuffixLen.contents;
         bSuffixLenBoundary.contents = bSuffixLen.contents;

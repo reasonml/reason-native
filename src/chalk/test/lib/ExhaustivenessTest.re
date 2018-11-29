@@ -12,10 +12,14 @@ describe("Pre test runner exhaustiveness test", ({test}) =>
   test("should match snapshot", ({expect}) => {
     let outputRev = ref([]);
     let print_endline = s => outputRev := [s] @ outputRev^;
-    let print_string = s => outputRev := switch(outputRev^){
-    | [] => [s]
-    | [first, ...rest] => [first ++ s, ...rest]
-    };
+    let print_string = s =>
+      outputRev :=
+        (
+          switch (outputRev^) {
+          | [] => [s]
+          | [first, ...rest] => [first ++ s, ...rest]
+          }
+        );
 
     print_endline(
       <Chalk>

@@ -35,7 +35,7 @@ let functionArgsCount = str => {
   /* Fortunately, raw ocaml types don't use parenthesis for anything. */
   let nestedFunctionTypeR = Re.Pcre.regexp({|\([\s\S]+\)|});
   let cleaned =
-    Re.Pcre.substitute(~rex=nestedFunctionTypeR, ~subst=(_) => "|||||", str);
+    Re.Pcre.substitute(~rex=nestedFunctionTypeR, ~subst=_ => "|||||", str);
   /* TODO: allow pluggable function type syntax */
   List.length(split({|->|}, cleaned)) - 1;
 };
@@ -421,8 +421,8 @@ let file_SyntaxError = (err, cachedContent, range) => {
   let allR = Re.Pcre.regexp({|Syntax error|});
   let allUnknownR = Re.Pcre.regexp({|<UNKNOWN SYNTAX ERROR>|});
   /* raise the same error than if we failed to match */
-  if (! Re.Pcre.pmatch(~rex=allR, err)
-      && ! Re.Pcre.pmatch(~rex=allUnknownR, err)) {
+  if (!Re.Pcre.pmatch(~rex=allR, err)
+      && !Re.Pcre.pmatch(~rex=allUnknownR, err)) {
     raise(Not_found);
   } else {
     let hintR = {|Syntax error:([\s\S]+)|};

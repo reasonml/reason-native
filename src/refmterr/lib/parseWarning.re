@@ -22,12 +22,15 @@ let warning_PatternNotExhaustive = (code, err, _, _, _) => {
     if (unmatchedRaw.[0] == '(') {
       /* format was (Variant1|Variant2|Variant3). We strip the surrounding parens */
       unmatchedRaw
-      |> Helpers.stringSlice(~first=1, ~last=String.length(unmatchedRaw) - 1)
-      |> split({|\|[\s]*|})
+      |> Helpers.stringSlice(
+           ~first=1,
+           ~last=String.length(unmatchedRaw) - 1,
+         )
+      |> split({|\|[\s]*|});
     } else {
-      [unmatchedRaw]
+      [unmatchedRaw];
     };
-  Warning_PatternNotExhaustive({unmatched: unmatched})
+  Warning_PatternNotExhaustive({unmatched: unmatched});
 };
 
 let warning_PatternUnused = (code, err, _, _, _) => raise(Not_found);
@@ -46,15 +49,17 @@ let warning_OptionalArgumentNotErased = (code, err, _, cachedContent, range) => 
       ~first=startColumn,
       ~last=
         if (startRow == endRow) {
-          endColumn
+          endColumn;
         } else {
-          99999
+          99999;
         },
-      fileLine
+      fileLine,
     );
   let argumentNameR = {|(:?\?\s*\()?([^=]+)|};
   let argumentName = get_match_n(2, argumentNameR, argumentNameRaw);
-  Warning_OptionalArgumentNotErased({argumentName: String.trim(argumentName)})
+  Warning_OptionalArgumentNotErased({
+    argumentName: String.trim(argumentName),
+  });
 };
 
 /* need: what the variant is. If it's e.g. a list, instead of saying "doesn't
@@ -66,15 +71,15 @@ let warning_BadFileName = (code, err, filePath, _, _) =>
     let offendingChar =
       switch (
         get_match_maybe({|^([^a-zA-Z])|}, fileName),
-        get_match_maybe({|.+?([^a-zA-Z\.])|}, fileName)
+        get_match_maybe({|.+?([^a-zA-Z\.])|}, fileName),
       ) {
       | (Some(m), _) => Leading(m)
       | (None, Some(m)) => Contains(m)
       | _ => UnknownIllegalChar
       };
-    Warning_BadFileName(offendingChar)
+    Warning_BadFileName(offendingChar);
   } else {
-    raise(Not_found)
+    raise(Not_found);
   };
 
 /* TODO: better logic using these codes */
@@ -83,15 +88,15 @@ let parsers = [
   warning_PatternNotExhaustive,
   warning_PatternUnused,
   warning_OptionalArgumentNotErased,
-  warning_BadFileName
+  warning_BadFileName,
 ];
 
 let parse = (code, warningBody, filePath, cachedContent, range) => {
-  let tryParser = (parse') =>
+  let tryParser = parse' =>
     try (Some(parse'(code, warningBody, filePath, cachedContent, range))) {
     | _ => None
     };
   try (Helpers.listFindMap(tryParser, parsers)) {
   | Not_found => NoWarningExtracted
-  }
+  };
 };
