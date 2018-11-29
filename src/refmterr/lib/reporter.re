@@ -351,7 +351,7 @@ module Make = (Styl: Stylish.StylishSig) => {
           ]
         | e =>
           /* This should never happen */
-          raise(Yojson_result_parse_not_list(Yojson.Safe.to_string(e)));
+          raise(Yojson_result_parse_not_list(Yojson.Safe.to_string(e)))
         };
       } :
       prettyResult;
