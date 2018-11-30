@@ -7,6 +7,7 @@
     "@opam/re": "*",
     "@esy-ocaml/reason": "^3.0.0",
     "ocaml": " >= 4.2.0  < 4.8.0",
+    "@reason-native/chalk": "*",
     "@opam/yojson": "*",
     "@opam/ppx_deriving_yojson": "*"
   },
