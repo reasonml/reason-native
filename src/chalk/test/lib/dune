@@ -1,7 +1,6 @@
-
 (library
    (name ChalkTestLib)
-   (public_name chalk.test)
+   (public_name chalk-test.lib)
    (ocamlopt_flags -linkall -g)
    (libraries  chalk.lib test-runner.lib )
 )
