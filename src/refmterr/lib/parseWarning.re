@@ -18,23 +18,22 @@ let warning_UnusedVariable = (code, err, _, _, _) => None;
 let warning_PatternNotExhaustive = (code, err, _, _, _) => {
   let unmatchedR = {|this pattern-matching is not exhaustive.\sHere is an example of a value that is not matched:\s([\s\S]+)|};
   get_match_maybe(unmatchedR, err)
-  |>? (
-    unmatchedRaw => {
-      let unmatched =
-        if (unmatchedRaw.[0] == '(') {
-          /* format was (Variant1|Variant2|Variant3). We strip the surrounding parens */
-          unmatchedRaw
-          |> Helpers.stringSlice(
-               ~first=1,
-               ~last=String.length(unmatchedRaw) - 1,
-             )
-          |> split({|\|[\s]*|});
-        } else {
-          [unmatchedRaw];
-        };
-      Some(Warning_PatternNotExhaustive({unmatched: unmatched}));
-    }
-  );
+  |>? (unmatchedRaw) =>
+   {
+    let unmatched =
+    if (unmatchedRaw.[0] == '(') {
+      /* format was (Variant1|Variant2|Variant3). We strip the surrounding parens */
+      unmatchedRaw
+      |> Helpers.stringSlice(
+          ~first=1,
+          ~last=String.length(unmatchedRaw) - 1,
+        )
+      |> split({|\|[\s]*|});
+    } else {
+      [unmatchedRaw];
+    };
+    Some(Warning_PatternNotExhaustive({unmatched: unmatched}));
+   };
 };
 
 let warning_PatternUnused = (code, err, _, _, _) => None;
@@ -48,32 +47,26 @@ let warning_OptionalArgumentNotErased = (code, err, _, cachedContent, range) => 
   let allR = {|this optional argument cannot be erased\.|};
   let fileLine = List.nth(cachedContent, startRow);
   get_match_n_maybe(0, allR, err)
-  |>? (
-    _ =>
-      {
-        let argumentNameRaw =
-          Helpers.stringSlice(
-            ~first=startColumn,
-            ~last=
-              if (startRow == endRow) {
-                endColumn;
-              } else {
-                99999;
-              },
-            fileLine,
-          );
-        let argumentNameR = {|(:?\?\s*\()?([^=]+)|};
-        get_match_n_maybe(2, argumentNameR, argumentNameRaw);
-      }
-      |>? (
-        argumentName =>
-          Some(
-            Warning_OptionalArgumentNotErased({
-              argumentName: String.trim(argumentName),
-            }),
-          )
-      )
-  );
+  |>? (_) =>
+    {
+      let argumentNameRaw =
+      Helpers.stringSlice(
+        ~first=startColumn,
+        ~last=
+          if (startRow == endRow) {
+            endColumn;
+          } else {
+            99999;
+          },
+        fileLine,
+      );
+      let argumentNameR = {|(:?\?\s*\()?([^=]+)|};
+      get_match_n_maybe(2, argumentNameR, argumentNameRaw);
+    }
+  |>? (argumentName) =>
+    Some(Warning_OptionalArgumentNotErased({
+      argumentName: String.trim(argumentName),
+    }));
 };
 
 /* need: what the variant is. If it's e.g. a list, instead of saying "doesn't
@@ -106,8 +99,7 @@ let parsers = [
 ];
 
 let parse = (code, warningBody, filePath, cachedContent, range) => {
-  let tryParser = parse' =>
-    parse'(code, warningBody, filePath, cachedContent, range);
+  let tryParser = parse' => parse'(code, warningBody, filePath, cachedContent, range);
   try (Helpers.listFindMap(tryParser, parsers)) {
   | Not_found => NoWarningExtracted
   };
