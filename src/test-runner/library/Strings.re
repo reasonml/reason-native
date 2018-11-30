@@ -32,14 +32,14 @@ type arrayEntry =
   | PosInOther(int)
   | TableRef(tableEntry);
 
-let incrememntCounter = (counter: counter) : counter =>
+let incrememntCounter = (counter: counter): counter =>
   switch (counter) {
   | Zero => One
   | One => Many
   | Many => Many
   };
 
-let split = (splitRe: Str.regexp, s: string) : array(string) =>
+let split = (splitRe: Str.regexp, s: string): array(string) =>
   s
   |> Str.full_split(splitRe)
   |> List.map(part =>
@@ -51,8 +51,7 @@ let split = (splitRe: Str.regexp, s: string) : array(string) =>
   |> Array.of_list;
 
 let diff =
-    (~delimeter: Str.regexp, old: string, new_: string)
-    : list(difference) => {
+    (~delimeter: Str.regexp, old: string, new_: string): list(difference) => {
   /*
    * Throughout the algorithm the comments walk through example of:
    * `diff("foo apple foo orange", "foo orange foo apple")`
@@ -71,7 +70,7 @@ let diff =
   let nArray: array(arrayEntry) =
     Array.mapi(
       (index, token) => {
-        if (! StringMap.has(token, table^)) {
+        if (!StringMap.has(token, table^)) {
           table :=
             StringMap.set(
               token,
@@ -106,7 +105,7 @@ let diff =
   let oArray: array(arrayEntry) =
     Array.mapi(
       (index, token) => {
-        if (! StringMap.has(token, table^)) {
+        if (!StringMap.has(token, table^)) {
           table :=
             StringMap.set(
               token,
@@ -325,7 +324,7 @@ let diff =
     };
     /* We construct a set of the edges that are okay to keep */
     let validEdges = ref(IntSet.empty);
-    let getEdge = (index: ref(int)) : int =>
+    let getEdge = (index: ref(int)): int =>
       switch (nProcessed[index^]) {
       | Move(edge, _) => edge
       | _ => failwith("Unreachable: This should only be processing edges.")
@@ -340,14 +339,14 @@ let diff =
     /* Then we update each array accordingly */
     for (j in 0 to oLen - 1) {
       switch (oProcessed[j]) {
-      | Move(edge, _) when ! IntSet.has(edge, validEdges) =>
+      | Move(edge, _) when !IntSet.has(edge, validEdges) =>
         oProcessed[j] = Delete
       | _ => ()
       };
     };
     for (i in 0 to nLen - 1) {
       switch (nProcessed[i]) {
-      | Move(edge, _) when ! IntSet.has(edge, validEdges) =>
+      | Move(edge, _) when !IntSet.has(edge, validEdges) =>
         nProcessed[i] = Insert
       | _ => ()
       };

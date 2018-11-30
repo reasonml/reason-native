@@ -17,7 +17,7 @@ type stackUtils = {
   getStackTrace: unit => stackTrace,
   stackTraceToString: stackTrace => string,
   getTopFrame: unit => string,
-  getTopLocation: unit => option(Printexc.location)
+  getTopLocation: unit => option(Printexc.location),
 };
 
 type stackUtilsConfig = {
@@ -115,17 +115,20 @@ let makeStackUtils = (config: stackUtilsConfig): stackUtils => {
         }
     );
 
-    let getTopLocation = () => {
-        getCallstack()
-        |> getTopSlot(slot => !slotMatchesAny(filters, slot))
-        |> (opt => switch(opt) {
-        | Some(slot) => switch(Printexc.Slot.location(slot)) {
+  let getTopLocation = () =>
+    getCallstack()
+    |> getTopSlot(slot => !slotMatchesAny(filters, slot))
+    |> (
+      opt =>
+        switch (opt) {
+        | Some(slot) =>
+          switch (Printexc.Slot.location(slot)) {
           | Some(location) => Some(location)
           | None => None
           }
         | None => None
-        });
-    };
+        }
+    );
 
   {getStackTrace, getTopFrame, stackTraceToString: s => s, getTopLocation};
 };

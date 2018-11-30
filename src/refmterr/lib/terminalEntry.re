@@ -9,19 +9,23 @@ open BetterErrorsTypes;
 open Index;
 open Helpers;
 
-let parseFromStdin = (~refmttypePath, ~customLogOutputProcessors, ~customErrorParsers) => {
+let parseFromStdin =
+    (~refmttypePath, ~customLogOutputProcessors, ~customErrorParsers) => {
   let reverseErrBuffer = {contents: []};
-  let prettyPrintParsedResult = TerminalReporter.prettyPrintParsedResult(~refmttypePath);
-  let forEachLine = (line) =>
+  let prettyPrintParsedResult =
+    TerminalReporter.prettyPrintParsedResult(~refmttypePath);
+  let forEachLine = line =>
     switch (
       reverseErrBuffer.contents,
       Re.Pcre.pmatch(~rex=fileR, line),
       Re.Pcre.pmatch(~rex=hasErrorOrWarningR, line),
-      Re.Pcre.pmatch(~rex=hasIndentationR, line)
+      Re.Pcre.pmatch(~rex=hasIndentationR, line),
     ) {
     | ([], false, false, false) =>
       /* no error, just stream on the line */
-      print_endline(TerminalReporter.processLogOutput(~customLogOutputProcessors, line))
+      print_endline(
+        TerminalReporter.processLogOutput(~customLogOutputProcessors, line),
+      )
     | ([], true, _, _)
     | ([], _, true, _)
     | ([], _, _, true) =>
@@ -38,11 +42,12 @@ let parseFromStdin = (~refmttypePath, ~customLogOutputProcessors, ~customErrorPa
       |> prettyPrintParsedResult(~originalRevLines=reverseErrBuffer.contents)
       |> revBufferToStr
       |> print_endline;
-      reverseErrBuffer.contents = [line]
+      reverseErrBuffer.contents = [line];
     /* buffer not empty, and we're seeing an error/indentation line. This is
        the continuation of a currently streaming error/warning */
     | (_, _, _, true)
-    | (_, _, true, _) => reverseErrBuffer.contents = [line, ...reverseErrBuffer.contents]
+    | (_, _, true, _) =>
+      reverseErrBuffer.contents = [line, ...reverseErrBuffer.contents]
     | (_, false, false, false) =>
       /* woah this case was previously forgotten but caught by the
              compiler. Man I don't ever wanna write an if-else anymore
@@ -60,7 +65,7 @@ let parseFromStdin = (~refmttypePath, ~customLogOutputProcessors, ~customErrorPa
           || Re.Pcre.pmatch(~rex=notVisibleInCurrentScopeR, line)
           || Re.Pcre.pmatch(~rex=theyWillNotBeSelectedR, line)) {
         reverseErrBuffer.contents =
-          [line, ...reverseErrBuffer.contents]
+          [line, ...reverseErrBuffer.contents];
           /* let bufferText = revBufferToStr(reverseErrBuffer.contents);
            * parse(~customLogOutputProcessors, ~customErrorParsers, bufferText)
            * |> prettyPrintParsedResult(~originalRevLines=reverseErrBuffer.contents)
@@ -71,26 +76,32 @@ let parseFromStdin = (~refmttypePath, ~customLogOutputProcessors, ~customErrorPa
       } else {
         let bufferText = revBufferToStr(reverseErrBuffer.contents);
         parse(~customLogOutputProcessors, ~customErrorParsers, bufferText)
-        |> prettyPrintParsedResult(~originalRevLines=reverseErrBuffer.contents)
+        |> prettyPrintParsedResult(
+             ~originalRevLines=reverseErrBuffer.contents,
+           )
         |> revBufferToStr
         |> print_endline;
-        reverseErrBuffer.contents = [line]
+        reverseErrBuffer.contents = [line];
       }
     };
-  try {
-    line_stream_of_channel(stdin) |> Stream.iter(forEachLine);
-    /* might have accumulated a few more lines */
-    if (reverseErrBuffer.contents !== []) {
-      let bufferText = revBufferToStr(reverseErrBuffer.contents);
-      parse(~customLogOutputProcessors, ~customErrorParsers, bufferText)
-      |> prettyPrintParsedResult(~originalRevLines=reverseErrBuffer.contents)
-      |> revBufferToStr
-      |> print_endline
-    };
-    close_in(stdin)
-  } {
+  try (
+    {
+      line_stream_of_channel(stdin) |> Stream.iter(forEachLine);
+      /* might have accumulated a few more lines */
+      if (reverseErrBuffer.contents !== []) {
+        let bufferText = revBufferToStr(reverseErrBuffer.contents);
+        parse(~customLogOutputProcessors, ~customErrorParsers, bufferText)
+        |> prettyPrintParsedResult(
+             ~originalRevLines=reverseErrBuffer.contents,
+           )
+        |> revBufferToStr
+        |> print_endline;
+      };
+      close_in(stdin);
+    }
+  ) {
   | e =>
     close_in(stdin);
-    raise(e)
-  }
+    raise(e);
+  };
 };

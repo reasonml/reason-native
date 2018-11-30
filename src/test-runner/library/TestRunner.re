@@ -156,7 +156,7 @@ module Make = (UserConfig: FrameworkConfig) => {
         };
       open RunConfig;
 
-      let {printEndline, printString, printNewline, flush } = config.printer;
+      let {printEndline, printString, printNewline, flush} = config.printer;
 
       let describeName = describeName |?: "root describe";
       let printSnapshotStatus = () =>
@@ -377,7 +377,8 @@ module Make = (UserConfig: FrameworkConfig) => {
         };
 
         let _ =
-          isRootDescribe ? () : printEndline(Chalk.whiteBright(describeName));
+          isRootDescribe ?
+            () : printEndline(Chalk.whiteBright(describeName));
 
         update(true);
         let _ =
@@ -563,8 +564,10 @@ module Make = (UserConfig: FrameworkConfig) => {
     );
 
   let cli = () => {
-    let shouldUpdateSnapshots = Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
-    let config = RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
+    let shouldUpdateSnapshots =
+      Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
+    let config =
+      RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
     run(config);
   };
 };

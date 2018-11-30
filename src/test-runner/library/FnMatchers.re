@@ -54,7 +54,11 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
 
     let notToThrow =
       createMatcher(
-        ({matcherHint, formatReceived, indent, formatExpected}, actualThunk, _) => {
+        (
+          {matcherHint, formatReceived, indent, formatExpected},
+          actualThunk,
+          _,
+        ) => {
         let actual = actualThunk();
         switch (actual()) {
         | _ => (passMessageThunk, true)
@@ -131,7 +135,7 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
                 indent(formatExpected(Printexc.to_string(expectedExn))),
                 "\n",
                 "Instead, it threw:\n",
-                indent(formatReceived(Printexc.to_string(e)))
+                indent(formatReceived(Printexc.to_string(e))),
               ],
             );
           ((() => message), false);

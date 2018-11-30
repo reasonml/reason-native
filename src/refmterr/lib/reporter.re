@@ -86,21 +86,46 @@ module Make = (Styl: Stylish.StylishSig) => {
           /* Have to process from the end content first because it changes the
            * range. */
           /* Note: ~last/endColumn /endColumn is not really the last index to highlight but one beyond it. */
-          let highlightedEnd = highlightSource(~dim=true, stringSlice(~first=endColumn, currLine));
+          let highlightedEnd =
+            highlightSource(
+              ~dim=true,
+              stringSlice(~first=endColumn, currLine),
+            );
           let highlightedMiddle =
-            red(~bold=true, ~underline=true, ~dim=false, stringSlice(~first=startColumn, ~last=endColumn, currLine));
-          let highlightedBeginning = highlightSource(~dim=true, stringSlice(~last=startColumn, currLine));
-          let highlighted = highlightedBeginning ++ highlightedMiddle ++ highlightedEnd;
+            red(
+              ~bold=true,
+              ~underline=true,
+              ~dim=false,
+              stringSlice(~first=startColumn, ~last=endColumn, currLine),
+            );
+          let highlightedBeginning =
+            highlightSource(
+              ~dim=true,
+              stringSlice(~last=startColumn, currLine),
+            );
+          let highlighted =
+            highlightedBeginning ++ highlightedMiddle ++ highlightedEnd;
           revResult.contents = [
-            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep) ++ highlighted,
+            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep)
+            ++ highlighted,
             ...revResult.contents,
           ];
         } else if (i == startRow) {
-          let highlightedEnd = red(~bold=true, ~underline=true, stringSlice(~first=startColumn, currLine));
-          let highlightedBeginning = highlightSource(~dim=true, stringSlice(~last=startColumn, currLine));
-          let highlighted = highlightedBeginning ++  highlightedEnd;
+          let highlightedEnd =
+            red(
+              ~bold=true,
+              ~underline=true,
+              stringSlice(~first=startColumn, currLine),
+            );
+          let highlightedBeginning =
+            highlightSource(
+              ~dim=true,
+              stringSlice(~last=startColumn, currLine),
+            );
+          let highlighted = highlightedBeginning ++ highlightedEnd;
           revResult.contents = [
-            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep) ++ highlighted,
+            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep)
+            ++ highlighted,
             ...revResult.contents,
           ];
         } else if (i == endRow) {
@@ -108,13 +133,15 @@ module Make = (Styl: Stylish.StylishSig) => {
           let endStr = stringSlice(~first=endColumn, currLine);
           let beginningStr = stringSlice(~last=endColumn, currLine);
           /* In the middle of the error. */
-          let (white, trimmedBeginningStr) = splitLeadingWhiteSpace(beginningStr);
+          let (white, trimmedBeginningStr) =
+            splitLeadingWhiteSpace(beginningStr);
           let highlightedBeginningStr =
             white ++ red(~bold=true, ~underline=true, trimmedBeginningStr);
           let highlightedEndStr = highlightSource(~dim=true, endStr);
           let highlighted = highlightedBeginningStr ++ highlightedEndStr;
           revResult.contents = [
-            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep) ++ highlighted,
+            red(~dim=true, pad(string_of_int(i + 1), lineNumWidth) ++ sep)
+            ++ highlighted,
             ...revResult.contents,
           ];
         } else {
@@ -129,7 +156,8 @@ module Make = (Styl: Stylish.StylishSig) => {
         };
       } else {
         revResult.contents = [
-          dim(pad(string_of_int(i + 1), lineNumWidth) ++ sep) ++ highlightSource(~dim=true, currLine),
+          dim(pad(string_of_int(i + 1), lineNumWidth) ++ sep)
+          ++ highlightSource(~dim=true, currLine),
           ...revResult.contents,
         ];
       };
@@ -154,21 +182,19 @@ module Make = (Styl: Stylish.StylishSig) => {
         sp(
           "%s %s%s %s",
           labelColor(~invert=true, ~bold=true, label),
-          cyan(
+          cyan(~underline=true, sp("%s", filePath)),
+          highlight(
+            ~dim=true,
             ~underline=true,
-            sp("%s", filePath),
+            sp(":%d %d-%d", startRow + 1, startColumn, endColumn),
           ),
-          highlight(~dim=true, ~underline=true, sp(":%d %d-%d", startRow + 1, startColumn, endColumn)),
           labelColor(~bold=true, warningCodeStr),
         );
       } else {
         sp(
           "%s %s%s %s",
           labelColor(~invert=true, ~bold=true, label),
-          cyan(
-            ~underline=true,
-            filePath
-          ),
+          cyan(~underline=true, filePath),
           highlight(
             ~dim=true,
             ~underline=true,
@@ -285,4 +311,4 @@ module Make = (Styl: Stylish.StylishSig) => {
         [highlight(~dim=true, ~bold=true, "# Unformatted Warning Output:")],
       ])
     };
-}
+};

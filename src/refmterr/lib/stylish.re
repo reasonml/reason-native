@@ -12,20 +12,83 @@ module type StylishSig = {
   let dim: string => string;
   let underline: string => string;
 
-  let normal: (~underline: bool=?, ~invert: bool=?, ~dim: bool=?, ~bold: bool=?, string) => string;
-  let red: (~underline: bool=?, ~invert: bool=?, ~dim: bool=?, ~bold: bool=?, string) => string;
-  let yellow: (~underline: bool=?, ~invert: bool=?, ~dim: bool=?, ~bold: bool=?, string) => string;
-  let blue: (~underline: bool=?, ~invert: bool=?, ~dim: bool=?, ~bold: bool=?, string) => string;
-  let green: (~underline: bool=?, ~invert: bool=?, ~dim: bool=?, ~bold: bool=?, string) => string;
-  let cyan: (~underline: bool=?, ~invert: bool=?, ~dim: bool=?, ~bold: bool=?, string) => string;
-  let purple: (~underline: bool=?, ~invert: bool=?, ~dim: bool=?, ~bold: bool=?, string) => string;
+  let normal:
+    (
+      ~underline: bool=?,
+      ~invert: bool=?,
+      ~dim: bool=?,
+      ~bold: bool=?,
+      string
+    ) =>
+    string;
+  let red:
+    (
+      ~underline: bool=?,
+      ~invert: bool=?,
+      ~dim: bool=?,
+      ~bold: bool=?,
+      string
+    ) =>
+    string;
+  let yellow:
+    (
+      ~underline: bool=?,
+      ~invert: bool=?,
+      ~dim: bool=?,
+      ~bold: bool=?,
+      string
+    ) =>
+    string;
+  let blue:
+    (
+      ~underline: bool=?,
+      ~invert: bool=?,
+      ~dim: bool=?,
+      ~bold: bool=?,
+      string
+    ) =>
+    string;
+  let green:
+    (
+      ~underline: bool=?,
+      ~invert: bool=?,
+      ~dim: bool=?,
+      ~bold: bool=?,
+      string
+    ) =>
+    string;
+  let cyan:
+    (
+      ~underline: bool=?,
+      ~invert: bool=?,
+      ~dim: bool=?,
+      ~bold: bool=?,
+      string
+    ) =>
+    string;
+  let purple:
+    (
+      ~underline: bool=?,
+      ~invert: bool=?,
+      ~dim: bool=?,
+      ~bold: bool=?,
+      string
+    ) =>
+    string;
   let highlight:
     (
       ~underline: bool=?,
       ~invert: bool=?,
       ~dim: bool=?,
       ~bold: bool=?,
-      ~color: (~underline: bool=?, ~invert: bool=?, ~dim: bool=?, ~bold: bool=?, string) => string
+      ~color: (
+                ~underline: bool=?,
+                ~invert: bool=?,
+                ~dim: bool=?,
+                ~bold: bool=?,
+                string
+              ) =>
+              string
                 =?,
       ~first: int=?,
       ~last: int=?,
@@ -45,33 +108,26 @@ module ANSIStylish: StylishSig = {
 
   let underline = Chalk.underline;
 
-  let normal = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) => {
-    <Chalk underline inverse=invert dim bold>s</Chalk>
-  }
+  let normal = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
+    <Chalk underline inverse=invert dim bold> s </Chalk>;
 
-  let red = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) => {
-    <Chalk underline inverse=invert dim bold color=Red>s</Chalk>
-  }
+  let red = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
+    <Chalk underline inverse=invert dim bold color=Red> s </Chalk>;
 
-  let yellow = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) => {
-    <Chalk underline inverse=invert dim bold color=Yellow>s</Chalk>
-  }
+  let yellow = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
+    <Chalk underline inverse=invert dim bold color=Yellow> s </Chalk>;
 
-  let blue = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) => {
-    <Chalk underline inverse=invert dim bold color=Blue>s</Chalk>
-  }
+  let blue = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
+    <Chalk underline inverse=invert dim bold color=Blue> s </Chalk>;
 
-  let green = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) => {
-    <Chalk underline inverse=invert dim bold color=Green>s</Chalk>
-  }
+  let green = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
+    <Chalk underline inverse=invert dim bold color=Green> s </Chalk>;
 
-  let cyan = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) => {
-    <Chalk underline inverse=invert dim bold color=Cyan>s</Chalk>
-  }
+  let cyan = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
+    <Chalk underline inverse=invert dim bold color=Cyan> s </Chalk>;
 
-  let purple = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) => {
-    <Chalk underline inverse=invert dim bold color=Magenta>s</Chalk>
-  }
+  let purple = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
+    <Chalk underline inverse=invert dim bold color=Magenta> s </Chalk>;
 
   let stringSlice = (~first=0, ~last=?, str) => {
     let last =
@@ -97,6 +153,12 @@ module ANSIStylish: StylishSig = {
         str,
       ) =>
     stringSlice(~last=first, str)
-    ++ color(~underline, ~dim, ~invert, ~bold, stringSlice(~first, ~last, str))
+    ++ color(
+         ~underline,
+         ~dim,
+         ~invert,
+         ~bold,
+         stringSlice(~first, ~last, str),
+       )
     ++ stringSlice(~first=last, str);
 };

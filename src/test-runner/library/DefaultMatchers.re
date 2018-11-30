@@ -16,7 +16,7 @@ type matchers = {
   lines: list(string) => stringMatchersWithNot,
   bool: bool => boolMatchersWithNot,
   int: int => intMatchersWithNot,
-  fn: 'a. (unit => 'a) => fnMatchersWithNot
+  fn: 'a. (unit => 'a) => fnMatchersWithNot,
 };
 
 let makeDefaultMatchers = (utils, snapshotMatcher) => {
@@ -32,5 +32,5 @@ let makeDefaultMatchers = (utils, snapshotMatcher) => {
   },
   bool: b => BoolMatchers.makeMatchers(".bool", utils, b),
   int: i => IntMatchers.makeMatchers(".int", utils, i),
-  fn: f => FnMatchers.makeMatchers(".fn", utils, f)
+  fn: f => FnMatchers.makeMatchers(".fn", utils, f),
 };

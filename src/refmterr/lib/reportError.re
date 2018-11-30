@@ -18,8 +18,8 @@ module Make = (Styl: Stylish.StylishSig) => {
   let refmttypeNewlineR = Re.Pcre.regexp({|\\n|});
 
   /*
-  * Remove GADT cruft etc.
-  */
+   * Remove GADT cruft etc.
+   */
   let gadtR = Re.Pcre.regexp({|\$[a-zA-Z0-9']*|});
 
   let replaceDollar = s =>
@@ -42,7 +42,7 @@ module Make = (Styl: Stylish.StylishSig) => {
           result.contents = [
             Re.Pcre.substitute(
               ~rex=refmttypeNewlineR,
-              ~subst=(_) => "\n",
+              ~subst=_ => "\n",
               input_line(input),
             ),
             ...result.contents,
@@ -74,7 +74,8 @@ module Make = (Styl: Stylish.StylishSig) => {
     let len = String.length(typ);
     let prefix = String.sub(typ, 0, typPrefixLen);
     let suffix = String.sub(typ, len - typSuffixLen, typSuffixLen);
-    let mid = String.sub(typ, typPrefixLen, len - typPrefixLen - typSuffixLen);
+    let mid =
+      String.sub(typ, typPrefixLen, len - typPrefixLen - typSuffixLen);
     if (String.length(prefix)
         + String.length(mid)
         + String.length(suffix) === len) {
@@ -86,14 +87,14 @@ module Make = (Styl: Stylish.StylishSig) => {
   };
 
   /*
-  * Renders type equalities but also accepts "others" which are the
-  * contradicting types which can be used to highlight the diff in the types
-  * being printed.
-  *
-  * ~types: A list of type equivalencies.
-  * ~others: Corresponding type equivalences for the contradicting type.
-  * ~diffHl: How to highlight the diff portion between the two.
-  */
+   * Renders type equalities but also accepts "others" which are the
+   * contradicting types which can be used to highlight the diff in the types
+   * being printed.
+   *
+   * ~types: A list of type equivalencies.
+   * ~others: Corresponding type equivalences for the contradicting type.
+   * ~diffHl: How to highlight the diff portion between the two.
+   */
   let rec renderTypeEquality = (~lines=[], ~types, ~others, hl, diffHl) =>
     switch (types, others) {
     | ([hd, ...tl], [opHd, ...opTl]) =>
@@ -115,10 +116,10 @@ module Make = (Styl: Stylish.StylishSig) => {
 
   let renderInequality = (~isDetail, ~actual, ~expected) => {
     /*
-    * If there are more than one total incompatable messages, or if the one
-    * and only incompat message has line breaks, we'll print the more detailed
-    * version with some comforatable white space.
-    */
+     * If there are more than one total incompatable messages, or if the one
+     * and only incompat message has line breaks, we'll print the more detailed
+     * version with some comforatable white space.
+     */
     let diffBad = highlight(~color=red, ~bold=true, ~dim=false);
     let diffGood = highlight(~color=green, ~bold=true, ~dim=false);
     let bad = highlight(~color=red, ~bold=false, ~dim=false);
@@ -158,10 +159,10 @@ module Make = (Styl: Stylish.StylishSig) => {
   let subDot = s => ".";
 
   /*
-  * Often types are reported with separate type equalities listed for module
-  * aliases but these are really not very helpful and more confusing than
-  * anything. Let's filter these out.
-  */
+   * Often types are reported with separate type equalities listed for module
+   * aliases but these are really not very helpful and more confusing than
+   * anything. Let's filter these out.
+   */
   let normalizeEquivalencies = strings =>
     switch (strings) {
     | [] => []
@@ -195,10 +196,10 @@ module Make = (Styl: Stylish.StylishSig) => {
       [
         purple(~bold=true, "Learn:")
         ++ highlight(
-            ~bold=true,
-            ~dim=true,
-            " What does it mean for a type variable to \"escape\" its scope?",
-          ),
+             ~bold=true,
+             ~dim=true,
+             " What does it mean for a type variable to \"escape\" its scope?",
+           ),
         concatList(
           "\n",
           [
@@ -228,37 +229,41 @@ module Make = (Styl: Stylish.StylishSig) => {
   };
 
   /*
-  * Algorithm for injecting highlighting:
-  *
-  * A = A' not compatible with B = B'
-  * AA = AA' not compatible with BB = BB'
-  * AAA = AAA' not compatible with BBB = BBB'
-  *
-  * Either AA or AA' will be in at least one of A or A'.
-  * Either BB or BB' will be in at least one of B or B'.
-  * And so on.
-  *
-  * 1. Find the first point where A and B differ.
-  *    Find the first point where A' and B' differ.
-  *
-  * We try to fold AAA/BBB or their primes into AA/BB or their primes just by
-  * highlighting.
-  * If not, we show AAA/BBB.
-  *
-  * We try to fold AA/BB into A/B just by highlighting.
-  * If not, we show AA/BB.
-  */
-  let report = (~refmttypePath, parsedContent) : list(string) => {
+   * Algorithm for injecting highlighting:
+   *
+   * A = A' not compatible with B = B'
+   * AA = AA' not compatible with BB = BB'
+   * AAA = AAA' not compatible with BBB = BBB'
+   *
+   * Either AA or AA' will be in at least one of A or A'.
+   * Either BB or BB' will be in at least one of B or B'.
+   * And so on.
+   *
+   * 1. Find the first point where A and B differ.
+   *    Find the first point where A' and B' differ.
+   *
+   * We try to fold AAA/BBB or their primes into AA/BB or their primes just by
+   * highlighting.
+   * If not, we show AAA/BBB.
+   *
+   * We try to fold AA/BB into A/B just by highlighting.
+   * If not, we show AA/BB.
+   */
+  let report = (~refmttypePath, parsedContent): list(string) => {
     let toReasonTypes = toReasonTypes(~refmttypePath);
     let toReasonTypes1 = toReasonTypes1(~refmttypePath);
     let toReasonTypes2 = toReasonTypes2(~refmttypePath);
     /*
-    * For some reason refmttype outputs the string (backslash followed by n)
-    * instead of actual newlines.
-    */
+     * For some reason refmttype outputs the string (backslash followed by n)
+     * instead of actual newlines.
+     */
     switch (parsedContent) {
     | NoErrorExtracted => []
-    | Type_MismatchTypeArguments({typeConstructor, expectedCount, actualCount}) => [
+    | Type_MismatchTypeArguments({
+        typeConstructor,
+        expectedCount,
+        actualCount,
+      }) => [
         sp(
           "You must pass exactly %d argument%s to this variant. You have passed %d argument%s.",
           expectedCount,
@@ -273,10 +278,10 @@ module Make = (Styl: Stylish.StylishSig) => {
       let expected = toReasonTypes(main.expected);
       let actual = toReasonTypes(main.actual);
       /*
-      * If there are more than one total incompatable messages, or if the one
-      * and only incompat message has line breaks, we'll print the more detailed
-      * version with some comforatable white space.
-      */
+       * If there are more than one total incompatable messages, or if the one
+       * and only incompat message has line breaks, we'll print the more detailed
+       * version with some comforatable white space.
+       */
       let termStr = term === Pattern ? "This pattern" : "This";
       let typeInequality =
         renderInequality(~isDetail=false, ~expected, ~actual);
@@ -571,7 +576,9 @@ module Make = (Styl: Stylish.StylishSig) => {
           [
             sp(
               "%s %s",
-              bold("This module is missing the " ++ whatStr(what) ++ " named"),
+              bold(
+                "This module is missing the " ++ whatStr(what) ++ " named",
+              ),
               red(~bold=true, named),
             ),
             "",
@@ -584,7 +591,17 @@ module Make = (Styl: Stylish.StylishSig) => {
           ],
         );
       let badValueMsg = info => {
-        let (what, named, good, goodFile, goodLn, badName, bad, badFile, badLn) = info;
+        let (
+          what,
+          named,
+          good,
+          goodFile,
+          goodLn,
+          badName,
+          bad,
+          badFile,
+          badLn,
+        ) = info;
         let (bad, good) = toReasonTypes2(bad, good);
         concatList(
           "\n",
