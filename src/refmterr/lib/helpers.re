@@ -424,7 +424,7 @@ let findCommonEnds = (aStr, bStr) => {
 };
 
 /* Safe pipe operator
-https://github.com/facebook/reason/issues/1928#issuecomment-389161245 */
+   https://github.com/facebook/reason/issues/1928#issuecomment-389161245 */
 let (|>?) = (x, access) =>
   switch (x) {
   | None => None
