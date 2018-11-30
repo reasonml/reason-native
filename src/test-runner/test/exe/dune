@@ -2,6 +2,6 @@
 (executable
    (name TestRunnerTest)
    (public_name TestRunnerTest.exe)
-   (libraries  test-runner.test )
-   (package test-runner)
+   (libraries  test-runner-test.lib )
+   (package test-runner-test)
 )
