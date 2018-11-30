@@ -9,7 +9,8 @@
     "ocaml": " >= 4.2.0  < 4.8.0",
     "@reason-native/chalk": "*",
     "@opam/yojson": "*",
-    "@opam/ppx_deriving_yojson": "*"
+    "@opam/ppx_deriving_yojson": "*",
+    "@reason-native/console": "*"
   },
   "author": {
     "name": "chenglou"
