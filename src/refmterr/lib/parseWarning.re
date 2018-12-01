@@ -10,30 +10,34 @@ open Helpers;
 
 /* agnostic extractors, turning err string into proper data structures */
 /* TODO: don't make these raise error */
-let warning_UnusedVariable = (code, err, _, _, _) => raise(Not_found);
+let warning_UnusedVariable = (code, err, _, _, _) => None;
 
 /* need: what the variant is. If it's e.g. a list, instead of saying "doesn't
    cover all the cases of the variant" we could say "doesn't cover all the possible
    length of the list" */
 let warning_PatternNotExhaustive = (code, err, _, _, _) => {
   let unmatchedR = {|this pattern-matching is not exhaustive.\sHere is an example of a value that is not matched:\s([\s\S]+)|};
-  let unmatchedRaw = get_match(unmatchedR, err);
-  let unmatched =
-    if (unmatchedRaw.[0] == '(') {
-      /* format was (Variant1|Variant2|Variant3). We strip the surrounding parens */
-      unmatchedRaw
-      |> Helpers.stringSlice(
-           ~first=1,
-           ~last=String.length(unmatchedRaw) - 1,
-         )
-      |> split({|\|[\s]*|});
-    } else {
-      [unmatchedRaw];
-    };
-  Warning_PatternNotExhaustive({unmatched: unmatched});
+  get_match_maybe(unmatchedR, err)
+  |>? (
+    unmatchedRaw => {
+      let unmatched =
+        if (unmatchedRaw.[0] == '(') {
+          /* format was (Variant1|Variant2|Variant3). We strip the surrounding parens */
+          unmatchedRaw
+          |> Helpers.stringSlice(
+               ~first=1,
+               ~last=String.length(unmatchedRaw) - 1,
+             )
+          |> split({|\|[\s]*|});
+        } else {
+          [unmatchedRaw];
+        };
+      Some(Warning_PatternNotExhaustive({unmatched: unmatched}));
+    }
+  );
 };
 
-let warning_PatternUnused = (code, err, _, _, _) => raise(Not_found);
+let warning_PatternUnused = (code, err, _, _, _) => None;
 
 /* need: offending optional argument name from AST */
 /* need: offending function name */
@@ -43,23 +47,33 @@ let warning_OptionalArgumentNotErased = (code, err, _, cachedContent, range) => 
      https://github.com/ocaml/ocaml/blob/901c67559469acc58935e1cc0ced253469a8c77a/utils/warnings.ml#L20 */
   let allR = {|this optional argument cannot be erased\.|};
   let fileLine = List.nth(cachedContent, startRow);
-  let _ = get_match_n(0, allR, err);
-  let argumentNameRaw =
-    Helpers.stringSlice(
-      ~first=startColumn,
-      ~last=
-        if (startRow == endRow) {
-          endColumn;
-        } else {
-          99999;
-        },
-      fileLine,
-    );
-  let argumentNameR = {|(:?\?\s*\()?([^=]+)|};
-  let argumentName = get_match_n(2, argumentNameR, argumentNameRaw);
-  Warning_OptionalArgumentNotErased({
-    argumentName: String.trim(argumentName),
-  });
+  get_match_n_maybe(0, allR, err)
+  |>? (
+    _ =>
+      {
+        let argumentNameRaw =
+          Helpers.stringSlice(
+            ~first=startColumn,
+            ~last=
+              if (startRow == endRow) {
+                endColumn;
+              } else {
+                99999;
+              },
+            fileLine,
+          );
+        let argumentNameR = {|(:?\?\s*\()?([^=]+)|};
+        get_match_n_maybe(2, argumentNameR, argumentNameRaw);
+      }
+      |>? (
+        argumentName =>
+          Some(
+            Warning_OptionalArgumentNotErased({
+              argumentName: String.trim(argumentName),
+            }),
+          )
+      )
+  );
 };
 
 /* need: what the variant is. If it's e.g. a list, instead of saying "doesn't
@@ -77,9 +91,9 @@ let warning_BadFileName = (code, err, filePath, _, _) =>
       | (None, Some(m)) => Contains(m)
       | _ => UnknownIllegalChar
       };
-    Warning_BadFileName(offendingChar);
+    Some(Warning_BadFileName(offendingChar));
   } else {
-    raise(Not_found);
+    None;
   };
 
 /* TODO: better logic using these codes */
@@ -93,9 +107,7 @@ let parsers = [
 
 let parse = (code, warningBody, filePath, cachedContent, range) => {
   let tryParser = parse' =>
-    try (Some(parse'(code, warningBody, filePath, cachedContent, range))) {
-    | _ => None
-    };
+    parse'(code, warningBody, filePath, cachedContent, range);
   try (Helpers.listFindMap(tryParser, parsers)) {
   | Not_found => NoWarningExtracted
   };
