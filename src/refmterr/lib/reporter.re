@@ -231,6 +231,33 @@ module Make = (Styl: Stylish.StylishSig) => {
       customLogOutputProcessors,
     );
 
+  let convertParsedToJson =
+      (
+        ~originalRevLines: list(string),
+        ~prettyResult: list(string),
+        result: result,
+      )
+      : string => {
+    let originalRevLinesJson =
+      `List(List.map(x => `String(x), originalRevLines));
+    let prettyResultJson = `List(List.map(x => `String(x), prettyResult));
+    let basicPayload = [
+      ("originallines", originalRevLinesJson),
+      ("prettyResult", prettyResultJson),
+    ];
+    switch (BetterErrorsTypes.result_to_yojson(result)) {
+    | `List([err_type, err_data]) =>
+      Yojson.Safe.to_string(
+        `Assoc([("type", err_type), ("data", err_data), ...basicPayload]),
+      )
+    | `List([err_type]) =>
+      Yojson.Safe.to_string(`Assoc([("type", err_type), ...basicPayload]))
+    | e =>
+      /* This should never happen */
+      raise(Yojson_result_parse_not_list(Yojson.Safe.to_string(e)))
+    };
+  };
+
   let prettyPrintParsedResult =
       (
         ~originalRevLines: list(string),
@@ -325,35 +352,7 @@ module Make = (Styl: Stylish.StylishSig) => {
         ])
       };
     rawOutput ?
-      {
-        let originalRevLinesJson =
-          `List(List.map(x => `String(x), originalRevLines));
-        let prettyResultJson =
-          `List(List.map(x => `String(x), prettyResult));
-        let basicPayload = [
-          ("originallines", originalRevLinesJson),
-          ("prettyResult", prettyResultJson),
-        ];
-        switch (BetterErrorsTypes.result_to_yojson(result)) {
-        | `List([err_type, err_data]) => [
-            Yojson.Safe.to_string(
-              `Assoc([
-                ("type", err_type),
-                ("data", err_data),
-                ...basicPayload,
-              ]),
-            ),
-          ]
-        | `List([err_type]) => [
-            Yojson.Safe.to_string(
-              `Assoc([("type", err_type), ...basicPayload]),
-            ),
-          ]
-        | e =>
-          /* This should never happen */
-          raise(Yojson_result_parse_not_list(Yojson.Safe.to_string(e)))
-        };
-      } :
+      [convertParsedToJson(~originalRevLines, ~prettyResult, result)] :
       prettyResult;
   };
 };
