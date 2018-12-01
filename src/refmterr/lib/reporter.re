@@ -239,10 +239,10 @@ module Make = (Styl: Stylish.StylishSig) => {
       )
       : string => {
     let originalRevLinesJson =
-      `List(List.map(x => `String(x), originalRevLines));
-    let prettyResultJson = `List(List.map(x => `String(x), prettyResult));
+      `String(String.concat("\n", originalRevLines));
+    let prettyResultJson = `String(String.concat("\n", prettyResult));
     let basicPayload = [
-      ("originallines", originalRevLinesJson),
+      ("originalLines", originalRevLinesJson),
       ("prettyResult", prettyResultJson),
     ];
     switch (BetterErrorsTypes.result_to_yojson(result)) {
