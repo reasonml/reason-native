@@ -10,10 +10,15 @@ open Index;
 open Helpers;
 
 let parseFromStdin =
-    (~refmttypePath, ~customLogOutputProcessors, ~customErrorParsers) => {
+    (
+      ~refmttypePath,
+      ~customLogOutputProcessors,
+      ~customErrorParsers,
+      ~rawOutput,
+    ) => {
   let reverseErrBuffer = {contents: []};
   let prettyPrintParsedResult =
-    TerminalReporter.prettyPrintParsedResult(~refmttypePath);
+    TerminalReporter.prettyPrintParsedResult(~refmttypePath, ~rawOutput);
   let forEachLine = line =>
     switch (
       reverseErrBuffer.contents,
