@@ -24,7 +24,7 @@ dependencies": {
 ```
 ## Creating a test package
 
-Let's start by creating a library for our tests. First create an opam file for your test package (it should be empty). Then let's create a directory called test and create a dune file four our library (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
+Let's start by creating a library for our tests. First create an opam file for your test package (it should be empty). Then let's create a directory called test and create a dune file for our library (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
 ```
 │
 ├─my-lib-test.opam
