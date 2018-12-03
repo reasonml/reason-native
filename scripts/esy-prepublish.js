@@ -10,32 +10,32 @@ if (process.cwd() !== path.resolve(__dirname, '..')) {
 
 let projectRoot = process.cwd();
 
-let relativeSubpackages = [];
+let relativeJsonPaths = [];
 for (var i = 2; i < process.argv.length; i++) {
-  let relativeSubpackage = process.argv[i];
-  relativeSubpackages.push(relativeSubpackage);
+  let jsonRelativePath = process.argv[i];
+  relativeJsonPaths.push(jsonRelativePath);
 }
 
-if (relativeSubpackages.length === 0) {
-  relativeSubpackages = ['.'];
+if (relativeJsonPaths.length === 0) {
+  relativeJsonPaths = ['esy.json'];
 }
 
-for (var i = 0; i < relativeSubpackages.length; i++) {
-  let relativeSubpackage = relativeSubpackages[i];
-  let subpackageRoot = path.resolve(projectRoot, relativeSubpackage);
-  if (!relativeSubpackage || !fs.existsSync(subpackageRoot)) {
+for (var i = 0; i < relativeJsonPaths.length; i++) {
+  let jsonRelativePath = relativeJsonPaths[i];
+  let subpackageJson = path.resolve(projectRoot, jsonRelativePath);
+  if (path.extname(jsonRelativePath) !== '.json') {
     console.log(
-      'You specified an invalid release package root (' +
-      subpackageRoot +
-      '). Specify location of packages to release relative to repo root directory.'
+      'You specified an relative path to something that isn\'t a json file (' +
+      subpackageJson +
+      '). Specify location of json files relative to repo root.'
     );
     process.exit(1);
   }
-  if (!fs.existsSync(path.resolve(subpackageRoot, 'esy.json'))) {
+  if (!jsonRelativePath || !fs.existsSync(subpackageJson)) {
     console.log(
-      'You specified a package release root (' +
-      subpackageRoot +
-      ') that does not contain a package.json file'
+      'You specified an invalid release package root (' +
+      subpackageJson +
+      '). Specify location of packages to release relative to repo root directory.'
     );
     process.exit(1);
   }
@@ -60,13 +60,6 @@ if (uncommitted !== "") {
   process.exit(1);
 }
 
-// Files to copy from subpackages to root, and therefore delete if present
-let copyOver = {
-  '.npmignore': '.npmignore',
-  'package.json': 'package.json',
-  'esy.json': 'package.json'
-};
-
 process.chdir(projectRoot);
 let tarResult = cp.spawnSync('tar', ['--exclude', 'node_modules', '--exclude', '_build', '--exclude', '.git', '-cf', 'template.tar', '.']);
 let tarErr = tarResult.stderr.toString();
@@ -82,12 +75,13 @@ try {
   // For each subpackage, we release the entire source code for all packages, but
   // with the root package.json swapped out with the esy.json file in the
   // subpackage.
-  for (var i = 0; i < relativeSubpackages.length; i++) {
+  for (var i = 0; i < relativeJsonPaths.length; i++) {
     process.chdir(projectRoot);
-    let relativeSubpackage = relativeSubpackages[i];
-    let subpackageRoot = path.resolve(projectRoot, relativeSubpackage);
-    let subpackageReleaseDir = path.resolve(_releaseDir, relativeSubpackage);
-    let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(relativeSubpackage), '_prep');
+    let jsonRelativePath = relativeJsonPaths[i];
+    let jsonResolvedPath = path.resolve(projectRoot, jsonRelativePath);
+    
+    let subpackageReleaseDir = path.resolve(_releaseDir, jsonRelativePath);
+    let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
     cp.spawnSync('mkdir', ['-p', subpackageReleaseDir]);
     cp.spawnSync('mkdir', ['-p', subpackageReleasePrepDir]);
     cp.spawnSync(
@@ -100,35 +94,34 @@ try {
     process.chdir(subpackageReleasePrepDir);
     cp.spawnSync('tar', ['-xvf', 'template.tar']);
     cp.spawnSync('rm', [path.join(subpackageReleasePrepDir, 'template.tar')]);
-    const packageJsonPath = path.resolve(subpackageRoot, 'esy.json');
-    const packageJson = require(packageJsonPath);
+    const packageJson = require(jsonResolvedPath);
     const packageName = packageJson.name;
     const packageVersion = packageJson.version;
 
-    // In the process we want to remove any .npmignore/package/esy.json files
-    // that were at the root, before we even copy subpackage files to the root.
-    for (var filename in copyOver) {
-      let destFile = path.resolve(subpackageReleasePrepDir, filename);
-      if (fs.existsSync(destFile)) {
-        let rmResult = cp.spawnSync('rm', [destFile]);
-        let mvErr = rmResult.stderr.toString();
-        if (mvErr !== '') {
-          console.log('ERROR: Could not rm ' + filename + ' - ' + mvErr);
-          process.exit(1);
-        }
+
+
+    let originPath = path.resolve(subpackageReleasePrepDir, jsonRelativePath);
+    let destPath = path.resolve(subpackageReleasePrepDir, 'package.json');
+    if (fs.existsSync(originPath)) {
+      let cpResult = cp.spawnSync('mv', [originPath, destPath]);
+      let mvErr = cpResult.stderr.toString();
+      if (mvErr !== '') {
+        console.log('ERROR: Could not move ' + originPath + ' - ' + mvErr);
+        process.exit(1);
       }
     }
 
-    for (var filename in copyOver) {
-      let originPath = path.resolve(subpackageRoot, filename);
-      let destPath = path.resolve(subpackageReleasePrepDir, copyOver[filename]);
-      if (fs.existsSync(originPath)) {
-        let cpResult = cp.spawnSync('cp', [originPath, destPath]);
-        let mvErr = cpResult.stderr.toString();
-        if (mvErr !== '') {
-          console.log('ERROR: Could not move ' + filename + ' - ' + mvErr);
-          process.exit(1);
-        }
+    // If an esy.json file remains, we need to remove it so that it isn't
+    // picked up as the default by esy (it gives priority to esy.json over
+    // package.json). But this has to be done _after_ the `mv` above, in case
+    // the json file that someone published _was_ the esy.json file.
+    let esyFile = path.resolve(subpackageReleasePrepDir, 'esy.json');
+    if (fs.existsSync(esyFile)) {
+      let rmResult = cp.spawnSync('rm', [esyFile]);
+      let rmErr = rmResult.stderr.toString();
+      if (rmErr !== '') {
+        console.log('ERROR: Could not rm ' + esyFile + ' - ' + rmErr);
+        process.exit(1);
       }
     }
 

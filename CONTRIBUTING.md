@@ -16,6 +16,21 @@ We actively welcome your pull requests.
 5. Make sure your code lints.
 6. If you haven't already, complete the Contributor License Agreement ("CLA").
 
+
+## Releasing
+
+To release packages, run the `./scripts/esy-prepublish.js` script supplying the
+relative paths to various `.json` files you wish to publish. To release package
+`@reason-native/foo` which has a `foo.json` file in the repo root, run
+
+```sh
+node ./scripts/esy-prepublish.js ./foo.json
+```
+
+Then follow the instructions that are printed.
+
+
+
 ## Contributor License Agreement ("CLA")
 In order to accept your pull request, we need you to submit a CLA. You only need
 to do this once to work on any of Facebook's open source projects.
