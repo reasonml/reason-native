@@ -4,6 +4,11 @@ Part of the
 [reason-native](https://github.com/facebookexperimental/reason-native) native
 utility collection.
 
+## Using:
+- From your project, add a package dependency on `@reason-native/console`
+- If using Dune, add an entry in your `dune` file's `libraries` section so that
+  it includes `console.lib` such as: `(libraries console.lib )`
+
 **Browser Inspired**: `Console` is modelled after the browser console. It
 doesn't require that you define any printers, and `Console.log/warn/error`
 accept any type of input. Record fields and variant label names are lost at
