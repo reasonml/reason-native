@@ -8,10 +8,15 @@
   Console: No effort, universal logger.
   =====================================
 
+  Part of the
+  [reason-native](https://github.com/facebookexperimental/reason-native) native
+  utility collection.
+  
+
   **Browser Inspired**: `Console` is modelled after the browser console. It
   doesn't require that you define any printers, and `Console.log/warn/error`
-  accept any type of input. When compiling natively, the output is less
-  informative than when compiling to JavaScript.
+  accept any type of input. Record fields and variant label names are lost at
+  compile time so they aren't printed.
 
   **Suitable For Developers or Users:**
   - Passing a single `string` (as in `Console.log("hello")`) will not print the
@@ -26,7 +31,8 @@
 
   **No Effort**: Uses runtime checks to determine a likely appropriate printer
   for your data without requiring any ppx plugins and without having to write
-  printers for your data types.
+  printers for your data types. Depth checking will prevent cyclical data from
+  printing infinitely.
 
 
   **Best effort**: The basic data types are detected accurately at
@@ -109,9 +115,13 @@ let out: 'a => unit;
  */
 let debug: 'a => unit;
 
-/*
+/**
  * Same as `Console.log` but writes to `stderr`.
  */
 let error: 'a => unit;
 
+/**
+ * Currently the same as `Console.error` but will eventually be able to be
+ * suppressed via a "log level".
+ */
 let warn: 'a => unit;
