@@ -1,4 +1,14 @@
 //this file was copied from https://github.com/facebook/reason/blob/master/scripts/esy-prepublish.js
+//
+//  Usage: Run from the repo root:
+//    node scripts/esy-prepublish.js relative/path/to/some-package-name.json
+//
+//  The script will copy relative/path/to/some-package-name.json into
+//  ./package.json and delete any remaining esy.json at the root. It will also
+//  search for relative/path/to/some-package-name.README.md (or if that is not
+//  found, then relative/path/to/README.md) and copy it to ./README.md at the
+//  repo root so that the published package has its appropriate README on the
+//  npm page.
 const fs = require('fs');
 const cp = require('child_process');
 const path = require('path');
@@ -98,16 +108,35 @@ try {
     const packageName = packageJson.name;
     const packageVersion = packageJson.version;
 
-
-
-    let originPath = path.resolve(subpackageReleasePrepDir, jsonRelativePath);
-    let destPath = path.resolve(subpackageReleasePrepDir, 'package.json');
-    if (fs.existsSync(originPath)) {
-      let cpResult = cp.spawnSync('mv', [originPath, destPath]);
-      let mvErr = cpResult.stderr.toString();
-      if (mvErr !== '') {
-        console.log('ERROR: Could not move ' + originPath + ' - ' + mvErr);
-        process.exit(1);
+    let readmePath = path.resolve(subpackageReleasePrepDir, 'README.md');
+    let readmePkgPath =
+      path.resolve(
+        subpackageReleasePrepDir,
+        path.basename(jsonRelativePath, '.json') + '.README.md'
+      );
+    let readmeResolvedPath = fs.existsSync(readmePath) ? readmePath :
+      fs.existsSync(readmePkgPath) ? readmePkgPath : null;
+    
+    let toCopy = [
+      {
+        originPath: path.resolve(subpackageReleasePrepDir, jsonRelativePath),
+        destPath: path.resolve(subpackageReleasePrepDir, 'package.json')
+      },
+      {
+        originPath: readmeResolvedPath,
+        destPath: path.resolve(subpackageReleasePrepDir, 'README.md')
+      }
+    ];
+    for (var i = 0; i < toCopy.length; i++) {
+      let originPath = toCopy[i].originPath;
+      let destPath = toCopy[i].destPath;
+      if (originPath !== null && fs.existsSync(originPath)) {
+        let cpResult = cp.spawnSync('mv', [originPath, destPath]);
+        let mvErr = cpResult.stderr.toString();
+        if (mvErr !== '') {
+          console.log('ERROR: Could not move ' + originPath + ' - ' + mvErr);
+          process.exit(1);
+        }
       }
     }
 
