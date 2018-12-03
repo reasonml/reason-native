@@ -114,8 +114,10 @@ try {
         subpackageReleasePrepDir,
         path.basename(jsonRelativePath, '.json') + '.README.md'
       );
-    let readmeResolvedPath = fs.existsSync(readmePath) ? readmePath :
-      fs.existsSync(readmePkgPath) ? readmePkgPath : null;
+    let readmeResolvedPath =
+      fs.existsSync(readmePkgPath) ? readmePkgPath :
+      fs.existsSync(readmePath) ? readmePath :
+      null;
     
     let toCopy = [
       {
