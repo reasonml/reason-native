@@ -1,5 +1,5 @@
 {
-  "name": "test-runner",
+  "name": "@reason-native/test-runner",
   "version": "0.0.0",
   "description": "My Project",
   "esy": {
