@@ -25,6 +25,6 @@
     "install": "esy-installer refmterr.install"
   },
   "scripts": {
-    "test": "esy src/refmterr/runTests.cmd"
+    "test": "esy src/refmterr/runTests.sh"
   }
 }

@@ -17,8 +17,7 @@
     ]
   },
   "scripts": {
-    "all": "./scripts/run-all.sh",
-    "test": "esy x bash -cx ./src/refmterr/runTests.cmd"
+    "test": "./runTests.sh"
   },
   "dependencies": {
     "@opam/dune": "*",
