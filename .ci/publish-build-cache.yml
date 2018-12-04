@@ -1,6 +1,6 @@
 steps:
 
-  - script: 'cd $(ESY__CACHE_INSTALL_PATH) && zip -r $(Build.ArtifactStagingDirectory)/cache.zip *'
+  - bash: 'cd $(ESY__CACHE_INSTALL_PATH) && zip -r $(Build.ArtifactStagingDirectory)/cache.zip *'
     displayName: 'Zip cache directory'
 
   - task: PublishBuildArtifacts@1
