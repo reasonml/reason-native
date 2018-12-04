@@ -13,7 +13,7 @@ steps:
         downloadPath: '$(ESY__CACHE_INSTALL_PATH)'
     continueOnError: true
 
-  - bash: 'tar -cxf cache-$(Agent.OS)-install/cache.tar . && rm -rf cache-$(Agent.OS)-install'
+  - bash: 'tar -xf cache-$(Agent.OS)-install/cache.tar -C . && rm -rf cache-$(Agent.OS)-install'
     workingDirectory: '$(ESY__CACHE_INSTALL_PATH)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Untar cache directory'
