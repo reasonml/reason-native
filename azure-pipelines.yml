@@ -35,20 +35,20 @@ jobs:
   - template: .ci/esy-build-steps.yml
   - template: .ci/publish-build-cache.yml
 
-# - job: Windows
-#   timeoutInMinutes: 0
-#   pool:
-#     vmImage: 'vs2017-win2016'
+- job: Windows
+  timeoutInMinutes: 0
+  pool:
+    vmImage: 'vs2017-win2016'
 
-#   variables:
-#     ESY__CACHE_INSTALL_PATH: C:\Users\VssAdministrator\.esy\3_\i
-#     ESY__CACHE_SOURCE_TARBALL_PATH: C:\Users\VssAdministrator\.esy\source\i
+  variables:
+    ESY__CACHE_INSTALL_PATH: C:\Users\VssAdministrator\.esy\3_\i
+    ESY__CACHE_SOURCE_TARBALL_PATH: C:\Users\VssAdministrator\.esy\source\i
 
-#   steps:
-#   - template: .ci/restore-build-cache.yml
-#   - template: .ci/install-esy.yml
-#   - template: .ci/esy-build-steps.yml
-#   - template: .ci/publish-build-cache.yml
+  steps:
+  - template: .ci/restore-build-cache.yml
+  - template: .ci/install-esy.yml
+  - template: .ci/esy-build-steps.yml
+  - template: .ci/publish-build-cache.yml
 
 # - job: Release
 #   timeoutInMinutes: 0
