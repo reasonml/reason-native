@@ -4,8 +4,7 @@ steps:
     displayName: 'Cache: Zip install folder'
     inputs:
       rootFolderOrFile: '$(ESY__CACHE_INSTALL_PATH)'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/cache.tar'
-      archiveType: 'tar'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/cache.zip'
       replaceExistingArchive: true
   - task: PublishBuildArtifacts@1
     displayName: 'Cache: Upload install folder'
