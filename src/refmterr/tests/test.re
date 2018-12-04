@@ -149,7 +149,7 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
-          "bash -c '%s 2>&1 | ../../_esy/default/build/install/default/bin/berror.exe --path-to-refmttype refmttype > %s'",
+          "bash -cx \"%s 2>&1 | ../../_esy/default/build/install/default/bin/berror.exe --path-to-refmttype refmttype > %s\"",
           cmd,
           actualOutputName,
         ),
