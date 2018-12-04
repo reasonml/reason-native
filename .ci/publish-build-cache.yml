@@ -1,5 +1,5 @@
 steps:
-  - task: ArchiveFiles
+  - task: ArchiveFiles@1
     condition: succeeded()
     displayName: 'Cache: Zip install folder'
     inputs:
