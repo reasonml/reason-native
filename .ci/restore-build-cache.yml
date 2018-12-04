@@ -1,6 +1,6 @@
 steps:
   - task: DownloadBuildArtifacts@0
-    condition: and(succeeded())
+    condition: succeeded()
     displayName: 'Cache: Restore install'
     inputs:
         buildType: 'specific'
@@ -14,7 +14,7 @@ steps:
     continueOnError: true
 
   - task: CopyFiles@2
-    condition: and(succeeded())
+    condition: succeeded()
     inputs:
         sourceFolder: '$(System.ArtifactsDirectory)/cache-$(Agent.OS)-install'
         targetFolder: '$(ESY__CACHE_INSTALL_PATH)'

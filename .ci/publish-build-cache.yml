@@ -1,7 +1,7 @@
 steps:
   - task: PublishBuildArtifacts@1
     displayName: 'Cache: Upload install folder'
-    condition: and(succeeded())
+    condition: succeeded()
     inputs:
         pathToPublish: '$(ESY__CACHE_INSTALL_PATH)'
         artifactName: 'cache-$(Agent.OS)-install'
