@@ -1,13 +1,14 @@
 steps:
 
-  - bash: 'cd $(ESY__CACHE_INSTALL_PATH) && zip -r $(Build.ArtifactStagingDirectory)/cache.zip *'
+  - bash: 'zip -r cache.zip *'
+    workingDirectory: '$(ESY__CACHE_INSTALL_PATH)'
     displayName: 'Zip cache directory'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Cache: Upload install folder'
     condition: succeeded()
     inputs:
-        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        pathToPublish: '$(ESY__CACHE_INSTALL_PATH)/cache.zip'
         artifactName: 'cache-$(Agent.OS)-install'
         parallel: true
         parallelCount: 8
