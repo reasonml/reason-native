@@ -8,8 +8,8 @@
     "install": [
       "esy-installer chalk.install",
       "esy-installer chalk-test.install",
-      "esy-installer test-runner.install",
-      "esy-installer test-runner-test.install",
+      "esy-installer rely.install",
+      "esy-installer rely-test.install",
       "esy-installer console.install",
       "esy-installer chalk-console.install",
       "esy-installer file-context-printer.install",

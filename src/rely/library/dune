@@ -1,0 +1,5 @@
+(library
+   (name Rely)
+   (public_name rely.lib)
+   (libraries chalk.lib file-context-printer.lib unix)
+)

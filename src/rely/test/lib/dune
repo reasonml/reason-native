@@ -1,8 +1,8 @@
 
 (library
-   (name TestRunnerTestLib)
-   (public_name test-runner-test.lib)
+   (name RelyTestLib)
+   (public_name rely-test.lib)
    ; the linkall flag is used to ensure that all tests are compiled and properly registered with the TestFramework
    (ocamlopt_flags -linkall -g)
-   (libraries  test-runner.lib )
+   (libraries  rely.lib )
 )

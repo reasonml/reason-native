@@ -15,12 +15,12 @@ let projectDir =
     |> dirname
     |> dirname
     |> (dir => Filename.concat(dir, "src"))
-    |> (dir => Filename.concat(dir, "test-runner"))
+    |> (dir => Filename.concat(dir, "rely"))
   );
 
-include TestRunner.Make({
+include Rely.Make({
   let config =
-    TestRunner.TestFrameworkConfig.initialize({
+    Rely.TestFrameworkConfig.initialize({
       snapshotDir:
         Filename.(
           projectDir
