@@ -1,15 +1,15 @@
 steps:
 
-  - script: 'ls $(ESY__CACHE_INSTALL_PATH)'
+  - script: 'tar -cvzf $(Build.ArtifactStagingDirectory)/cache.tar $(ESY__CACHE_INSTALL_PATH)'
     displayName: 'list install path'
 
-  - task: ArchiveFiles@1
-    condition: succeeded()
-    displayName: 'Cache: Zip install folder'
-    inputs:
-      rootFolderOrFile: '$(ESY__CACHE_INSTALL_PATH)'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/cache.zip'
-      replaceExistingArchive: true
+#  - task: ArchiveFiles@1
+#    condition: succeeded()
+#    displayName: 'Cache: Zip install folder'
+#    inputs:
+#    rootFolderOrFile: '$(ESY__CACHE_INSTALL_PATH)'
+#      archiveFile: '$(Build.ArtifactStagingDirectory)/cache.zip'
+#      replaceExistingArchive: true
   - task: PublishBuildArtifacts@1
     displayName: 'Cache: Upload install folder'
     condition: succeeded()
