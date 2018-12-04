@@ -43,13 +43,13 @@ exception Not_equal(string);
 
 let beginsWithPrefix = (str, prefix) => {
   let prefixLength = String.length(prefix);
-  if(String.length(str) < prefixLength) {
+  if (String.length(str) < prefixLength) {
     false;
   } else {
     let strPrefix = String.sub(str, 0, prefixLength);
     strPrefix == prefix;
-  }
-}
+  };
+};
 
 let readFile = filePath => {
   let lines = {contents: []};
@@ -59,13 +59,13 @@ let readFile = filePath => {
       while (true) {
         let line = input_line(chan);
         /* Rather hacky, however the reason test case was outputting stuff like
-        * Command line: refmt 'tests/file_SyntaxError/file_SyntaxError_7.re' > /var/folders/ty/3n7_qfdn767dqdzjs76k9mm1brfmx_/T/ocamlpp138f80
-        * which caused a different temporary file to be generated each time (and is somewhat OS dependent). As these tests run from a shell script
-        * and use ocaml directly, we don't have access to a bunch of libraries, so this seemed like the simplest way to get the tests running smoothly
-        */
-        if(!beginsWithPrefix(line, "Command line:")){
+         * Command line: refmt 'tests/file_SyntaxError/file_SyntaxError_7.re' > /var/folders/ty/3n7_qfdn767dqdzjs76k9mm1brfmx_/T/ocamlpp138f80
+         * which caused a different temporary file to be generated each time (and is somewhat OS dependent). As these tests run from a shell script
+         * and use ocaml directly, we don't have access to a bunch of libraries, so this seemed like the simplest way to get the tests running smoothly
+         */
+        if (!beginsWithPrefix(line, "Command line:")) {
           lines.contents = [line, ...lines.contents];
-        }
+        };
       };
       "this will never be reached";
     }
@@ -88,7 +88,8 @@ let specialTestsCommands = [
 
 let changeCommands = {contents: []};
 
-let forEachTest = (i, (dirname, fileCount, indicesWithInterfaces, indicesWithReason)) =>
+let forEachTest =
+    (i, (dirname, fileCount, indicesWithInterfaces, indicesWithReason)) =>
   for (j in 1 to fileCount) {
     let testsDirname = Filename.concat("tests", dirname);
     /* text test */
@@ -99,16 +100,22 @@ let forEachTest = (i, (dirname, fileCount, indicesWithInterfaces, indicesWithRea
           testsDirname,
           Printf.sprintf("%s_%d.txt", dirname, j),
         ) :
-        Filename.concat(testsDirname, isReason ?
-          Printf.sprintf("%s_%d.re", dirname, j) :
-          Printf.sprintf("%s_%d.ml", dirname, j));
+        Filename.concat(
+          testsDirname,
+          isReason ?
+            Printf.sprintf("%s_%d.re", dirname, j) :
+            Printf.sprintf("%s_%d.ml", dirname, j),
+        );
     let interfaceFilename =
       i === 1 ?
         Filename.concat(
           testsDirname,
           Printf.sprintf("%s_%d.txt", dirname, j),
         ) :
-        Filename.concat(testsDirname, Printf.sprintf("%s_%d.mli", dirname, j));
+        Filename.concat(
+          testsDirname,
+          Printf.sprintf("%s_%d.mli", dirname, j),
+        );
     let expectedOutputName =
       Filename.concat(
         testsDirname,
@@ -125,22 +132,23 @@ let forEachTest = (i, (dirname, fileCount, indicesWithInterfaces, indicesWithRea
         List.nth(specialTestsCommands, j - 1);
       } else if (i === 1) {
         "cat " ++ filename;
+      } else if (List.exists(q => q == j, indicesWithInterfaces)) {
+        "ocamlc -w +40 "
+        ++ interfaceFilename
+        ++ " &&  ocamlc -I "
+        ++ Filename.dirname(filename)
+        ++ " -w +40 "
+        ++ filename;
+      } else if (isReason) {
+        "ocamlc -pp refmt -w +40 -impl " ++ filename;
       } else {
-        if ((List.exists(q => q == j, indicesWithInterfaces))) {
-          "ocamlc -w +40 " ++ interfaceFilename ++ " &&  ocamlc -I " ++ Filename.dirname(filename) ++ " -w +40 " ++ filename;
-        } else {
-          if (isReason) {
-            "ocamlc -pp refmt -w +40 -impl " ++ filename;
-          } else {
-            "ocamlc -w +40 " ++ filename;
-          }
-        }
+        "ocamlc -w +40 " ++ filename;
       };
     /* expecting compiling errors in stderr; pipe to a file */
     ignore(
       Sys.command(
         Printf.sprintf(
-          "%s 2>&1 | ../../_esy/default/build/install/default/bin/berror.exe --path-to-refmttype refmttype > %s",
+          "bash -c '%s 2>&1 | ../../_esy/default/build/install/default/bin/berror.exe --path-to-refmttype refmttype > %s'",
           cmd,
           actualOutputName,
         ),
@@ -178,7 +186,7 @@ let forEachTest = (i, (dirname, fileCount, indicesWithInterfaces, indicesWithRea
       print_newline();
       changeCommands.contents = [
         "cp " ++ actualOutputName ++ " " ++ expectedOutputName,
-        ...changeCommands.contents
+        ...changeCommands.contents,
       ];
       print_newline();
       /* raise(Not_equal(filename)); */
