@@ -13,10 +13,7 @@ steps:
         downloadPath: '$(System.ArtifactsDirectory)'
     continueOnError: true
 
-  - task: ExtractFiles@1
+  - bash: 'tar -xf $(System.ArtifactsDirectory)/cache-$(Agent.OS)-install/cache.tar .'
+    workingDirectory: '$(ESY__CACHE_INSTALL_PATH)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Cache: Untar install'
-    inputs:
-      archiveFilePatterns: '$(System.ArtifactsDirectory)/cache-$(Agent.OS)-install/cache.tar'
-      destinationFolder: '$(ESY__CACHE_INSTALL_PATH)'
-    continueOnError: true
+    displayName: 'Untar cache directory'
