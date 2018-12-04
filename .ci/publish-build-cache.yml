@@ -1,4 +1,8 @@
 steps:
+
+  - script: 'ls $(ESY__CACHE_INSTALL_PATH)'
+    displayName: 'list install path'
+
   - task: ArchiveFiles@1
     condition: succeeded()
     displayName: 'Cache: Zip install folder'
