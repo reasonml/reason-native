@@ -1,7 +1,7 @@
 {
   "name": "@reason-native/rely",
   "version": "0.0.0",
-  "description": "A native reason test runner that is heavily inspired by Jest",
+  "description": "A native Reason test runner that is heavily inspired by Jest",
   "esy": {
     "build": "refmterr dune build -p rely",
     "install": "esy-installer rely.install"
