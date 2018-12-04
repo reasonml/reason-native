@@ -13,5 +13,5 @@ steps:
   - script: 'esy build'
     displayName: 'esy build'
 
-  - script: 'esy test'
+  - script: 'esy src/refmterr/runTests.sh'
     displayName: 'esy src/refmterr/runTests.sh'
