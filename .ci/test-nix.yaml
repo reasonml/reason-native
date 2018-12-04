@@ -10,9 +10,6 @@ steps:
   - script: 'esy install'
     displayName: 'esy install'
 
-  - script: 'esy all install'
-    displayName: 'esy all install'
-
   - task: PublishBuildArtifacts@1
     displayName: 'Cache: Upload install folder'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -22,8 +19,8 @@ steps:
         parallel: true
         parallelCount: 8
 
-  - script: 'esy all build'
-    displayName: 'esy all build'
+  - script: 'esy build'
+    displayName: 'esy build'
 
-  - script: 'esy all test'
-    displayName: 'esy all test'
+  - script: 'esy test'
+    displayName: 'esy x src/refmterr/runTests.sh'
