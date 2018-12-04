@@ -15,8 +15,8 @@ jobs:
     ESY__CACHE_SOURCE_TARBALL_PATH: /home/vsts/.esy/source/i
 
   steps:
-  - template: .ci/install-esy.yml
   - template: .ci/restore-build-cache.yml
+  - template: .ci/install-esy.yml
   - template: .ci/esy-build-steps.yml
   - template: .ci/publish-build-cache.yml
 
@@ -30,8 +30,8 @@ jobs:
     ESY__CACHE_SOURCE_TARBALL_PATH: /Users/vsts/.esy/source/i
 
   steps:
-  - template: .ci/install-esy.yml
   - template: .ci/restore-build-cache.yml
+  - template: .ci/install-esy.yml
   - template: .ci/esy-build-steps.yml
   - template: .ci/publish-build-cache.yml
 
@@ -45,8 +45,8 @@ jobs:
     ESY__CACHE_SOURCE_TARBALL_PATH: C:\Users\VssAdministrator\.esy\source\i
 
   steps:
-  - template: .ci/install-esy.yml
   - template: .ci/restore-build-cache.yml
+  - template: .ci/install-esy.yml
   - template: .ci/esy-build-steps.yml
   - template: .ci/publish-build-cache.yml
 
