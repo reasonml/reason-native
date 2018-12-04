@@ -1,6 +1,7 @@
 steps:
-  - script: 'esy mkdir $(ESY__CACHE_INSTALL_PATH)/cache && esy zip $(ESY__CACHE_INSTALL_PATH)/cache/cache.zip $(ESY__CACHE_INSTALL_PATH)/*'
+  - script: 'esy mkdir cache && esy zip -r cache/cache.zip *'
     condition: succeeded()
+    workingDirectory: '$(ESY__CACHE_INSTALL_PATH)'
     displayName: 'Cache: Zip install folder'
   - task: PublishBuildArtifacts@1
     displayName: 'Cache: Upload install folder'
