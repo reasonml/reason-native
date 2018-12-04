@@ -43,11 +43,7 @@ module Make = (UserConfig: FileContextPrinterConfig, Styl: Stylish.StylishSig) =
     startingSpacesCount'(str, 0);
   };
 
-  let print =
-      (
-        content: list(string),
-        ~highlight: rowColumnRange,
-      ) => {
+  let print = (content: list(string), ~highlight: rowColumnRange) => {
     let ((startRow, startColumn), (endRow, endColumn)) = highlight;
     /* The rest of this method was written assuming that the range is zero indexed
        , however given that this module is scoped explicitly to files, whose lines are actually one indexed
@@ -171,18 +167,13 @@ module Make = (UserConfig: FileContextPrinterConfig, Styl: Stylish.StylishSig) =
         ];
       };
     };
-    revResult.contents
-    |> List.rev
-    |> String.concat("\n");
+    revResult.contents |> List.rev |> String.concat("\n");
   };
 
   let printFile = (~path: string, ~highlight: rowColumnRange) => {
     let fileContents =
       switch (Helpers.fileLinesOfExn(path)) {
-      | fileLines =>
-        Some(
-          print(fileLines, highlight)
-        )
+      | fileLines => Some(print(fileLines, highlight))
       | exception e => None
       };
     fileContents;
