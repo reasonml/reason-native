@@ -15,8 +15,8 @@ steps:
 
   - task: ExtractFiles@1
     condition: succeeded()
-    displayName: 'Cache: Unzip install'
+    displayName: 'Cache: Untar install'
     inputs:
-      archiveFilePatterns: '$(System.ArtifactsDirectory)/cache-$(Agent.OS)-install/cache.zip'
+      archiveFilePatterns: '$(System.ArtifactsDirectory)/cache-$(Agent.OS)-install/cache.tar'
       destinationFolder: '$(ESY__CACHE_INSTALL_PATH)'
     continueOnError: true
