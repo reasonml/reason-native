@@ -7,4 +7,3 @@ steps:
 
   - script: 'esy test'
     displayName: 'esy test'
-    continueOnError: true
