@@ -5,6 +5,6 @@ steps:
   - script: 'esy build'
     displayName: 'esy build'
 
-  - script: 'esy src/refmterr/runTests.sh'
-    displayName: 'esy src/refmterr/runTests.sh'
+  - script: 'esy test'
+    displayName: 'esy test'
     continueOnError: true
