@@ -17,7 +17,8 @@
     ]
   },
   "scripts": {
-    "all": "./scripts/run-all.sh"
+    "all": "./scripts/run-all.sh",
+    "test": "./src/refmterr/runTests.sh"
   },
   "dependencies": {
     "@opam/dune": "*",
