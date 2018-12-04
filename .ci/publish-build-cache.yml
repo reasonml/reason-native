@@ -1,9 +1,12 @@
 steps:
+  - script: 'esy mkdir cache && esy zip $(ESY__CACHE_INSTALL_PATH)/cache/cache.zip $(ESY__CACHE_INSTALL_PATH)/*'
+    condition: succeeded()
+    displayName: 'Cache: Zip install folder'
   - task: PublishBuildArtifacts@1
     displayName: 'Cache: Upload install folder'
     condition: succeeded()
     inputs:
-        pathToPublish: '$(ESY__CACHE_INSTALL_PATH)'
+        pathToPublish: '$(ESY__CACHE_INSTALL_PATH)/cache'
         artifactName: 'cache-$(Agent.OS)-install'
         parallel: true
         parallelCount: 8

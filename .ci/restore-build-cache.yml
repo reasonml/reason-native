@@ -13,9 +13,6 @@ steps:
         downloadPath: '$(System.ArtifactsDirectory)'
     continueOnError: true
 
-  - task: CopyFiles@2
+  - script: 'esy mkdir $(ESY__CACHE_INSTALL_PATH) && esy unzip $(System.ArtifactsDirectory)/cache-$(Agent.OS)-install/cache.zip -d $(ESY__CACHE_INSTALL_PATH)'
     condition: succeeded()
-    inputs:
-        sourceFolder: '$(System.ArtifactsDirectory)/cache-$(Agent.OS)-install'
-        targetFolder: '$(ESY__CACHE_INSTALL_PATH)'
-    continueOnError: true
+    displayName: 'Cache: Unzip install'
