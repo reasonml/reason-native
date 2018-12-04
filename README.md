@@ -9,7 +9,7 @@ Testing, printing, coloring, and other tools to effectively write native Reason 
 - `@reason-native/console`: A web-influenced polymorphic console API for native `Console.log(anything)` with runtime printing.
 - `@reason-native/file-context-printer`: Utility for displaying snippets of files on the command line.
 - `@reason-native/refmterr`: Utility for extracting structure from unstructured ocaml compiler errors, and displaying them.
-- `@reason-native/test-runner`: Native Jest style API.
+- `@reason-native/rely`: Native Jest style API.
 - `@reason-native/chalk-console`: To be used in `devDependencies`. Enhances `console` with colors.
 
 ## Status:
@@ -23,14 +23,14 @@ released when their APIs are sufficiently stable.
 
 ## Examples
 
-* [TestRunner](src/test-runner)
+* [TestRunner](src/rely)
 
 ## Contributing
 
 * install esy (https://esy.sh/)
 * run `esy install` and `esy build`
 * test executables are currently defined in the respective .json files for each repository, to run them run `esy x ExecutableName.exe`
-  
+
 ## License
 
 reason-native is MIT licensed, as found in the LICENSE file.

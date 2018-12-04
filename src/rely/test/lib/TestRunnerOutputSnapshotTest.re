@@ -4,17 +4,17 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open TestRunner.Describe;
-open TestRunner.Test;
+open Rely.Describe;
+open Rely.Test;
 
 module type SnapshotDir = {let snapshotDir: string;};
 
 module MakeTestFramework =
        (SnapshotDir: SnapshotDir)
-       : TestRunner.TestFramework =>
-  TestRunner.Make({
+       : Rely.TestFramework =>
+  Rely.Make({
     let config =
-      TestRunner.TestFrameworkConfig.initialize({
+      Rely.TestFrameworkConfig.initialize({
         snapshotDir:
           Filename.(
             Sys.executable_name
@@ -26,7 +26,7 @@ module MakeTestFramework =
             |> dirname
             |> dirname
             |> (dir => Filename.concat(dir, "src"))
-            |> (dir => Filename.concat(dir, "test-runner"))
+            |> (dir => Filename.concat(dir, "rely"))
             |> (dir => Filename.concat(dir, "test"))
             |> (dir => Filename.concat(dir, "lib"))
             |> (
@@ -63,7 +63,7 @@ let testRunnerOutputSnapshotTest =
             testFn(utils)
           );
           TestFramework.run(
-            TestRunner.RunConfig.(initialize() |> updateSnapshots(doUpdate)),
+            Rely.RunConfig.(initialize() |> updateSnapshots(doUpdate)),
           );
           ();
         });
