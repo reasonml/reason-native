@@ -16,7 +16,9 @@
       "esy-installer refmterr.install"
     ]
   },
-  "scripts": {},
+  "scripts": {
+    "test": "./runTests.sh"
+  },
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
