@@ -5,6 +5,7 @@ steps:
     inputs:
       rootFolderOrFile: '$(ESY__CACHE_INSTALL_PATH)'
       archiveFile: '$(Build.ArtifactStagingDirectory)/cache.zip'
+      replaceExistingArchive: true
   - task: PublishBuildArtifacts@1
     displayName: 'Cache: Upload install folder'
     condition: succeeded()
