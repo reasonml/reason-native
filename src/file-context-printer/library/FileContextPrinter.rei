@@ -12,10 +12,16 @@ module type FileContextPrinter = {
     (~path: string, ~highlight: rowColumnRange) => option(string);
 };
 
-include Config;
+type initialConfig = {
+  linesBefore: int,
+  linesAfter: int,
+};
 
-module Make = (UserConfig: FileContextPrinterConfig) =>
-  FileContextPrinterFactory.Make(
-    UserConfig,
-    Stylish.ANSIStylish,
-  );
+module Config: {
+  type t;
+  let initialize: initialConfig => t;
+};
+
+module type FileContextPrinterConfig = {let config: Config.t;};
+
+module Make: (FileContextPrinterConfig) => FileContextPrinter;

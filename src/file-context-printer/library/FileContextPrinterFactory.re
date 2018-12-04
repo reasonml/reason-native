@@ -4,19 +4,19 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-module type FileContextPrinterConfig = {
-  let linesBefore: int;
-  let linesAfter: int;
-};
+
+/** A type representing a 1-indexed row/column range */
+open Config;
 
 type rowColumnRange = ((int, int), (int, int));
 
-module Make = (Config: FileContextPrinterConfig, Styl: Stylish.StylishSig) => {
+module Make = (UserConfig: FileContextPrinterConfig, Styl: Stylish.StylishSig) => {
   module Printer = Printer.Make(Styl);
 
   open Helpers;
   open Printer;
   open Styl;
+  open UserConfig;
 
   let pad = (~ch=' ', content, n) =>
     String.make(n - String.length(content), ch) ++ content;
@@ -43,21 +43,24 @@ module Make = (Config: FileContextPrinterConfig, Styl: Stylish.StylishSig) => {
     startingSpacesCount'(str, 0);
   };
 
-  let _printFile =
+  let print =
       (
-        ~highlight as ((startRow, startColumn), (endRow, endColumn)),
-        content,
+        content: list(string),
+        ~highlight: rowColumnRange,
       ) => {
-    /* The rest of this method was written assuming that startRow and endRow are zero indexed
+    let ((startRow, startColumn), (endRow, endColumn)) = highlight;
+    /* The rest of this method was written assuming that the range is zero indexed
        , however given that this module is scoped explicitly to files, whose lines are actually one indexed
        we convert here rather than rewrite everything else (which should probably also be done at some point) */
     let startRow = startRow - 1;
     let endRow = endRow - 1;
-    let displayedStartRow = max(0, startRow - Config.linesBefore);
+    let startColumn = max(0, startColumn - 1);
+    let endColumn = endColumn - 1;
+    let displayedStartRow = max(0, startRow - config.linesBefore);
     /* we display no more than 3 lines after startRow. Some endRow are rly far
        away */
     let displayedEndRow =
-      min(List.length(content) - 1, startRow + Config.linesAfter);
+      min(List.length(content) - 1, startRow + config.linesAfter);
     let lineNumWidth = numberOfDigits(List.length(content));
     /* sometimes the snippet of file we show is really indented. We de-indent it
        for nicer display by trimming out the maximum amount of leading spaces we can. */
@@ -168,15 +171,17 @@ module Make = (Config: FileContextPrinterConfig, Styl: Stylish.StylishSig) => {
         ];
       };
     };
-    revResult.contents;
+    revResult.contents
+    |> List.rev
+    |> String.concat("\n");
   };
 
-  let print = (~path: string, ~range: rowColumnRange) => {
+  let printFile = (~path: string, ~highlight: rowColumnRange) => {
     let fileContents =
       switch (Helpers.fileLinesOfExn(path)) {
       | fileLines =>
         Some(
-          _printFile(range, fileLines) |> List.rev |> String.concat("\n"),
+          print(fileLines, highlight)
         )
       | exception e => None
       };
