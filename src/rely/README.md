@@ -1,6 +1,4 @@
-# test-runner
-
-[![CircleCI](https://circleci.com/gh/yourgithubhandle/test-runner/tree/master.svg?style=svg)](https://circleci.com/gh/yourgithubhandle/test-runner/tree/master)
+# rely
 
 ## Installation
 
@@ -17,7 +15,7 @@ Add it as a dependency to your package.json (or esy.json) and run ```esy install
 
 dependencies": {
     ...
-    "@reason-native/test-runner": "*",
+    "@reason-native/rely": "*",
     ...
 },
 ...
@@ -44,7 +42,7 @@ Let's start by creating a library for our tests. First create an opam file for y
    (ocamlopt_flags -linkall -g)
    ; you will want to depend on the library you are testing as well, however for
    ; the purposes of this example we are only depending on the test runner itself
-   (libraries test-runner.lib )
+   (libraries rely.lib )
 )
 ```
 
@@ -60,9 +58,9 @@ Now let's create a file to initialize the test framework. Here we are specifying
 
 #### TestFramework.re
 ```reason
-include TestRunner.Make({
+include Rely.Make({
   let config =
-    TestRunner.TestFrameworkConfig.initialize({
+    Rely.TestFrameworkConfig.initialize({
       snapshotDir: "path/to/test/lib/__snapshots__"
       projectDir: "path/to/your/project"
     });
@@ -133,9 +131,9 @@ esy build
 ## Running Tests:
 
 ```
-esy x TestRunnerTest.exe
+esy x TestRely.exe
 ```
 
 ## License
-@reason-native/test-runner is MIT licensed, as found in the LICENSE file at the root of the reason-native repository.
+@reason-native/rely is MIT licensed, as found in the LICENSE file at the root of the reason-native repository.
 
