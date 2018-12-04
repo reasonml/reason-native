@@ -19,3 +19,4 @@ steps:
     inputs:
       archiveFilePatterns: '$(System.ArtifactsDirectory)/cache-$(Agent.OS)-install/cache.zip'
       destinationFolder: '$(ESY__CACHE_INSTALL_PATH)'
+    continueOnError: true
