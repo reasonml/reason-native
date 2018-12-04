@@ -1,0 +1,29 @@
+steps:
+  - task: NodeTool@0
+    displayName: 'Use Node 8.x'
+    inputs:
+      versionSpec: 8.x
+
+  - script: 'npm install -g esy@0.4.3 --unsafe-perm'
+    displayName: 'npm install -g esy'
+
+  - script: 'esy install'
+    displayName: 'esy install'
+
+  - script: 'esy all install'
+    displayName: 'esy all install'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Cache: Upload install folder'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    inputs:
+        pathToPublish: '_esy'
+        artifactName: 'cache-$(Agent.OS)-install'
+        parallel: true
+        parallelCount: 8
+
+  - script: 'esy all build'
+    displayName: 'esy all build'
+
+  - script: 'esy all test'
+    displayName: 'esy all test'
