@@ -6,7 +6,7 @@ steps:
         buildType: 'specific'
         project: '$(System.TeamProject)'
         pipeline: '$(Build.DefinitionName)'
-        branchName: '$(variables['Build.SourceBranch'])'
+        branchName: '$(variables[\'Build.SourceBranch\'])'
         buildVersionToDownload: 'latestFromBranch'
         downloadType: 'single'
         artifactName: 'cache-$(Agent.OS)-install'
