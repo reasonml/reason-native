@@ -1,12 +1,12 @@
 steps:
 
-  - bash: 'tar -czf esy-cache.tar $(ESY__CACHE_INSTALL_PATH)'
-    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+  - bash: 'tar -czf $(Build.ArtifactStagingDirectory)/esy-cache.tar .'
+    workingDirectory: '$(ESY__CACHE_INSTALL_PATH)'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Tar esy cache directory'
 
-  - bash: 'tar -czf npm-cache.tar $(NPM__GLOBAL_ROOT)'
-    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+  - bash: 'tar -czf $(Build.ArtifactStagingDirectory)/npm-cache.tar .'
+    workingDirectory: '$(NPM__GLOBAL_ROOT)'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Tar npm cache directory'
 

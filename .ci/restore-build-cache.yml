@@ -13,8 +13,22 @@ steps:
         downloadPath: '$(Build.ArtifactStagingDirectory)'
     continueOnError: true
 
-  - bash: 'tar -xf npm-cache.tar -C $(NPM__GLOBAL_ROOT) && tar -xf esy-cache.tar -C $(ESY__CACHE_INSTALL_PATH) && cd .. && rm -rf cache-$(Agent.OS)-install'
+
+
+  - bash: 'tar -xf $(Build.ArtifactStagingDirectory)/cache-$(Agent.OS)-install/npm-cache.tar -C .'
     continueOnError: true
-    workingDirectory: '$(Build.ArtifactStagingDirectory)/cache-$(Agent.OS)-install'
+    workingDirectory: '$(NPM__GLOBAL_ROOT)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Untar cache directory'
+    displayName: 'Untar npm cache directory'
+
+  - bash: 'tar -xf $(Build.ArtifactStagingDirectory)/cache-$(Agent.OS)-install/esy-cache.tar -C .'
+    continueOnError: true
+    workingDirectory: '$(ESY__CACHE_INSTALL_PATH)'
+    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Untar esy cache directory'
+
+  - bash: 'rm -rf *'
+    continueOnError: true
+    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+    condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    displayName: 'Clean up'
