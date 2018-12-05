@@ -3,3 +3,5 @@
    (public_name rely.lib)
    (libraries chalk.lib file-context-printer.lib unix)
 )
+(include_subdirs unqualified)
+
