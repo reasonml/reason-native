@@ -1,5 +1,5 @@
 cd src/refmterr
 refmt ./tests/test.re --print ml > ./tests/test.ml
-ls ../../
-echo "$(npm config get prefix)/lib/node_modules"
+ls ../../_esy
+npm config get prefix
 ocaml ./tests/test.ml
