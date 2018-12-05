@@ -1,7 +1,6 @@
 steps:
 
-  - bash: 'touch .'
-    workingDirectory: '$(STAGING_DIRECTORY)'
+  - bash: 'mkdir -p $(STAGING_DIRECTORY_UNIX)'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Create cache directory'
 
