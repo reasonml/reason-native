@@ -1,5 +1,5 @@
 cd src/refmterr
 refmt ./tests/test.re --print ml > ./tests/test.ml
-ls ../../_esy
-npm config get prefix
+ls ../../_esy/default
+npm root -g
 ocaml ./tests/test.ml
