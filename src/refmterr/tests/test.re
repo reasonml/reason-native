@@ -149,7 +149,7 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
-          "%s 2>&1 | berror.exe --path-to-refmttype refmttype | sed 's/\\%s/\\//g' > %s",
+          "%s 2>&1 | berror.exe --path-to-refmttype refmttype | sed 's/\\%s/\\e/g' > %s",
           cmd,
           Filename.dir_sep,
           actualOutputName,
