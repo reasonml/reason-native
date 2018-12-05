@@ -149,7 +149,7 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
-          "%s 2>&1 | sed -E \"s/([A-Za-z0-9])\\\\\\\\([A-Za-z0-9])/\\\\1\\\\/\\\\2/g\" | berror.exe --path-to-refmttype refmttype > %s",
+          "%s 2>&1 | berror.exe --path-to-refmttype refmttype | sed -E \"s/([A-Za-z0-9])\\\\\\\\([A-Za-z0-9])/\\\\1\\\\/\\\\2/g\" > %s",
           cmd,
           actualOutputName,
         ),
