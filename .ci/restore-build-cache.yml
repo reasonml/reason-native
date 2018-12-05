@@ -13,11 +13,11 @@ steps:
         downloadPath: '$(STAGING_DIRECTORY)'
     continueOnError: true
 
-  - bash: 'mkdir -p $(ESY__CACHE_INSTALL_PATH) $(NPM__GLOBAL_ROOT)'
+  - bash: 'mkdir -p $(ESY__CACHE_INSTALL_PATH) $(ESY__NPM_ROOT)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Create cache directory'
 
-  - bash: 'cd $(NPM__GLOBAL_ROOT) && tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/npm-cache.tar -C .'
+  - bash: 'cd $(ESY__NPM_ROOT) && tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/npm-cache.tar -C .'
     continueOnError: true
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Untar npm cache directory'
