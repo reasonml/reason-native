@@ -93,7 +93,7 @@ module Make = (IO: SnapshotIO) => {
       messages :=
         messages^
         @ [
-          Chalk.yellow(
+          Pastel.yellow(
             String.concat(
               "",
               [
@@ -110,7 +110,7 @@ module Make = (IO: SnapshotIO) => {
       messages :=
         messages^
         @ [
-          Chalk.yellow(
+          Pastel.yellow(
             String.concat(
               "",
               [
@@ -127,7 +127,7 @@ module Make = (IO: SnapshotIO) => {
       messages :=
         messages^
         @ [
-          Chalk.yellow(
+          Pastel.yellow(
             String.concat(
               "",
               [

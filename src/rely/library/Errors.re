@@ -48,21 +48,21 @@ let wrapString = (cols: int, message: string): string =>
 let info = (~prefix=true, ~color=true, ~wrap=true, message: string): unit => {
   let message = prefix ? "[Info] " ++ message : message;
   let message = wrap ? wrapString(120, message) : message;
-  let message = color ? Chalk.blue(message) : message;
+  let message = color ? Pastel.blue(message) : message;
   prerr_endline(message);
 };
 
 let warn = (~prefix=true, ~color=true, ~wrap=true, message: string): unit => {
   let message = prefix ? "[Warn] " ++ message : message;
   let message = wrap ? wrapString(120, message) : message;
-  let message = color ? Chalk.yellow(message) : message;
+  let message = color ? Pastel.yellow(message) : message;
   prerr_endline(message);
 };
 
 let error = (~prefix=true, ~color=true, ~wrap=true, message: string): unit => {
   let message = prefix ? "[Error] " ++ message : message;
   let message = wrap ? wrapString(120, message) : message;
-  let message = color ? Chalk.red(message) : message;
+  let message = color ? Pastel.red(message) : message;
   prerr_endline(message);
 };
 
@@ -70,7 +70,7 @@ let fatal =
     (~prefix=true, ~color=true, ~wrap=true, ~errorCode=1, message: string): 'a => {
   let message = prefix ? "[Fatal] " ++ message : message;
   let message = wrap ? wrapString(120, message) : message;
-  let message = color ? Chalk.red(message) : message;
+  let message = color ? Pastel.red(message) : message;
   prerr_endline(message);
   exit(errorCode);
 };

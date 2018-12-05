@@ -39,7 +39,7 @@ steps: &steps
     command: esy test
 - run:
     name: Run the main binary
-    command: esy x ChalkConsoleApp.exe
+    command: esy x PastelConsoleApp.exe
 - run:
     name: Show all libraries including this package lib
     command: esy ls-libs
@@ -48,18 +48,18 @@ steps: &steps
     command: esy release
 - run:
     name: Preparing release tarball
-    command: mv "_release/$(cd _release && npm pack 2>/dev/null)" _release/chalk-console.tgz
+    command: mv "_release/$(cd _release && npm pack 2>/dev/null)" _release/pastel-console.tgz
 - run:
     name: Installing release
-    command: npm install -g ./_release/chalk-console.tgz
+    command: npm install -g ./_release/pastel-console.tgz
 - run:
     name: Testing installed release
-    command: "ChalkConsoleApp.exe"
+    command: "PastelConsoleApp.exe"
 
 
 - store_artifacts:
-    path: _release/chalk-console.tgz
-    destination: chalk-console.tgz
+    path: _release/pastel-console.tgz
+    destination: pastel-console.tgz
 
 environment: &environment
 - TERM: dumb
