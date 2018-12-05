@@ -8,60 +8,43 @@ open MatcherUtils;
 open SnapshotIO;
 open Common.Option.Infix;
 open Common.Collections;
-open Common.Strs;
+open TestResult;
 include TestFrameworkConfig;
 include RunConfig;
-
-module FCP =
-  FileContextPrinter.Make({
-    let config =
-      FileContextPrinter.Config.initialize({linesBefore: 3, linesAfter: 3});
-  });
-
-module Test = {
-  type testResult =
-    | Pending
-    | Passed
-    | Failed(string, option(Printexc.location), string)
-    | Exception(exn, option(Printexc.location), string);
-
-  type testUtils = {expect: DefaultMatchers.matchers};
-  type testFn = (string, testUtils => unit) => unit;
-  type testSpec = {
-    testID: int,
-    name: string,
-    runTest: unit => unit,
-    mutable testResult,
-  };
-};
+include Test;
+open Reporter;
 
 module Describe = {
   type describeConfig = {
     updateSnapshots: bool,
-    updateSnapshotsFlag: string,
     snapshotDir: string,
-    printer: RunConfig.printer,
-    onTestFrameworkFailure: unit => unit,
   };
-  type describeState = {
-    testHashes: MStringSet.t,
-    snapshotState: ref(Snapshot.state),
-  };
+
   type describeUtils = {
     describe: describeFn,
     test: Test.testFn,
   }
-  and rootDescribeFn =
-    (
-      ~config: describeConfig,
-      ~isRootDescribe: bool=?,
-      ~state: option(describeState)=?,
-      ~describeName: option(string),
-      describeUtils => unit
-    ) =>
-    list(MIntMap.t(Test.testSpec))
   and describeFn = (string, describeUtils => unit) => unit;
 };
+
+open Describe;
+
+exception TestAlreadyRan(string);
+exception PendingTestException(string);
+
+type testRunState = {
+  testHashes: MStringSet.t,
+  snapshotState: ref(Snapshot.state),
+};
+
+type runDescribeFn =
+  (
+    ~config: Describe.describeConfig,
+    ~state: testRunState,
+    ~describePath: TestPath.describe,
+    Describe.describeUtils => unit
+  ) =>
+  describeResult;
 
 module type TestFramework = {
   let describe: Describe.describeFn;
@@ -74,6 +57,13 @@ module type FrameworkConfig = {let config: TestFrameworkConfig.t;};
 module Make = (UserConfig: FrameworkConfig) => {
   module TestSnapshot = Snapshot.Make(SnapshotIO.FileSystemSnapshotIO);
   module TestSnapshotIO = SnapshotIO.FileSystemSnapshotIO;
+  module StackTrace =
+    StackTrace.Make({
+      let baseDir = UserConfig.config.projectDir;
+      let exclude = ["Rely.re", "matchers/"];
+      let formatLink = Pastel.cyan;
+      let formatText = Pastel.dim;
+    });
 
   let escape = (s: string): string => {
     let lines = Str.split(Str.regexp("\n"), s);
@@ -95,17 +85,6 @@ module Make = (UserConfig: FrameworkConfig) => {
 
   let maxNumStackFrames = 3;
 
-  let indent = (~indent: string, s: string): string => {
-    let lines = Str.split(Str.regexp("\n"), s);
-    let lines = List.map(line => indent ++ line, lines);
-    String.concat("\n", lines);
-  };
-
-  let messageIndent = "    ";
-  let stackIndent = "      ";
-  let titleIndent = "  ";
-  let ancestrySeparator = " › ";
-
   let sanitizeName = (name: string): string => {
     ();
     let name =
@@ -126,48 +105,18 @@ module Make = (UserConfig: FrameworkConfig) => {
   /* This will generate unique IDs for describes. */
   let describeCounter = Counter.create();
 
-  let rec rootDescribe: Describe.rootDescribeFn =
+  let rec runDescribe: runDescribeFn =
     (
       ~config: Describe.describeConfig,
-      ~isRootDescribe=true,
-      ~state=None,
-      ~describeName: option(string),
+      ~state,
+      ~describePath: TestPath.describe,
       fn,
     ) => {
       open Test;
       open Describe;
-      module StackTrace =
-        StackTrace.Make({
-          let baseDir = UserConfig.config.projectDir;
-          let exclude = ["Rely.re", "matchers/"];
-          let formatLink = Pastel.cyan;
-          let formatText = Pastel.dim;
-        });
-      let state =
-        state
-        |?: {
-          testHashes: MStringSet.empty(),
-          snapshotState:
-            ref(
-              TestSnapshot.initializeState(
-                ~snapshotDir=config.snapshotDir,
-                ~updateSnapshots=config.updateSnapshots,
-              ),
-            ),
-        };
       open RunConfig;
+      let describeName = TestPath.(Describe(describePath) |> toString);
 
-      let {printEndline, printString, printNewline, flush} = config.printer;
-
-      let describeName = describeName |?: "root describe";
-      let printSnapshotStatus = () =>
-        if (isRootDescribe) {
-          let _ =
-            state.snapshotState^
-            |> TestSnapshot.getSnapshotStatus
-            >>| printEndline;
-          ();
-        };
       let testHashes = state.testHashes;
       /* This will generate unique IDs for tests within this describe. */
       let testCounter = Counter.create();
@@ -175,12 +124,11 @@ module Make = (UserConfig: FrameworkConfig) => {
       let finishedTestHashes = MStringSet.empty();
       /* Mutable map tracking the status of each test for this describe. */
       let testMap = MIntMap.empty();
-      let updateTestResult = (testID: int, testResult: testResult): unit => {
-        let prev = MIntMap.getOpt(testID, testMap);
+      let updateTestResult = (testId: int, update: testResult): unit => {
+        let prev = MIntMap.getOpt(testId, testMap);
         switch (prev) {
-        | Some({testResult: Pending} as prev) =>
-          prev.testResult = testResult;
-          ();
+        | Some(PendingTestResult(_)) =>
+          MIntMap.set(testId, FinalTestResult(update), testMap)
         | _ => ()
         };
       };
@@ -189,24 +137,16 @@ module Make = (UserConfig: FrameworkConfig) => {
       /* Create the test function we will pass around. */
       let testFn: Test.testFn =
         (testName, usersTest) => {
-          let testID = Counter.next(testCounter);
+          let testPath = (testName, describePath);
+          let testId = Counter.next(testCounter);
           /* This will generate unique IDs for expects within this test call. */
           let expectCounter = Counter.create();
-          let testTitle = describeName ++ ancestrySeparator ++ testName;
+          let testTitle = TestPath.testToString(testPath);
           let testHash = ref(None);
           let i = ref(0);
           let break = ref(false);
-          let ancestryRegex = Str.regexp_string(ancestrySeparator);
           while (! break^ && i^ < 10000) {
-            let testHashAttempt =
-              String.sub(
-                Crypto.md5(
-                  Str.global_replace(ancestryRegex, "", testTitle)
-                  ++ string_of_int(i^),
-                ),
-                0,
-                8,
-              );
+            let testHashAttempt = TestPath.hash(Test(testPath), i^);
             switch (testHash^) {
             | None =>
               if (!MStringSet.has(testHashAttempt, testHashes)) {
@@ -224,7 +164,7 @@ module Make = (UserConfig: FrameworkConfig) => {
             | None => "hash_conflict"
             | Some(testHash) => testHash
             };
-          let updateTestResult = updateTestResult(testID);
+          let updateTestResult = updateTestResult(testId);
           let snapshotPrefix =
             Filename.concat(config.snapshotDir, describeFileName);
           module TestSnapshotMatcher =
@@ -257,6 +197,11 @@ module Make = (UserConfig: FrameworkConfig) => {
               switch (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {
               | (messageThunk, true) => ()
               | (messageThunk, false) =>
+                state.snapshotState :=
+                  TestSnapshot.markSnapshotsAsCheckedForTest(
+                    testTitle,
+                    state.snapshotState^,
+                  );
                 let stackTrace = StackTrace.getStackTrace();
                 let location = StackTrace.getTopLocation(stackTrace);
                 let stack =
@@ -264,7 +209,13 @@ module Make = (UserConfig: FrameworkConfig) => {
                     stackTrace,
                     maxNumStackFrames,
                   );
-                updateTestResult(Failed(messageThunk(), location, stack));
+                updateTestResult({
+                  path: testPath,
+                  duration: None,
+                  testStatus: Failed(messageThunk(), location, stack),
+                  title: testName,
+                  fullName: testTitle,
+                });
               };
               ();
             };
@@ -284,7 +235,14 @@ module Make = (UserConfig: FrameworkConfig) => {
           };
           let runTest = () => {
             switch (usersTest(testUtils)) {
-            | () => updateTestResult(Passed)
+            | () =>
+              updateTestResult({
+                path: testPath,
+                duration: None,
+                testStatus: Passed,
+                title: testName,
+                fullName: testTitle,
+              })
             | exception e =>
               let exceptionTrace = StackTrace.getExceptionStackTrace();
               let location = StackTrace.getTopLocation(exceptionTrace);
@@ -293,7 +251,18 @@ module Make = (UserConfig: FrameworkConfig) => {
                   exceptionTrace,
                   maxNumStackFrames,
                 );
-              updateTestResult(Exception(e, location, stackTrace));
+              state.snapshotState :=
+                TestSnapshot.markSnapshotsAsCheckedForTest(
+                  testTitle,
+                  state.snapshotState^,
+                );
+              updateTestResult({
+                path: testPath,
+                duration: None,
+                testStatus: Exception(e, location, stackTrace),
+                title: testName,
+                fullName: testTitle,
+              });
             };
             let _ = MStringSet.add(testHash, finishedTestHashes);
             ();
@@ -301,271 +270,144 @@ module Make = (UserConfig: FrameworkConfig) => {
           /* Update testMap with initial Pending result. */
           let _ =
             MIntMap.set(
-              testID,
-              {testID, name: testTitle, runTest, testResult: Pending},
+              testId,
+              PendingTestResult({path: testPath, runTest}),
               testMap,
             );
           ();
         };
       /* Prepend the original describe name before the next one when nesting */
-      let testMaps = ref([]);
-      let describeFn = (describeName2, fn) => {
-        let resultMap =
-          rootDescribe(
+      let childDescribeResults = ref([]);
+      let describeFn = (describeName, fn) => {
+        let childDescribeResult =
+          runDescribe(
             ~config,
-            ~isRootDescribe=false,
-            ~state=Some(state),
-            ~describeName=
-              Some(
-                isRootDescribe ?
-                  describeName2 :
-                  describeName ++ ancestrySeparator ++ describeName2,
-              ),
+            ~state,
+            ~describePath=Nested(describeName, describePath),
             fn,
           );
-        testMaps := testMaps^ @ resultMap;
+        childDescribeResults := childDescribeResults^ @ [childDescribeResult];
       };
       let utils = {describe: describeFn, test: testFn};
       /* Gather all the tests */
       fn(utils);
       /* Now run them */
-      let total = ref(MIntMap.size(testMap));
-      let failed = ref(0);
-      if (total^ > 0) {
-        let pending = ref(total^);
-        let passed = ref(0);
-        let prev = ref(0);
-        let update = (first: bool): unit => {
-          let pendingFormatter = pending^ === 0 ? dimFormatter : (x => x);
-          let passedFormatter =
-            passed^ === total^ ? passFormatter : dimFormatter;
-          let failedFormatter = failed^ === 0 ? dimFormatter : failFormatter;
-          let update =
-            pendingFormatter(
-              "["
-              ++ string_of_int(pending^)
-              ++ "/"
-              ++ string_of_int(total^)
-              ++ "] Pending",
-            )
-            ++ "  "
-            ++ passedFormatter(
-                 "["
-                 ++ string_of_int(passed^)
-                 ++ "/"
-                 ++ string_of_int(total^)
-                 ++ "] Passed",
-               )
-            ++ "  "
-            ++ failedFormatter(
-                 "["
-                 ++ string_of_int(failed^)
-                 ++ "/"
-                 ++ string_of_int(total^)
-                 ++ "] Failed",
-               );
-          let updateLength = String.length(update);
-          let diff = prev^ - updateLength;
-          if (diff > 0) {
-            /* This moves back `diff` columns then clears to end of line */
-            printString(
-              "\027[" ++ string_of_int(diff) ++ "D\027[K",
-            );
-          };
-          printString("\r" ++ update);
-          flush(stdout);
-          prev := updateLength;
-        };
-
-        let _ =
-          isRootDescribe ?
-            () : printEndline(Pastel.whiteBright(describeName));
-
-        update(true);
-        let _ =
-          MIntMap.forEach(
-            (test, _) => {
-              test.runTest();
-              switch (test.testResult) {
-              | Pending => failwith("How is this test still pending?")
-              | Passed =>
-                incr(passed);
-                decr(pending);
-              | Failed(_)
-              | Exception(_) =>
-                incr(failed);
-                decr(pending);
-              };
-              update(false);
-              ();
+      let _ =
+        MIntMap.forEach(
+          (test, _) =>
+            switch (test) {
+            | PendingTestResult(t) => t.runTest()
+            | FinalTestResult(t) => raise(TestAlreadyRan(t.fullName))
             },
-            testMap,
-          );
-        printNewline();
+          testMap,
+        );
+      let testResults =
+        MIntMap.values(testMap)
+        |> List.map(test =>
+             switch (test) {
+             | PendingTestResult(t) =>
+               raise(PendingTestException(t.path |> TestPath.testToString))
+             | FinalTestResult(t) => t
+             }
+           );
 
-        let getStackInfo = (optLoc: option(Printexc.location), trace: string) => {
-          let stackInfo =
-            optLoc
-            >>| (
-              (l: Printexc.location) =>
-                FCP.printFile(
-                  l.filename,
-                  (
-                    /* File-context-printer expects line number and column number
-                     * to both be 1-indexed, however the locations from Printexc
-                     * have 1 indexed lines and 0 indexed columns*/
-                    (l.line_number, l.start_char + 1),
-                    (l.line_number, l.end_char + 1),
-                  ),
-                )
-            )
-            >>| (
-              optFileContext =>
-                switch (optFileContext) {
-                | Some(context) =>
-                  String.concat(
-                    "\n\n",
-                    [
-                      indent(context, ~indent=stackIndent),
-                      indent(trace, ~indent=stackIndent),
-                    ],
-                  )
-                | None => ""
-                }
-            )
-            |?: "";
-          stackInfo;
-        };
-
-        if (failed^ > 0) {
-          printNewline();
-          let _ =
-            testMap
-            |> MIntMap.toList
-            |> List.map(((_, test: testSpec)) => {
-                 let resultString =
-                   switch (test) {
-                   | {testResult: Pending} => ""
-                   | {testResult: Passed} => ""
-                   | {testResult: Exception(e, loc, trace), name} =>
-                     let titleBullet = "• ";
-                     let title =
-                       Pastel.bold(
-                         failFormatter(titleIndent ++ titleBullet ++ name),
-                       );
-
-                     let exceptionMessage =
-                       String.concat(
-                         "",
-                         [
-                           indent("Exception ", ~indent=messageIndent),
-                           Pastel.dim(Printexc.to_string(e)),
-                           "\n",
-                         ],
-                       );
-                     String.concat(
-                       "\n",
-                       [title, exceptionMessage, getStackInfo(loc, trace)],
-                     );
-                   | {testResult: Failed(message, loc, stack), name} =>
-                     let titleBullet = "• ";
-                     let title =
-                       Pastel.bold(
-                         failFormatter(
-                           titleIndent ++ titleBullet ++ name ++ "\n",
-                         ),
-                       );
-                     String.concat(
-                       "",
-                       [
-                         title,
-                         indent(message, ~indent=messageIndent),
-                         getStackInfo(loc, stack),
-                       ],
-                     );
-                   };
-                 resultString;
-               })
-            |> List.filter(res => res != "")
-            |> String.concat("\n\n")
-            |> printEndline;
-          printSnapshotStatus();
-        };
+      let describeResult = {
+        path: describePath,
+        duration: None,
+        describeResults: childDescribeResults^,
+        testResults,
       };
-      if (isRootDescribe) {
-        failed :=
-          List.fold_left(
-            (num, m) => {
-              let failures = ref(0);
-              m
-              |> MIntMap.values
-              |> List.iter(spec =>
-                   switch (spec.testResult) {
-                   | Pending
-                   | Passed => ()
-                   | Failed(_)
-                   | Exception(_) => incr(failures)
-                   }
-                 );
-              num + failures^;
-            },
-            0,
-            testMaps^,
-          );
-      };
-      if (failed^ === 0 && isRootDescribe) {
-        /* mark pending and failed tests as checked so we don't delete their associated snapshots */
-        let testSpecs = MIntMap.values(testMap);
-        state.snapshotState :=
-          testSpecs
-          |> List.fold_left(
-               (snapshotState, testSpec) =>
-                 switch (testSpec) {
-                 | {testResult: Failed(_) | Pending | Exception(_), name} =>
-                   TestSnapshot.markSnapshotsAsCheckedForTest(
-                     name,
-                     snapshotState,
-                   )
-                 | {testResult: Passed} => snapshotState
-                 },
-               state.snapshotState^,
-             );
-
-        TestSnapshot.removeUnusedSnapshots(state.snapshotState^);
-      };
-      printSnapshotStatus();
-      if (failed^ > 0 && isRootDescribe) {
-        config.onTestFrameworkFailure();
-      };
-      testMaps^ @ [testMap];
+      describeResult;
     };
 
-  let testFixtures = ref([]);
-  let describe = (name, describeBlock) =>
-    testFixtures := testFixtures^ @ [(name, describeBlock)];
+  type testSuiteInternal = {
+    name: string,
+    fn: Describe.describeUtils => unit,
+  };
+
+  let testSuites: ref(list(testSuiteInternal)) = ref([]);
+  let describe = (name, fn) => testSuites := testSuites^ @ [{name, fn}];
+  type testSuiteAccumulator = {
+    testRunState,
+    aggregatedResult: AggregatedResult.t,
+  };
 
   let run = (config: RunConfig.t) =>
-    Util.withBacktrace(() =>
-      ignore(
-        rootDescribe(
-          ~config={
-            updateSnapshots: config.updateSnapshots,
-            snapshotDir: UserConfig.config.snapshotDir,
-            updateSnapshotsFlag: "-u",
-            printer: config.printer,
-            onTestFrameworkFailure: config.onTestFrameworkFailure,
-          },
-          ~isRootDescribe=true,
-          ~state=None,
-          ~describeName=None,
-          ({describe}) =>
-          List.iter(
-            ((name, describeBlock)) => describe(name, describeBlock),
-            testFixtures^,
-          )
-        ),
-      )
-    );
+    Util.withBacktrace(() => {
+      let notifyReporters = f => List.iter(f, config.reporters);
+      notifyReporters(r =>
+        r.onRunStart({
+          testSuites: testSuites^ |> List.map(s => {name: s.name}),
+        })
+      );
+      let initialState = {
+        testHashes: MStringSet.empty(),
+        snapshotState:
+          ref(
+            TestSnapshot.initializeState(
+              ~snapshotDir=UserConfig.config.snapshotDir,
+              ~updateSnapshots=config.updateSnapshots,
+            ),
+          ),
+      };
+      let result =
+        testSuites^
+        |> List.fold_left(
+             (acc, testSuite) => {
+               let reporterSuite = {name: testSuite.name};
+               notifyReporters(r => r.onTestSuiteStart(reporterSuite));
+               let describeResult =
+                 runDescribe(
+                   ~config={
+                     updateSnapshots: config.updateSnapshots,
+                     snapshotDir: UserConfig.config.snapshotDir,
+                   },
+                   ~state=acc.testRunState,
+                   ~describePath=Terminal(testSuite.name),
+                   testSuite.fn,
+                 );
+               let testSuiteResult =
+                 TestSuiteResult.ofDescribeResult(describeResult);
+               let newResult =
+                 acc.aggregatedResult
+                 |> AggregatedResult.addTestSuiteResult(testSuiteResult);
+               notifyReporters(r =>
+                 r.onTestSuiteResult(
+                   reporterSuite,
+                   newResult,
+                   testSuiteResult,
+                 )
+               );
+               {...acc, aggregatedResult: newResult};
+             },
+             {
+               testRunState: initialState,
+               aggregatedResult:
+                 AggregatedResult.initialAggregatedResult(
+                   List.length(testSuites^),
+                 ),
+             },
+           );
+      let aggregatedResultWithSnapshotStatus = {
+        ...result.aggregatedResult,
+        snapshotSummary:
+          Some(
+            TestSnapshot.getSnapshotStatus(
+              result.testRunState.snapshotState^,
+            ),
+          ),
+      };
+      let success = aggregatedResultWithSnapshotStatus.numFailedTests == 0;
+      TestSnapshot.removeUnusedSnapshots(result.testRunState.snapshotState^);
+      /* todo cleanup snapshots if failed */
+      notifyReporters(r =>
+        r.onRunComplete(aggregatedResultWithSnapshotStatus)
+      );
+      if (!success) {
+        config.onTestFrameworkFailure();
+      };
+      ();
+    });
 
   let cli = () => {
     let shouldUpdateSnapshots =

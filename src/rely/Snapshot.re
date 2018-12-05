@@ -6,6 +6,8 @@
  */;
 open SnapshotIO;
 open Common.Collections;
+open TestResult
+
 type state = {
   unusedSnapshotSet: MStringSet.t,
   updatedSnapshotSet: MStringSet.t,
@@ -74,7 +76,6 @@ module Make = (IO: SnapshotIO) => {
   };
 
   let getSnapshotStatus = state => {
-    let messages: ref(list(string)) = ref([]);
     let {removedSnapshotCount} = state;
     let updatedSnapshotCount = ref(0);
     let createdSnapshotCount = ref(0);
@@ -88,62 +89,10 @@ module Make = (IO: SnapshotIO) => {
           },
         state.updatedSnapshotSet,
       );
-
-    if (createdSnapshotCount^ > 0) {
-      messages :=
-        messages^
-        @ [
-          Pastel.yellow(
-            String.concat(
-              "",
-              [
-                "Created ",
-                string_of_int(createdSnapshotCount^),
-                " missing snapshots",
-              ],
-            ),
-          ),
-        ];
-    };
-
-    if (updatedSnapshotCount^ > 0) {
-      messages :=
-        messages^
-        @ [
-          Pastel.yellow(
-            String.concat(
-              "",
-              [
-                "Updated ",
-                string_of_int(updatedSnapshotCount^),
-                " snapshots",
-              ],
-            ),
-          ),
-        ];
-    };
-
-    if (removedSnapshotCount^ > 0) {
-      messages :=
-        messages^
-        @ [
-          Pastel.yellow(
-            String.concat(
-              "",
-              [
-                "Removed ",
-                string_of_int(removedSnapshotCount^),
-                " unused snapshots",
-              ],
-            ),
-          ),
-        ];
-    };
-
-    if (List.length(messages^) > 0) {
-      Some(String.concat("\n", messages^));
-    } else {
-      None;
+    {
+      numCreatedSnapshots: createdSnapshotCount^,
+      numRemovedSnapshots: removedSnapshotCount^,
+      numUpdatedSnapshots: updatedSnapshotCount^
     };
   };
 

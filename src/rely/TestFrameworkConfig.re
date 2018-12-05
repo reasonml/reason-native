@@ -10,6 +10,14 @@ type requiredConfiguration = {
 };
 
 module TestFrameworkConfig = {
-  type t = requiredConfiguration;
-  let initialize: requiredConfiguration => t = config => config;
+  type t = {
+    snapshotDir: string,
+    projectDir: string,
+  };
+
+  let initialize: requiredConfiguration => t =
+    config => {
+      snapshotDir: config.snapshotDir,
+      projectDir: config.projectDir
+    }
 };

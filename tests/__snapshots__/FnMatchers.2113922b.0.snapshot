@@ -1,31 +1,39 @@
 FnMatchers › FnMatchers failure output
-\027[97mFnMatchers failure output\027[39m
-\r[4/4] Pending  \027[2m[0/4] Passed\027[22m  \027[2m[0/4] Failed\027[22m\r[3/4] Pending  \027[2m[0/4] Passed\027[22m  \027[31m[1/4] Failed\027[39m\r[2/4] Pending  \027[2m[0/4] Passed\027[22m  \027[31m[2/4] Failed\027[39m\r[1/4] Pending  \027[2m[0/4] Passed\027[22m  \027[31m[3/4] Failed\027[39m\r\027[2m[0/4] Pending\027[22m  \027[2m[0/4] Passed\027[22m  \027[31m[4/4] Failed\027[39m
+Running 1 test suite
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mFnMatchers failure output\027[39m\027[70D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m \027[97mFnMatchers failure output\027[39m
+\027[1m\027[31m  \226\128\162 FnMatchers failure output \226\128\186 Expect to throw, but doesn't\027[39m\027[22m
 
-\027[1m\027[31m  \226\128\162 FnMatchers failure output \226\128\186 Expect to throw, but doesn't
-\027[39m\027[22m    \027[2mexpect.fn(\027[22m\027[31mfunction\027[39m\027[2m).toThrow(\027[22m\027[2m)\027[22m
+    \027[2mexpect.fn(\027[22m\027[31mfunction\027[39m\027[2m).toThrow(\027[22m\027[2m)\027[22m
     
     Expected the function to throw an error.
     But it didn't throw anything.
 
-\027[1m\027[31m  \226\128\162 FnMatchers failure output \226\128\186 Expect not to throw and does
-\027[39m\027[22m    \027[2mexpect.fn(\027[22m\027[31mfunction\027[39m\027[2m)toThrow(\027[22m\027[2m)\027[22m
+\027[1m\027[31m  \226\128\162 FnMatchers failure output \226\128\186 Expect not to throw and does\027[39m\027[22m
+
+    \027[2mexpect.fn(\027[22m\027[31mfunction\027[39m\027[2m)toThrow(\027[22m\027[2m)\027[22m
     
     Expected the function not to throw an error.
     Instead, it threw: 
       \027[31mInvalid_argument(\"the earth is flat\")\027[39m
 
-\027[1m\027[31m  \226\128\162 FnMatchers failure output \226\128\186 Expect the wrong exception
-\027[39m\027[22m    \027[2mexpect.fn(\027[22m\027[31mfunction\027[39m\027[2m).toThrowException(\027[22m\027[32mexception\027[39m\027[2m)\027[22m
+\027[1m\027[31m  \226\128\162 FnMatchers failure output \226\128\186 Expect the wrong exception\027[39m\027[22m
+
+    \027[2mexpect.fn(\027[22m\027[31mfunction\027[39m\027[2m).toThrowException(\027[22m\027[32mexception\027[39m\027[2m)\027[22m
     
     Expected the function to throw an error matching:
       \027[32mInvalid_argument(\"with some other message\")\027[39m
     Instead, it threw:
       \027[31mInvalid_argument(\"with some message\")\027[39m
 
-\027[1m\027[31m  \226\128\162 FnMatchers failure output \226\128\186 Expect an exception that doesn't throw
-\027[39m\027[22m    \027[2mexpect.fn(\027[22m\027[31mfunction\027[39m\027[2m).toThrowException(\027[22m\027[32mexception\027[39m\027[2m)\027[22m
+\027[1m\027[31m  \226\128\162 FnMatchers failure output \226\128\186 Expect an exception that doesn't throw\027[39m\027[22m
+
+    \027[2mexpect.fn(\027[22m\027[31mfunction\027[39m\027[2m).toThrowException(\027[22m\027[32mexception\027[39m\027[2m)\027[22m
     
     Expected the function to throw an error matching:
       \027[32mNot_found\027[39m
     But it didn't throw anything.
+
+
+\027[97m\027[1mTest Suites: \027[22m\027[39m\027[31m\027[1m1 failed\027[22m\027[39m, 0 passed, 1 total
+\027[97m\027[1mTests:       \027[22m\027[39m\027[31m\027[1m4 failed\027[22m\027[39m, 0 passed, 4 total
+
