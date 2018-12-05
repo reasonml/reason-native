@@ -25,6 +25,6 @@ steps:
 
   - bash: 'rm -rf *'
     continueOnError: true
-    workingDirectory: '$(STAGING_DIRECTORY_UNIX)'
+    workingDirectory: '$(STAGING_DIRECTORY)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Clean up'
