@@ -13,6 +13,7 @@ jobs:
   variables:
     ESY__CACHE_INSTALL_PATH: /home/vsts/.esy/3_____________________________________________________________________/i
     ESY__CACHE_SOURCE_TARBALL_PATH: /home/vsts/.esy/source/i
+    NPM__GLOBAL_ROOT: /opt/hostedtoolcache/node/8.14.0/x64/lib/node_modules
 
   steps:
   - template: .ci/restore-build-cache.yml
@@ -28,6 +29,7 @@ jobs:
   variables:
     ESY__CACHE_INSTALL_PATH: /Users/vsts/.esy/3____________________________________________________________________/i
     ESY__CACHE_SOURCE_TARBALL_PATH: /Users/vsts/.esy/source/i
+    NPM__GLOBAL_ROOT: /Users/vsts/hostedtoolcache/node/8.14.0/x64/lib/node_modules
 
   steps:
   - template: .ci/restore-build-cache.yml
@@ -43,6 +45,7 @@ jobs:
   variables:
     ESY__CACHE_INSTALL_PATH: C:\Users\VssAdministrator\.esy\3_\i
     ESY__CACHE_SOURCE_TARBALL_PATH: C:\Users\VssAdministrator\.esy\source\i
+    NPM__GLOBAL_ROOT: C:\npm\prefix\node_modules
 
   steps:
   - template: .ci/restore-build-cache.yml

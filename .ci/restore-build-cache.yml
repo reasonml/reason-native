@@ -10,10 +10,11 @@ steps:
         buildVersionToDownload: 'latestFromBranch'
         downloadType: 'single'
         artifactName: 'cache-$(Agent.OS)-install'
-        downloadPath: '$(ESY__CACHE_INSTALL_PATH)'
+        downloadPath: '$(Build.ArtifactStagingDirectory)'
     continueOnError: true
 
-  - bash: 'tar -xf cache-$(Agent.OS)-install/cache.tar -C . && rm -rf cache-$(Agent.OS)-install'
-    workingDirectory: '$(ESY__CACHE_INSTALL_PATH)'
+  - bash: 'tar -xf npm-cache.tar -C $(NPM__GLOBAL_ROOT) && tar -xf esy-cache.tar -C $(ESY__CACHE_INSTALL_PATH) && cd .. && rm -rf cache-$(Agent.OS)-install'
+    continueOnError: true
+    workingDirectory: '$(Build.ArtifactStagingDirectory)/cache-$(Agent.OS)-install'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Untar cache directory'
