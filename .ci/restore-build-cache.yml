@@ -10,18 +10,18 @@ steps:
         buildVersionToDownload: 'latestFromBranch'
         downloadType: 'single'
         artifactName: 'cache-$(Agent.OS)-install'
-        downloadPath: '$(Build.ArtifactStagingDirectory)'
+        downloadPath: '$(STAGING_DIRECTORY)'
     continueOnError: true
 
 
 
-  - bash: 'tar -xf $(Build.ArtifactStagingDirectory)/cache-$(Agent.OS)-install/npm-cache.tar -C .'
+  - bash: 'tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/npm-cache.tar -C .'
     continueOnError: true
     workingDirectory: '$(NPM__GLOBAL_ROOT)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Untar npm cache directory'
 
-  - bash: 'tar -xf $(Build.ArtifactStagingDirectory)/cache-$(Agent.OS)-install/esy-cache.tar -C .'
+  - bash: 'tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/esy-cache.tar -C .'
     continueOnError: true
     workingDirectory: '$(ESY__CACHE_INSTALL_PATH)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -29,6 +29,6 @@ steps:
 
   - bash: 'rm -rf *'
     continueOnError: true
-    workingDirectory: '$(Build.ArtifactStagingDirectory)'
+    workingDirectory: '$(STAGING_DIRECTORY_UNIX)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
     displayName: 'Clean up'
