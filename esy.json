@@ -18,7 +18,7 @@
   },
   "scripts": {
     "all": "./scripts/run-all.sh",
-    "test": "bash -cx ./src/refmterr/runTests.sh"
+    "test": "./src/refmterr/runTests.cmd"
   },
   "dependencies": {
     "@opam/dune": "*",
