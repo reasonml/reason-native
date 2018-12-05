@@ -5,7 +5,7 @@
 : # for details.
 
 cd src/refmterr
-refmt ./tests/test.re --print ml > ./tests/test.m
+refmt ./tests/test.re --print ml > ./tests/test.ml
 
 :; ocaml ./tests/test.ml
 :; exit
