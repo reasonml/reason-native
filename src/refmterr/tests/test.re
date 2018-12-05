@@ -148,7 +148,7 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
-          "%s 2>&1 | berror.exe --path-to-refmttype refmttype | sed 's/\\%s/\\//g' > %s",
+          "%s 2>&1 | berror.exe --path-to-refmttype refmttype | sed 's/\\%s/\\e/g' > %s",
           cmd,
           Filename.dir_sep,
           actualOutputName,
@@ -198,15 +198,17 @@ try (
   {
     List.iteri(forEachTest, folders);
 
+    ignore(Sys.command("rm -rf ./tests/**/*.{cmi,cmo}"));
+
     if (List.length(changeCommands.contents) > 0) {
       print_newline();
       print_endline("To accept the changes run:");
       print_endline(String.concat("\n", changeCommands.contents));
+      exit(1);
     } else {
       print_newline();
       print_endline("ALL GOOD!");
     };
-    ignore(Sys.command("rm -rf ./tests/**/*.{cmi,cmo}"));
   }
 ) {
 /* trust me I'm not evil */
