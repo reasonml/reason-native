@@ -1,7 +1,42 @@
 {
   "name": "@reason-native/pastel",
   "version": "0.0.0",
-  "description": "My Project",
+  "description": "Native Reason ANSI terminal styling with an awesome API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/pastel"
+  },
+  "license": "MIT",
+  "keywords": [
+    "color",
+		"colour",
+		"colors",
+		"terminal",
+		"console",
+		"cli",
+		"string",
+		"str",
+		"ansi",
+		"style",
+		"styles",
+		"tty",
+		"formatting",
+		"rgb",
+		"256",
+		"shell",
+		"xterm",
+		"log",
+		"logging",
+		"command-line",
+		"text",
+    "reason",
+    "facebook",
+    "chalk",
+    "highlight",
+    "pastel",
+    "reason-native",
+    "native"
+  ],
   "esy": {
     "build": "refmterr dune build -p pastel",
     "install": "esy-installer pastel.install"
