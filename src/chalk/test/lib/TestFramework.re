@@ -18,9 +18,9 @@ let projectDir =
     |> (dir => Filename.concat(dir, "chalk"))
   );
 
-include TestRunner.Make({
+include Rely.Make({
   let config =
-    TestRunner.TestFrameworkConfig.initialize({
+  Rely.TestFrameworkConfig.initialize({
       snapshotDir:
         Filename.(
           projectDir

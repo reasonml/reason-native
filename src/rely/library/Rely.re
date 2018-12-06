@@ -13,8 +13,8 @@ include RunConfig;
 
 module FCP =
   FileContextPrinter.Make({
-    let linesBefore = 3;
-    let linesAfter = 3;
+    let config =
+      FileContextPrinter.Config.initialize({linesBefore: 3, linesAfter: 3});
   });
 
 module Test = {
@@ -407,11 +407,14 @@ module Make = (UserConfig: FrameworkConfig) => {
             optLoc
             >>| (
               (l: Printexc.location) =>
-                FCP.print(
+                FCP.printFile(
                   l.filename,
                   (
-                    (l.line_number, l.start_char),
-                    (l.line_number, l.end_char),
+                    /* File-context-printer expects line number and column number
+                     * to both be 1-indexed, however the locations from Printexc
+                     * have 1 indexed lines and 0 indexed columns*/
+                    (l.line_number, l.start_char + 1),
+                    (l.line_number, l.end_char + 1),
                   ),
                 )
             )

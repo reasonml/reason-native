@@ -1,15 +1,14 @@
 {
-  "name": "@reason-native/test-runner",
+  "name": "@reason-native/rely",
   "version": "0.0.0",
-  "description": "My Project",
+  "description": "A native Reason test runner that is heavily inspired by Jest",
   "esy": {
-    "build": "refmterr dune build -p test-runner",
-    "install": "esy-installer test-runner.install"
+    "build": "refmterr dune build -p rely",
+    "install": "esy-installer rely.install"
   },
   "scripts": {
-    "test": "esy x TestTestRunner.exe"
+    "test": "esy x TestRely.exe"
   },
-  "//": "TODO publish @reason-native/chalk, @reason-native/file-context-printer and reference npm version",
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",

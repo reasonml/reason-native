@@ -7,9 +7,9 @@
 open TestFramework;
 
 module MakeInnterTestFramework = (()) =>
-  TestRunner.Make({
+  Rely.Make({
     let config =
-      TestRunner.TestFrameworkConfig.initialize({
+      Rely.TestFrameworkConfig.initialize({
         snapshotDir: "unused",
         projectDir:
           Filename.(
@@ -22,12 +22,12 @@ module MakeInnterTestFramework = (()) =>
             |> dirname
             |> dirname
             |> (dir => Filename.concat(dir, "src"))
-            |> (dir => Filename.concat(dir, "test-runner"))
+            |> (dir => Filename.concat(dir, "rely"))
           ),
       });
   });
 
-open TestRunner.Test;
+open Rely.Test;
 
 describe("Multiple TestFramework.describes", ({test}) => {
   let boolListToString = boolList =>
@@ -64,7 +64,7 @@ describe("Multiple TestFramework.describes", ({test}) => {
         let onFrameworkFailureCalled = ref(false);
 
         InnerTestFramework.run(
-          TestRunner.RunConfig.(
+          Rely.RunConfig.(
             initialize()
             |> printer_internal_do_not_use({
                  printEndline: _ => (),
