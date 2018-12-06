@@ -1,0 +1,9 @@
+npm-debug.log
+.merlin
+yarn-error.log
+node_modules/
+_build
+_release
+pastel.install
+.DS_Store
+*.install

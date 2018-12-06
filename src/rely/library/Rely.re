@@ -86,11 +86,11 @@ module Make = (UserConfig: FrameworkConfig) => {
     | None => none
     };
 
-  let failFormatter = s => Chalk.red(s);
+  let failFormatter = s => Pastel.red(s);
 
-  let passFormatter = s => Chalk.green(s);
+  let passFormatter = s => Pastel.green(s);
 
-  let dimFormatter = Chalk.dim;
+  let dimFormatter = Pastel.dim;
 
   let maxNumStackFrames = 3;
 
@@ -139,8 +139,8 @@ module Make = (UserConfig: FrameworkConfig) => {
         StackTrace.Make({
           let baseDir = UserConfig.config.projectDir;
           let exclude = ["TestRunner.re", "Matcher"];
-          let formatLink = Chalk.cyan;
-          let formatText = Chalk.dim;
+          let formatLink = Pastel.cyan;
+          let formatText = Pastel.dim;
         });
       let state =
         state
@@ -335,12 +335,12 @@ module Make = (UserConfig: FrameworkConfig) => {
         let passed = ref(0);
         let prev = ref(0);
         let update = (first: bool): unit => {
-          let pendingChalker = pending^ === 0 ? dimFormatter : (x => x);
-          let passedChalker =
+          let pendingFormatter = pending^ === 0 ? dimFormatter : (x => x);
+          let passedFormatter =
             passed^ === total^ ? passFormatter : dimFormatter;
-          let failedChalker = failed^ === 0 ? dimFormatter : failFormatter;
+          let failedFormatter = failed^ === 0 ? dimFormatter : failFormatter;
           let update =
-            pendingChalker(
+            pendingFormatter(
               "["
               ++ string_of_int(pending^)
               ++ "/"
@@ -348,7 +348,7 @@ module Make = (UserConfig: FrameworkConfig) => {
               ++ "] Pending",
             )
             ++ "  "
-            ++ passedChalker(
+            ++ passedFormatter(
                  "["
                  ++ string_of_int(passed^)
                  ++ "/"
@@ -356,7 +356,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                  ++ "] Passed",
                )
             ++ "  "
-            ++ failedChalker(
+            ++ failedFormatter(
                  "["
                  ++ string_of_int(failed^)
                  ++ "/"
@@ -378,7 +378,7 @@ module Make = (UserConfig: FrameworkConfig) => {
 
         let _ =
           isRootDescribe ?
-            () : printEndline(Chalk.whiteBright(describeName));
+            () : printEndline(Pastel.whiteBright(describeName));
 
         update(true);
         let _ =
@@ -449,7 +449,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                    | {testResult: Exception(e, loc, trace), name} =>
                      let titleBullet = "• ";
                      let title =
-                       Chalk.bold(
+                       Pastel.bold(
                          failFormatter(titleIndent ++ titleBullet ++ name),
                        );
 
@@ -458,7 +458,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                          "",
                          [
                            indent("Exception ", ~indent=messageIndent),
-                           Chalk.dim(Printexc.to_string(e)),
+                           Pastel.dim(Printexc.to_string(e)),
                            "\n",
                          ],
                        );
@@ -469,7 +469,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                    | {testResult: Failed(message, loc, stack), name} =>
                      let titleBullet = "• ";
                      let title =
-                       Chalk.bold(
+                       Pastel.bold(
                          failFormatter(
                            titleIndent ++ titleBullet ++ name ++ "\n",
                          ),

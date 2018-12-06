@@ -6,13 +6,13 @@
     "install": "esy-installer file-context-printer.install"
   },
   "scripts": {},
-  "//": "TODO publish @reason-native/chalk and reference npm version",
+  "//": "TODO publish @reason-native/pastel and reference npm version",
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
     "@opam/re": "*",
-    "@reason-native/chalk": "*"
+    "@reason-native/pastel": "*"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",

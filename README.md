@@ -5,12 +5,12 @@ Testing, printing, coloring, and other tools to effectively write native Reason 
 
 ## Packages:
 
-- `@reason-native/chalk`: Terminal highlighting with support for nesting and style propagation.
+- `@reason-native/pastel`: Terminal highlighting with support for nesting and style propagation.
 - `@reason-native/console`: A web-influenced polymorphic console API for native `Console.log(anything)` with runtime printing.
 - `@reason-native/file-context-printer`: Utility for displaying snippets of files on the command line.
 - `@reason-native/refmterr`: Utility for extracting structure from unstructured ocaml compiler errors, and displaying them.
 - `@reason-native/rely`: Native Jest style API.
-- `@reason-native/chalk-console`: To be used in `devDependencies`. Enhances `console` with colors.
+- `@reason-native/pastel-console`: To be used in `devDependencies`. Enhances `console` with colors.
 
 ## Status:
 

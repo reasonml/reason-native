@@ -1,0 +1,6 @@
+
+(library
+   (name Pastel)
+   (public_name pastel.lib)
+   (libraries  str )
+)

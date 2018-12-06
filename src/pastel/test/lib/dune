@@ -1,0 +1,6 @@
+(library
+   (name PastelTestLib)
+   (public_name pastel-test.lib)
+   (ocamlopt_flags -linkall -g)
+   (libraries  pastel.lib rely.lib )
+)

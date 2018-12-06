@@ -1,0 +1,6 @@
+(executable
+   (name TestPastel)
+   (public_name TestPastel.exe)
+   (libraries pastel-test.lib )
+   (package pastel-test)
+)
