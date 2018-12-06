@@ -5,47 +5,47 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-open MakePastel;
+open MakeDecorator;
 
-type pastel = string => string;
+type decorator = string => string;
 
 type modifier = {
-  bold: pastel,
-  dim: pastel,
-  italic: pastel,
-  underline: pastel,
-  inverse: pastel,
-  hidden: pastel,
-  strikethrough: pastel,
+  bold: decorator,
+  dim: decorator,
+  italic: decorator,
+  underline: decorator,
+  inverse: decorator,
+  hidden: decorator,
+  strikethrough: decorator,
 };
 
 type color = {
-  black: pastel,
-  red: pastel,
-  green: pastel,
-  yellow: pastel,
-  blue: pastel,
-  magenta: pastel,
-  cyan: pastel,
-  white: pastel,
-  blackBright: pastel,
-  redBright: pastel,
-  greenBright: pastel,
-  yellowBright: pastel,
-  blueBright: pastel,
-  magentaBright: pastel,
-  cyanBright: pastel,
-  whiteBright: pastel,
+  black: decorator,
+  red: decorator,
+  green: decorator,
+  yellow: decorator,
+  blue: decorator,
+  magenta: decorator,
+  cyan: decorator,
+  white: decorator,
+  blackBright: decorator,
+  redBright: decorator,
+  greenBright: decorator,
+  yellowBright: decorator,
+  blueBright: decorator,
+  magentaBright: decorator,
+  cyanBright: decorator,
+  whiteBright: decorator,
 };
 
 let modifier: modifier = {
-  bold: makePastel(Ansi.modifier.bold),
-  dim: makePastel(Ansi.modifier.dim),
-  italic: makePastel(Ansi.modifier.italic),
-  underline: makePastel(Ansi.modifier.underline),
-  inverse: makePastel(Ansi.modifier.inverse),
-  hidden: makePastel(Ansi.modifier.hidden),
-  strikethrough: makePastel(Ansi.modifier.strikethrough),
+  bold: makeDecorator(Ansi.modifier.bold),
+  dim: makeDecorator(Ansi.modifier.dim),
+  italic: makeDecorator(Ansi.modifier.italic),
+  underline: makeDecorator(Ansi.modifier.underline),
+  inverse: makeDecorator(Ansi.modifier.inverse),
+  hidden: makeDecorator(Ansi.modifier.hidden),
+  strikethrough: makeDecorator(Ansi.modifier.strikethrough),
 };
 
 let bold = modifier.bold;
@@ -63,22 +63,22 @@ let hidden = modifier.hidden;
 let strikethrough = modifier.strikethrough;
 
 let color: color = {
-  black: makePastel(Ansi.color.black),
-  red: makePastel(Ansi.color.red),
-  green: makePastel(Ansi.color.green),
-  yellow: makePastel(Ansi.color.yellow),
-  blue: makePastel(Ansi.color.blue),
-  magenta: makePastel(Ansi.color.magenta),
-  cyan: makePastel(Ansi.color.cyan),
-  white: makePastel(Ansi.color.white),
-  blackBright: makePastel(Ansi.color.blackBright),
-  redBright: makePastel(Ansi.color.redBright),
-  greenBright: makePastel(Ansi.color.greenBright),
-  yellowBright: makePastel(Ansi.color.yellowBright),
-  blueBright: makePastel(Ansi.color.blueBright),
-  magentaBright: makePastel(Ansi.color.magentaBright),
-  cyanBright: makePastel(Ansi.color.cyanBright),
-  whiteBright: makePastel(Ansi.color.whiteBright),
+  black: makeDecorator(Ansi.color.black),
+  red: makeDecorator(Ansi.color.red),
+  green: makeDecorator(Ansi.color.green),
+  yellow: makeDecorator(Ansi.color.yellow),
+  blue: makeDecorator(Ansi.color.blue),
+  magenta: makeDecorator(Ansi.color.magenta),
+  cyan: makeDecorator(Ansi.color.cyan),
+  white: makeDecorator(Ansi.color.white),
+  blackBright: makeDecorator(Ansi.color.blackBright),
+  redBright: makeDecorator(Ansi.color.redBright),
+  greenBright: makeDecorator(Ansi.color.greenBright),
+  yellowBright: makeDecorator(Ansi.color.yellowBright),
+  blueBright: makeDecorator(Ansi.color.blueBright),
+  magentaBright: makeDecorator(Ansi.color.magentaBright),
+  cyanBright: makeDecorator(Ansi.color.cyanBright),
+  whiteBright: makeDecorator(Ansi.color.whiteBright),
 };
 
 let lengthRegex = {
@@ -127,22 +127,22 @@ let cyanBright = color.cyanBright;
 let whiteBright = color.whiteBright;
 
 let bg: color = {
-  black: makePastel(Ansi.bg.black),
-  red: makePastel(Ansi.bg.red),
-  green: makePastel(Ansi.bg.green),
-  yellow: makePastel(Ansi.bg.yellow),
-  blue: makePastel(Ansi.bg.blue),
-  magenta: makePastel(Ansi.bg.magenta),
-  cyan: makePastel(Ansi.bg.cyan),
-  white: makePastel(Ansi.bg.white),
-  blackBright: makePastel(Ansi.bg.blackBright),
-  redBright: makePastel(Ansi.bg.redBright),
-  greenBright: makePastel(Ansi.bg.greenBright),
-  yellowBright: makePastel(Ansi.bg.yellowBright),
-  blueBright: makePastel(Ansi.bg.blueBright),
-  magentaBright: makePastel(Ansi.bg.magentaBright),
-  cyanBright: makePastel(Ansi.bg.cyanBright),
-  whiteBright: makePastel(Ansi.bg.whiteBright),
+  black: makeDecorator(Ansi.bg.black),
+  red: makeDecorator(Ansi.bg.red),
+  green: makeDecorator(Ansi.bg.green),
+  yellow: makeDecorator(Ansi.bg.yellow),
+  blue: makeDecorator(Ansi.bg.blue),
+  magenta: makeDecorator(Ansi.bg.magenta),
+  cyan: makeDecorator(Ansi.bg.cyan),
+  white: makeDecorator(Ansi.bg.white),
+  blackBright: makeDecorator(Ansi.bg.blackBright),
+  redBright: makeDecorator(Ansi.bg.redBright),
+  greenBright: makeDecorator(Ansi.bg.greenBright),
+  yellowBright: makeDecorator(Ansi.bg.yellowBright),
+  blueBright: makeDecorator(Ansi.bg.blueBright),
+  magentaBright: makeDecorator(Ansi.bg.magentaBright),
+  cyanBright: makeDecorator(Ansi.bg.cyanBright),
+  whiteBright: makeDecorator(Ansi.bg.whiteBright),
 };
 
 type colorName =
@@ -241,7 +241,7 @@ let createElement =
     strikethrough ? [modifier.strikethrough, ...pastels] : pastels;
   let childrenStr = String.concat("", children);
   List.fold_left(
-    (curText, nextPastel) => nextPastel(curText),
+    (curText, nextDecorataor) => nextDecorataor(curText),
     childrenStr,
     pastels,
   );

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-type pastel = string => string;
+type decorator = string => string;
 
 type colorName =
   | Black
@@ -26,32 +26,32 @@ type colorName =
   | WhiteBright;
 
 type color = {
-  black: pastel,
-  red: pastel,
-  green: pastel,
-  yellow: pastel,
-  blue: pastel,
-  magenta: pastel,
-  cyan: pastel,
-  white: pastel,
-  blackBright: pastel,
-  redBright: pastel,
-  greenBright: pastel,
-  yellowBright: pastel,
-  blueBright: pastel,
-  magentaBright: pastel,
-  cyanBright: pastel,
-  whiteBright: pastel,
+  black: decorator,
+  red: decorator,
+  green: decorator,
+  yellow: decorator,
+  blue: decorator,
+  magenta: decorator,
+  cyan: decorator,
+  white: decorator,
+  blackBright: decorator,
+  redBright: decorator,
+  greenBright: decorator,
+  yellowBright: decorator,
+  blueBright: decorator,
+  magentaBright: decorator,
+  cyanBright: decorator,
+  whiteBright: decorator,
 };
 
 type modifier = {
-  bold: pastel,
-  dim: pastel,
-  italic: pastel,
-  underline: pastel,
-  inverse: pastel,
-  hidden: pastel,
-  strikethrough: pastel,
+  bold: decorator,
+  dim: decorator,
+  italic: decorator,
+  underline: decorator,
+  inverse: decorator,
+  hidden: decorator,
+  strikethrough: decorator,
 };
 
 let length: string => int;
@@ -60,30 +60,30 @@ let modifier: modifier;
 let color: color;
 let bg: color;
 
-let bold: pastel;
-let dim: pastel;
-let italic: pastel;
-let underline: pastel;
-let inverse: pastel;
-let hidden: pastel;
-let strikethrough: pastel;
+let bold: decorator;
+let dim: decorator;
+let italic: decorator;
+let underline: decorator;
+let inverse: decorator;
+let hidden: decorator;
+let strikethrough: decorator;
 
-let black: pastel;
-let red: pastel;
-let green: pastel;
-let yellow: pastel;
-let blue: pastel;
-let magenta: pastel;
-let cyan: pastel;
-let white: pastel;
-let blackBright: pastel;
-let redBright: pastel;
-let greenBright: pastel;
-let yellowBright: pastel;
-let blueBright: pastel;
-let magentaBright: pastel;
-let cyanBright: pastel;
-let whiteBright: pastel;
+let black: decorator;
+let red: decorator;
+let green: decorator;
+let yellow: decorator;
+let blue: decorator;
+let magenta: decorator;
+let cyan: decorator;
+let white: decorator;
+let blackBright: decorator;
+let redBright: decorator;
+let greenBright: decorator;
+let yellowBright: decorator;
+let blueBright: decorator;
+let magentaBright: decorator;
+let cyanBright: decorator;
+let whiteBright: decorator;
 
 let createElement:
   (

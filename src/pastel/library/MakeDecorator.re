@@ -117,5 +117,5 @@ let rec reduceTokens = (style: Ansi.style, str, tokens) =>
     reduceTokens(style, String.concat("", [str, escapeCodes]), rest)
   };
 
-let makePastel = (style: Ansi.style, str) =>
+let makeDecorator = (style: Ansi.style, str) =>
   reduceTokens(style, "", tokenize(str));
