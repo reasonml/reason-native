@@ -1,1 +1,0 @@
-src/pastel-console/README.md
