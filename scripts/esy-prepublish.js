@@ -89,7 +89,7 @@ try {
     process.chdir(projectRoot);
     let jsonRelativePath = relativeJsonPaths[i];
     let jsonResolvedPath = path.resolve(projectRoot, jsonRelativePath);
-    
+
     let subpackageReleaseDir = path.resolve(_releaseDir, jsonRelativePath);
     let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
     cp.spawnSync('mkdir', ['-p', subpackageReleaseDir]);
@@ -112,13 +112,13 @@ try {
     let readmePkgPath =
       path.resolve(
         subpackageReleasePrepDir,
-        path.basename(jsonRelativePath, '.json') + '.README.md'
+        path.join("src", path.basename(jsonRelativePath, '.json'), 'README.md')
       );
     let readmeResolvedPath =
       fs.existsSync(readmePkgPath) ? readmePkgPath :
       fs.existsSync(readmePath) ? readmePath :
       null;
-    
+
     let toCopy = [
       {
         originPath: path.resolve(subpackageReleasePrepDir, jsonRelativePath),
