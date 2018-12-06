@@ -1,7 +1,9 @@
+# Steps for restoring project cache
+
 steps:
   - task: DownloadBuildArtifacts@0
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Cache: Restore install'
+    displayName: '[Cache][Restore] Restore install'
     inputs:
         buildType: 'specific'
         project: '$(System.TeamProject)'
@@ -15,20 +17,20 @@ steps:
 
   - bash: 'mkdir -p $(ESY__CACHE_INSTALL_PATH)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Create cache directory'
+    displayName: '[Cache][Restore] Create cache directory'
 
   # - bash: 'cd $(ESY__NPM_ROOT) && tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/npm-cache.tar -C .'
   #   continueOnError: true
   #   condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-  #   displayName: 'Untar npm cache directory'
+  #   displayName: '[Cache][Restore] Untar npm cache directory'
 
   - bash: 'cd $(ESY__CACHE_INSTALL_PATH) && tar -xf $(STAGING_DIRECTORY_UNIX)/cache-$(Agent.OS)-install/esy-cache.tar -C .'
     continueOnError: true
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Untar esy cache directory'
+    displayName: '[Cache][Restore] Untar esy cache directory'
 
   - bash: 'rm -rf *'
     continueOnError: true
     workingDirectory: '$(STAGING_DIRECTORY)'
     condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
-    displayName: 'Clean up'
+    displayName: '[Cache][Restore] Clean up'
