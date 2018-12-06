@@ -1,7 +1,8 @@
 {
   "name": "@reason-native/console",
   "version": "0.0.0",
-  "description": "My Project",
+  "description": "No effort, universal logger",
+  "license": "MIT",
   "esy": {
     "build": "refmterr dune build -p console",
     "install": "esy-installer console.install"
