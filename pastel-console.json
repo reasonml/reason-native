@@ -7,7 +7,7 @@
     "install": "esy-installer pastel-console.install"
   },
   "scripts": {
-    "test": "esy x TestpastelConsole.exe"
+    "test": "esy x TestPastelConsole.exe"
   },
   "dependencies": {
     "@reason-native/console": "*",
