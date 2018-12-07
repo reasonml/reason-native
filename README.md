@@ -25,7 +25,7 @@ released when their APIs are sufficiently stable.
 
 ## Examples
 
-* [Rely](src/rely) - Test Runner
+* [Test Runner](src/rely)
 
 ## Contributing
 
