@@ -1,5 +1,7 @@
 # Reason Native
 
+[![Build Status](https://dev.azure.com/reason-native/reason-native/_apis/build/status/facebookexperimental.reason-native?branchName=master)](https://dev.azure.com/reason-native/reason-native/_build/latest?definitionId=1?branchName=master)
+
 Testing, printing, coloring, and other tools to effectively write native Reason code.
 
 
