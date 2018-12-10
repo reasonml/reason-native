@@ -157,7 +157,7 @@ let forEachTest =
     /* expecting compiling errors in stderr; pipe to a file */
     let windowsCompatibilityPipe =
       switch (Sys.os_type) {
-      | "Win32" => "| sed -E \"s/([A-Za-z0-9])\\\\([A-Za-z0-9])/\\1\\/\\2/g\" | sed -E \"s/\\r//g\""
+      | "Win32" => "| sed -E \"s/([A-Za-z0-9])\\\\\\\\([A-Za-z0-9])/\\\\1\\\\/\\\\2/g\" | sed -E \"s/\\\\r//g\""
       | _ => ""
       };
     ignore(
