@@ -14,7 +14,7 @@ let folders = [
   /* first one is special. See the actual tests loop below */
   ("specialTests", 4, [], []),
   /* `textTests` are simply recorded raw texts ran through berror. */
-  /*("textTests", 1, [], []),
+  ("textTests", 1, [], []),
   ("noError", 1, [], []),
   ("prettyPrint", 2, [], []),
   ("1_bad_file_name", 1, [], []),
@@ -22,9 +22,9 @@ let folders = [
   ("file_IllegalCharacter", 1, [], []),
   ("file_SyntaxError", 7, [], [7]),
   ("type_FunctionWrongLabel", 5, [], []),
-  ("type_AppliedTooMany", 3, [], []), 
-  ("type_SignatureItemMismatch", 12, [11, 12], []), 
-  ("type_AppliedWithoutLabel", 1, [], []), 
+  ("type_AppliedTooMany", 3, [], []),
+  ("type_SignatureItemMismatch", 12, [11, 12], []),
+  ("type_AppliedWithoutLabel", 1, [], []),
   ("type_IncompatibleType", 10, [], []),
   ("type_MismatchTypeArguments", 1, [], []),
   ("type_NotAFunction", 1, [], []),
@@ -36,7 +36,7 @@ let folders = [
   ("type_UnboundValue", 4, [], []),
   ("warning_OptionalArgumentNotErased", 2, [], []),
   ("warning_PatternNotExhaustive", 2, [], []),
-  ("warning_PatternUnused", 1, [], []),*/
+  ("warning_PatternUnused", 1, [], []),
 ];
 
 exception Not_equal(string);
@@ -86,7 +86,7 @@ let specialTestsCommands = [
   switch (Sys.os_type) {
   | "Win32" => "type tests\\specialTests\\stderrTestInput.txt"
   | _ => "cat tests/specialTests/stderrTestInput.txt"
-  }
+  },
 ];
 
 let changeCommands = {contents: []};
@@ -134,10 +134,13 @@ let forEachTest =
       if (i === 0) {
         List.nth(specialTestsCommands, j - 1);
       } else if (i === 1) {
-        switch (Sys.os_type) {
-        | "Win32" => "type "
-        | _ => "cat "
-        } ++ filename;
+        (
+          switch (Sys.os_type) {
+          | "Win32" => "type "
+          | _ => "cat "
+          }
+        )
+        ++ filename;
       } else if (List.exists(q => q == j, indicesWithInterfaces)) {
         "ocamlc -w +40 "
         ++ interfaceFilename
@@ -152,10 +155,11 @@ let forEachTest =
       };
 
     /* expecting compiling errors in stderr; pipe to a file */
-    let windowsCompatibilityPipe = switch (Sys.os_type) {
-    | "Win32" => "| sed -E s/([A-Za-z0-9])\\\\([A-Za-z0-9])/\\1\\/\\2/g | sed -E s/\\r//g"
-    | _ => ""
-    }
+    let windowsCompatibilityPipe =
+      switch (Sys.os_type) {
+      | "Win32" => "| sed -E s/([A-Za-z0-9])\\\\([A-Za-z0-9])/\\1\\/\\2/g | sed -E s/\\r//g"
+      | _ => ""
+      };
     ignore(
       Sys.command(
         Printf.sprintf(
@@ -163,7 +167,7 @@ let forEachTest =
           cmd,
           windowsCompatibilityPipe,
           actualOutputName,
-        )
+        ),
       ),
     );
     /* open the produced error output */
@@ -211,10 +215,11 @@ let forEachTest =
     };
   };
 
-let rmCommand =  switch (Sys.os_type) {
-| "Win32" => "cd tests && del /Q /F /S \"*.cmi\" && del /Q /F /S \"*.cmo\""
-| _ => "rm -rf ./tests/**/*.{cmi,cmo}"
-};
+let rmCommand =
+  switch (Sys.os_type) {
+  | "Win32" => "cd tests && del /Q /F /S \"*.cmi\" && del /Q /F /S \"*.cmo\""
+  | _ => "rm -rf ./tests/**/*.{cmi,cmo}"
+  };
 
 try (
   {
