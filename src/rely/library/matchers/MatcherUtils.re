@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open Chalk;
+open Pastel;
 
 type matcherHintOptions = {comment: option(string)};
 
@@ -26,14 +26,14 @@ type matcherUtils = {
   indent: string => string,
 };
 
-let expectedColor = Chalk.green;
-let receivedColor = Chalk.red;
+let expectedColor = Pastel.green;
+let receivedColor = Pastel.red;
 let formatReceived = receivedColor;
 let formatExpected = expectedColor;
 
-let oldFormatter = Chalk.red;
-let newFormatter = Chalk.green;
-let dimFormatter = Chalk.blackBright;
+let oldFormatter = Pastel.red;
+let newFormatter = Pastel.green;
+let dimFormatter = Pastel.blackBright;
 
 let prepareDiff = (o: string, s: string): string => {
   let diff = Strings.diffWords(o, s);
@@ -66,19 +66,19 @@ let matcherHint =
     String.concat(
       "",
       [
-        Chalk.dim(String.concat("", ["expect", expectType, "("])),
+        Pastel.dim(String.concat("", ["expect", expectType, "("])),
         receivedColor(received),
-        Chalk.dim(
+        Pastel.dim(
           String.concat("", [")", isNot ? ".not" : "", matcherName, "("]),
         ),
         expectedColor(expected),
-        Chalk.dim(")"),
+        Pastel.dim(")"),
       ],
     );
   switch (options.comment) {
   | Some(comment) =>
     let formattedComment =
-      Chalk.dim(String.concat("", ["/* ", comment, " */"]));
+      Pastel.dim(String.concat("", ["/* ", comment, " */"]));
     String.concat(" ", [assertion, formattedComment]);
   | None => assertion
   };

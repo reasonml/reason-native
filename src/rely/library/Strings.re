@@ -410,9 +410,9 @@ let diffLines = diff(~delimeter=Str.regexp("[\n]+"));
 
 let printDiff =
     (
-      ~oldFormatter=s => Chalk.(strikethrough(red(s))),
-      ~newFormatter=s => Chalk.(underline(green(s))),
-      ~bothFormatter=s => Chalk.blackBright(s),
+      ~oldFormatter=s => Pastel.(strikethrough(red(s))),
+      ~newFormatter=s => Pastel.(underline(green(s))),
+      ~bothFormatter=s => Pastel.blackBright(s),
       differences: list(difference),
     )
     : string =>
@@ -430,8 +430,8 @@ let printDiff =
 
 let printDiffBg =
   printDiff(
-    ~oldFormatter=s => Chalk.(bg.red(black(s))),
-    ~newFormatter=s => Chalk.(bg.green(black(s))),
+    ~oldFormatter=s => Pastel.(bg.red(black(s))),
+    ~newFormatter=s => Pastel.(bg.green(black(s))),
     ~bothFormatter=s => s,
   );
 

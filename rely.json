@@ -2,6 +2,23 @@
   "name": "@reason-native/rely",
   "version": "0.0.0",
   "description": "A native Reason test runner that is heavily inspired by Jest",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/rely"
+  },
+  "license": "MIT",
+  "keywords": [
+    "reason",
+    "facebook",
+    "jest",
+    "runner",
+    "test",
+    "testing",
+    "snapshot",
+    "rely",
+    "reason-native",
+    "native"
+  ],
   "esy": {
     "build": "refmterr dune build -p rely",
     "install": "esy-installer rely.install"
@@ -14,7 +31,7 @@
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
-    "@reason-native/chalk": "*",
+    "@reason-native/pastel": "*",
     "@reason-native/file-context-printer": "*"
   },
   "devDependencies": {

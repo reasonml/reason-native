@@ -6,12 +6,12 @@
   "esy": {
     "build": "refmterr dune build --profile=release",
     "install": [
-      "esy-installer chalk.install",
-      "esy-installer chalk-test.install",
+      "esy-installer pastel.install",
+      "esy-installer pastel-test.install",
       "esy-installer rely.install",
       "esy-installer rely-test.install",
       "esy-installer console.install",
-      "esy-installer chalk-console.install",
+      "esy-installer pastel-console.install",
       "esy-installer file-context-printer.install",
       "esy-installer refmterr.install"
     ]

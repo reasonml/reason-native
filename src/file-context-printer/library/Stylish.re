@@ -100,34 +100,34 @@ module type StylishSig = {
 module ANSIStylish: StylishSig = {
   let concatList = String.concat;
 
-  let bold = Chalk.bold;
+  let bold = Pastel.bold;
 
-  let invert = Chalk.inverse;
+  let invert = Pastel.inverse;
 
-  let dim = Chalk.dim;
+  let dim = Pastel.dim;
 
-  let underline = Chalk.underline;
+  let underline = Pastel.underline;
 
   let normal = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
-    <Chalk underline inverse=invert dim bold> s </Chalk>;
+    <Pastel underline inverse=invert dim bold> s </Pastel>;
 
   let red = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
-    <Chalk underline inverse=invert dim bold color=Red> s </Chalk>;
+    <Pastel underline inverse=invert dim bold color=Red> s </Pastel>;
 
   let yellow = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
-    <Chalk underline inverse=invert dim bold color=Yellow> s </Chalk>;
+    <Pastel underline inverse=invert dim bold color=Yellow> s </Pastel>;
 
   let blue = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
-    <Chalk underline inverse=invert dim bold color=Blue> s </Chalk>;
+    <Pastel underline inverse=invert dim bold color=Blue> s </Pastel>;
 
   let green = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
-    <Chalk underline inverse=invert dim bold color=Green> s </Chalk>;
+    <Pastel underline inverse=invert dim bold color=Green> s </Pastel>;
 
   let cyan = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
-    <Chalk underline inverse=invert dim bold color=Cyan> s </Chalk>;
+    <Pastel underline inverse=invert dim bold color=Cyan> s </Pastel>;
 
   let purple = (~underline=false, ~invert=false, ~dim=false, ~bold=false, s) =>
-    <Chalk underline inverse=invert dim bold color=Magenta> s </Chalk>;
+    <Pastel underline inverse=invert dim bold color=Magenta> s </Pastel>;
 
   let stringSlice = (~first=0, ~last=?, str) => {
     let last =

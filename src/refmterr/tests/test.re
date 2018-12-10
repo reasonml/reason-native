@@ -134,6 +134,7 @@ let forEachTest =
       if (i === 0) {
         List.nth(specialTestsCommands, j - 1);
       } else if (i === 1) {
+<<<<<<< HEAD
         (
           switch (Sys.os_type) {
           | "Win32" => "type "
@@ -141,6 +142,9 @@ let forEachTest =
           }
         )
         ++ filename;
+=======
+        "cat " ++ filename;
+>>>>>>> 36378e17cc58e3a65cf667c71d7d61161b0286a4
       } else if (List.exists(q => q == j, indicesWithInterfaces)) {
         "ocamlc -w +40 "
         ++ interfaceFilename
@@ -163,7 +167,11 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
+<<<<<<< HEAD
           "(%s) 2>&1 | berror.exe --path-to-refmttype refmttype %s > %s",
+=======
+          "%s 2>&1 | berror.exe --path-to-refmttype refmttype | sed -E \"s/([A-Za-z0-9])\\\\\\\\([A-Za-z0-9])/\\\\1\\\\/\\\\2/g\" > %s",
+>>>>>>> 36378e17cc58e3a65cf667c71d7d61161b0286a4
           cmd,
           windowsCompatibilityPipe,
           actualOutputName,
