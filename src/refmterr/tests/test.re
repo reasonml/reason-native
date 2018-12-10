@@ -10,6 +10,11 @@
    us to pass the `-pp refmt` option to parse reason code. Would be nice if `ocaml`
    had that like `ocamlc` */
 let folders = [
+  ("specialTests", 4, [], []),
+  ("textTests", 1, [], []),
+  ("type_RecordFieldsUndefined", 1, [], []),
+];
+/* [
   /* (directory, number of tests) */
   /* first one is special. See the actual tests loop below */
   ("specialTests", 4, [], []),
@@ -37,7 +42,7 @@ let folders = [
   ("warning_OptionalArgumentNotErased", 2, [], []),
   ("warning_PatternNotExhaustive", 2, [], []),
   ("warning_PatternUnused", 1, [], []),
-];
+]; */
 
 exception Not_equal(string);
 
@@ -149,7 +154,7 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
-          "%s 2>&1 | berror.exe --path-to-refmttype refmttype | sed -E \"s/([A-Za-z0-9])\\\\\\\\([A-Za-z0-9])/\\\\1\\\\/\\\\2/g\" > %s",
+          "%s 2>&1 | berror.exe --path-to-refmttype refmttype | sed -E s/([A-Za-z0-9])\\\\([A-Za-z0-9])/\\1\\/\\2/g > %s",
           cmd,
           actualOutputName,
         ),
@@ -173,6 +178,9 @@ let forEachTest =
         "----------------------------------------------------------------------",
       );
       print_endline(actual);
+      print_endline(
+        "----------------------------------------------------------------------",
+      );
       print_newline();
       print_newline();
       print_endline(
@@ -183,6 +191,9 @@ let forEachTest =
         "----------------------------------------------------------------------",
       );
       print_endline(expected);
+      print_endline(
+        "----------------------------------------------------------------------",
+      );
       print_newline();
       print_newline();
       changeCommands.contents = [

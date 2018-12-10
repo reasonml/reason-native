@@ -107,7 +107,7 @@ let listTake = (n, lst) => {
 let listTakeWhile = (f, lst) => {
   let result = ref([]);
   let lst = ref(lst);
-  while (f(List.hd(lst^))) {
+  while (lst^ != [] && f(List.hd(lst^))) {
     result := [List.hd(lst^), ...result^];
     lst := List.tl(lst^);
   };

@@ -273,7 +273,9 @@ let parse = (~customLogOutputProcessors, ~customErrorParsers, err) => {
     | _ => Unparsable
     }
   ) {
-  | _ => Unparsable
+  | (err) => 
+    print_endline(Printexc.to_string(err));
+    Unparsable;
   };
 };
 
