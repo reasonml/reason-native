@@ -1,0 +1,13 @@
+{
+  "name": "esydune",
+  "version": "0.0.0",
+  "description": "esy dune integration",
+  "license": "MIT",
+  "esy": {
+    "build": "true",
+    "install": "cp esydune #{self.bin / 'esydune'}"
+  },
+  "dependencies": {
+    "@opam/dune": "*"
+  }
+}

@@ -4,7 +4,7 @@
   "description": "No effort, universal logger",
   "license": "MIT",
   "esy": {
-    "build": "refmterr dune build -p console",
+    "build": "esydune build",
     "install": "esy-installer console.install"
   },
   "scripts": {
@@ -13,13 +13,8 @@
     "testJs": "node _build/default/test/TestConsole.bc.js"
   },
   "dependencies": {
-    "@opam/dune": "*",
+    "esydune": "*",
     "@esy-ocaml/reason": "^3.3.0",
-    "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0"
-  },
-  "devDependencies": {
-    "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0"
   }
 }

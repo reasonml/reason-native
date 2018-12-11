@@ -20,21 +20,17 @@
     "native"
   ],
   "esy": {
-    "build": "refmterr dune build -p rely",
-    "install": "esy-installer rely.install"
+    "build": "esydune build",
+    "install": "esydune install"
   },
   "scripts": {
     "test": "esy x TestRely.exe"
   },
   "dependencies": {
-    "@opam/dune": "*",
+    "esydune": "*",
     "@esy-ocaml/reason": "*",
-    "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
     "@reason-native/pastel": "*",
     "@reason-native/file-context-printer": "*"
-  },
-  "devDependencies": {
-    "@esy-ocaml/merlin": "*"
   }
 }

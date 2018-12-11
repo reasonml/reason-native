@@ -1,0 +1,36 @@
+#!/bin/bash
+
+run () {
+  echo "esydune:" "$@"
+  "$@"
+}
+
+packageNameWithoutNamespace () {
+	if [[ "$1" == @* ]]; then
+		local parts
+		IFS="/" read -r -a parts <<<"$1"
+		echo "${parts[1]}"
+	else
+		echo "$1"
+	fi
+}
+
+nameWithoutNamespace="$(packageNameWithoutNamespace $cur__name)"
+
+case "$1" in
+
+install)
+  run dune install "$nameWithoutNamespace" --prefix "$cur__install"
+  ;;
+build)
+  if [ "$cur__dev" = "true" ]; then
+    run refmterr dune build --only-packages "$nameWithoutNamespace" --root .
+  else
+    run dune build -p "$nameWithoutNamespace"
+  fi
+  ;;
+*)
+  dunecmd="$1"
+  shift
+  run dune "$dunecmd" --only-packages "$nameWithoutNamespace" --root . "$@"
+esac

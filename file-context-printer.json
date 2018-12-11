@@ -8,19 +8,15 @@
   },
   "license": "MIT",
   "esy": {
-    "build": "refmterr dune build -p file-context-printer",
-    "install": "esy-installer file-context-printer.install"
+    "build": "esydune build",
+    "install": "esydune install"
   },
   "scripts": {},
   "dependencies": {
-    "@opam/dune": "*",
+    "esydune": "*",
     "@esy-ocaml/reason": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
     "@opam/re": "*",
     "@reason-native/pastel": "*"
-  },
-  "devDependencies": {
-    "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0"
   }
 }

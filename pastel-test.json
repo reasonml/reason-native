@@ -1,0 +1,12 @@
+{
+  "name": "@reason-native/pastel-test",
+  "esy": {
+    "build": "esydune build",
+    "install": "esydune install"
+  },
+  "dependencies": {
+    "esydune": "*",
+    "@reason-native/pastel": "*",
+    "@reason-native/rely": "*"
+  }
+}

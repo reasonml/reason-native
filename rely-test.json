@@ -1,0 +1,11 @@
+{
+  "name": "@reason-native/rely-test",
+  "esy": {
+    "build": "esydune build",
+    "install": "esydune install"
+  },
+  "dependencies": {
+    "esydune": "*",
+    "@reason-native/rely": "*"
+  }
+}

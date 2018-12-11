@@ -3,35 +3,33 @@
   "version": "0.0.0",
   "description": "My Project",
   "license": "MIT",
-  "esy": {
-    "build": "refmterr dune build --profile=release",
-    "install": [
-      "esy-installer pastel.install",
-      "esy-installer pastel-test.install",
-      "esy-installer rely.install",
-      "esy-installer rely-test.install",
-      "esy-installer console.install",
-      "esy-installer pastel-console.install",
-      "esy-installer file-context-printer.install",
-      "esy-installer refmterr.install"
-    ]
-  },
   "scripts": {
     "all": "./scripts/run-all.sh",
     "test": "esy x bash -cx ./src/refmterr/runTests.cmd"
   },
   "dependencies": {
-    "@opam/dune": "*",
-    "@esy-ocaml/reason": "*",
-    "refmterr": "*",
-    "ocaml": ">= 4.2.0  <= 4.7.0",
-    "@opam/re": "*",
-    "@opam/yojson": "*",
-    "@opam/ppx_deriving_yojson": "*"
+    "@reason-native/pastel": "*",
+    "@reason-native/pastel-test": "*",
+    "@reason-native/rely": "*",
+    "@reason-native/rely-test": "*",
+    "@reason-native/console": "*",
+    "@reason-native/pastel-console": "*",
+    "@reason-native/file-context-printer": "*"
   },
   "devDependencies": {
     "@opam/merlin": "*",
+    "refmterr": "*",
     "ocaml": "~4.6.0",
     "@esy-ocaml/reason": "3.3.3"
+  },
+  "resolutions": {
+    "@reason-native/pastel": "link:./pastel.json",
+    "@reason-native/pastel-test": "link:./pastel-test.json",
+    "@reason-native/rely": "link:./rely.json",
+    "@reason-native/rely-test": "link:./rely-test.json",
+    "@reason-native/console": "link:./console.json",
+    "@reason-native/pastel-console": "link:./pastel-console.json",
+    "@reason-native/file-context-printer": "link:./file-context-printer.json",
+    "esydune": "link:./esydune.json"
   }
 }
