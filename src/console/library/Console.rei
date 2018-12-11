@@ -96,11 +96,11 @@ let defaultGlobalConsole: t;
 let makeStandardChannelsConsole: ObjectPrinter.t => t;
 
 /**
- * Output a string or object to standard output. Suitable for writing to logs,
- * or for outputting user messaging in command line applications. If you pass a
- * string, it will not be wrapped in quotes. If you pass an object,
- * `Console.log` will attempt to print the object dynamically. Strings deep in
- * objects will be wrapped in quotes.
+ * Output a string or object to standard output followed by a newline. Suitable
+ * for writing to logs, or for outputting user messaging in command line
+ * applications. If you pass a string, it will not be wrapped in quotes. If you
+ * pass an object, `Console.log` will attempt to print the object dynamically.
+ * Strings deep in objects will be wrapped in quotes.
  */
 let log: 'a => unit;
 
@@ -110,8 +110,11 @@ let log: 'a => unit;
 let out: 'a => unit;
 
 /**
- * Outputs developer-only messaging to standard out. Suitable for writing to
- * log files. In production mode, would typically be suppressed entirely.
+ * Same as `Console.log` but used for developer-facing messaging to standard
+ * out. Suitable for writing to log files. In production mode, would typically
+ * be suppressed entirely. Custom `Console.t` implementations may implement
+ * custom behavior for `Console.debug` that behaves differently from
+ * `Console.log`.
  */
 let debug: 'a => unit;
 
