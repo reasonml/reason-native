@@ -1,36 +1,36 @@
 TestRunner › failing tests
 \027[97mfailing tests\027[39m
-\r[16/16] Pending  \027[2m[0/16] Passed\027[22m  \027[2m[0/16] Failed\027[22m\r[15/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[1/16] Failed\027[39m\r[14/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[2/16] Failed\027[39m\r[13/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[3/16] Failed\027[39m\r[12/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[4/16] Failed\027[39m\r[11/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[5/16] Failed\027[39m\r[10/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[6/16] Failed\027[39m\027[1D\027[K\r[9/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[7/16] Failed\027[39m\r[8/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[8/16] Failed\027[39m\r[7/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[9/16] Failed\027[39m\r[6/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[10/16] Failed\027[39m\r[5/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[11/16] Failed\027[39m\r[4/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[12/16] Failed\027[39m\r[3/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[13/16] Failed\027[39m\r[2/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[14/16] Failed\027[39m\r[1/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[15/16] Failed\027[39m\r\027[2m[0/16] Pending\027[22m  \027[2m[0/16] Passed\027[22m  \027[31m[16/16] Failed\027[39m
+\r[16/16] Pending  \027[2m[0/16] Passed\027[22m  \027[2m[0/16] Failed\027[22m\r[15/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[1/16] Failed\027[39m\r[14/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[2/16] Failed\027[39m\r[13/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[3/16] Failed\027[39m\r[12/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[4/16] Failed\027[39m\r[11/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[5/16] Failed\027[39m\r[10/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[6/16] Failed\027[39m\027[1D\027[K\r[9/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[7/16] Failed\027[39m\r[8/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[8/16] Failed\027[39m\r[7/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[9/16] Failed\027[39m\r[6/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[10/16] Failed\027[39m\r[5/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[11/16] Failed\027[39m\r[4/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[12/16] Failed\027[39m\r[3/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[13/16] Failed\027[39m\r[2/16] Pending  \027[2m[0/16] Passed\027[22m  \027[31m[14/16] Failed\027[39m\r[1/16] Pending  \027[2m[1/16] Passed\027[22m  \027[31m[14/16] Failed\027[39m\r\027[2m[0/16] Pending\027[22m  \027[2m[2/16] Passed\027[22m  \027[31m[14/16] Failed\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.toBeEmpty
 \027[39m\027[22m    \027[2mexpect.string(\027[22m\027[31mreceived\027[39m\027[2m).toBeEmpty(\027[22m\027[2m)\027[22m
     
-    Received: \027[31m\"foo\"\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Received: \027[31m\"foo\"\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.not.toBeEmpty
 \027[39m\027[22m    \027[2mexpect.string(\027[22m\027[31mreceived\027[39m\027[2m).not.toBeEmpty(\027[22m\027[2m)\027[22m
     
-    Expected value not to be empty, but received: \027[31m\"\"\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Expected value not to be empty, but received: \027[31m\"\"\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.toEqual
 \027[39m\027[22m    \027[2mexpect.string(\027[22m\027[31mreceived\027[39m\027[2m).toEqual(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
@@ -41,17 +41,17 @@ TestRunner › failing tests
       \027[31m\"bacon\"\027[39m
     
     Difference:
-      \027[31mbacon\027[39m\027[32mdelicious\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+      \027[31mbacon\027[39m\027[32mdelicious\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.not.toEqual
 \027[39m\027[22m    \027[2mexpect.string(\027[22m\027[31mreceived\027[39m\027[2m).not.toEqual(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
@@ -59,17 +59,17 @@ TestRunner › failing tests
     Expected value to not equal:
       \027[32m\"bacon\"\027[39m
     Received:
-      \027[31m\"bacon\"\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+      \027[31m\"bacon\"\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.toEqualFile\027[39m\027[22m
     Exception \027[2mSys_error(\"tests/testFiles/foo.txt: No such file or directory\")\027[22m
@@ -90,140 +90,107 @@ TestRunner › failing tests
 \027[39m\027[22m    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).toBe(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
     
     Expected: \027[32mtrue\027[39m
-    Received: \027[31mfalse\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Received: \027[31mfalse\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.bool.not.toBe(false)
 \027[39m\027[22m    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).not.toBe(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
     
     Expected: \027[32mfalse\027[39m
-    Received: \027[31mfalse\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Received: \027[31mfalse\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.bool.toBeTrue
 \027[39m\027[22m    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).toBeTrue(\027[22m\027[2m)\027[22m
     
-    Received: \027[31mfalse\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Received: \027[31mfalse\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.bool.not.toBeTrue
 \027[39m\027[22m    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).not.toBeTrue(\027[22m\027[2m)\027[22m
     
-    Received: \027[31mtrue\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Received: \027[31mtrue\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.bool.toBeFalse
 \027[39m\027[22m    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).toBeFalse(\027[22m\027[2m)\027[22m
     
-    Received: \027[31mtrue\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Received: \027[31mtrue\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.bool.not.toBeFalse
 \027[39m\027[22m    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).not.toBeFalse(\027[22m\027[2m)\027[22m
     
-    Received: \027[31mfalse\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Received: \027[31mfalse\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.int.toBe
 \027[39m\027[22m    \027[2mexpect.int(\027[22m\027[31mreceived\027[39m\027[2m).toBe(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
     
     Expected: \027[32m43\027[39m
-    Received: \027[31m42\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
+    Received: \027[31m42\027[39m      \027[2m257 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
+      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
+      \027[2m259 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
+      \027[31m\027[2m260 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
+      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
+      \027[2m262 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
+      \027[2m263 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
 
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
-
-\027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot mismatch
-\027[39m\027[22m    \027[2mexpect.string(\027[22m\027[31mreceived\027[39m\027[2m).toMatchSnapshot(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
-    
-    \027[32m- bacon2\027[39m
-    \027[31m+ bacon3\027[39m
-    
-    Difference:
-      \027[31mbacon3\027[39m\027[32mbacon2\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
-
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
-
-\027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot no snapshot exists
-\027[39m\027[22m    New snapshot was \027[31mnot written\027[39m. The update flag must be explicitly passed to write a new snapshot.
-    
-    Received: \027[31mmore bacon!\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
-
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
+      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
+\027[33mCreated 2 missing snapshots\027[39m
