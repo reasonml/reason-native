@@ -10,7 +10,7 @@ function native_out(s) {
   // In node, you can omit the newline, but not in the browser.
   if (typeof process != "undefined" &&
     typeof process.stdout != "undefined") {
-    process.stdout.write(s)
+    process.stdout.write(s.c)
   } else {
     joo_global_object.console.log(s.c);
   }
