@@ -1,0 +1,8 @@
+(library
+    (name Lib)
+    (public_name lib.lib)
+    (libraries str pastel.lib unix)
+)
+(include_subdirs unqualified)
+
+

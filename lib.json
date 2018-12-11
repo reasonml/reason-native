@@ -1,0 +1,25 @@
+{
+    "name": "@reason-native/lib",
+    "version": "0.0.0",
+    "description": "Native Reason Helper API Library",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/lib"
+    },
+    "license": "MIT",
+    "esy": {
+        "build": "refmterr dune build -p lib",
+        "install": "esy-installer lib.install"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@opam/dune": "*",
+        "@esy-ocaml/reason": "*",
+        "refmterr": "*",
+        "ocaml": ">= 4.2.0  <= 4.7.0"
+    },
+    "devDependencies": {
+        "@esy-ocaml/merlin": "*",
+        "ocaml": "~4.6.0"
+    }
+}
