@@ -1,0 +1,96 @@
+#!/bin/bash
+
+set -eo pipefail
+
+ESYBIN="$HOME/Workspace/esy-ocaml/esy/bin/esy"
+DEPSPEC="dependencies(self)+devDependencies(root)"
+
+run () {
+  local debug
+  debug="$ESYMONO__DEBUG"
+  if [ "$debug" != "" ]; then
+    echo "debug esymono:" "$@"
+  fi
+  "$@"
+}
+
+esy () {
+  run "$ESYBIN" "$@"
+}
+
+case "$1" in
+install|i)
+  esy install
+  ;;
+build|b)
+  shift
+  if [ "$1" = "--release" ]; then
+    esy build-dependencies --all --release
+  elif [ "$1" = "" ]; then
+    esy build-dependencies --link-depspec "$DEPSPEC" --all
+  else
+    esy build-dependencies --link-depspec "$DEPSPEC" --all "$1"
+    esy build-package --link-depspec "$DEPSPEC" "$1"
+  fi
+  ;;
+x)
+  esy build-dependencies --link-depspec "$DEPSPEC" --all
+  shift
+  esy exec-command \
+    --link-depspec "$DEPSPEC" \
+    --include-current-env \
+    --include-build-env \
+    root \
+    -- "$@"
+  ;;
+x-in)
+  package="$2"
+  shift
+  shift
+  esy build-dependencies --link-depspec "$DEPSPEC" --all "$package"
+  esy exec-command \
+    --link-depspec "$DEPSPEC" \
+    --include-current-env \
+    --include-build-env \
+    "$package" \
+    -- "$@"
+  ;;
+''|help|--help|-h)
+  cat << EOF
+esymono
+
+  Monorepo workflow for esy.
+
+Usage:
+
+  esymono COMMAND
+
+Commands:
+
+  esymono install           Install dependencies.
+
+  esymono build             Build all packages in dev mode.
+  esymono build --release   Build all packages in release mode.
+
+  esymono build PKG         Build a specified package in dev mode.
+
+  esymono exec PKG CMD      Execute command CMD in context of a package PKG.
+  esymono CMD               Execute command CMD in context of a monorepo root.
+
+  esymono help              Show this message and exit.
+
+Referencing packages:
+
+  Packages can be references via its name '@reason-native/rely' or by their
+  manifests './rely.json'.
+
+EOF
+  ;;
+*)
+  esy build-dependencies
+  esy exec-command \
+    --link-depspec "$DEPSPEC" \
+    --include-current-env \
+    root \
+    -- "$@"
+esac
