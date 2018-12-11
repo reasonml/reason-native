@@ -23,7 +23,7 @@ let folders = [
   ("file_SyntaxError", 7, [], [7]),
   ("type_FunctionWrongLabel", 5, [], []),
   ("type_AppliedTooMany", 3, [], []),
-  ("type_SignatureItemMismatch", 12, [11, 12], []),
+  ("type_SignatureItemMismatch", 13, [11, 12], []),
   ("type_AppliedWithoutLabel", 1, [], []),
   ("type_IncompatibleType", 10, [], []),
   ("type_MismatchTypeArguments", 1, [], []),
