@@ -24,7 +24,7 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
     let toBe = isNot =>
       createMatcher(
         (
-          {matcherHint, formatReceived, formatExpected},
+          {matcherHint, formatReceived, formatExpected, _},
           actualThunk,
           expectedThunk,
         ) => {
@@ -59,11 +59,7 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
       });
     let toBeTrue = isNot =>
       createMatcher(
-        (
-          {matcherHint, formatReceived, formatExpected},
-          actualThunk,
-          expectedThunk,
-        ) => {
+        ({matcherHint, formatReceived, _}, actualThunk, _expectedThunk) => {
         let actual = actualThunk();
         let actualEqualsExpected = actual == true;
         let pass =
@@ -93,11 +89,7 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
       });
     let toBeFalse = isNot =>
       createMatcher(
-        (
-          {matcherHint, formatReceived, formatExpected},
-          actualThunk,
-          expectedThunk,
-        ) => {
+        ({matcherHint, formatReceived, _}, actualThunk, _expectedThunk) => {
         let actual = actualThunk();
         let actualEqualsExpected = actual == false;
         let pass =

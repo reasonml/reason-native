@@ -36,9 +36,9 @@ module Make = (Styl: Stylish.StylishSig) => {
       List.map(
         fun
         | Re.Pcre.Text(s) => Styl.highlight(~dim, ~bold, ~underline, s)
-        | Delim(s) => "" /* Let the Group do the highlighting */
+        | Delim(_s) => "" /* Let the Group do the highlighting */
         | Group(i, s) => {
-            let (r, color) = List.nth(tokens, i - 1);
+            let (_r, color) = List.nth(tokens, i - 1);
             Styl.highlight(~dim, ~bold, ~underline, ~color, s);
           }
         | NoGroup => "",

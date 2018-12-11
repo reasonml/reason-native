@@ -8,7 +8,7 @@
 open TestFramework;
 open Pastel;
 
-describe("Pre test runner exhaustiveness test", ({test}) =>
+describe("Pre test runner exhaustiveness test", ({test, _}) =>
   test("should match snapshot", ({expect}) => {
     let outputRev = ref([]);
     let print_endline = s => outputRev := [s] @ outputRev^;
@@ -81,7 +81,8 @@ describe("Pre test runner exhaustiveness test", ({test}) =>
       | WhiteBright => "WhiteBright   "
       };
 
-    let label = (~backgroundColor, ~color, ~bold, ~italic, ~underline) =>
+    let label =
+        (~backgroundColor as _, ~color as _, ~bold as _, ~italic, ~underline) =>
       (italic ? "ita " : "noI ") ++ (underline ? "und" : "noU");
 
     let margin = "              ";

@@ -69,7 +69,7 @@ let diff =
   /* First pass */
   let nArray: array(arrayEntry) =
     Array.mapi(
-      (index, token) => {
+      (_index, token) => {
         if (!StringMap.has(token, table^)) {
           table :=
             StringMap.set(
@@ -147,7 +147,12 @@ let diff =
          * Note that if oCounter is one, logically oTokenNumber must have
          * Some value set.
          */
-        | TableRef({oCounter: One, nCounter: One, oTokenNumber: Some(olno)}) =>
+        | TableRef({
+            oCounter: One,
+            nCounter: One,
+            oTokenNumber: Some(olno),
+            _,
+          }) =>
           /* Set OA[olno] to i */
           oArray[olno] = PosInOther(index);
           /* Set NA[i] to OLNO */
@@ -175,7 +180,8 @@ let diff =
     | PosInOther(j) =>
       if (i + 1 < nLen && j + 1 < oLen) {
         switch (nArray[i + 1], oArray[j + 1]) {
-        | (TableRef({key: nKey}), TableRef({key: oKey})) when nKey == oKey =>
+        | (TableRef({key: nKey, _}), TableRef({key: oKey, _}))
+            when nKey == oKey =>
           nArray[i + 1] = PosInOther(j + 1);
           oArray[j + 1] = PosInOther(i + 1);
         | _ => ()
@@ -202,7 +208,8 @@ let diff =
     | PosInOther(j) =>
       if (i - 1 >= 0 && j - 1 >= 0) {
         switch (nArray[i - 1], oArray[j - 1]) {
-        | (TableRef({key: nKey}), TableRef({key: oKey})) when nKey == oKey =>
+        | (TableRef({key: nKey, _}), TableRef({key: oKey, _}))
+            when nKey == oKey =>
           nArray[i - 1] = PosInOther(j - 1);
           oArray[j - 1] = PosInOther(i - 1);
         | _ => ()
@@ -365,7 +372,7 @@ let diff =
      * If it's a move, then we first make sure to catch up our i pointer
      * to add any inserts we haven't done yet. Then we add a Both entry.
      */
-    | Move(j2, i2) =>
+    | Move(_j2, i2) =>
       while (i^ < i2) {
         /* TODO: Should we assert that these are all Inserts? They should be. */
         differences := differences^ @ [New(nTokens[i^])];

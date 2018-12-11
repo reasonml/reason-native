@@ -173,8 +173,8 @@ module Make = (UserConfig: FileContextPrinterConfig, Styl: Stylish.StylishSig) =
   let printFile = (~path: string, ~highlight: rowColumnRange) => {
     let fileContents =
       switch (Helpers.fileLinesOfExn(path)) {
-      | fileLines => Some(print(fileLines, highlight))
-      | exception e => None
+      | fileLines => Some(print(fileLines, ~highlight))
+      | exception _e => None
       };
     fileContents;
   };

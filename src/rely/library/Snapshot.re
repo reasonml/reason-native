@@ -75,7 +75,7 @@ module Make = (IO: SnapshotIO) => {
 
   let getSnapshotStatus = state => {
     let messages: ref(list(string)) = ref([]);
-    let {removedSnapshotCount} = state;
+    let {removedSnapshotCount, _} = state;
     let updatedSnapshotCount = ref(0);
     let createdSnapshotCount = ref(0);
     let _ =

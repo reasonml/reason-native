@@ -29,7 +29,7 @@ module MakeInnterTestFramework = (()) =>
 
 open Rely.Test;
 
-describe("Multiple TestFramework.describes", ({test}) => {
+describe("Multiple TestFramework.describes", ({test, _}) => {
   let boolListToString = boolList =>
     boolList |> List.map(string_of_bool) |> String.concat(", ");
 
@@ -48,7 +48,7 @@ describe("Multiple TestFramework.describes", ({test}) => {
             incr(i);
             let describeName =
               "InnerTestFramework describe " ++ string_of_int(i^);
-            InnerTestFramework.describe(describeName, ({test: innerTest}) =>
+            InnerTestFramework.describe(describeName, ({test: innerTest, _}) =>
               innerTest(
                 "inner test " ++ string_of_int(i^),
                 ({expect}) => {

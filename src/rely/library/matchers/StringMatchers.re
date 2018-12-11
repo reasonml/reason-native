@@ -38,7 +38,7 @@ let makeMatchers = (accessorPath, snapshotMatcher, utils) => {
   let {createMatcher} = utils;
   let createStringMatchers = sActual => {
     let toBeEmpty =
-      createMatcher(({matcherHint, formatReceived}, actualThunk, _) => {
+      createMatcher(({matcherHint, formatReceived, _}, actualThunk, _) => {
         let actual = actualThunk();
         let pass = actual == "";
         if (pass) {
@@ -64,7 +64,7 @@ let makeMatchers = (accessorPath, snapshotMatcher, utils) => {
       });
 
     let notToBeEmpty =
-      createMatcher(({matcherHint, formatReceived}, actualThunk, _) => {
+      createMatcher(({matcherHint, formatReceived, _}, actualThunk, _) => {
         let actual = actualThunk();
         let pass = actual != "";
         if (pass) {
@@ -127,7 +127,7 @@ let makeMatchers = (accessorPath, snapshotMatcher, utils) => {
     let notToEqual =
       createMatcher(
         (
-          {matcherHint, formatReceived, formatExpected, indent},
+          {matcherHint, formatReceived, formatExpected, indent, _},
           actualThunk,
           expectedThunk,
         ) => {
@@ -278,7 +278,7 @@ let makeMatchers = (accessorPath, snapshotMatcher, utils) => {
     let toMatch = isNot =>
       createMatcher(
         (
-          {matcherHint, formatReceived, formatExpected, indent, prepareDiff},
+          {matcherHint, formatReceived, formatExpected, indent, _},
           actualThunk,
           expectedThunk,
         ) => {

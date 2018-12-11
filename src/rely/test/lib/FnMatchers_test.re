@@ -26,7 +26,7 @@ describe("FnMatchers", describeUtils => {
   testRunnerOutputSnapshotTest(
     "FnMatchers failure output",
     describeUtils,
-    ({test}) => {
+    ({test, _}) => {
       test("Expect to throw, but doesn't", ({expect}) =>
         expect.fn(() => 7).toThrow()
       );

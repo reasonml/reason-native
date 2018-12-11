@@ -25,8 +25,7 @@ let passMessageThunk = () => "";
 let makeMatchers = (accessorPath, {createMatcher}) => {
   let createFnMatchers = actual => {
     let toThrow =
-      createMatcher(
-        ({matcherHint, formatReceived, formatExpected}, actualThunk, _) => {
+      createMatcher(({matcherHint, _}, actualThunk, _) => {
         let actual = actualThunk();
         switch (actual()) {
         | _ =>
@@ -48,17 +47,13 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
               ],
             );
           ((() => message), false);
-        | exception e => (passMessageThunk, true)
+        | exception _e => (passMessageThunk, true)
         };
       });
 
     let notToThrow =
       createMatcher(
-        (
-          {matcherHint, formatReceived, indent, formatExpected},
-          actualThunk,
-          _,
-        ) => {
+        ({matcherHint, formatReceived, indent, _}, actualThunk, _) => {
         let actual = actualThunk();
         switch (actual()) {
         | _ => (passMessageThunk, true)
@@ -88,7 +83,7 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
     let toThrowException =
       createMatcher(
         (
-          {matcherHint, indent, formatReceived, formatExpected},
+          {matcherHint, indent, formatReceived, formatExpected, _},
           actualThunk,
           expectedThunk,
         ) => {

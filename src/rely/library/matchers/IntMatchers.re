@@ -19,7 +19,7 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
     let toBe = isNot =>
       createMatcher(
         (
-          {matcherHint, formatReceived, formatExpected},
+          {matcherHint, formatReceived, formatExpected, _},
           actualThunk,
           expectedThunk,
         ) => {

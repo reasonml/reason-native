@@ -9,17 +9,17 @@ let pastelifiedObjectPrinter = {
   let super = Console.ObjectPrinter.base;
   let printer = {
     ...super,
-    quotedString: (self, s) =>
+    quotedString: (_self, s) =>
       <Pastel color=Pastel.Green> {super.quotedString(super, s)} </Pastel>,
-    int: (self, i) =>
+    int: (_self, i) =>
       <Pastel color=Pastel.Yellow> {super.int(super, i)} </Pastel>,
-    float: (self, i) =>
+    float: (_self, i) =>
       <Pastel color=Pastel.Magenta> {super.float(super, i)} </Pastel>,
-    maxDepthExceeded: self =>
+    maxDepthExceeded: _self =>
       <Pastel color=Pastel.Red> {super.maxDepthExceeded(super)} </Pastel>,
-    maxLengthExceeded: self =>
+    maxLengthExceeded: _self =>
       <Pastel color=Pastel.Red> {super.maxLengthExceeded(super)} </Pastel>,
-    closure: (self, f) =>
+    closure: (_self, f) =>
       <Pastel dim=true color=Cyan>
         "closure(@"
         {string_of_int(0 + Obj.magic(Obj.repr(f)))}

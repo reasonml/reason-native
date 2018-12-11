@@ -22,12 +22,12 @@ Console.error([Some(["console"]), Some(["dot"]), Some(["error"]), None]);
 
 Console.ObjectPrinter.setMaxDepth(3);
 
-let rec maxDepthHit = [[[[2, 3]]], [[[5, 6]]]];
+let maxDepthHit = [[[[2, 3]]], [[[5, 6]]]];
 Console.error(maxDepthHit);
 
 Console.ObjectPrinter.setMaxLength(8);
 
-let rec maxLengthHit = [2, 3, 4, 5, 6];
+let maxLengthHit = [2, 3, 4, 5, 6];
 
 Console.error(maxLengthHit);
 

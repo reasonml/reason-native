@@ -11,7 +11,7 @@ describe("TestRunner", describeUtils => {
   testRunnerOutputSnapshotTest(
     "failing tests",
     describeUtils,
-    ({test}) => {
+    ({test, _}) => {
       test("expect.string.toBeEmpty", ({expect}) =>
         expect.string("foo").toBeEmpty()
       );
@@ -71,7 +71,7 @@ describe("TestRunner", describeUtils => {
   testRunnerOutputSnapshotTest(
     "passing tests",
     describeUtils,
-    ({test}) => {
+    ({test, _}) => {
       test("Inner test 1", ({expect}) => {
         expect.string("foo").toEqual("foo");
         expect.string("bar").toEqual("bar");
@@ -83,8 +83,8 @@ describe("TestRunner", describeUtils => {
     },
   );
   testRunnerOutputSnapshotTest(
-    "string operations", describeUtils, ({describe}) =>
-    describe("Inner describe 2", ({test}) =>
+    "string operations", describeUtils, ({describe, _}) =>
+    describe("Inner describe 2", ({test, _}) =>
       test("Inner test 1", ({expect}) => {
         expect.string("").toBeEmpty();
         expect.string("foo").not.toBeEmpty();
@@ -97,8 +97,8 @@ describe("TestRunner", describeUtils => {
       })
     )
   );
-  testRunnerOutputSnapshotTest("mixed tests", describeUtils, ({describe}) =>
-    describe("Inner describe 1", ({test}) => {
+  testRunnerOutputSnapshotTest("mixed tests", describeUtils, ({describe, _}) =>
+    describe("Inner describe 1", ({test, _}) => {
       test("Inner test 1", ({expect}) => {
         expect.string("foo").toEqual("foo");
         expect.string("foo").toEqual("foo");
@@ -114,9 +114,9 @@ describe("TestRunner", describeUtils => {
     })
   );
   testRunnerOutputSnapshotTest(
-    "nested describes", describeUtils, ({describe}) =>
+    "nested describes", describeUtils, ({describe, _}) =>
     describe("Root", ({describe, test}) => {
-      describe("Describe 1", ({test}) => {
+      describe("Describe 1", ({test, _}) => {
         test("Inner test 1.1", ({expect}) => {
           expect.string("foo").toEqual("foo");
           expect.string("foo").toEqual("foo");
@@ -131,7 +131,7 @@ describe("TestRunner", describeUtils => {
           expect.string("foo").toEqual("foo");
           expect.string("foo").toEqual("foo");
         });
-        describe("Describe 3", ({test}) => {
+        describe("Describe 3", ({test, _}) => {
           test("Inner test 3.1", ({expect}) => {
             expect.string("foo").toEqual("foo");
             expect.string("foo").toEqual("foo");
@@ -159,8 +159,8 @@ describe("TestRunner", describeUtils => {
     })
   );
   testRunnerOutputSnapshotTest(
-    "exceptions in tests", describeUtils, ({describe}) =>
-    describe("test framework handling of exceptions", ({test}) => {
+    "exceptions in tests", describeUtils, ({describe, _}) =>
+    describe("test framework handling of exceptions", ({test, _}) => {
       test("normal failure", ({expect}) =>
         expect.string("foo").toEqual("bar")
       );

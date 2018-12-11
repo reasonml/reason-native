@@ -46,7 +46,7 @@ module Make = (Config: Config) => {
 
   let hasMatchingSubstring = (s, re) =>
     switch (Str.search_forward(re, s, 0)) {
-    | index => true
+    | _index => true
     | exception Not_found => false
     };
 

@@ -208,7 +208,7 @@ let colorNameToForeground = n =>
 
 let createElement =
     (
-      ~reset: bool=false,
+      ~reset as _: bool=false,
       ~bold: bool=false,
       ~dim: bool=false,
       ~italic: bool=false,

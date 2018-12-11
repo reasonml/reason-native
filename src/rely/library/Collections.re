@@ -180,10 +180,10 @@ module Map = {
         };
     let has: (key, t('value)) => bool = Map_Impl.mem;
     let keys: t('value) => list(key) =
-      map => map |> toList |> List.map(((key, value)) => key);
+      map => map |> toList |> List.map(((key, _value)) => key);
     let set: (key, 'value, t('value)) => t('value) = Map_Impl.add;
     let values: t('value) => list('value) =
-      map => map |> toList |> List.map(((key, value)) => value);
+      map => map |> toList |> List.map(((_key, value)) => value);
     /* Non-standard JavaScript methods - Similar to JavaScript array */
     let every: (('value, key) => bool, t('value)) => bool =
       (fn, map) => Map_Impl.for_all((key, value) => fn(value, key), map);

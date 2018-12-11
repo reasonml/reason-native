@@ -7,7 +7,7 @@
 open TestFramework;
 open Pastel;
 
-describe("Pastel.length", ({test}) => {
+describe("Pastel.length", ({test, _}) => {
   test("Length with no colors", ({expect}) => {
     expect.int(length("")).toBe(0);
     expect.int(length("123")).toBe(3);
@@ -32,7 +32,7 @@ describe("Pastel.length", ({test}) => {
     },
   );
 });
-describe("Pastel.length fuzz testing", ({test}) => {
+describe("Pastel.length fuzz testing", ({test, _}) => {
   let allPastels = [|
     modifier.bold,
     modifier.dim,

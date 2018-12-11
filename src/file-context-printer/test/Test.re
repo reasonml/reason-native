@@ -13,8 +13,8 @@ module FCP =
 let result =
   switch (
     FCP.printFile(
-      "src/file-context-printer/test/DummyFile.re",
-      ((7, 1), (7, 11)),
+      ~path="src/file-context-printer/test/DummyFile.re",
+      ~highlight=((7, 1), (7, 11)),
     )
   ) {
   | Some(context) => context

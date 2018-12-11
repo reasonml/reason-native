@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
- type user = {
+type user = {
   name: string,
   age: int,
 };
@@ -13,7 +13,9 @@
 let runTest = () => {
   Console.log("");
 
-  Console.log(<Pastel bold=true> <Pastel> "Primitive types:" </Pastel> </Pastel>);
+  Console.log(
+    <Pastel bold=true> <Pastel> "Primitive types:" </Pastel> </Pastel>,
+  );
   Console.log(<Pastel dim=true> ">  Console.log(4.6);" </Pastel>);
   Console.log(4.6);
   Console.log("");
@@ -58,7 +60,9 @@ let runTest = () => {
   Console.log("");
   Console.log("");
   Console.log(<Pastel bold=true> "Lists of closures:" </Pastel>);
-  Console.log(<Pastel dim=true> ">  Console.log([a=>1, b=>2, c=>3]" </Pastel>);
+  Console.log(
+    <Pastel dim=true> ">  Console.log([a=>1, b=>2, c=>3]" </Pastel>,
+  );
   Console.log([_a => 1, _b => 2, _c => 3]);
 
   Console.log("");
@@ -84,7 +88,7 @@ let runTest = () => {
   Console.log(
     <Pastel dim=true> ">  Console.error([[[[[2]]], [[[]]]]], [])" </Pastel>,
   );
-  let rec maxDepthHit = [[[[2]]], [[[]]], [[]]];
+  let maxDepthHit = [[[[2]]], [[[]]], [[]]];
   Console.error(maxDepthHit);
 
   Console.log("");

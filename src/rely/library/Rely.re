@@ -6,7 +6,6 @@
  */;
 open Collections;
 open MatcherUtils;
-open SnapshotIO;
 open Option.Infix;
 include TestFrameworkConfig;
 include RunConfig;
@@ -74,18 +73,6 @@ module Make = (UserConfig: FrameworkConfig) => {
   module TestSnapshot = Snapshot.Make(SnapshotIO.FileSystemSnapshotIO);
   module TestSnapshotIO = SnapshotIO.FileSystemSnapshotIO;
 
-  let escape = (s: string): string => {
-    let lines = Str.split(Str.regexp("\n"), s);
-    let lines = List.map(line => String.escaped(line), lines);
-    String.concat("\n", lines);
-  };
-
-  let ifSome = (opt, some, none) =>
-    switch (opt) {
-    | Some(opt) => some(opt)
-    | None => none
-    };
-
   let failFormatter = s => Pastel.red(s);
 
   let passFormatter = s => Pastel.green(s);
@@ -121,9 +108,6 @@ module Make = (UserConfig: FrameworkConfig) => {
       };
     name;
   };
-
-  /* This will generate unique IDs for describes. */
-  let describeCounter = Counter.create();
 
   let rec rootDescribe: Describe.rootDescribeFn =
     (
@@ -177,7 +161,7 @@ module Make = (UserConfig: FrameworkConfig) => {
       let updateTestResult = (testID: int, testResult: testResult): unit => {
         let prev = MIntMap.getOpt(testID, testMap);
         switch (prev) {
-        | Some({testResult: Pending} as prev) =>
+        | Some({testResult: Pending, _} as prev) =>
           prev.testResult = testResult;
           ();
         | _ => ()
@@ -254,7 +238,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           let createMatcher = matcherConfig => {
             let matcher = (actualThunk, expectedThunk) => {
               switch (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {
-              | (messageThunk, true) => ()
+              | (_messageThunk, true) => ()
               | (messageThunk, false) =>
                 let stackTrace = StackTrace.getStackTrace();
                 let location = StackTrace.getTopLocation(stackTrace);
@@ -334,7 +318,7 @@ module Make = (UserConfig: FrameworkConfig) => {
         let pending = ref(total^);
         let passed = ref(0);
         let prev = ref(0);
-        let update = (first: bool): unit => {
+        let update = (_first: bool): unit => {
           let pendingFormatter = pending^ === 0 ? dimFormatter : (x => x);
           let passedFormatter =
             passed^ === total^ ? passFormatter : dimFormatter;
@@ -408,8 +392,8 @@ module Make = (UserConfig: FrameworkConfig) => {
             >>| (
               (l: Printexc.location) =>
                 FCP.printFile(
-                  l.filename,
-                  (
+                  ~path=l.filename,
+                  ~highlight=(
                     /* File-context-printer expects line number and column number
                      * to both be 1-indexed, however the locations from Printexc
                      * have 1 indexed lines and 0 indexed columns*/
@@ -444,9 +428,9 @@ module Make = (UserConfig: FrameworkConfig) => {
             |> List.map(((_, test: testSpec)) => {
                  let resultString =
                    switch (test) {
-                   | {testResult: Pending} => ""
-                   | {testResult: Passed} => ""
-                   | {testResult: Exception(e, loc, trace), name} =>
+                   | {testResult: Pending, _} => ""
+                   | {testResult: Passed, _} => ""
+                   | {testResult: Exception(e, loc, trace), name, _} =>
                      let titleBullet = "• ";
                      let title =
                        Pastel.bold(
@@ -466,7 +450,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                        "\n",
                        [title, exceptionMessage, getStackInfo(loc, trace)],
                      );
-                   | {testResult: Failed(message, loc, stack), name} =>
+                   | {testResult: Failed(message, loc, stack), name, _} =>
                      let titleBullet = "• ";
                      let title =
                        Pastel.bold(
@@ -520,12 +504,12 @@ module Make = (UserConfig: FrameworkConfig) => {
           |> List.fold_left(
                (snapshotState, testSpec) =>
                  switch (testSpec) {
-                 | {testResult: Failed(_) | Pending | Exception(_), name} =>
+                 | {testResult: Failed(_) | Pending | Exception(_), name, _} =>
                    TestSnapshot.markSnapshotsAsCheckedForTest(
                      name,
                      snapshotState,
                    )
-                 | {testResult: Passed} => snapshotState
+                 | {testResult: Passed, _} => snapshotState
                  },
                state.snapshotState^,
              );
@@ -557,7 +541,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           ~isRootDescribe=true,
           ~state=None,
           ~describeName=None,
-          ({describe}) =>
+          ({describe, _}) =>
           List.iter(
             ((name, describeBlock)) => describe(name, describeBlock),
             testFixtures^,

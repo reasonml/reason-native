@@ -6,7 +6,6 @@
  */;
 open StringMatchers;
 open BoolMatchers;
-open SnapshotMatchers;
 open IntMatchers;
 open FnMatchers;
 
