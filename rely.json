@@ -32,6 +32,7 @@
     "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
     "@reason-native/pastel": "*",
+    "@reason-native/core": "*",
     "@reason-native/file-context-printer": "*"
   },
   "devDependencies": {

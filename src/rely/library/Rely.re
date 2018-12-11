@@ -4,10 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open Collections;
 open MatcherUtils;
 open SnapshotIO;
-open Option.Infix;
+open Lib.Option.Infix;
+open Lib.Collections;
+open Lib.Strs;
 include TestFrameworkConfig;
 include RunConfig;
 
@@ -199,7 +200,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           while (! break^ && i^ < 10000) {
             let testHashAttempt =
               String.sub(
-                Strings.md5(
+                Crypto.md5(
                   Str.global_replace(ancestryRegex, "", testTitle)
                   ++ string_of_int(i^),
                 ),
