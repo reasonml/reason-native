@@ -16,23 +16,15 @@ type t = {
 
 let makeStandardChannelsConsole = (objectPrinter: ObjectPrinter.t): t => {
   log: a =>
-    NativeChannels._log(
-      objectPrinter.polymorphicPrint(objectPrinter, a) ++ "\n",
-    ),
-  out: a =>
     NativeChannels._log(objectPrinter.polymorphicPrint(objectPrinter, a)),
+  out: a =>
+    NativeChannels._out(objectPrinter.polymorphicPrint(objectPrinter, a)),
   debug: a =>
-    NativeChannels._debug(
-      objectPrinter.polymorphicPrint(objectPrinter, a) ++ "\n",
-    ),
+    NativeChannels._debug(objectPrinter.polymorphicPrint(objectPrinter, a)),
   error: a =>
-    NativeChannels._error(
-      objectPrinter.polymorphicPrint(objectPrinter, a) ++ "\n",
-    ),
+    NativeChannels._error(objectPrinter.polymorphicPrint(objectPrinter, a)),
   warn: a =>
-    NativeChannels._warn(
-      objectPrinter.polymorphicPrint(objectPrinter, a) ++ "\n",
-    ),
+    NativeChannels._warn(objectPrinter.polymorphicPrint(objectPrinter, a)),
 };
 
 let defaultGlobalConsole = makeStandardChannelsConsole(ObjectPrinter.base);
