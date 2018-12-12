@@ -1,6 +1,6 @@
 (library
-    (name Lib)
-    (public_name lib.lib)
+    (name Common)
+    (public_name common.lib)
     (libraries str pastel.lib unix)
 )
 (include_subdirs unqualified)

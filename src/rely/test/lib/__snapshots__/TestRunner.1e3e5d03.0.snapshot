@@ -193,4 +193,3 @@ TestRunner › failing tests
       \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:260:33\027[39m
       \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:286:19\027[39m
       \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:388:14\027[39m
-\027[33mCreated 2 missing snapshots\027[39m

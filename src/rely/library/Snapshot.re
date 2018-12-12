@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */;
 open SnapshotIO;
-open Lib.Collections;
+open Common.Collections;
 type state = {
   unusedSnapshotSet: MStringSet.t,
   updatedSnapshotSet: MStringSet.t,

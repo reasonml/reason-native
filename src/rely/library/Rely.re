@@ -6,9 +6,9 @@
  */;
 open MatcherUtils;
 open SnapshotIO;
-open Lib.Option.Infix;
-open Lib.Collections;
-open Lib.Strs;
+open Common.Option.Infix;
+open Common.Collections;
+open Common.Strs;
 include TestFrameworkConfig;
 include RunConfig;
 

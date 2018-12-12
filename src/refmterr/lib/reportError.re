@@ -12,7 +12,7 @@ module Make = (Styl: Stylish.StylishSig) => {
   open Printer;
   open Styl;
 
-  let printDiff = (bad, good) => "  " ++ Str.global_replace(Str.regexp("\n"), "\n  ", Lib.Strs.Diffs.(printDiff(
+  let printDiff = (bad, good) => "  " ++ Str.global_replace(Str.regexp("\n"), "\n  ", Common.Strs.Diffs.(printDiff(
     ~oldFormatter= highlight(
       ~bold=true,
       ~color=green,

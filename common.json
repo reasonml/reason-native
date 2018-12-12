@@ -1,15 +1,15 @@
 {
-    "name": "@reason-native/lib",
+    "name": "@reason-native/DO-NOT-INSTALL-common-internal-library",
     "version": "0.0.0",
     "description": "Native Reason Helper API Library",
     "repository": {
         "type": "git",
-        "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/lib"
+        "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/common"
     },
     "license": "MIT",
     "esy": {
-        "build": "refmterr dune build -p lib",
-        "install": "esy-installer lib.install"
+        "build": "refmterr dune build -p common",
+        "install": "esy-installer common.install"
     },
     "scripts": {},
     "dependencies": {
