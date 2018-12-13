@@ -22,3 +22,5 @@ tests/test.ml
 
 yarn-error.log
 **/.merlin
+
+lib/common
