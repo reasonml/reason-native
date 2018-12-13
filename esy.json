@@ -13,10 +13,12 @@
       "esy-installer console.install",
       "esy-installer pastel-console.install",
       "esy-installer file-context-printer.install",
-      "esy-installer refmterr.install"
+      "esy-installer refmterr.install",
+      "esy update-common"
     ]
   },
   "scripts": {
+    "update-common": "esy x bash -cx ./update-common.cmd",
     "all": "./scripts/run-all.sh",
     "test": "esy x bash -cx ./src/refmterr/runTests.cmd"
   },
