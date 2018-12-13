@@ -1,7 +1,7 @@
 (library
    (name Rely)
    (public_name rely.lib)
-   (libraries common.lib pastel.lib file-context-printer.lib unix)
+   (libraries pastel.lib file-context-printer.lib unix)
 )
 (include_subdirs unqualified)
 
