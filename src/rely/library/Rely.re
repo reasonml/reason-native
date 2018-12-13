@@ -405,7 +405,7 @@ module Make = (UserConfig: FrameworkConfig) => {
         let getStackInfo = (optLoc: option(Printexc.location), trace: string) => {
           let stackInfo =
             optLoc
-            >>| (
+            >>= (
               (l: Printexc.location) =>
                 FCP.printFile(
                   l.filename,
@@ -419,20 +419,15 @@ module Make = (UserConfig: FrameworkConfig) => {
                 )
             )
             >>| (
-              optFileContext =>
-                switch (optFileContext) {
-                | Some(context) =>
-                  String.concat(
-                    "\n\n",
-                    [
-                      indent(context, ~indent=stackIndent),
-                      indent(trace, ~indent=stackIndent),
-                    ],
-                  )
-                | None => ""
-                }
-            )
-            |?: "";
+              context =>
+                String.concat(
+                  "\n\n",
+                  [
+                    indent(context, ~indent=stackIndent),
+                    indent(trace, ~indent=stackIndent),
+                  ],
+                )
+            );
           stackInfo;
         };
 
@@ -462,26 +457,28 @@ module Make = (UserConfig: FrameworkConfig) => {
                            "\n",
                          ],
                        );
-                     String.concat(
-                       "\n",
-                       [title, exceptionMessage, getStackInfo(loc, trace)],
-                     );
-                   | {testResult: Failed(message, loc, stack), name} =>
+                     let stackInfo = getStackInfo(loc, trace);
+                     let parts =
+                       switch (stackInfo) {
+                       | Some(stack) => [title, exceptionMessage, stack]
+                       | None => [title, exceptionMessage]
+                       };
+                     String.concat("\n", parts);
+                   | {testResult: Failed(message, loc, trace), name} =>
                      let titleBullet = "• ";
                      let title =
                        Pastel.bold(
-                         failFormatter(
-                           titleIndent ++ titleBullet ++ name ++ "\n",
-                         ),
+                         failFormatter(titleIndent ++ titleBullet ++ name),
                        );
-                     String.concat(
-                       "",
-                       [
-                         title,
-                         indent(message, ~indent=messageIndent),
-                         getStackInfo(loc, stack),
-                       ],
-                     );
+                     let stackInfo = getStackInfo(loc, trace);
+                     let indentedMessage =
+                       indent(message, ~indent=messageIndent);
+                     let parts =
+                       switch (stackInfo) {
+                       | Some(stack) => [title, indentedMessage, "\n" ++ stack]
+                       | None => [title, indentedMessage]
+                       };
+                     String.concat("\n", parts);
                    };
                  resultString;
                })
