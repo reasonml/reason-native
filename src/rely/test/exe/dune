@@ -2,6 +2,6 @@
 (executable
    (name TestRely)
    (public_name TestRely.exe)
-   (libraries  rely-test.lib )
+   (libraries rely-test.lib )
    (package rely-test)
 )

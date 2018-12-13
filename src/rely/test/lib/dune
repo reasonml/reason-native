@@ -4,5 +4,5 @@
    (public_name rely-test.lib)
    ; the linkall flag is used to ensure that all tests are compiled and properly registered with the TestFramework
    (ocamlopt_flags -linkall -g)
-   (libraries  rely.lib )
+   (libraries rely.lib )
 )
