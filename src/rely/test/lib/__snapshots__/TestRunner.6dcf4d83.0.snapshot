@@ -11,17 +11,7 @@ TestRunner › exceptions in tests
       \027[31m\"foo\"\027[39m
     
     Difference:
-      \027[31mfoo\027[39m\027[32mbar\027[39m      \027[2m256 \226\148\134 \027[22m\027[33m\027[2mswitch\027[22m\027[39m\027[2m (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {\027[22m
-      \027[2m257 \226\148\134 \027[22m\027[2m| (messageThunk, true)\027[22m\027[31m\027[2m => \027[22m\027[39m\027[2m()\027[22m
-      \027[2m258 \226\148\134 \027[22m\027[2m| (messageThunk, false) =>\027[22m
-      \027[31m\027[2m259 \226\148\134 \027[22m\027[39m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stackTrace = \027[22m\027[31m\027[1m\027[4mStackTrace.getStackTrace()\027[24m\027[22m\027[39m\027[2m;\027[22m
-      \027[2m260 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m location = \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.getTopLocation(stackTrace);\027[22m
-      \027[2m261 \226\148\134 \027[22m\027[2m  \027[22m\027[35m\027[2mlet\027[22m\027[39m\027[2m stack =\027[22m
-      \027[2m262 \226\148\134 \027[22m\027[2m    \027[22m\027[34m\027[2mStackTrace\027[22m\027[39m\027[2m.stackTraceToString(\027[22m
-
-      \027[2mRaised by primitive operation at \027[22m\027[36msrc/rely/library/Rely.re:259:33\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:387:14\027[39m
+      \027[31mfoo\027[39m\027[32mbar\027[39m
 
 \027[1m\027[31m  \226\128\162 exceptions in tests \226\128\186 test framework handling of exceptions \226\128\186 uninlineable exception output\027[39m\027[22m
     Exception \027[2mInvalid_argument(\"I'm invalid :(\")\027[22m
@@ -35,7 +25,6 @@ TestRunner › exceptions in tests
       \027[2m171 \226\148\134 \027[22m\027[2m});\027[22m
 
       \027[2mRaised at \027[22m\027[36msrc/rely/test/lib/TestRunner_test.re:168:24\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
 
 \027[1m\027[31m  \226\128\162 exceptions in tests \226\128\186 test framework handling of exceptions \226\128\186 inline exception output\027[39m\027[22m
     Exception \027[2mNot_found\027[22m
@@ -50,4 +39,3 @@ TestRunner › exceptions in tests
 
       \027[2mRaised at \027[22m\027[36msrc/rely/test/lib/TestRunner_test.re:173:24\027[39m\027[2m (inlined)\027[22m
       \027[2mCalled from \027[22m\027[36msrc/rely/test/lib/TestRunner_test.re:175:8\027[39m
-      \027[2mCalled from \027[22m\027[36msrc/rely/library/Rely.re:285:19\027[39m
