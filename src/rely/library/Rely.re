@@ -138,7 +138,7 @@ module Make = (UserConfig: FrameworkConfig) => {
       module StackTrace =
         StackTrace.Make({
           let baseDir = UserConfig.config.projectDir;
-          let exclude = ["TestRunner.re", "Matcher"];
+          let exclude = ["Rely.re", "matchers/"];
           let formatLink = Pastel.cyan;
           let formatText = Pastel.dim;
         });
