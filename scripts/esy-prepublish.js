@@ -112,7 +112,7 @@ try {
     let readmePkgPath =
       path.resolve(
         subpackageReleasePrepDir,
-        path.join("src", path.basename(jsonRelativePath, '.json'), 'README.md')
+        path.join('src', path.basename(jsonRelativePath, '.json'), 'README.md')
       );
     let readmeResolvedPath =
       fs.existsSync(readmePkgPath) ? readmePkgPath :
