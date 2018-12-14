@@ -132,7 +132,7 @@ try {
     for (var i = 0; i < toCopy.length; i++) {
       let originPath = toCopy[i].originPath;
       let destPath = toCopy[i].destPath;
-      if (originPath !== null && fs.existsSync(originPath)) {
+      if (originPath !== null && fs.existsSync(originPath) && destPath !== originPath) {
         let cpResult = cp.spawnSync('mv', [originPath, destPath]);
         let mvErr = cpResult.stderr.toString();
         if (mvErr !== '') {
