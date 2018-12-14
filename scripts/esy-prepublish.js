@@ -74,8 +74,8 @@ process.chdir(projectRoot);
 let tarResult = cp.spawnSync('tar', ['--exclude', 'node_modules', '--exclude', '_build', '--exclude', '.git', '-cf', 'template.tar', '.']);
 let tarErr = tarResult.stderr.toString();
 // if (tarErr !== '') {
-  // console.log('ERROR: Could not create template npm pack for prepublish');
-  // throw new Error('Error:' + tarErr);
+// console.log('ERROR: Could not create template npm pack for prepublish');
+// throw new Error('Error:' + tarErr);
 // }
 
 try {
@@ -89,7 +89,7 @@ try {
     process.chdir(projectRoot);
     let jsonRelativePath = relativeJsonPaths[i];
     let jsonResolvedPath = path.resolve(projectRoot, jsonRelativePath);
-    
+
     let subpackageReleaseDir = path.resolve(_releaseDir, jsonRelativePath);
     let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
     cp.spawnSync('mkdir', ['-p', subpackageReleaseDir]);
@@ -116,9 +116,9 @@ try {
       );
     let readmeResolvedPath =
       fs.existsSync(readmePkgPath) ? readmePkgPath :
-      fs.existsSync(readmePath) ? readmePath :
-      null;
-    
+        fs.existsSync(readmePath) ? readmePath :
+          null;
+
     let toCopy = [
       {
         originPath: path.resolve(subpackageReleasePrepDir, jsonRelativePath),
@@ -163,21 +163,20 @@ try {
     process.chdir(subpackageReleasePrepDir);
     // Npm pack is just a convenient way to strip out any unnecessary files.
     let packResult = cp.spawnSync('npm', ['pack']);
-    let packErr = packResult.stderr.toString();
-    if (packErr !== '') {
+    if (packResult.status !== 0) {
       console.log('ERROR: Could not create npm pack for ' + subpackageReleasePrepDir);
-      throw new Error('Error:' + packErr);
+      throw new Error('Error:' + packResult.stderr.toString());
     }
     let mvFrom = '*.tgz';
     let mvTo = subpackageReleaseDir;
-    let mvResult = cp.spawnSync('mv', [mvFrom, mvTo], {shell: true});
+    let mvResult = cp.spawnSync('mv', [mvFrom, mvTo], { shell: true });
     var mvErr = mvResult.stderr.toString();
     if (mvErr !== '') {
       console.log('ERROR: Could not move from ' + mvFrom + ' to ' + mvTo);
       throw new Error('Error:' + mvErr);
     }
     process.chdir(mvTo);
-    let tarResult = cp.spawnSync('tar', ['-xvf', '*.tgz'], {shell: true});
+    let tarResult = cp.spawnSync('tar', ['-xvf', '*.tgz'], { shell: true });
     if (tarResult.error) {
       console.log('ERROR: Could not untar in ' + mvTo);
       throw new Error('Error:' + tarResult.stderr.toString());
@@ -192,5 +191,5 @@ try {
     console.log('');
   }
 } finally {
-  cp.spawnSync('rm', [ path.join(projectRoot, 'template.tar')]);
+  cp.spawnSync('rm', [path.join(projectRoot, 'template.tar')]);
 }
