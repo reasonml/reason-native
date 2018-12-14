@@ -1,8 +1,7 @@
 :; set -e
-:; for pkg in *.opam; do
-:;   [ -f "$pkg" ] || break
-:;   "$@" "${pkg%%.*}"
+:; for folder in src/*/; do
+:;   "$@" $(basename $folder)
 :; done
-for %%f in (*.opam) do (
-    %* %%~nf
+for /D %%f in (src/*) do (
+    %* %%f
 )
