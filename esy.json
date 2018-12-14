@@ -17,7 +17,7 @@
     ]
   },
   "scripts": {
-    "all": "esy x bash -x ./scripts/run-all.sh",
+    "all": "./scripts/run-all.sh",
     "test": "esy x bash -cx ./src/refmterr/runTests.cmd"
   },
   "dependencies": {
