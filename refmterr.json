@@ -25,6 +25,7 @@
     "install": "esy-installer refmterr.install"
   },
   "scripts": {
-    "test": "esy src/refmterr/runTests.cmd"
+    "test": "esy src/refmterr/runTests.cmd",
+    "release": "node ./scripts/esy-prepublish.js refmterr.json"
   }
 }

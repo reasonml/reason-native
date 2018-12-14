@@ -1,4 +1,4 @@
 #!/bin/bash
-for pkg in chalk-console chalk console refmterr test-runner; do
+for pkg in pastel-console pastel console refmterr rely; do
     esy "@${pkg}" "$@"
 done

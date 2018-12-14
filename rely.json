@@ -24,7 +24,8 @@
     "install": "esy-installer rely.install"
   },
   "scripts": {
-    "test": "esy x TestRely.exe"
+    "test": "esy x TestRely.exe",
+    "release": "node ./scripts/esy-prepublish.js rely.json"
   },
   "dependencies": {
     "@opam/dune": "*",

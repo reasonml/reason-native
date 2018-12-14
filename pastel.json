@@ -42,7 +42,8 @@
     "install": "esy-installer pastel.install"
   },
   "scripts": {
-    "test": "esy x TestPastel.exe"
+    "test": "esy x TestPastel.exe",
+    "release": "node ./scripts/esy-prepublish.js pastel.json"
   },
   "dependencies": {
     "@opam/dune": "*",
