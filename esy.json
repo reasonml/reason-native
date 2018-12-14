@@ -18,7 +18,8 @@
   },
   "scripts": {
     "all": "./scripts/run-all.cmd",
-    "test": "esy x bash -cx ./src/refmterr/runTests.cmd"
+    "test": "esy x bash -cx ./src/refmterr/runTests.cmd",
+    "test-prepublish": "esy all ./scripts/test-prepublish.cmd"
   },
   "dependencies": {
     "@opam/dune": "*",
