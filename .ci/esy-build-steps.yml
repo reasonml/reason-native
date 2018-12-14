@@ -10,3 +10,6 @@ steps:
 
   - script: 'esy test'
     displayName: 'esy test'
+
+  - bash: './scripts/run-all.sh ./scripts/test-prepublish.sh'
+    displayName: 'test release'
