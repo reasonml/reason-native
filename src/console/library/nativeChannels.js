@@ -5,6 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+//Provides: native_out
+function native_out(s) {
+  // In node, you can omit the newline, but not in the browser.
+  if (typeof process != "undefined" &&
+    typeof process.stdout != "undefined") {
+    process.stdout.write(s.c)
+  } else {
+    joo_global_object.console.log(s.c);
+  }
+}
+
 //Provides: native_log
 function native_log(s) {
   joo_global_object.console.log(s.c);
