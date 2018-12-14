@@ -11,5 +11,5 @@ steps:
   - script: 'esy test'
     displayName: 'esy test'
 
-  - bash: './scripts/run-all.sh ./scripts/test-prepublish.sh'
+  - script: './scripts/run-all.cmd ./scripts/test-prepublish.cmd'
     displayName: 'test release'
