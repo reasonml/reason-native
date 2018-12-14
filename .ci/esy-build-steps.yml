@@ -11,5 +11,8 @@ steps:
   - script: 'esy test'
     displayName: 'esy test'
 
-  - script: 'esy test-prepublish'
+  - script: |
+      :; set -e
+      :; ./scripts/run-all.cmd ./scripts/test-prepublish.cmd
+      scripts\run-all.cmd scripts\test-prepublish.cmd || exit 1
     displayName: 'esy test-prepublish'
