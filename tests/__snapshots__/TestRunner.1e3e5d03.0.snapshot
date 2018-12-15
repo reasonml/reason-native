@@ -85,13 +85,9 @@ TestRunner › failing tests
     Received: \027[31m42\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot mismatch
-\027[39m\027[22m    \027[2mexpect.string(\027[22m\027[31mreceived\027[39m\027[2m).toMatchSnapshot(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
+\027[39m\027[22m    New snapshot was \027[31mnot written\027[39m. The update flag must be explicitly passed to write a new snapshot.
     
-    \027[32m- bacon2\027[39m
-    \027[31m+ bacon3\027[39m
-    
-    Difference:
-      \027[31mbacon3\027[39m\027[32mbacon2\027[39m
+    Received: \027[31mbacon3\027[39m
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot no snapshot exists
 \027[39m\027[22m    New snapshot was \027[31mnot written\027[39m. The update flag must be explicitly passed to write a new snapshot.

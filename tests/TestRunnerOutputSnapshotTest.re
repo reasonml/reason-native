@@ -9,26 +9,14 @@ open Rely.Test;
 
 module type SnapshotDir = {let snapshotDir: string;};
 
-module MakeTestFramework =
-       (SnapshotDir: SnapshotDir)
-       : Rely.TestFramework =>
+module MakeTestFramework = (SnapshotDir: SnapshotDir) : Rely.TestFramework =>
   Rely.Make({
     let config =
       Rely.TestFrameworkConfig.initialize({
         snapshotDir:
           Filename.(
-            Sys.executable_name
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> (dir => Filename.concat(dir, "src"))
-            |> (dir => Filename.concat(dir, "rely"))
-            |> (dir => Filename.concat(dir, "test"))
-            |> (dir => Filename.concat(dir, "lib"))
+            GetProjectRoot.get()
+            |> (dir => Filename.concat(dir, "tests"))
             |> (
               dir =>
                 Filename.concat(dir, "__test_runner_output_snapshot_tests__")
