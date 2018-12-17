@@ -1,1 +1,2 @@
-(ignored_subdirs (node_modules _esy _release))
+(dirs :standard \ node_modules _esy _release)
+(data_only_dirs node_modules _esy _release)
