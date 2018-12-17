@@ -5,27 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-let dir = Sys.getenv_opt("REASON_NATIVE_ROOT");
-
-let dir =
-  switch (dir) {
-  | Some(dir) => dir
-  | None =>
-    failwith(
-      "Expected `REASON_NATIVE_ROOT` environment variable to be set "
-      ++ "before running tests.",
-    )
-  };
+let projectDir = GetProjectRoot.get();
 
 include Rely.Make({
   let config =
     Rely.TestFrameworkConfig.initialize({
       snapshotDir:
         Filename.(
-          dir
+          projectDir
           |> (dir => Filename.concat(dir, "tests"))
           |> (dir => Filename.concat(dir, "__snapshots__"))
         ),
-      projectDir: dir,
+      projectDir: projectDir,
     });
 });

@@ -60,6 +60,10 @@ describe("TestRunner", describeUtils => {
       test("expect.int.toBe", ({expect}) =>
         expect.int(42).toBe(43)
       );
+
+      /**
+       * See comments in `TestRunnerOutputSnapshotTest.re` for more details.
+       */
       test("expect.string.toMatchSnapshot mismatch", ({expect}) =>
         expect.string("bacon3").toMatchSnapshot()
       );
