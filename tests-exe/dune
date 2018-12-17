@@ -1,0 +1,9 @@
+(executable
+  (package tests)
+  (name ReasonNativeTests)
+  (public_name ReasonNativeTests.exe)
+  (ocamlopt_flags -g)
+  (libraries
+    Tests
+  )
+)
