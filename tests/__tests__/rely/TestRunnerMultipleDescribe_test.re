@@ -11,19 +11,7 @@ module MakeInnterTestFramework = (()) =>
     let config =
       Rely.TestFrameworkConfig.initialize({
         snapshotDir: "unused",
-        projectDir:
-          Filename.(
-            Sys.executable_name
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> dirname
-            |> (dir => Filename.concat(dir, "src"))
-            |> (dir => Filename.concat(dir, "rely"))
-          ),
+        projectDir: GetProjectRoot.get(),
       });
   });
 
