@@ -46,7 +46,7 @@ module Make = (Styl: Stylish.StylishSig) => {
         sp(
           "File name potentially invalid. The OCaml ecosystem's build systems usually turn file names into module names by simply upper-casing the first letter. In this case, `%s` %s.\nNote: some build systems might e.g. turn kebab-case into CamelCase module, which is why this isn't a hard error.",
           /* "%s\n\n%s 24: \"%s\" isn't a valid file name; OCaml file names are often turned into modules, which need to start with a capitalized letter." */
-          Filename.basename(filePath) |> String.capitalize,
+          Filename.basename(filePath) |> String.capitalize_ascii,
           switch (offendingChar) {
           | Leading(ch) =>
             sp("starts with `%s`, which doesn't form a legal module name", ch)
