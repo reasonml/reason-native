@@ -2,6 +2,13 @@ Pastel Console › Circular list
 ===== Standard Out =====
 
 ===== Standard Err =====
-[\027[32m\"circular\"\027[39m, \027[32m\"list\"\027[39m, \027[32m\"should\"\027[39m, \027[32m\"not\"\027[39m, \027[32m\"error\"\027[39m, \027[31m@max-length\027[39m]
+[
+  \027[32m\"circular\"\027[39m,
+  \027[32m\"list\"\027[39m,
+  \027[32m\"should\"\027[39m,
+  \027[32m\"not\"\027[39m,
+  \027[32m\"error\"\027[39m,
+  \027[31m@max-length\027[39m
+]
 ========================
 
