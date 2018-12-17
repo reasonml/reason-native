@@ -5,6 +5,7 @@
   (libraries
     rely.lib
     pastel.lib
+    console.lib
   )
 )
 (include_subdirs unqualified)

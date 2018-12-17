@@ -1,0 +1,9 @@
+Console › Basic output
+===== Standard Out =====
+Console.log output of a string will not print quotes
+Console.debug output of a string will not print quotes
+===== Standard Err =====
+Console.error output of a string will not print quotes
+Console.warn output of a string will not print quotes
+========================
+
