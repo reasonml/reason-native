@@ -1,6 +1,0 @@
-(executable
-   (name TestPastelConsole)
-   (public_name TestPastelConsole.exe)
-   (libraries  pastel-console.lib )
-   (package pastel-console)
-  )

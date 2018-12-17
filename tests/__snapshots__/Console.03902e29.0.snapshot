@@ -1,0 +1,7 @@
+Console › Output without newlines
+===== Standard Out =====
+Console.out of a string will not print quotes, or the newline. See how this line continues.
+===== Standard Err =====
+
+========================
+
