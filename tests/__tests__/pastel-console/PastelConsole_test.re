@@ -12,18 +12,11 @@ type user = {
   age: int,
 };
 
-let allOut = (stdout, stderr) =>
-  "===== Standard Out =====\n"
-  ++ stdout
-  ++ "\n===== Standard Err =====\n"
-  ++ stderr
-  ++ "\n========================\n";
-
 let captureOutput = fn =>
   IO.captureOutput(() => {
     /* Initialize pastel console before running. */
     PastelConsole.init();
-    Console.ObjectPrinter.setPrintWidth(120);
+    Console.ObjectPrinter.setPrintWidth(80);
     fn() /* Reset the console when we finish. */;
     Console.currentGlobalConsole.contents = Console.defaultGlobalConsole;
   });
@@ -36,7 +29,7 @@ describe("Pastel Console", ({test}) => {
         Console.log("This is a string");
         Console.log(a => a + 1);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -46,7 +39,7 @@ describe("Pastel Console", ({test}) => {
         Console.log(["this", "is", "a", "list", "of", "strings"]);
         Console.log([4.9, 5.0, 999.99]);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -56,28 +49,28 @@ describe("Pastel Console", ({test}) => {
         Console.log({name: "joe", age: 100});
         Console.log([{name: "joe", age: 100}, {name: "sue", age: 18}]);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
   test("List of closures", ({expect}) => {
     let (stdout, stderr, _) =
       captureOutput(() => Console.log([_a => 1, _b => 2, _c => 3]));
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
   test("Array of strings", ({expect}) => {
     let (stdout, stderr, _) =
       captureOutput(() => Console.log([|"a", "b", "c"|]));
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
   test("Array of floats", ({expect}) => {
     let (stdout, stderr, _) =
       captureOutput(() => Console.log([|2.3, 8.9, 9.0|]));
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -88,7 +81,7 @@ describe("Pastel Console", ({test}) => {
         let rec maxDepthHit = [[[[2]]], [[[]]], [[]]];
         Console.error(maxDepthHit);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -99,7 +92,7 @@ describe("Pastel Console", ({test}) => {
         let rec maxLengthHit = [2, 3, 4, 5, 6];
         Console.error(maxLengthHit);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -119,7 +112,7 @@ describe("Pastel Console", ({test}) => {
         ];
         Console.error(circularList);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 });
