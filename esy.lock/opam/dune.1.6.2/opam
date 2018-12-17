@@ -7,6 +7,8 @@ dev-repo: "git+https://github.com/ocaml/dune.git"
 license: "MIT"
 depends: [
   "ocaml" {>= "4.02"}
+  "base-unix"
+  "base-threads"
 ]
 build: [
   # opam 2 sets OPAM_SWITCH_PREFIX, so we don't need a hardcoded path
@@ -17,6 +19,7 @@ build: [
 ]
 conflicts: [
   "jbuilder" {!= "transition"}
+  "odoc" {< "1.3.0"}
 ]
 
 synopsis: "Fast, portable and opinionated build system"
@@ -39,6 +42,6 @@ packages across several versions of OCaml and gives cross-compilation
 for free.
 """
 url {
-  src: "https://github.com/ocaml/dune/releases/download/1.5.1/dune-1.5.1.tbz"
-  checksum: "md5=071ff387b85e08bdfd49dee728dc8358"
+  src: "https://github.com/ocaml/dune/releases/download/1.6.2/dune-1.6.2.tbz"
+  checksum: "md5=e628e3903d2418d410e058ca49938a5d"
 }
