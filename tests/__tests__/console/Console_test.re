@@ -7,13 +7,6 @@
 
 open TestFramework;
 
-let allOut = (stdout, stderr) =>
-  "===== Standard Out =====\n"
-  ++ stdout
-  ++ "\n===== Standard Err =====\n"
-  ++ stderr
-  ++ "\n========================\n";
-
 describe("Console", ({test}) => {
   test("Basic output", ({expect}) => {
     let (stdout, stderr, _) =
@@ -27,7 +20,7 @@ describe("Console", ({test}) => {
           "Console.debug output of a string will not print quotes",
         );
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -39,7 +32,18 @@ describe("Console", ({test}) => {
         );
         Console.out(" See how this line continues.");
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
+    expect.string(out).toMatchSnapshot();
+  });
+
+  test("Primitive types", ({expect}) => {
+    let (stdout, stderr, _) =
+      IO.captureOutput(() => {
+        Console.log(4.6);
+        Console.log("This is a string");
+        Console.log(a => a + 1);
+      });
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -65,7 +69,7 @@ describe("Console", ({test}) => {
           None,
         ]);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -76,7 +80,7 @@ describe("Console", ({test}) => {
         let rec maxDepthHit = [[[[2, 3]]], [[[5, 6]]]];
         Console.error(maxDepthHit);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -87,7 +91,7 @@ describe("Console", ({test}) => {
         let rec maxLengthHit = [2, 3, 4, 5, 6];
         Console.error(maxLengthHit);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 
@@ -107,7 +111,7 @@ describe("Console", ({test}) => {
         ];
         Console.error(circularList);
       });
-    let out = allOut(stdout, stderr);
+    let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
   });
 });
