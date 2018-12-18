@@ -12,6 +12,7 @@
     "docusaurus": "^1.6.2"
   },
   "dependencies": {
+    "ansi_up": "^3.0.0",
     "reason-highlightjs": "^0.2.0"
   }
 }

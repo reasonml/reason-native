@@ -14,3 +14,19 @@
 
 @media only screen and (min-width: 1500px) {
 }
+
+.example-output {
+    background: #222;
+    padding: 1rem;
+    margin-top: -16px;
+    color: #FFF;
+    font-size: 85%;
+}
+.examples .hljs {
+    border: 1px solid #222;
+    border-radius: 0;
+}
+code, pre {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+}

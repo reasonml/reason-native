@@ -1,19 +1,26 @@
 {
   "docs": {
     "Overview": [
-      "projects"
+      "introduction"
     ],
-    "First Category": [
-      "doc2"
+    "Pastel": [
+      "pastel/index"
     ],
-    "Second Category": [
-      "doc3"
-    ]
-  },
-  "docs-other": {
-    "First Category": [
-      "doc4",
-      "doc5"
+    "Console": [
+      "console/index",
+      "console/installation",
+      "console/methods"
+    ],
+    "File Context Printer": [
+      "file-context-printer/index"
+    ],
+    "Refmterr": [
+      "refmterr/index"
+    ],
+    "Rely": [
+      "rely/index",
+      "rely/installation",
+      "rely/quickstart"
     ]
   }
 }
