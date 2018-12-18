@@ -1,8 +1,15 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 //this file was copied from https://github.com/facebook/reason/blob/master/scripts/esy-prepublish.js
 //
 //  Usage: Run from the repo root:
-//    node scripts/esy-prepublish.js relative/path/to/some-package-name.json
 //
+//    node scripts/esy-prepublish.js relative/path/to/some-package-name.json
 //  The script will copy relative/path/to/some-package-name.json into
 //  ./package.json and delete any remaining esy.json at the root. It will also
 //  search for relative/path/to/some-package-name.README.md (or if that is not
@@ -149,17 +156,17 @@ try {
     // from other projects.
     process.chdir(subpackageReleasePrepDir);
     // Npm pack is just a convenient way to strip out any unnecessary files.
-    let packResult = cp.spawnSync(process.platform === "win32" ? 'npm.cmd' : 'npm', ['pack']);
+    const packResult = cp.spawnSync(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['pack']);
     if (packResult.status !== 0) {
       console.log('ERROR: Could not create npm pack for ' + subpackageReleasePrepDir);
       throw new Error('Error:' + packResult.stderr.toString());
     }
-    let mvTo = subpackageReleaseDir;
+    const mvTo = subpackageReleaseDir;
     fs.readdirSync(subpackageReleasePrepDir).filter(fn => fn.endsWith('.tgz')).forEach(fn => {
       fs.renameSync(fn, path.join(mvTo, fn));
     });
     process.chdir(mvTo);
-    let tarResult = cp.spawnSync('tar', ['-xvf', '*.tgz'], { shell: true });
+    const tarResult = cp.spawnSync('tar', ['-xvf', '*.tgz'], { shell: true });
     if (tarResult.error) {
       console.log('ERROR: Could not untar in ' + mvTo);
       throw new Error('Error:' + tarResult.stderr.toString());
