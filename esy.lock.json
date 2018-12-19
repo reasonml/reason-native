@@ -11,8 +11,8 @@
         "opam": null
       },
       "dependencies": [
-        "@esy-ocaml/reason@3.3.3", "@opam/dune@opam:1.5.1",
-        "@opam/merlin@opam:3.2.2", "@opam/ppx_deriving_yojson@opam:3.1",
+        "@esy-ocaml/reason@3.3.3", "@opam/dune@opam:1.6.2",
+        "@opam/merlin@opam:3.2.2", "@opam/ppx_deriving_yojson@opam:3.3",
         "@opam/re@opam:1.7.3", "@opam/yojson@opam:1.4.1", "ocaml@4.6.9",
         "refmterr@3.1.10"
       ]
@@ -27,7 +27,7 @@
         "opam": null
       },
       "dependencies": [
-        "@esy-ocaml/reason@3.3.3", "@opam/dune@opam:1.5.1",
+        "@esy-ocaml/reason@3.3.3", "@opam/dune@opam:1.6.2",
         "@opam/re@opam:1.7.3", "ocaml@4.6.9"
       ]
     },
@@ -103,6 +103,27 @@
         "ocaml@4.6.9"
       ]
     },
+    "@opam/ppxfind@opam:1.2": {
+      "record": {
+        "name": "@opam/ppxfind",
+        "version": "opam:1.2",
+        "source":
+          "archive:https://github.com/diml/ppxfind/releases/download/1.2/ppxfind-1.2.tbz#md5:3c6f81800bb816e190a64f9898481f82",
+        "files": [],
+        "opam": {
+          "name": "ppxfind",
+          "version": "1.2",
+          "opam":
+            "opam-version: \"2.0\"\nname: \"ppxfind\"\nversion: \"1.2\"\nsynopsis: \"ocamlfind ppx tool\"\ndescription: \"\"\"\nPpxfind is a small command line tool that among other things allows\nto use old style ppx rewriters with jbuilder.\"\"\"\nmaintainer: \"jeremie@dimino.org\"\nauthors: \"Jérémie Dimino\"\nlicense: \"BSD3\"\nhomepage: \"https://github.com/diml/ppxfind\"\nbug-reports: \"https://github.com/diml/ppxfind/issues\"\ndepends: [\n  \"ocaml\" {>= \"4.03.0\"}\n  \"jbuilder\" {build & >= \"1.0+beta16\"}\n  \"ocaml-migrate-parsetree\"\n  \"ocamlfind\"\n]\nconflicts: [\n  \"dune\" {= \"1.2.0\" | = \"1.2.1\"}\n]\nbuild: [\"jbuilder\" \"build\" \"-p\" name \"-j\" jobs]\ndev-repo: \"git://github.com/diml/ppxfind.git\"\nurl {\n  src:\n    \"https://github.com/diml/ppxfind/releases/download/1.2/ppxfind-1.2.tbz\"\n  checksum: \"md5=3c6f81800bb816e190a64f9898481f82\"\n}",
+          "override": null
+        }
+      },
+      "dependencies": [
+        "@esy-ocaml/substs@0.0.1", "@opam/jbuilder@opam:transition",
+        "@opam/ocaml-migrate-parsetree@opam:1.1.0",
+        "@opam/ocamlfind@opam:1.8.0", "ocaml@4.6.9"
+      ]
+    },
     "@opam/ppx_tools@opam:5.1+4.06.0": {
       "record": {
         "name": "@opam/ppx_tools",
@@ -123,50 +144,25 @@
         "ocaml@4.6.9"
       ]
     },
-    "@opam/ppx_deriving_yojson@opam:3.1": {
+    "@opam/ppx_deriving_yojson@opam:3.3": {
       "record": {
         "name": "@opam/ppx_deriving_yojson",
-        "version": "opam:3.1",
+        "version": "opam:3.3",
         "source":
-          "archive:https://github.com/ocaml-ppx/ppx_deriving_yojson/archive/v3.1.tar.gz#md5:83128c06b0569309351886d9fd0dbb74",
-        "files": [
-          {
-            "name": "ppx_deriving_yojson-3.1.patch",
-            "content":
-              "--- ./pkg/build.ml\n+++ ./pkg/build.ml\n@@ -3,7 +3,7 @@\n #use \"topkg.ml\"\n \n let ocamlbuild =\n-  \"ocamlbuild -use-ocamlfind -classic-display -plugin-tag 'package(cppo_ocamlbuild)'\"\n+  \"ocamlbuild -use-ocamlfind -classic-display -plugin-tag \" ^ Filename.quote \"package(cppo_ocamlbuild)\"\n \n let () =\n   Pkg.describe \"ppx_deriving_yojson\" ~builder:(`Other (ocamlbuild, \"_build\")) [\n"
-          },
-          {
-            "name": "patch-topkg-ppx_deriving_yojson.3.1",
-            "content":
-              "--- ./pkg/topkg.ml\n+++ ./pkg/topkg.ml\n@@ -152,7 +152,63 @@\n module Exts : Exts = struct\n   let interface = [\".mli\"; \".cmi\"; \".cmti\"]\n   let interface_opt = \".cmx\" :: interface\n-  let c_library = if Sys.win32 then [\".lib\"] else [\".a\"]\n+  let c_library =\n+    match Sys.win32 with\n+    | false -> [\".a\"]\n+    | true ->\n+      let input_line ch =\n+        try\n+          let s = input_line ch in\n+          let len = String.length s in\n+          if len > 0 && Sys.os_type = \"Win32\" && s.[len-1] = '\\r' then\n+            Some (String.sub s 0 (pred len))\n+          else\n+            Some s\n+        with\n+        | End_of_file -> None\n+      in\n+      let rec get_ext_lib ch =\n+        match input_line ch with\n+        | None -> \".a\"\n+        | Some s ->\n+          let len = String.length s in\n+          if len < 11 || s.[0] <> 'e' || String.sub s 0 9 <> \"ext_lib: \" then\n+            get_ext_lib ch\n+          else\n+            String.sub s 9 (len - 9)\n+      in\n+      let get_ext_lib fln =\n+        let ch = open_in fln in\n+        let ch_closed = ref false in\n+        try\n+          let res = get_ext_lib ch in\n+          ch_closed := true;\n+          close_in ch ;\n+          res\n+        with\n+        | x when !ch_closed = false ->\n+          close_in_noerr ch;\n+          raise x\n+      in\n+      let e_null = if Sys.win32 then \" 2>NUL\" else \" 2>/dev/null\" in\n+      let fln = Filename.temp_file \"get_ext\" \".txt\" in\n+      let cleanup = lazy (try Sys.remove fln with Sys_error _ -> ()) in\n+      try\n+        let qfln = Filename.quote fln in\n+        let cmd = \"ocamlfind ocamlc -config > \" ^ qfln ^ e_null in\n+        let ec = Sys.command cmd in\n+        if ec <> 0 then (\n+          let cmd = \"ocamlc -config > \" ^ qfln ^ e_null in\n+          let ec = Sys.command cmd in\n+          if ec <> 0 then\n+            failwith (Printf.sprintf \"couldn't call ocamlc -config\");\n+        );\n+        let res = get_ext_lib fln in\n+        Lazy.force cleanup;\n+        [res]\n+      with\n+      | x -> Lazy.force cleanup; raise x\n+\n   let c_dll_library = if Sys.win32 then [\".dll\"] else [\".so\"]\n   let library = [\".cma\"; \".cmxa\"; \".cmxs\"] @ c_library\n   let module_library = (interface_opt @ library)\n@@ -258,7 +314,9 @@\n     let src, dst =\n       if not auto then src, dst else\n       let dst = match dst with\n-      | None -> Some (Filename.basename src)\n+      | None ->\n+        let src = if Sys.os_type <> \"Win32\" then src else src ^ \".exe\" in\n+        Some (Filename.basename src)\n       | Some _ as dst -> dst\n       in\n       let src = if Env.native then src ^ \".native\" else src ^ \".byte\" in\n"
-          }
-        ],
+          "archive:https://github.com/ocaml-ppx/ppx_deriving_yojson/archive/v3.3.tar.gz#sha512:e04ee424d89423ca891e018b3ea6e3f5f1e3714bd1ec1b07187143da1a646e51d068d1c09bc794e25b5b5be00ccb517212f62853ec66c17969a9795ba88fae6a",
+        "files": [],
         "opam": {
           "name": "ppx_deriving_yojson",
-          "version": "3.1",
+          "version": "3.3",
           "opam":
-            "opam-version: \"2.0\"\nname: \"ppx_deriving_yojson\"\nversion: \"3.1\"\nsynopsis: \"JSON codec generator for OCaml >=4.02\"\ndescription: \"\"\"\nppx_deriving_yojson is a ppx_deriving plugin that provides\na JSON codec generator.\"\"\"\nmaintainer: \"whitequark <whitequark@whitequark.org>\"\nauthors: \"whitequark <whitequark@whitequark.org>\"\nlicense: \"MIT\"\ntags: [\"syntax\" \"json\"]\nhomepage: \"https://github.com/whitequark/ppx_deriving_yojson\"\ndoc: \"http://whitequark.github.io/ppx_deriving_yojson\"\nbug-reports: \"https://github.com/whitequark/ppx_deriving_yojson/issues\"\ndepends: [\n  \"ocaml\"\n  \"yojson\"\n  \"result\"\n  \"ppx_deriving\" {>= \"4.0\" & < \"5.0\"}\n  \"ocamlfind\" {build}\n  \"ocamlbuild\" {build}\n  \"cppo\" {build}\n  \"cppo_ocamlbuild\" {build}\n  \"ounit\" {with-test}\n  \"ppx_import\" {with-test & >= \"1.1\"}\n]\nconflicts: [\n  \"ppx_deriving\" {= \"4.2\"}\n]\nbuild: [\n  [\n    \"ocaml\"\n    \"pkg/build.ml\"\n    \"native=%{ocaml:native}%\"\n    \"native-dynlink=%{ocaml:native-dynlink}%\"\n  ]\n  [\n    \"ocamlbuild\"\n    \"-classic-display\"\n    \"-use-ocamlfind\"\n    \"src_test/test_ppx_yojson.byte\"\n    \"--\"\n  ] {with-test}\n]\nsubsts: \"pkg/META\"\ndev-repo: \"git://github.com/whitequark/ppx_deriving_yojson.git\"\nurl {\n  src: \"https://github.com/ocaml-ppx/ppx_deriving_yojson/archive/v3.1.tar.gz\"\n  checksum: \"md5=83128c06b0569309351886d9fd0dbb74\"\n}",
-          "override": {
-            "build": [
-              [
-                "bash", "-c",
-                "#{os == 'windows' ? 'patch -p1 < ppx_deriving_yojson-3.1.patch' : 'true'}"
-              ],
-              [
-                "bash", "-c",
-                "#{os == 'windows' ? 'patch -p1 < patch-topkg-ppx_deriving_yojson.3.1' : 'true'}"
-              ],
-              [
-                "ocaml", "pkg/build.ml", "native=true", "native-dynlink=true"
-              ]
-            ]
-          }
+            "opam-version: \"2.0\"\nname: \"ppx_deriving_yojson\"\nversion: \"3.3\"\nsynopsis: \"JSON codec generator for OCaml\"\ndescription: \"\"\"\nppx_deriving_yojson is a ppx_deriving plugin that provides\na JSON codec generator.\"\"\"\nmaintainer: \"whitequark <whitequark@whitequark.org>\"\nauthors: \"whitequark <whitequark@whitequark.org>\"\nlicense: \"MIT\"\ntags: [\"syntax\" \"json\"]\nhomepage: \"https://github.com/whitequark/ppx_deriving_yojson\"\ndoc: \"http://whitequark.github.io/ppx_deriving_yojson\"\nbug-reports: \"https://github.com/whitequark/ppx_deriving_yojson/issues\"\ndepends: [\n  \"ocaml\" {>= \"4.04.0\"}\n  \"yojson\"\n  \"result\"\n  \"ppx_deriving\" {>= \"4.0\" & < \"5.0\"}\n  \"ppx_tools\" {build}\n  \"ppxfind\" {build}\n  \"dune\" {build & >= \"1.2\"}\n  \"cppo\" {build}\n  \"ounit\" {with-test}\n]\nconflicts: [\n  \"ppx_deriving\" {= \"4.2\"}\n]\nbuild: [\n  [\"dune\" \"subst\"] {pinned}\n  [\"dune\" \"build\" \"-p\" name \"-j\" jobs]\n  [\"dune\" \"runtest\" \"-p\" name] {with-test}\n]\ndev-repo: \"git://github.com/whitequark/ppx_deriving_yojson.git\"\nurl {\n  src: \"https://github.com/ocaml-ppx/ppx_deriving_yojson/archive/v3.3.tar.gz\"\n  checksum:\n    \"sha512=e04ee424d89423ca891e018b3ea6e3f5f1e3714bd1ec1b07187143da1a646e51d068d1c09bc794e25b5b5be00ccb517212f62853ec66c17969a9795ba88fae6a\"\n}",
+          "override": null
         }
       },
       "dependencies": [
         "@esy-ocaml/substs@0.0.1", "@opam/cppo@opam:1.6.5",
-        "@opam/cppo_ocamlbuild@opam:1.6.0", "@opam/ocamlbuild@opam:0.12.0",
-        "@opam/ocamlfind@opam:1.8.0", "@opam/ppx_deriving@opam:4.2.1",
+        "@opam/dune@opam:1.6.2", "@opam/ppx_deriving@opam:4.2.1",
+        "@opam/ppx_tools@opam:5.1+4.06.0", "@opam/ppxfind@opam:1.2",
         "@opam/result@opam:1.3", "@opam/yojson@opam:1.4.1", "ocaml@4.6.9"
       ]
     },
@@ -355,7 +351,7 @@
         }
       },
       "dependencies": [
-        "@esy-ocaml/substs@0.0.1", "@opam/dune@opam:1.5.1",
+        "@esy-ocaml/substs@0.0.1", "@opam/dune@opam:1.6.2",
         "@opam/result@opam:1.3", "ocaml@4.6.9"
       ]
     },
@@ -409,7 +405,7 @@
         }
       },
       "dependencies": [
-        "@esy-ocaml/substs@0.0.1", "@opam/dune@opam:1.5.1",
+        "@esy-ocaml/substs@0.0.1", "@opam/dune@opam:1.6.2",
         "@opam/ocamlfind@opam:1.8.0", "@opam/yojson@opam:1.4.1",
         "ocaml@4.6.9"
       ]
@@ -467,7 +463,7 @@
         }
       },
       "dependencies": [
-        "@esy-ocaml/substs@0.0.1", "@opam/dune@opam:1.5.1", "ocaml@4.6.9"
+        "@esy-ocaml/substs@0.0.1", "@opam/dune@opam:1.6.2", "ocaml@4.6.9"
       ]
     },
     "@opam/easy-format@opam:1.3.1": {
@@ -490,18 +486,18 @@
         "ocaml@4.6.9"
       ]
     },
-    "@opam/dune@opam:1.5.1": {
+    "@opam/dune@opam:1.6.2": {
       "record": {
         "name": "@opam/dune",
-        "version": "opam:1.5.1",
+        "version": "opam:1.6.2",
         "source":
-          "archive:https://github.com/ocaml/dune/releases/download/1.5.1/dune-1.5.1.tbz#md5:071ff387b85e08bdfd49dee728dc8358",
+          "archive:https://github.com/ocaml/dune/releases/download/1.6.2/dune-1.6.2.tbz#md5:e628e3903d2418d410e058ca49938a5d",
         "files": [],
         "opam": {
           "name": "dune",
-          "version": "1.5.1",
+          "version": "1.6.2",
           "opam":
-            "opam-version: \"2.0\"\nname: \"dune\"\nversion: \"1.5.1\"\nsynopsis: \"Fast, portable and opinionated build system\"\ndescription: \"\"\"\ndune is a build system that was designed to simplify the release of\nJane Street packages. It reads metadata from \"dune\" files following a\nvery simple s-expression syntax.\n\ndune is fast, it has very low-overhead and support parallel builds on\nall platforms. It has no system dependencies, all you need to build\ndune and packages using dune is OCaml. You don't need or make or bash\nas long as the packages themselves don't use bash explicitly.\n\ndune supports multi-package development by simply dropping multiple\nrepositories into the same directory.\n\nIt also supports multi-context builds, such as building against\nseveral opam roots/switches simultaneously. This helps maintaining\npackages across several versions of OCaml and gives cross-compilation\nfor free.\"\"\"\nmaintainer: \"opensource@janestreet.com\"\nauthors: \"Jane Street Group, LLC <opensource@janestreet.com>\"\nlicense: \"MIT\"\nhomepage: \"https://github.com/ocaml/dune\"\nbug-reports: \"https://github.com/ocaml/dune/issues\"\ndepends: [\n  \"ocaml\" {>= \"4.02\"}\n]\nconflicts: [\n  \"jbuilder\" {!= \"transition\"}\n]\nbuild: [\n  [\"ocaml\" \"configure.ml\" \"--libdir\" lib] {opam-version < \"2\"}\n  [\"ocaml\" \"bootstrap.ml\"]\n  [\"./boot.exe\" \"--release\" \"--subst\"] {pinned}\n  [\"./boot.exe\" \"--release\" \"-j\" jobs]\n]\ndev-repo: \"git+https://github.com/ocaml/dune.git\"\nurl {\n  src: \"https://github.com/ocaml/dune/releases/download/1.5.1/dune-1.5.1.tbz\"\n  checksum: \"md5=071ff387b85e08bdfd49dee728dc8358\"\n}",
+            "opam-version: \"2.0\"\nname: \"dune\"\nversion: \"1.6.2\"\nsynopsis: \"Fast, portable and opinionated build system\"\ndescription: \"\"\"\ndune is a build system that was designed to simplify the release of\nJane Street packages. It reads metadata from \"dune\" files following a\nvery simple s-expression syntax.\n\ndune is fast, it has very low-overhead and support parallel builds on\nall platforms. It has no system dependencies, all you need to build\ndune and packages using dune is OCaml. You don't need or make or bash\nas long as the packages themselves don't use bash explicitly.\n\ndune supports multi-package development by simply dropping multiple\nrepositories into the same directory.\n\nIt also supports multi-context builds, such as building against\nseveral opam roots/switches simultaneously. This helps maintaining\npackages across several versions of OCaml and gives cross-compilation\nfor free.\"\"\"\nmaintainer: \"opensource@janestreet.com\"\nauthors: \"Jane Street Group, LLC <opensource@janestreet.com>\"\nlicense: \"MIT\"\nhomepage: \"https://github.com/ocaml/dune\"\nbug-reports: \"https://github.com/ocaml/dune/issues\"\ndepends: [\n  \"ocaml\" {>= \"4.02\"}\n  \"base-unix\"\n  \"base-threads\"\n]\nconflicts: [\n  \"jbuilder\" {!= \"transition\"}\n  \"odoc\" {< \"1.3.0\"}\n]\nbuild: [\n  [\"ocaml\" \"configure.ml\" \"--libdir\" lib] {opam-version < \"2\"}\n  [\"ocaml\" \"bootstrap.ml\"]\n  [\"./boot.exe\" \"--release\" \"--subst\"] {pinned}\n  [\"./boot.exe\" \"--release\" \"-j\" jobs]\n]\ndev-repo: \"git+https://github.com/ocaml/dune.git\"\nurl {\n  src: \"https://github.com/ocaml/dune/releases/download/1.6.2/dune-1.6.2.tbz\"\n  checksum: \"md5=e628e3903d2418d410e058ca49938a5d\"\n}",
           "override": {
             "build": [
               [ "ocaml", "bootstrap.ml" ],
@@ -510,7 +506,10 @@
           }
         }
       },
-      "dependencies": [ "@esy-ocaml/substs@0.0.1", "ocaml@4.6.9" ]
+      "dependencies": [
+        "@esy-ocaml/substs@0.0.1", "@opam/base-threads@opam:base",
+        "@opam/base-unix@opam:base", "ocaml@4.6.9"
+      ]
     },
     "@opam/cppo_ocamlbuild@opam:1.6.0": {
       "record": {
@@ -563,7 +562,7 @@
           "name": "conf-which",
           "version": "1",
           "opam":
-            "opam-version: \"2.0\"\nname: \"conf-which\"\nversion: \"1\"\nsynopsis: \"Virtual package relying on which\"\ndescription:\n  \"This package can only install if the which program is installed on the system.\"\nmaintainer: \"unixjunkie@sdf.org\"\nauthors: \"Carlo Wood\"\nlicense: \"GPL-2+\"\nhomepage: \"http://www.gnu.org/software/which/\"\nbug-reports: \"https://github.com/ocaml/opam-repository/issues\"\nflags: conf\nbuild: [\"which\" \"which\"]\ndepexts: [\n  [\"which\"] {os-distribution = \"centos\"}\n  [\"which\"] {os-distribution = \"fedora\"}\n  [\"which\"] {os-distribution = \"opensuse\"}\n  [\"debianutils\"] {os-distribution = \"debian\"}\n  [\"debianutils\"] {os-distribution = \"ubuntu\"}\n  [\"which\"] {os-distribution = \"nixos\"}\n  [\"which\"] {os-distribution = \"archlinux\"}\n]",
+            "opam-version: \"2.0\"\nname: \"conf-which\"\nversion: \"1\"\nsynopsis: \"Virtual package relying on which\"\ndescription:\n  \"This package can only install if the which program is installed on the system.\"\nmaintainer: \"unixjunkie@sdf.org\"\nauthors: \"Carlo Wood\"\nlicense: \"GPL-2+\"\nhomepage: \"http://www.gnu.org/software/which/\"\nbug-reports: \"https://github.com/ocaml/opam-repository/issues\"\nflags: conf\nbuild: [\"which\" \"which\"]\ndepexts: [\n  [\"which\"] {os-distribution = \"centos\"}\n  [\"which\"] {os-distribution = \"fedora\"}\n  [\"which\"] {os-family = \"suse\"}\n  [\"debianutils\"] {os-distribution = \"debian\"}\n  [\"debianutils\"] {os-distribution = \"ubuntu\"}\n  [\"which\"] {os-distribution = \"nixos\"}\n  [\"which\"] {os-distribution = \"archlinux\"}\n]",
           "override": null
         }
       },
@@ -579,7 +578,7 @@
           "name": "conf-m4",
           "version": "1",
           "opam":
-            "opam-version: \"2.0\"\nname: \"conf-m4\"\nversion: \"1\"\nsynopsis: \"Virtual package relying on m4\"\ndescription:\n  \"This package can only install if the m4 binary is installed on the system.\"\nmaintainer: \"tim@gfxmonk.net\"\nauthors: \"GNU Project\"\nlicense: \"GPL-3\"\nhomepage: \"http://www.gnu.org/software/m4/m4.html\"\nbug-reports: \"https://github.com/ocaml/opam-repository/issues\"\nflags: conf\nbuild: [\"sh\" \"-exc\" \"echo | m4\"]\ndepexts: [\n  [\"m4\"] {os-distribution = \"debian\"}\n  [\"m4\"] {os-distribution = \"ubuntu\"}\n  [\"m4\"] {os-distribution = \"fedora\"}\n  [\"m4\"] {os-distribution = \"rhel\"}\n  [\"m4\"] {os-distribution = \"centos\"}\n  [\"m4\"] {os-distribution = \"alpine\"}\n  [\"m4\"] {os-distribution = \"nixos\"}\n  [\"m4\"] {os-distribution = \"opensuse\"}\n  [\"m4\"] {os-distribution = \"oraclelinux\"}\n  [\"m4\"] {os-distribution = \"archlinux\"}\n]",
+            "opam-version: \"2.0\"\nname: \"conf-m4\"\nversion: \"1\"\nsynopsis: \"Virtual package relying on m4\"\ndescription:\n  \"This package can only install if the m4 binary is installed on the system.\"\nmaintainer: \"tim@gfxmonk.net\"\nauthors: \"GNU Project\"\nlicense: \"GPL-3\"\nhomepage: \"http://www.gnu.org/software/m4/m4.html\"\nbug-reports: \"https://github.com/ocaml/opam-repository/issues\"\nflags: conf\nbuild: [\"sh\" \"-exc\" \"echo | m4\"]\ndepexts: [\n  [\"m4\"] {os-distribution = \"debian\"}\n  [\"m4\"] {os-distribution = \"ubuntu\"}\n  [\"m4\"] {os-distribution = \"fedora\"}\n  [\"m4\"] {os-distribution = \"rhel\"}\n  [\"m4\"] {os-distribution = \"centos\"}\n  [\"m4\"] {os-distribution = \"alpine\"}\n  [\"m4\"] {os-distribution = \"nixos\"}\n  [\"m4\"] {os-family = \"suse\"}\n  [\"m4\"] {os-distribution = \"oraclelinux\"}\n  [\"m4\"] {os-distribution = \"archlinux\"}\n]",
           "override": null
         }
       },
@@ -617,6 +616,22 @@
           "version": "base",
           "opam":
             "opam-version: \"2.0\"\nname: \"base-unix\"\nversion: \"base\"\nsynopsis: \"\"\ndescription: \"Unix library distributed with the OCaml compiler\"\nmaintainer: \"https://github.com/ocaml/opam-repository/issues\"",
+          "override": null
+        }
+      },
+      "dependencies": [ "@esy-ocaml/substs@0.0.1" ]
+    },
+    "@opam/base-threads@opam:base": {
+      "record": {
+        "name": "@opam/base-threads",
+        "version": "opam:base",
+        "source": "no-source:",
+        "files": [],
+        "opam": {
+          "name": "base-threads",
+          "version": "base",
+          "opam":
+            "opam-version: \"2.0\"\nname: \"base-threads\"\nversion: \"base\"\nsynopsis: \"\"\ndescription: \"Threads library distributed with the OCaml compiler\"\nmaintainer: \"https://github.com/ocaml/opam-repository/issues\"",
           "override": null
         }
       },
