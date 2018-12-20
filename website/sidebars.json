@@ -16,15 +16,15 @@
       "console/quickstart",
       "console/api"
     ],
-    "File Context Printer": [
-      "file-context-printer/index"
+    "Rely": [
+      "rely/index",
+      "rely/quickstart"
     ],
     "Refmterr": [
       "refmterr/index"
     ],
-    "Rely": [
-      "rely/index",
-      "rely/quickstart"
+    "File Context Printer": [
+      "file-context-printer/index"
     ]
   }
 }

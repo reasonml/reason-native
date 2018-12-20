@@ -182,11 +182,11 @@ class Index extends React.Component {
             output={ConsoleExampleOutput}
           />
           <Description
-            title="File Context Printer"
-            doc="file-context-printer"
-            content="Utility for displaying snippets of files on the command line."
-            example={FilePrinterExample}
-            output={FilePrinterExampleOutput}
+            title="Rely"
+            doc="rely"
+            content="Fast, native, Jest-style test framework"
+            example={RelyExample}
+            output={RelyExampleOutput}
           />
           <Description
             title="Refmterr"
@@ -196,11 +196,11 @@ class Index extends React.Component {
             output={RefmterrExampleOutput}
           />
           <Description
-            title="Rely"
-            doc="rely"
-            content="Fast, native, Jest-style test framework"
-            example={RelyExample}
-            output={RelyExampleOutput}
+            title="File Context Printer"
+            doc="file-context-printer"
+            content="Utility for displaying snippets of files on the command line."
+            example={FilePrinterExample}
+            output={FilePrinterExampleOutput}
           />
         </div>
       </div>
