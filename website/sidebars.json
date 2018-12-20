@@ -1,0 +1,30 @@
+{
+  "docs": {
+    "Overview": [
+      "introduction",
+      "getting-started",
+      "native-basics"
+    ],
+    "Pastel": [
+      "pastel/index",
+      "pastel/quickstart",
+      "pastel/api",
+      "pastel/console"
+    ],
+    "Console": [
+      "console/index",
+      "console/quickstart",
+      "console/api"
+    ],
+    "File Context Printer": [
+      "file-context-printer/index"
+    ],
+    "Refmterr": [
+      "refmterr/index"
+    ],
+    "Rely": [
+      "rely/index",
+      "rely/quickstart"
+    ]
+  }
+}
