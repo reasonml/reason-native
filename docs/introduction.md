@@ -7,7 +7,7 @@ sidebar_label: Introduction
 Testing, printing, coloring, and other tools to effectively write native Reason code.
 
 
-## Packages:
+## Packages
 
 - [`@reason-native/pastel`](./pastel/index.md): Terminal highlighting with support for nesting and style propagation.
 - [`@reason-native/console`](./console/index.md): `Console.log(anything)`. At Runtime. Natively.
@@ -16,7 +16,7 @@ Testing, printing, coloring, and other tools to effectively write native Reason 
 - [`@reason-native/rely`](./rely/index.md): Native Jest style API.
 - [`@reason-native/pastel-console`](./pastel/console.md): To be used in `devDependencies`. Enhances `console` with colors.
 
-## Status:
+## Status
 
 The packages included in this repo are not yet released to npm/opam. They are being made public
 as a way to gather feedback and share progress on native command line tooling.

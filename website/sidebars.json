@@ -2,7 +2,8 @@
   "docs": {
     "Overview": [
       "introduction",
-      "getting-started"
+      "getting-started",
+      "native-basics"
     ],
     "Pastel": [
       "pastel/index",

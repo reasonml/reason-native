@@ -57,7 +57,7 @@ let hello = () =>
   );
 ```
 
-[Pastel](./pastel/index.md) is a React-like text formatting library for the terminal. One of its core features is the ability to format console text in all kinds of different colors with [ANSI Escape Codes](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors).
+[Pastel](./pastel/index.md) is a React-like text formatting library for the terminal; one of its core features is the ability to format console text with [ANSI Escape Codes](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors).
 
 Let's try making `Hello` yellow:
 
@@ -79,10 +79,24 @@ Running Test Program:
 
 ### Console
 
-Similarly, let's take a loot at `bin/Hello.re`:
+Similarly, let's take a look at `bin/Hello.re`:
 
 ```re
 /* bin/Hello.re */
 Console.log("Running Test Program:");
 let () = print_endline(Lib.Util.hello());
+```
+The [Console](console/index.md) package allows you to log nearly anything without having to define any printers. Let's try logging a nested tuple:
+
+```re
+/* bin/Hello.re */
+Console.log((1, (2, 3)));
+let () = print_endline(Lib.Util.hello());
+```
+
+Running `esy build && esy x Hello.exe` should produce the following:
+
+```sh
+{1, {2, 3}}
+[33mHello[39m, [32mWorld[39m!
 ```
