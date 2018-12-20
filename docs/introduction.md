@@ -37,4 +37,4 @@ released when their APIs are sufficiently stable.
 
 ## License
 
-reason-native is MIT licensed, as found in the LICENSE file.
+Reason Native is MIT licensed, as found in the LICENSE file.

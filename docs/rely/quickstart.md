@@ -28,7 +28,6 @@ Let's start by creating a library for our tests. First create an opam file for y
 
 Now let's create a file to initialize the test framework. Here we are specifying where snapshots should be stored as well as the root directory of your project for the formatting of terminal output.
 ```
-│
 ├─my-lib-test.opam
 ├─test/
 │   lib/
@@ -49,7 +48,6 @@ include Rely.Make({
 
 Now we can finally write our first test!
 ```
-│
 ├─my-lib-test.opam
 ├─test/
 │   lib/
@@ -70,7 +68,6 @@ describe("my first test suite", ({test}) => {
 
 From here let's create an executable to actually run our tests.
 ```
-│
 ├─my-lib-test.opam
 ├─test/
 │   lib/
