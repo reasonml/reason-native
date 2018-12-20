@@ -17,7 +17,7 @@ let isNone = (o: option('a)): bool =>
 let valuex = (o: option('a)): 'a =>
   switch (o) {
   | Some(value) => value
-  | None => Errors.fatal("Expected option to have value but got None")
+  | None => CommonErrors.fatal("Expected option to have value but got None")
   };
 let valueOr = (default: 'a, o: option('a)): 'a =>
   switch (o) {

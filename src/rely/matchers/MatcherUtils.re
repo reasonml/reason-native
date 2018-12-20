@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */;
 open Pastel;
+open Common;
 
 type matcherHintOptions = {comment: option(string)};
 
@@ -36,8 +37,8 @@ let newFormatter = Pastel.green;
 let dimFormatter = Pastel.blackBright;
 
 let prepareDiff = (o: string, s: string): string => {
-  let diff = Strings.diffWords(o, s);
-  Strings.printDiff(
+  let diff = Common.Strs.Diffs.diffWords(o, s);
+  Common.Strs.Diffs.printDiff(
     ~oldFormatter,
     ~newFormatter,
     ~bothFormatter=dimFormatter,

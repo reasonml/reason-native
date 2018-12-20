@@ -12,6 +12,20 @@ module Make = (Styl: Stylish.StylishSig) => {
   open Printer;
   open Styl;
 
+  let printDiff = (bad, good) => "  " ++ Str.global_replace(Str.regexp("\n"), "\n  ", Common.Strs.Diffs.(printDiff(
+    ~oldFormatter= highlight(
+      ~bold=true,
+      ~color=green,
+    ),
+    ~newFormatter= s => "\n" ++ highlight(
+      ~bold=true,
+      ~color=red,
+      s
+    ),
+    ~bothFormatter=s => s,
+    diffLines(good, bad),
+  )));
+
   let suggestifyList = suggestions =>
     suggestions |> List.map(sug => yellow("- " ++ sug));
 
@@ -645,15 +659,9 @@ module Make = (Styl: Stylish.StylishSig) => {
               ),
             "",
             sp("  %s %s%s", "At", cyan(goodFile), dim(":" ++ goodLn)),
-            "  the signature required that the type be defined as:",
+            "  the " ++ highlight(~bold=true, ~color=green, "expected signature") ++ " differs from " ++ highlight(~bold=true, ~color=red, "provided signature") ++ ":",
             "",
-            "  " ++ highlight(~bold=true, ~color=green, good),
-            "",
-            "",
-            sp("  %s %s%s", "At", cyan(badFile), dim(":" ++ badLn)),
-            "  your module defined the type to be:",
-            "",
-            "  " ++ highlight(~bold=true, ~color=red, bad),
+            printDiff(bad, good),
             "",
           ],
         );

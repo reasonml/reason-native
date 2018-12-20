@@ -18,6 +18,7 @@
     ]
   },
   "scripts": {
+    "bootstrap": "esy x bash -cx ./bootstrap.cmd",
     "all": "./scripts/run-all.sh",
     "test": "./scripts/test.sh"
   },

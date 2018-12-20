@@ -38,7 +38,7 @@
     "native"
   ],
   "esy": {
-    "build": "refmterr dune build -p pastel",
+    "build": "dune build -p pastel",
     "install": "esy-installer pastel.install"
   },
   "scripts": {
@@ -48,7 +48,6 @@
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
-    "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0"
   },
   "devDependencies": {

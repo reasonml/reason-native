@@ -20,7 +20,7 @@
     "@esy-ocaml/reason": "3.3.3"
   },
   "esy": {
-    "build": "refmterr dune build -p refmterr",
+    "build": "dune build -p refmterr",
     "install": "esy-installer refmterr.install"
   },
   "scripts": {

@@ -77,7 +77,8 @@ module MutableSet = {
     /* Non-standard creation */
     let empty: unit => t = () => ref(Set_Impl.empty);
     let fromList: list(value) => t = list => ref(Set_Impl.fromList(list));
-    let fromArray: array(value) => t = arr => ref(Set_Impl.fromArray(arr));
+    let fromArray: array(value) => t =
+      arr => ref(Set_Impl.fromArray(arr));
     /* Non-standard conversion */
     let toList: t => list(value) = set => Set_Impl.toList(set^);
     let toArray: t => array(value) = set => Set_Impl.toArray(set^);
@@ -98,13 +99,15 @@ module MutableSet = {
         set := Set_Impl.delete(value, set^);
         ();
       };
-    let entries: t => list((value, value)) = set => Set_Impl.entries(set^);
+    let entries: t => list((value, value)) =
+      set => Set_Impl.entries(set^);
     let forEach: (value => unit, t) => unit =
       (fn, set) => {
         let _ = Set_Impl.forEach(fn, set^);
         ();
       };
-    let has: (value, t) => bool = (value, set) => Set_Impl.has(value, set^);
+    let has: (value, t) => bool =
+      (value, set) => Set_Impl.has(value, set^);
     let values: t => list(value) = toList;
     /* Non-standard JavaScript methods - Similar to JavaScript array */
     let every: (value => bool, t) => bool =

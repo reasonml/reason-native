@@ -16,8 +16,7 @@
  * light-weight wrapper around a `ref` of the immutable versions. The
  * collections are not truly optimized to be mutable.
  */
-open CollectionTypes;
-
+open CommonCollectionsTypes;
 module Set: {
   module type OrderedType = Core_Set.OrderedType;
   module Make: (Ord: OrderedType) => SetMakeResult with type value = Ord.t;

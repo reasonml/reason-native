@@ -3,5 +3,5 @@
    (public_name rely.lib)
    (libraries pastel.lib file-context-printer.lib unix)
 )
+(copy_files# ../../common/*)
 (include_subdirs unqualified)
-

@@ -58,12 +58,6 @@ for (var i = 0; i < relativeJsonPaths.length; i++) {
   }
 }
 
-let releaseRoot = path.resolve(projectRoot, '_release');
-if (fs.existsSync(releaseRoot)) {
-  console.log('YOU NEED TO REMOVE THE ' + releaseRoot + ' DIR FIRST!');
-  process.exit(1);
-}
-
 const head =
   cp.spawnSync('git', ['rev-parse', '--verify', 'HEAD']).stdout.toString();
 const master =
@@ -87,7 +81,6 @@ let tarErr = tarResult.stderr.toString();
 
 try {
   let _releaseDir = path.resolve(projectRoot, '_release');
-  fs.mkdirSync(_releaseDir);
 
   // For each subpackage, we release the entire source code for all packages, but
   // with the root package.json swapped out with the esy.json file in the
@@ -98,8 +91,15 @@ try {
     let jsonResolvedPath = path.resolve(projectRoot, jsonRelativePath);
 
     let subpackageReleaseDir = path.resolve(_releaseDir, jsonRelativePath);
-    let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
+    if (fs.existsSync(subpackageReleaseDir)) {
+      console.log('YOU NEED TO REMOVE THE ' + subpackageReleaseDir + ' DIR FIRST!');
+      process.exit(1);
+    }
+    if (!fs.existsSync(_releaseDir)) {
+      fs.mkdirSync(_releaseDir);
+    }
     fs.mkdirSync(subpackageReleaseDir);
+    let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
     fs.mkdirSync(subpackageReleasePrepDir);
     fs.copyFileSync(
       path.join(projectRoot, 'template.tar'),

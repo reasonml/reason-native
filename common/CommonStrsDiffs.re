@@ -4,12 +4,8 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open Collections;
-
-type difference =
-  | Old(string)
-  | New(string)
-  | Both(string);
+module StringMap = CommonCollections.StringMap;
+module IntSet = CommonCollections.IntSet;
 
 type operation =
   | Delete
@@ -38,6 +34,11 @@ let incrememntCounter = (counter: counter): counter =>
   | One => Many
   | Many => Many
   };
+
+type difference =
+  | Old(string)
+  | New(string)
+  | Both(string);
 
 let split = (splitRe: Str.regexp, s: string): array(string) =>
   s
@@ -83,7 +84,7 @@ let diff =
               table^,
             );
         };
-        let entry = StringMap.getOpt(token, table^) |> Option.valuex;
+        let entry = StringMap.getOpt(token, table^) |> CommonOption.valuex;
         entry.nCounter = incrememntCounter(entry.nCounter);
         TableRef(entry);
       },
@@ -118,7 +119,7 @@ let diff =
               table^,
             );
         };
-        let entry = StringMap.getOpt(token, table^) |> Option.valuex;
+        let entry = StringMap.getOpt(token, table^) |> CommonOption.valuex;
         entry.oCounter = incrememntCounter(entry.oCounter);
         entry.oTokenNumber = Some(index);
         TableRef(entry);
@@ -434,5 +435,3 @@ let printDiffBg =
     ~newFormatter=s => Pastel.(bg.green(black(s))),
     ~bothFormatter=s => s,
   );
-
-let md5 = string => string |> Digest.string |> Digest.to_hex;
