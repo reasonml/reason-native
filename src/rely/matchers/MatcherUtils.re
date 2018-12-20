@@ -69,9 +69,9 @@ let matcherHint =
       [
         Pastel.dim(String.concat("", ["expect", expectType, "("])),
         receivedColor(received),
-        Pastel.dim(
-          String.concat("", [")", isNot ? ".not" : "", matcherName, "("]),
-        ),
+        isNot ?
+          Pastel.dim(").") ++ "not" ++ Pastel.dim(matcherName ++ "(") :
+          Pastel.dim(String.concat("", [")", matcherName, "("])),
         expectedColor(expected),
         Pastel.dim(")"),
       ],
