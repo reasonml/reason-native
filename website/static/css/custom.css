@@ -18,9 +18,11 @@
 .example-output {
     background: #222;
     padding: 1rem;
-    margin-top: -16px;
     color: #FFF;
     font-size: 85%;
+}
+pre.stacked {
+    margin-top: -16px;
 }
 .examples .hljs {
     border: 1px solid #222;
@@ -37,4 +39,11 @@ code, pre {
 }
 .headerWrapper .logo:hover {
     background: #0084DB;
+}
+
+body a {
+    color: #0084DB;
+}
+body a:hover {
+    color: #0084DB;
 }

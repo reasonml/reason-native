@@ -11,7 +11,7 @@ var AU = require('ansi_up');
 var ansi_up = new AU.default;
 
 const ansiBlock = (ansi) => {
-  return '<pre class="example-output">' + ansi_up.ansi_to_html(ansi) + '</pre>';
+  return '<pre class="example-output stacked">' + ansi_up.ansi_to_html(ansi) + '</pre>';
 }
 
 const CompLibrary = require('../../core/CompLibrary.js');

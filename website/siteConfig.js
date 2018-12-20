@@ -82,7 +82,7 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: ['https://unpkg.com/ansi_up@3.0.0/ansi_up.js', 'https://buttons.github.io/buttons.js', '/reason-native/js/ansi.js'],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',

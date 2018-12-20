@@ -1,10 +1,12 @@
 {
   "docs": {
     "Overview": [
-      "introduction"
+      "introduction",
+      "getting-started"
     ],
     "Pastel": [
-      "pastel/index"
+      "pastel/index",
+      "pastel/console"
     ],
     "Console": [
       "console/index",
