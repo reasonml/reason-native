@@ -4,6 +4,28 @@ title: Rely Quickstart
 sidebar_label: Quickstart
 ---
 
+## Installation
+We recommend that you use [`esy`](https://esy.sh/) to handle your package management. To install esy using npm, run
+```bash
+npm install -g esy
+```
+
+Add it as a dependency to your package.json (or esy.json) and run ```esy install```. If you don't want to distribute your tests as part of your release, you can utilize  [multiple sandboxes](https://esy.sh/docs/en/multiple-sandboxes.html) and .opam files to separate your dependencies
+
+**package.json**
+```
+...
+
+dependencies": {
+    ...
+    "@reason-native/rely": "*",
+    ...
+},
+...
+```
+
+## Create a test
+
 Let's start by creating a library for our tests. First create an opam file for your test package (it should be empty). Then let's create a directory called test and create a dune file for our library (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
 ```
 ├─my-lib-test.opam

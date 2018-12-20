@@ -1,7 +1,7 @@
 ---
-id: methods
-title: Console Methods
-sidebar_label: Methods
+id: api
+title: Console API
+sidebar_label: API
 ---
 
 ## `Console.log(anything)`

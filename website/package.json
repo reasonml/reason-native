@@ -6,13 +6,16 @@
     "publish-gh-pages": "docusaurus-publish",
     "write-translations": "docusaurus-write-translations",
     "version": "docusaurus-version",
-    "rename-version": "docusaurus-rename-version"
+    "rename-version": "docusaurus-rename-version",
+    "regenerate-ansi": "node_modules/.bin/browserify -p tinyify --require 'ansi-to-html' > static/js/ansi-to-html.js"
   },
   "devDependencies": {
-    "docusaurus": "^1.6.2"
+    "browserify": "^16.2.3",
+    "ansi-to-html": "^0.6.9",
+    "docusaurus": "^1.6.2",
+    "tinyify": "^2.5.0"
   },
   "dependencies": {
-    "ansi_up": "^3.0.0",
     "reason-highlightjs": "^0.2.0"
   }
 }

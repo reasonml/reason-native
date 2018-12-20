@@ -7,12 +7,14 @@
     ],
     "Pastel": [
       "pastel/index",
+      "pastel/quickstart",
+      "pastel/api",
       "pastel/console"
     ],
     "Console": [
       "console/index",
-      "console/installation",
-      "console/methods"
+      "console/quickstart",
+      "console/api"
     ],
     "File Context Printer": [
       "file-context-printer/index"
@@ -22,7 +24,6 @@
     ],
     "Rely": [
       "rely/index",
-      "rely/installation",
       "rely/quickstart"
     ]
   }

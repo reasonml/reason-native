@@ -7,13 +7,6 @@
 
 const React = require('react');
 
-var AU = require('ansi_up');
-var ansi_up = new AU.default;
-
-const ansiBlock = (ansi) => {
-  return '<pre class="example-output stacked">' + ansi_up.ansi_to_html(ansi) + '</pre>';
-}
-
 const CompLibrary = require('../../core/CompLibrary.js');
 
 const MarkdownBlock = CompLibrary.MarkdownBlock; /* Used to read markdown */
@@ -48,8 +41,8 @@ FCP.printFile(
 );
 `;
 const FilePrinterExampleOutput = `
-[2m 4 ┆ [22m[2m * [22m[34m[2mThis[22m[39m[2m source code is licensed under the [22m[34m[2mMIT[22m[39m[2m license found in the[22m
-[2m 5 ┆ [22m[2m * [22m[34m[2mLICENSE[22m[39m[2m file in the root directory of this source tree.[22m
+[2m 4 ┆ [22m[2m * [22m[34m[2mThis[22m[39m[2m source code is licensed under the ...
+[2m 5 ┆ [22m[2m * [22m[34m[2mLICENSE[22m[39m[2m file in the root directory of ...
 [2m 6 ┆ [22m[2m */;[22m
 [31m[2m 7 ┆ [22m[39m[31m[1m[4mlet myFunc[24m[22m[39m[2mtion = ()[22m[31m[2m => [22m[39m[2mprint_endline([22m[32m[2m"do something"[22m[39m[2m);[22m
 [2m 8 ┆ [22m
@@ -72,7 +65,8 @@ const RefmterrExampleOutput = `
 [31m[2m2 ┆ [22m[39m[2m  | [22m[34m[2mHello[22m[39m[2m of [22m[31m[1m[4mwhereAmI[24m[22m[39m
 [2m3 ┆ [22m[2m  | [22m[34m[2mGoodbye[22m[39m
 
-The type [31m[1mwhereAmI[22m[39m can't be found.`;
+The type [31m[1mwhereAmI[22m[39m can't be found.
+`;
 
 const RelyExample = `re
 describe("Example", describeUtils => {
@@ -91,7 +85,8 @@ const RelyExampleOutput = `
 [1m[31m  • Example › ints
 [39m[22m    [2mexpect.int([22m[31mreceived[39m[2m).toBe([22m[32mexpected[39m[2m)[22m\n‌‌
     Expected: [32m5[39m
-    Received: [31m7[39m`
+    Received: [31m7[39m
+`;
 
 class HomeSplash extends React.Component {
   render() {
@@ -162,7 +157,7 @@ class Index extends React.Component {
           }, {
             content:
               '```' + example + '```\n' +
-              ansiBlock(output)
+              '```sh-stacked' + output + '```'
           }
         ]}
       </Block>
