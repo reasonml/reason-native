@@ -6,6 +6,9 @@ syntax: glob
 *.cmi
 
 _build
+_release
+_esy
+node_modules
 *.native
 *.byte
 *.docdir
@@ -15,13 +18,12 @@ setup.log
 
 /tests/**/*actual.txt
 
-_esy
-node_modules
 .jenga
 *.install
-tests/test.ml
+src/refmterr/tests/test.ml
 
 yarn-error.log
 **/.merlin
 
-lib/common
+npm-debug.log
+yarn-error.log

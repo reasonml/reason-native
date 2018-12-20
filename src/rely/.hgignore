@@ -1,9 +1,0 @@
-npm-debug.log
-.merlin
-yarn-error.log
-node_modules/
-_build
-_release
-.DS_Store
-*.install
-library/common
