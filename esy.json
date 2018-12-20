@@ -13,13 +13,14 @@
       "esy-installer console.install",
       "esy-installer pastel-console.install",
       "esy-installer file-context-printer.install",
-      "esy-installer refmterr.install"
+      "esy-installer refmterr.install",
+      "esy-installer tests.install"
     ]
   },
   "scripts": {
     "bootstrap": "esy x bash -cx ./bootstrap.cmd",
     "all": "./scripts/run-all.sh",
-    "test": "esy x bash -cx ./src/refmterr/runTests.cmd"
+    "test": "./scripts/test.sh"
   },
   "dependencies": {
     "@opam/dune": "*",

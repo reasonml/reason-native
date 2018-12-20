@@ -11,7 +11,9 @@
     "build": "refmterr dune build -p file-context-printer",
     "install": "esy-installer file-context-printer.install"
   },
-  "scripts": {},
+  "scripts": {
+    "release": "node ./scripts/esy-prepublish.js file-context-printer.json"
+  },
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",

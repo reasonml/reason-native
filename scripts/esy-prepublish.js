@@ -1,8 +1,15 @@
+/**
+ * Copyright 2004-present Facebook. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 //this file was copied from https://github.com/facebook/reason/blob/master/scripts/esy-prepublish.js
 //
 //  Usage: Run from the repo root:
-//    node scripts/esy-prepublish.js relative/path/to/some-package-name.json
 //
+//    node scripts/esy-prepublish.js relative/path/to/some-package-name.json
 //  The script will copy relative/path/to/some-package-name.json into
 //  ./package.json and delete any remaining esy.json at the root. It will also
 //  search for relative/path/to/some-package-name.README.md (or if that is not
@@ -80,7 +87,7 @@ let tarErr = tarResult.stderr.toString();
 
 try {
   let _releaseDir = path.resolve(projectRoot, '_release');
-  cp.spawnSync('mkdir', ['-p', _releaseDir]);
+  fs.mkdirSync(_releaseDir);
 
   // For each subpackage, we release the entire source code for all packages, but
   // with the root package.json swapped out with the esy.json file in the
@@ -92,18 +99,15 @@ try {
 
     let subpackageReleaseDir = path.resolve(_releaseDir, jsonRelativePath);
     let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
-    cp.spawnSync('mkdir', ['-p', subpackageReleaseDir]);
-    cp.spawnSync('mkdir', ['-p', subpackageReleasePrepDir]);
-    cp.spawnSync(
-      'cp',
-      [
-        path.join(projectRoot, 'template.tar'),
-        path.join(subpackageReleasePrepDir, 'template.tar')
-      ]
+    fs.mkdirSync(subpackageReleaseDir);
+    fs.mkdirSync(subpackageReleasePrepDir);
+    fs.copyFileSync(
+      path.join(projectRoot, 'template.tar'),
+      path.join(subpackageReleasePrepDir, 'template.tar')
     );
     process.chdir(subpackageReleasePrepDir);
     cp.spawnSync('tar', ['-xvf', 'template.tar']);
-    cp.spawnSync('rm', [path.join(subpackageReleasePrepDir, 'template.tar')]);
+    fs.unlinkSync(path.join(subpackageReleasePrepDir, 'template.tar'));
     const packageJson = require(jsonResolvedPath);
     const packageName = packageJson.name;
     const packageVersion = packageJson.version;
@@ -132,13 +136,8 @@ try {
     for (var i = 0; i < toCopy.length; i++) {
       let originPath = toCopy[i].originPath;
       let destPath = toCopy[i].destPath;
-      if (originPath !== null && fs.existsSync(originPath)) {
-        let cpResult = cp.spawnSync('mv', [originPath, destPath]);
-        let mvErr = cpResult.stderr.toString();
-        if (mvErr !== '') {
-          console.log('ERROR: Could not move ' + originPath + ' - ' + mvErr);
-          process.exit(1);
-        }
+      if (originPath !== null && fs.existsSync(originPath) && destPath !== originPath) {
+        fs.renameSync(originPath, destPath);
       }
     }
 
@@ -148,12 +147,7 @@ try {
     // the json file that someone published _was_ the esy.json file.
     let esyFile = path.resolve(subpackageReleasePrepDir, 'esy.json');
     if (fs.existsSync(esyFile)) {
-      let rmResult = cp.spawnSync('rm', [esyFile]);
-      let rmErr = rmResult.stderr.toString();
-      if (rmErr !== '') {
-        console.log('ERROR: Could not rm ' + esyFile + ' - ' + rmErr);
-        process.exit(1);
-      }
+      fs.unlinkSync(esyFile);
     }
 
     // Create a npm pack to remove all the stuff in .npmignore.  This would
@@ -162,21 +156,17 @@ try {
     // from other projects.
     process.chdir(subpackageReleasePrepDir);
     // Npm pack is just a convenient way to strip out any unnecessary files.
-    let packResult = cp.spawnSync('npm', ['pack']);
+    const packResult = cp.spawnSync(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['pack']);
     if (packResult.status !== 0) {
       console.log('ERROR: Could not create npm pack for ' + subpackageReleasePrepDir);
       throw new Error('Error:' + packResult.stderr.toString());
     }
-    let mvFrom = '*.tgz';
-    let mvTo = subpackageReleaseDir;
-    let mvResult = cp.spawnSync('mv', [mvFrom, mvTo], { shell: true });
-    var mvErr = mvResult.stderr.toString();
-    if (mvErr !== '') {
-      console.log('ERROR: Could not move from ' + mvFrom + ' to ' + mvTo);
-      throw new Error('Error:' + mvErr);
-    }
+    const mvTo = subpackageReleaseDir;
+    fs.readdirSync(subpackageReleasePrepDir).filter(fn => fn.endsWith('.tgz')).forEach(fn => {
+      fs.renameSync(fn, path.join(mvTo, fn));
+    });
     process.chdir(mvTo);
-    let tarResult = cp.spawnSync('tar', ['-xvf', '*.tgz'], { shell: true });
+    const tarResult = cp.spawnSync('tar', ['-xvf', '*.tgz'], { shell: true });
     if (tarResult.error) {
       console.log('ERROR: Could not untar in ' + mvTo);
       throw new Error('Error:' + tarResult.stderr.toString());
@@ -191,5 +181,5 @@ try {
     console.log('');
   }
 } finally {
-  cp.spawnSync('rm', [path.join(projectRoot, 'template.tar')]);
+  fs.unlinkSync(path.join(projectRoot, 'template.tar'));
 }

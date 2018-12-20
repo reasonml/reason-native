@@ -10,7 +10,8 @@
   "scripts": {
     "test": "esy x TestConsole.exe",
     "buildJs": "esy x dune build --profile=release test/TestConsole.bc.js",
-    "testJs": "node _build/default/test/TestConsole.bc.js"
+    "testJs": "node _build/default/test/TestConsole.bc.js",
+    "release": "node ./scripts/esy-prepublish.js console.json"
   },
   "dependencies": {
     "@opam/dune": "*",
