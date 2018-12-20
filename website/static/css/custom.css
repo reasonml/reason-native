@@ -30,3 +30,11 @@ code, pre {
     font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
 }
+
+.headerWrapper .logo {
+    background: #222;
+    transition: background 200ms;
+}
+.headerWrapper .logo:hover {
+    background: #0084DB;
+}
