@@ -6,4 +6,3 @@ _build
 _release
 .DS_Store
 *.install
-library/common
