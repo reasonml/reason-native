@@ -7,7 +7,7 @@
 module Make = (Styl: Stylish.StylishSig) => {
   module Printer = Printer.Make(Styl);
 
-  open BetterErrorsTypes;
+  open Types_t;
   open Helpers;
   open Printer;
   open Styl;
@@ -191,7 +191,7 @@ module Make = (Styl: Stylish.StylishSig) => {
       [hd, ...rest];
     };
 
-  let normalizeIncompat = (inc: incompat) => {
+  let normalizeIncompat = (inc: incompat): incompat => {
     actual: normalizeEquivalencies(inc.actual),
     expected: normalizeEquivalencies(inc.expected),
   };
@@ -272,8 +272,8 @@ module Make = (Styl: Stylish.StylishSig) => {
      * instead of actual newlines.
      */
     switch (parsedContent) {
-    | NoErrorExtracted => []
-    | Type_MismatchTypeArguments({
+    | `NoErrorExtracted => []
+    | `Type_MismatchTypeArguments({
         typeConstructor,
         expectedCount,
         actualCount,
@@ -286,7 +286,7 @@ module Make = (Styl: Stylish.StylishSig) => {
           actualCount == 1 ? "" : "s",
         ),
       ]
-    | Type_IncompatibleType(incompatibleType) =>
+    | `Type_IncompatibleType(incompatibleType) =>
       let {term, extra, main, incompats, escapedScope} =
         normalizeIncompatibleType(incompatibleType);
       let expected = toReasonTypes(main.expected);
@@ -296,7 +296,7 @@ module Make = (Styl: Stylish.StylishSig) => {
        * and only incompat message has line breaks, we'll print the more detailed
        * version with some comforatable white space.
        */
-      let termStr = term === Pattern ? "This pattern" : "This";
+      let termStr = term === `Pattern ? "This pattern" : "This";
       let typeInequality =
         renderInequality(~isDetail=false, ~expected, ~actual);
       let main =
@@ -344,13 +344,13 @@ module Make = (Styl: Stylish.StylishSig) => {
           ];
         };
       extra == "" ? withoutExtra : ["Extra info: " ++ extra, ...withoutExtra];
-    | Type_NotAFunction({actual}) =>
+    | `Type_NotAFunction(({actual}: notAFunction)) =>
       let actual = toReasonTypes1(actual);
       [
         "This has type " ++ actual ++ ", but you are calling it as a function.",
         "Perhaps you have forgoten a semicolon, or a comma somewhere.",
       ];
-    | Type_AppliedTooMany({functionType, expectedArgCount}) =>
+    | `Type_AppliedTooMany({functionType, expectedArgCount}) =>
       let functionType = toReasonTypes1(functionType);
       [
         sp(
@@ -359,29 +359,29 @@ module Make = (Styl: Stylish.StylishSig) => {
         ),
         sp("This function has type %s", functionType),
       ];
-    | Type_FunctionWrongLabel({functionType, labelIssue}) =>
+    | `Type_FunctionWrongLabel({functionType, labelIssue}) =>
       let functionType = toReasonTypes1(functionType);
       let labelIssueStr =
         switch (labelIssue) {
-        | HasOptionalLabel(str) =>
+        | `HasOptionalLabel(str) =>
           sp(
             "%s %s",
             bold("But its first argument is an optional named"),
             red(~bold=true, "~" ++ str ++ "?"),
           )
-        | HasLabel(str) =>
+        | `HasLabel(str) =>
           sp(
             "%s %s",
             bold("But its first argument is named"),
             red(~bold=true, "~" ++ str),
           )
-        | HasNoLabel =>
+        | `HasNoLabel =>
           sp(
             "%s %s",
             bold("But its first argument"),
             red(~bold=true, "is not named"),
           )
-        | Unknown =>
+        | `Unknown =>
           bold("There appears to be something wrong with the named arguments")
         };
       [
@@ -390,7 +390,7 @@ module Make = (Styl: Stylish.StylishSig) => {
         highlight(~color=green, functionType),
         bold("This function should have type:"),
       ];
-    | File_SyntaxError({offendingString, hint}) => [
+    | `File_SyntaxError({offendingString, hint}) => [
         "Note: the location indicated might not be accurate.",
         switch (offendingString) {
         | ";" => "Make sure all imperative statements, as well as let/type bindings have exactly one semicolon separating them."
@@ -404,10 +404,10 @@ module Make = (Styl: Stylish.StylishSig) => {
         | None => "This is a syntax error."
         },
       ]
-    | File_IllegalCharacter({character}) => [
+    | `File_IllegalCharacter({character}) => [
         sp("The character `%s` is illegal.", character),
       ]
-    | Type_UnboundTypeConstructor({namespacedConstructor, suggestion}) =>
+    | `Type_UnboundTypeConstructor({namespacedConstructor, suggestion}) =>
       let namespacedConstructor = toReasonTypes1(namespacedConstructor);
       let main =
         sp(
@@ -418,7 +418,7 @@ module Make = (Styl: Stylish.StylishSig) => {
       | None => [main]
       | Some(h) => [sp("Hint: did you mean %s?", yellow(h)), "", main]
       };
-    | Type_ArgumentCannotBeAppliedWithLabel({functionType, attemptedLabel}) =>
+    | `Type_ArgumentCannotBeAppliedWithLabel({functionType, attemptedLabel}) =>
       let formattedFunctionType = toReasonTypes1(functionType);
       [
         sp(
@@ -428,7 +428,7 @@ module Make = (Styl: Stylish.StylishSig) => {
         "",
         sp("The function has type %s", formattedFunctionType),
       ];
-    | Type_UnboundValue({unboundValue, suggestions}) =>
+    | `Type_UnboundValue({unboundValue, suggestions}) =>
       switch (suggestions) {
       | None => [
           sp(
@@ -462,7 +462,9 @@ module Make = (Styl: Stylish.StylishSig) => {
           ],
         ])
       }
-    | Type_UnboundRecordField({recordField, suggestion}) =>
+    | `Type_UnboundRecordField(
+        ({recordField, suggestion}: unboundRecordField),
+      ) =>
       let recordField = toReasonTypes1(recordField);
       let main =
         switch (suggestion) {
@@ -484,14 +486,14 @@ module Make = (Styl: Stylish.StylishSig) => {
         "",
         main,
       ];
-    | Type_RecordFieldNotBelongPattern({
+    | `Type_RecordFieldNotBelongPattern({
         term,
         recordType,
         recordField,
         suggestion,
       }) =>
       let recordType = toReasonTypes1(recordType);
-      let termStr = term === Expression ? "expression" : "pattern";
+      let termStr = term === `Expression ? "expression" : "pattern";
       let main = [
         "",
         sp(
@@ -517,7 +519,7 @@ module Make = (Styl: Stylish.StylishSig) => {
       | None => main
       | Some(hint) => [sp("Did you mean %s?", yellow(hint)), "", ...main]
       };
-    | Type_SomeRecordFieldsUndefined(recordField) => [
+    | `Type_SomeRecordFieldsUndefined(recordField) => [
         "record is of some other type - one that does have a "
         ++ bold(recordField)
         ++ " field. Where else is it used?",
@@ -531,7 +533,7 @@ module Make = (Styl: Stylish.StylishSig) => {
           red(~bold=true, recordField),
         ),
       ]
-    | Type_UnboundModule({unboundModule, suggestion}) =>
+    | `Type_UnboundModule({unboundModule, suggestion}) =>
       let unboundModule = toReasonTypes1(unboundModule);
       let main =
         sp(
@@ -557,7 +559,7 @@ module Make = (Styl: Stylish.StylishSig) => {
           main,
         ]
       };
-    | Type_SignatureItemMismatch({missing, values, types, notes: _}) =>
+    | `Type_SignatureItemMismatch({missing, values, types, notes: _}) =>
       let finalMessage =
         switch (missing, values, types) {
         | ([], [], []) => "This module doesn't match its signature. See the original error output"
@@ -581,8 +583,8 @@ module Make = (Styl: Stylish.StylishSig) => {
         };
       let whatStr = (
         fun
-        | Type => "type"
-        | Value => "value"
+        | `Type => "type"
+        | `Value => "value"
       );
       let missingMsg = ((what, named, declaredAtFile, declaredAtLine)) =>
         concatList(

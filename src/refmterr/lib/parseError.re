@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open BetterErrorsTypes;
+open Types_t;
 
 open Helpers;
 
@@ -63,7 +63,7 @@ let extractTypeIncompatsFromExtra = extra => {
         Re.Pcre.get_substring(Re.Pcre.exec(~rex=incompatR, str), 1),
         Re.Pcre.get_substring(Re.Pcre.exec(~rex=incompatR, str), 2),
       );
-      let incompat = {
+      let incompat: incompat = {
         actual: splitEquivalentTypes(incompatA),
         expected: splitEquivalentTypes(incompatB),
       };
@@ -111,13 +111,13 @@ let type_IncompatibleType = (err, _, range) => {
     get_match_n_maybe(4, allR, err),
   ) {
   | (Some(termRaw), Some(actualRaw), Some(expectedRaw)) =>
-    let main = {
+    let main: incompat = {
       actual: splitEquivalentTypes(actualRaw),
       expected: splitEquivalentTypes(expectedRaw),
     };
-    let term = termRaw == "expression has type" ? Expression : Pattern;
+    let term = termRaw == "expression has type" ? `Expression : `Pattern;
     Some(
-      Type_IncompatibleType({term, main, incompats, extra, escapedScope}),
+      `Type_IncompatibleType({term, main, incompats, extra, escapedScope}),
     );
   | _ => None
   };
@@ -133,7 +133,7 @@ let type_MismatchTypeArguments = (err, _, _) => {
   ) {
   | (Some(typeConstructor), Some(expectedCount), Some(actualCount)) =>
     Some(
-      Type_MismatchTypeArguments({
+      `Type_MismatchTypeArguments({
         typeConstructor,
         expectedCount: int_of_string(expectedCount),
         actualCount: int_of_string(actualCount),
@@ -157,7 +157,7 @@ let type_UnboundValue = (err, _, _) => {
         |> Helpers.optionMap(
              Re.Pcre.split(~rex=Re.Pcre.regexp({|, | or |})),
            );
-      Some(Type_UnboundValue({unboundValue, suggestions}));
+      Some(`Type_UnboundValue({unboundValue, suggestions}));
     }
   );
 };
@@ -189,7 +189,7 @@ let wrongTypeR =
 
 let fallbackSignatureMismatch =
   Some(
-    Type_SignatureItemMismatch({
+    `Type_SignatureItemMismatch({
       notes: "Could not extract error",
       types: [],
       values: [],
@@ -222,7 +222,7 @@ let type_SignatureItemMismatch = (err, cachedContent, _) => {
               get_match_n_maybe(4, missingItemR, itm),
             ) {
             | (Some(fileOrType), Some(name), Some(fileName), Some(line)) =>
-              let what = fileOrType == "type" ? Type : Value;
+              let what = fileOrType == "type" ? `Type : `Value;
               missing.contents = [
                 (what, name, fileName, line),
                 ...missing.contents,
@@ -232,7 +232,7 @@ let type_SignatureItemMismatch = (err, cachedContent, _) => {
           };
         };
         Some(
-          Type_SignatureItemMismatch({
+          `Type_SignatureItemMismatch({
             types: [],
             notes: "extracted error from missing items",
             values: [],
@@ -269,12 +269,12 @@ let type_SignatureItemMismatch = (err, cachedContent, _) => {
             Some(badLn),
           ) =>
           Some(
-            Type_SignatureItemMismatch({
+            `Type_SignatureItemMismatch({
               notes: "Successfully extracted error",
               types: [],
               values: [
                 (
-                  Value,
+                  `Value,
                   String.trim(goodName),
                   String.trim(good),
                   goodFile,
@@ -308,7 +308,7 @@ let type_SignatureItemMismatch = (err, cachedContent, _) => {
             Some(badLn),
           ) =>
           Some(
-            Type_SignatureItemMismatch({
+            `Type_SignatureItemMismatch({
               notes: "Successfully extracted type definition mismatch",
               /* good, goodFile, goodln, bad, badFile, badln, arity */
               values: [],
@@ -343,7 +343,7 @@ let type_UnboundModule = (err, _, _) => {
     unboundModule => {
       let suggestionR = {|Unbound module [\w\.]*[\s\S]Hint: Did you mean (\S+)\?|};
       let suggestion = get_match_maybe(suggestionR, err);
-      Some(Type_UnboundModule({unboundModule, suggestion}));
+      Some(`Type_UnboundModule({unboundModule, suggestion}));
     }
   );
 };
@@ -356,7 +356,7 @@ let type_UnboundRecordField = (err, _, _) => {
     recordField => {
       let suggestionR = {|Hint: Did you mean (\w+)\?|};
       let suggestion = get_match_maybe(suggestionR, err);
-      Some(Type_UnboundRecordField({recordField, suggestion}));
+      Some(`Type_UnboundRecordField({recordField, suggestion}));
     }
   );
 };
@@ -374,14 +374,14 @@ let type_RecordFieldNotBelongPattern = (err, _, _) => {
     let term =
       switch (termRaw) {
       | "expression has type"
-      | "record expression is expected to have type" => Expression
-      | "record pattern is expected to have type" => Pattern
-      | _ => Expression
+      | "record expression is expected to have type" => `Expression
+      | "record pattern is expected to have type" => `Pattern
+      | _ => `Expression
       };
     let suggestionR = {|Hint: Did you mean (\w+)\?|};
     let suggestion = get_match_maybe(suggestionR, err);
     Some(
-      Type_RecordFieldNotBelongPattern({
+      `Type_RecordFieldNotBelongPattern({
         term,
         recordType,
         recordField,
@@ -395,7 +395,7 @@ let type_RecordFieldNotBelongPattern = (err, _, _) => {
 let type_SomeRecordFieldsUndefined = (err, _, _) => {
   let recordFieldR = {|Some record fields are undefined: (\w+)|};
   get_match_maybe(recordFieldR, err)
-  |>? (recordField => Some(Type_SomeRecordFieldsUndefined(recordField)));
+  |>? (recordField => Some(`Type_SomeRecordFieldsUndefined(recordField)));
 };
 
 let type_UnboundConstructor = (err, cachedContent, _) => None;
@@ -408,7 +408,7 @@ let type_UnboundTypeConstructor = (err, _, _) => {
       let suggestionR = {|Hint: Did you mean ([\w\.]+)\?|};
       let suggestion = get_match_maybe(suggestionR, err);
       Some(
-        Type_UnboundTypeConstructor({
+        `Type_UnboundTypeConstructor({
           namespacedConstructor: constructor,
           suggestion,
         }),
@@ -426,7 +426,7 @@ let type_AppliedTooMany = (err, _, _) => {
   |>? (
     functionType =>
       Some(
-        Type_AppliedTooMany({
+        `Type_AppliedTooMany({
           functionType,
           expectedArgCount: functionArgsCount(functionType),
         }),
@@ -455,12 +455,12 @@ let type_FunctionWrongLabel = (err, _, _) => {
         get_match_n_maybe(1, labelledR, labelIssueString),
         get_match_n_maybe(1, notLabelledR, labelIssueString),
       ) {
-      | (Some(lbl), _, _) => HasOptionalLabel(lbl)
-      | (_, Some(lbl), _) => HasLabel(lbl)
-      | (_, _, Some(lbl)) => HasNoLabel
-      | _ => Unknown
+      | (Some(lbl), _, _) => `HasOptionalLabel(lbl)
+      | (_, Some(lbl), _) => `HasLabel(lbl)
+      | (_, _, Some(lbl)) => `HasNoLabel
+      | _ => `Unknown
       };
-    Some(Type_FunctionWrongLabel({functionType, labelIssue}));
+    Some(`Type_FunctionWrongLabel({functionType, labelIssue}));
   | _ => None
   };
 };
@@ -474,7 +474,7 @@ let type_ArgumentCannotBeAppliedWithLabel = (err, cachedContent, range) => {
   ) {
   | (Some(functionType), Some(attemptedLabel)) =>
     Some(
-      Type_ArgumentCannotBeAppliedWithLabel({functionType, attemptedLabel}),
+      `Type_ArgumentCannotBeAppliedWithLabel({functionType, attemptedLabel}),
     )
   | _ => None
   };
@@ -490,7 +490,7 @@ let type_NotAFunction = (err, _, range) => {
   let actualR = {|This expression has type([\s\S]+)This is not a function; it cannot be applied.|};
   get_match_maybe(actualR, err)
   |>+ String.trim
-  |>? (actual => Some(Type_NotAFunction({actual: actual})));
+  |>? (actual => Some(`Type_NotAFunction({actual: actual})));
 };
 
 let type_UnboundModule = (err, _, _) => {
@@ -500,7 +500,7 @@ let type_UnboundModule = (err, _, _) => {
     unboundModule => {
       let suggestionR = {|Unbound module [\w\.]*[\s\S]Hint: Did you mean (\S+)\?|};
       let suggestion = get_match_maybe(suggestionR, err);
-      Some(Type_UnboundModule({unboundModule, suggestion}));
+      Some(`Type_UnboundModule({unboundModule, suggestion}));
     }
   );
 };
@@ -520,7 +520,7 @@ let file_SyntaxError = (err, cachedContent, range) => {
     /* assuming on the same row */
     let ((startRow, startColumn), (_, endColumn)) = range;
     Some(
-      File_SyntaxError({
+      `File_SyntaxError({
         hint: Helpers.optionMap(String.trim, hint),
         offendingString:
           Helpers.stringSlice(
@@ -539,7 +539,7 @@ let build_InconsistentAssumptions = (err, cachedContent, range) => None;
 let file_IllegalCharacter = (err, _, _) => {
   let characterR = {|Illegal character \(([\s\S]+)\)|};
   let character = get_match(characterR, err);
-  Some(File_IllegalCharacter({character: character}));
+  Some(`File_IllegalCharacter({character: character}));
 };
 
 let parsers = [
@@ -582,7 +582,7 @@ let specialParserThatChecksWhetherFileEvenExists = (filePath, errorBody) =>
     | Some(err) =>
       switch (get_match_maybe(cannotFindFileRStr, err)) {
       | None => None /* unrecognized again? We're mainly trying to catch the case below */
-      | Some(fileName) => Some(ErrorFile(NoneFile(fileName)))
+      | Some(fileName) => Some(`ErrorFile(`NoneFile(fileName)))
       }
     }
   | "command line" =>
@@ -591,7 +591,7 @@ let specialParserThatChecksWhetherFileEvenExists = (filePath, errorBody) =>
     | Some(err) =>
       switch (get_match_maybe(unboundModuleRStr, err)) {
       | None => None /* unrecognized? We're mainly trying to catch the case below */
-      | Some(moduleName) => Some(ErrorFile(CommandLine(moduleName)))
+      | Some(moduleName) => Some(`ErrorFile(`CommandLine(moduleName)))
       }
     }
   | "(stdin)" =>
@@ -599,7 +599,7 @@ let specialParserThatChecksWhetherFileEvenExists = (filePath, errorBody) =>
        again */
     switch (errorBody) {
     | None => None /* unrecognized? We're mainly trying to catch the case below */
-    | Some(err) => Some(ErrorFile(Stdin(err)))
+    | Some(err) => Some(`ErrorFile(`Stdin(err)))
     }
   | _ => None
   };
@@ -612,5 +612,5 @@ let parse = (~customErrorParsers, ~errorBody, ~cachedContent, ~range) =>
       List.append(customErrorParsers, parsers),
     )
   ) {
-  | Not_found => NoErrorExtracted
+  | Not_found => `NoErrorExtracted
   };

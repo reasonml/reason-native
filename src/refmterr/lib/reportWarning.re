@@ -7,7 +7,7 @@
 module Make = (Styl: Stylish.StylishSig) => {
   module Printer = Printer.Make(Styl);
 
-  open BetterErrorsTypes;
+  open Types_t;
   open Helpers;
   open Printer;
   open Styl;
@@ -17,8 +17,8 @@ module Make = (Styl: Stylish.StylishSig) => {
    */
   let report = (~refmttypePath, code, filePath, parsedContent) =>
     switch (parsedContent) {
-    | NoWarningExtracted => []
-    | Warning_PatternNotExhaustive({unmatched}) => [
+    | `NoWarningExtracted => []
+    | `Warning_PatternNotExhaustive({unmatched}) => [
         "this match doesn't cover all possible values of the variant.",
         ...switch (unmatched) {
            | [oneVariant] => [
@@ -33,7 +33,7 @@ module Make = (Styl: Stylish.StylishSig) => {
              ]
            },
       ]
-    | Warning_OptionalArgumentNotErased({argumentName}) => [
+    | `Warning_OptionalArgumentNotErased({argumentName}) => [
         "The solution is usually to provide a final non-named argument, or a final unit() argument if necessary.",
         "",
         sp(
@@ -42,17 +42,17 @@ module Make = (Styl: Stylish.StylishSig) => {
           argumentName,
         ),
       ]
-    | Warning_BadFileName(offendingChar) => [
+    | `Warning_BadFileName(offendingChar) => [
         sp(
           "File name potentially invalid. The OCaml ecosystem's build systems usually turn file names into module names by simply upper-casing the first letter. In this case, `%s` %s.\nNote: some build systems might e.g. turn kebab-case into CamelCase module, which is why this isn't a hard error.",
           /* "%s\n\n%s 24: \"%s\" isn't a valid file name; OCaml file names are often turned into modules, which need to start with a capitalized letter." */
           Filename.basename(filePath) |> String.capitalize_ascii,
           switch (offendingChar) {
-          | Leading(ch) =>
+          | `Leading(ch) =>
             sp("starts with `%s`, which doesn't form a legal module name", ch)
-          | Contains(ch) =>
+          | `Contains(ch) =>
             sp("contains `%s`, which doesn't form a legal module name", ch)
-          | UnknownIllegalChar => "isn't a legal module name"
+          | `UnknownIllegalChar => "isn't a legal module name"
           },
         ),
       ]

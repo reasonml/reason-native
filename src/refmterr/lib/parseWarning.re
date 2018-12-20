@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open BetterErrorsTypes;
+open Types_t;
 
 open Helpers;
 
@@ -32,7 +32,7 @@ let warning_PatternNotExhaustive = (code, err, _, _, _) => {
         } else {
           [unmatchedRaw];
         };
-      Some(Warning_PatternNotExhaustive({unmatched: unmatched}));
+      Some(`Warning_PatternNotExhaustive({unmatched: unmatched}));
     }
   );
 };
@@ -68,7 +68,7 @@ let warning_OptionalArgumentNotErased = (code, err, _, cachedContent, range) => 
       |>? (
         argumentName =>
           Some(
-            Warning_OptionalArgumentNotErased({
+            `Warning_OptionalArgumentNotErased({
               argumentName: String.trim(argumentName),
             }),
           )
@@ -87,11 +87,11 @@ let warning_BadFileName = (code, err, filePath, _, _) =>
         get_match_maybe({|^([^a-zA-Z])|}, fileName),
         get_match_maybe({|.+?([^a-zA-Z\.])|}, fileName),
       ) {
-      | (Some(m), _) => Leading(m)
-      | (None, Some(m)) => Contains(m)
-      | _ => UnknownIllegalChar
+      | (Some(m), _) => `Leading(m)
+      | (None, Some(m)) => `Contains(m)
+      | _ => `UnknownIllegalChar
       };
-    Some(Warning_BadFileName(offendingChar));
+    Some(`Warning_BadFileName(offendingChar));
   } else {
     None;
   };
@@ -109,6 +109,6 @@ let parse = (code, warningBody, filePath, cachedContent, range) => {
   let tryParser = parse' =>
     parse'(code, warningBody, filePath, cachedContent, range);
   try (Helpers.listFindMap(tryParser, parsers)) {
-  | Not_found => NoWarningExtracted
+  | Not_found => `NoWarningExtracted
   };
 };
