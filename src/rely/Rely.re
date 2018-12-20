@@ -11,8 +11,14 @@ open Common.Collections;
 open TestResult;
 include TestFrameworkConfig;
 include RunConfig;
-include Test;
+module MatcherUtils = MatcherUtils;
+module MatcherTypes = MatcherTypes;
 open Reporter;
+
+module Test = {
+  type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
+  type testFn('ext) = (string, testUtils('ext) => unit) => unit;
+};
 
 module Describe = {
   type describeConfig = {
@@ -20,11 +26,11 @@ module Describe = {
     snapshotDir: string,
   };
 
-  type describeUtils = {
-    describe: describeFn,
-    test: Test.testFn,
+  type describeUtils('ext) = {
+    describe: describeFn('ext),
+    test: Test.testFn('ext),
   }
-  and describeFn = (string, describeUtils => unit) => unit;
+  and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
 };
 
 open Describe;
@@ -37,17 +43,20 @@ type testRunState = {
   snapshotState: ref(Snapshot.state),
 };
 
-type runDescribeFn =
+type runDescribeFn('ext) =
   (
     ~config: Describe.describeConfig,
     ~state: testRunState,
     ~describePath: TestPath.describe,
-    Describe.describeUtils => unit
+    MatcherTypes.matchersExtensionFn('ext),
+    Describe.describeUtils('ext) => unit
   ) =>
   describeResult;
 
 module type TestFramework = {
-  let describe: Describe.describeFn;
+  let describe: Describe.describeFn(unit);
+  let extendDescribe:
+    MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
   let run: RunConfig.t => unit;
   let cli: unit => unit;
 };
@@ -105,11 +114,12 @@ module Make = (UserConfig: FrameworkConfig) => {
   /* This will generate unique IDs for describes. */
   let describeCounter = Counter.create();
 
-  let rec runDescribe: runDescribeFn =
+  let rec runDescribe: runDescribeFn('ext) =
     (
       ~config: Describe.describeConfig,
       ~state,
       ~describePath: TestPath.describe,
+      makeCustomMatchers,
       fn,
     ) => {
       open Test;
@@ -135,7 +145,7 @@ module Make = (UserConfig: FrameworkConfig) => {
       /* Convert describeName to something reasonable for a file name. */
       let describeFileName = describeName |> sanitizeName;
       /* Create the test function we will pass around. */
-      let testFn: Test.testFn =
+      let testFn: Test.testFn('ext) =
         (testName, usersTest) => {
           let testPath = (testName, describePath);
           let testId = Counter.next(testCounter);
@@ -231,6 +241,7 @@ module Make = (UserConfig: FrameworkConfig) => {
               DefaultMatchers.makeDefaultMatchers(
                 expectUtils,
                 TestSnapshotMatcher.makeMatchers,
+                makeCustomMatchers,
               ),
           };
           let runTest = () => {
@@ -284,6 +295,7 @@ module Make = (UserConfig: FrameworkConfig) => {
             ~config,
             ~state,
             ~describePath=Nested(describeName, describePath),
+            makeCustomMatchers,
             fn,
           );
         childDescribeResults := childDescribeResults^ @ [childDescribeResult];
@@ -320,13 +332,30 @@ module Make = (UserConfig: FrameworkConfig) => {
       describeResult;
     };
 
-  type testSuiteInternal = {
+  type testSuiteWithMatchers('ext) = {
     name: string,
-    fn: Describe.describeUtils => unit,
+    fn: Describe.describeUtils('ext) => unit,
+    matchersExtensionFn: MatcherTypes.matchersExtensionFn('ext),
   };
 
+  type testSuiteInternal =
+    | TestSuiteInternal(testSuiteWithMatchers('ext)): testSuiteInternal;
+
   let testSuites: ref(list(testSuiteInternal)) = ref([]);
-  let describe = (name, fn) => testSuites := testSuites^ @ [{name, fn}];
+  let describe = (name, fn) =>
+    testSuites :=
+      testSuites^
+      @ [TestSuiteInternal({name, fn, matchersExtensionFn: _ => ()})];
+  let extendDescribe = (createCustomMatchers, name, fn) =>
+    testSuites :=
+      testSuites^
+      @ [
+        TestSuiteInternal({
+          name,
+          fn,
+          matchersExtensionFn: createCustomMatchers,
+        }),
+      ];
   type testSuiteAccumulator = {
     testRunState,
     aggregatedResult: AggregatedResult.t,
@@ -335,9 +364,12 @@ module Make = (UserConfig: FrameworkConfig) => {
   let run = (config: RunConfig.t) =>
     Util.withBacktrace(() => {
       let notifyReporters = f => List.iter(f, config.reporters);
+      let reporterTestSuites = testSuites^ |> List.map(s => switch(s) {
+        | TestSuiteInternal({name}) => {{name: name}}
+      });
       notifyReporters(r =>
         r.onRunStart({
-          testSuites: testSuites^ |> List.map(s => {name: s.name}),
+          testSuites: reporterTestSuites
         })
       );
       let initialState = {
@@ -354,31 +386,36 @@ module Make = (UserConfig: FrameworkConfig) => {
         testSuites^
         |> List.fold_left(
              (acc, testSuite) => {
-               let reporterSuite = {name: testSuite.name};
-               notifyReporters(r => r.onTestSuiteStart(reporterSuite));
-               let describeResult =
-                 runDescribe(
-                   ~config={
-                     updateSnapshots: config.updateSnapshots,
-                     snapshotDir: UserConfig.config.snapshotDir,
-                   },
-                   ~state=acc.testRunState,
-                   ~describePath=Terminal(testSuite.name),
-                   testSuite.fn,
-                 );
-               let testSuiteResult =
-                 TestSuiteResult.ofDescribeResult(describeResult);
-               let newResult =
-                 acc.aggregatedResult
-                 |> AggregatedResult.addTestSuiteResult(testSuiteResult);
-               notifyReporters(r =>
-                 r.onTestSuiteResult(
-                   reporterSuite,
-                   newResult,
-                   testSuiteResult,
-                 )
-               );
-               {...acc, aggregatedResult: newResult};
+               switch(testSuite){
+               | TestSuiteInternal({name, fn, matchersExtensionFn}) => {
+                let reporterSuite = {name: name};
+                notifyReporters(r => r.onTestSuiteStart(reporterSuite));
+                let describeResult =
+                  runDescribe(
+                    ~config={
+                      updateSnapshots: config.updateSnapshots,
+                      snapshotDir: UserConfig.config.snapshotDir,
+                    },
+                    ~state=acc.testRunState,
+                    ~describePath=Terminal(name),
+                    matchersExtensionFn,
+                    fn,
+                  );
+                let testSuiteResult =
+                  TestSuiteResult.ofDescribeResult(describeResult);
+                let newResult =
+                  acc.aggregatedResult
+                  |> AggregatedResult.addTestSuiteResult(testSuiteResult);
+                notifyReporters(r =>
+                  r.onTestSuiteResult(
+                    reporterSuite,
+                    newResult,
+                    testSuiteResult,
+                  )
+                );
+                {...acc, aggregatedResult: newResult};
+               }
+               }
              },
              {
                testRunState: initialState,
