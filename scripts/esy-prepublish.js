@@ -97,7 +97,6 @@ try {
     }
     fs.mkdirSync(subpackageReleaseDir);
     let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
-    fs.mkdirSync(subpackageReleaseDir);
     fs.mkdirSync(subpackageReleasePrepDir);
     fs.copyFileSync(
       path.join(projectRoot, 'template.tar'),
