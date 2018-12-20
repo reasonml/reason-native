@@ -11,7 +11,7 @@ module Make = (Styl: Stylish.StylishSig) => {
 
   exception Yojson_result_parse_not_list(string);
 
-  open BetterErrorsTypes;
+  open Types_t;
   open Helpers;
   open Printer;
   open Styl;
@@ -237,26 +237,24 @@ module Make = (Styl: Stylish.StylishSig) => {
         ~prettyResult: list(string),
         result: result,
       )
-      : string => {
-    let originalRevLinesJson =
-      `String(String.concat("\n", originalRevLines));
-    let prettyResultJson = `String(String.concat("\n", prettyResult));
-    let basicPayload = [
-      ("originalLines", originalRevLinesJson),
-      ("prettyResult", prettyResultJson),
-    ];
-    switch (BetterErrorsTypes.result_to_yojson(result)) {
-    | `List([err_type, err_data]) =>
-      Yojson.Safe.to_string(
-        `Assoc([("type", err_type), ("data", err_data), ...basicPayload]),
-      )
-    | `List([err_type]) =>
-      Yojson.Safe.to_string(`Assoc([("type", err_type), ...basicPayload]))
-    | e =>
-      /* This should never happen */
-      raise(Yojson_result_parse_not_list(Yojson.Safe.to_string(e)))
-    };
-  };
+      : string =>
+    Types_j.string_of_jsonResult({
+      data: result,
+      originalLines: String.concat("\n", originalRevLines),
+      prettyResult: String.concat("\n", prettyResult),
+      /*
+       switch (Types_j.string_of_result(result)) {
+       | `List([err_type, err_data]) =>
+         Yojson.Safe.to_string(
+           `Assoc([("type", err_type), ("data", err_data), ...basicPayload]),
+         )
+       | `List([err_type]) =>
+         Yojson.Safe.to_string(`Assoc([("type", err_type), ...basicPayload]))
+       | e =>
+         /* This should never happen */
+         raise(Yojson_result_parse_not_list(Yojson.Safe.to_string(e)))
+       }; */
+    });
 
   let prettyPrintParsedResult =
       (
@@ -268,7 +266,7 @@ module Make = (Styl: Stylish.StylishSig) => {
       : list(string) => {
     let prettyResult =
       switch (result) {
-      | Unparsable => originalRevLines
+      | `Unparsable => originalRevLines
       /* output the line without any decoration around. We previously had some
          cute little ascii red x mark to say "we couldn't parse this but there's
          probably an error". But it's very possible that this line's a continuation
@@ -276,18 +274,18 @@ module Make = (Styl: Stylish.StylishSig) => {
          line right after our supposedly parsed and pretty-printed error to make them
          look like one printed error. */
       /* the effing length we'd go for better errors... someone gimme a cookie */
-      | ErrorFile(NonexistentFile) =>
+      | `ErrorFile(`NonexistentFile) =>
         /* this case is never reached because we don't ever return `ErrorFile NonexistentFile` from
            `ParseError.specialParserThatChecksWhetherFileEvenExists` */
         originalRevLines
-      | ErrorFile(Stdin(original)) => [
+      | `ErrorFile(`Stdin(original)) => [
           sp(
             "%s (from stdin - see message above)",
             red(~bold=true, "Error:"),
           ),
           original,
         ]
-      | ErrorFile(CommandLine(moduleName)) => [
+      | `ErrorFile(`CommandLine(moduleName)) => [
           "",
           sp(
             "%s module %s not found.",
@@ -296,7 +294,7 @@ module Make = (Styl: Stylish.StylishSig) => {
           ),
           ...originalRevLines,
         ]
-      | ErrorFile(NoneFile(filename)) =>
+      | `ErrorFile(`NoneFile(filename)) =>
         /* TODO: test case for this. Forgot how to repro it */
         if (Filename.check_suffix(filename, ".cmo")) {
           [
@@ -318,7 +316,7 @@ module Make = (Styl: Stylish.StylishSig) => {
             ...originalRevLines,
           ];
         }
-      | ErrorContent(withFileInfo) =>
+      | `ErrorContent(withFileInfo) =>
         List.concat([
           ["", ""],
           ReportError.report(~refmttypePath, withFileInfo.parsedContent),
@@ -329,7 +327,7 @@ module Make = (Styl: Stylish.StylishSig) => {
           indent(dim("# "), List.map(dim, originalRevLines)),
           [highlight(~dim=true, ~bold=true, "# Unformatted Error Output:")],
         ])
-      | Warning(withFileInfo) =>
+      | `Warning(withFileInfo) =>
         List.concat([
           ["", ""],
           ReportWarning.report(

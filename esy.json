@@ -27,8 +27,7 @@
     "refmterr": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0",
     "@opam/re": "*",
-    "@opam/yojson": "*",
-    "@opam/ppx_deriving_yojson": "*"
+    "@opam/atdgen": "*"
   },
   "devDependencies": {
     "@opam/merlin": "*",

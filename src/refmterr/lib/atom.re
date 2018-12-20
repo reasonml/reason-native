@@ -4,9 +4,9 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
+open Types_t;
 module Range = {
-  [@deriving yojson]
-  type t = ((int, int), (int, int));
+  type t = rangeType;
   let emptyRange = ((0, 0), (0, 0));
 };
 module NuclideDiagnostic = {

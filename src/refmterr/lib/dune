@@ -1,5 +1,15 @@
+(rule
+ (targets types_j.ml
+          types_j.mli)
+ (deps    types.atd)
+ (action  (run atdgen -j -j-std %{deps})))
+
+(rule
+ (targets types_t.ml
+          types_t.mli)
+ (deps    types.atd)
+ (action  (run atdgen -t %{deps})))
 
 (library (name Refmterr)
     (public_name refmterr.lib)
-    (preprocess (pps ppx_deriving_yojson))
-    (libraries yojson ppx_deriving_yojson ppx_deriving_yojson.runtime re.pcre unix pastel.lib))
+    (libraries atdgen re.pcre unix pastel.lib))

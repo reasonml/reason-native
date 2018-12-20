@@ -1,0 +1,174 @@
+type term = [
+  | Pattern
+  | Expression
+]
+type mismatchTypeArguments =
+  {
+  typeConstructor: string ;
+  expectedCount: int ;
+  actualCount: int }
+type unboundValue = {
+  unboundValue: string ;
+  suggestions: string list option }
+type signatureItemWhatsMissing = [
+  | Value
+  | Type
+]
+type signatureItemMismatch =
+  {
+  notes: string ;
+  missing: (signatureItemWhatsMissing * string * string * string) list ;
+  values:
+    (signatureItemWhatsMissing * string * string * string * string * string *
+      string * string * string) list
+    ;
+  types: (string * string * string * string * string * string * bool) list }
+type unboundModule = {
+  unboundModule: string ;
+  suggestion: string option }
+type unboundConstructor =
+  {
+  constructor: string ;
+  expectedCount: int ;
+  observedCount: int }
+type unboundTypeConstructor =
+  {
+  namespacedConstructor: string ;
+  suggestion: string option }
+type argumentCannotBeAppliedWithLabel =
+  {
+  functionType: string ;
+  attemptedLabel: string }
+type labelIssue = [
+  | HasOptionalLabel of string
+  | HasLabel of string
+  | HasNoLabel
+  | Unknown
+]
+type functionWrongLabel = {
+  functionType: string ;
+  labelIssue: labelIssue }
+type appliedTooMany = {
+  functionType: string ;
+  expectedArgCount: int }
+type recordFieldNotInExpression =
+  {
+  constructor: string ;
+  expectedCount: int ;
+  observedCount: int }
+type recordFieldNotBelong =
+  {
+  term: term ;
+  recordType: string ;
+  recordField: string ;
+  suggestion: string option }
+type recordFieldError =
+  {
+  constructor: string ;
+  expectedCount: int ;
+  observedCount: int }
+type inconsistentAssumptions =
+  {
+  constructor: string ;
+  expectedCount: int ;
+  observedCount: int }
+type catchAll = {
+  warningCode: int ;
+  message: string }
+type unusedVariable =
+  {
+  constructor: string ;
+  expectedCount: int ;
+  observedCount: int }
+type fieldNotBelong = {
+  actual: string ;
+  expected: string }
+type badFileName = [
+  | Leading of string
+  | Contains of string
+  | UnknownIllegalChar
+]
+type incompat = {
+  actual: string list ;
+  expected: string list }
+type incompatibleType =
+  {
+  term: term ;
+  extra: string ;
+  main: incompat ;
+  incompats: incompat list ;
+  escapedScope: string option }
+type notAFunction = {
+  actual: string }
+type syntaxError = {
+  offendingString: string ;
+  hint: string option }
+type illegalCharacter = {
+  character: string }
+type patternNotExhaustive = {
+  unmatched: string list }
+type unparsableButWithFileInfo = {
+  error: string }
+type unboundRecordField = {
+  recordField: string ;
+  suggestion: string option }
+type optionalArgumentNotErased = {
+  argumentName: string }
+type warningType = [
+  | Warning_UnusedVariable of unusedVariable
+  | Warning_PatternNotExhaustive of patternNotExhaustive
+  | Warning_PatternUnused of unusedVariable
+  | Warning_OptionalArgumentNotErased of optionalArgumentNotErased
+  | Warning_BadFileName of badFileName
+  | NoWarningExtracted
+]
+type error = [
+  | Type_MismatchTypeArguments of mismatchTypeArguments
+  | Type_UnboundValue of unboundValue
+  | Type_SignatureItemMismatch of signatureItemMismatch
+  | Type_UnboundModule of unboundModule
+  | Type_UnboundRecordField of unboundRecordField
+  | Type_UnboundConstructor of unboundConstructor
+  | Type_UnboundTypeConstructor of unboundTypeConstructor
+  | Type_ArgumentCannotBeAppliedWithLabel of argumentCannotBeAppliedWithLabel
+  | Type_FunctionWrongLabel of functionWrongLabel
+  | Type_AppliedTooMany of appliedTooMany
+  | Type_RecordFieldNotInExpression of recordFieldNotInExpression
+  | Type_RecordFieldNotBelongPattern of recordFieldNotBelong
+  | Type_SomeRecordFieldsUndefined of string
+  | Type_RecordFieldError of recordFieldError
+  | Type_FieldNotBelong of fieldNotBelong
+  | Type_IncompatibleType of incompatibleType
+  | Type_NotAFunction of notAFunction
+  | File_SyntaxError of syntaxError
+  | Build_InconsistentAssumptions of inconsistentAssumptions
+  | File_IllegalCharacter of illegalCharacter
+  | NoErrorExtracted
+]
+type fileError = [
+  | NoneFile of string
+  | NonexistentFile
+  | CommandLine of string
+  | Stdin of string
+]
+type rangeType = ((int * int) * (int * int)) <json repr="array">
+type warning = {
+  code: int ;
+  warningType: warningType }
+type 'a withFileInfo =
+  {
+  filePath: string ;
+  cachedContent: string list ;
+  range: rangeType ;
+  parsedContent: 'a }
+type result = [
+  | Unparsable
+  | ErrorFile of fileError
+  | ErrorContent of error withFileInfo
+  | Warning of warning withFileInfo
+]
+type jsonResult = {
+    data: result;
+    originalLines: string;
+    prettyResult: string;
+  }
