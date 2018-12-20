@@ -1,0 +1,27 @@
+syntax: glob
+.DS_Store
+
+*.cmo
+*.out
+*.cmi
+
+_build
+*.native
+*.byte
+*.docdir
+
+setup.data
+setup.log
+
+/tests/**/*actual.txt
+
+_esy
+node_modules
+.jenga
+*.install
+tests/test.ml
+
+yarn-error.log
+**/.merlin
+
+lib/common
