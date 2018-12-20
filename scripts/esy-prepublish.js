@@ -95,6 +95,9 @@ try {
       console.log('YOU NEED TO REMOVE THE ' + subpackageReleaseDir + ' DIR FIRST!');
       process.exit(1);
     }
+    if (!fs.existsSync(_releaseDir)) {
+      fs.mkdirSync(_releaseDir);
+    }
     fs.mkdirSync(subpackageReleaseDir);
     let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
     fs.mkdirSync(subpackageReleasePrepDir);
