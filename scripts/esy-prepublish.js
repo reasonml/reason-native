@@ -58,12 +58,6 @@ for (var i = 0; i < relativeJsonPaths.length; i++) {
   }
 }
 
-let releaseRoot = path.resolve(projectRoot, '_release');
-if (fs.existsSync(releaseRoot)) {
-  console.log('YOU NEED TO REMOVE THE ' + releaseRoot + ' DIR FIRST!');
-  process.exit(1);
-}
-
 const head =
   cp.spawnSync('git', ['rev-parse', '--verify', 'HEAD']).stdout.toString();
 const master =
@@ -98,6 +92,10 @@ try {
     let jsonResolvedPath = path.resolve(projectRoot, jsonRelativePath);
 
     let subpackageReleaseDir = path.resolve(_releaseDir, jsonRelativePath);
+    if (fs.existsSync(subpackageReleaseDir)) {
+      console.log('YOU NEED TO REMOVE THE ' + subpackageReleaseDir + ' DIR FIRST!');
+      process.exit(1);
+    }
     let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
     fs.mkdirSync(subpackageReleaseDir);
     fs.mkdirSync(subpackageReleasePrepDir);
