@@ -81,7 +81,6 @@ let tarErr = tarResult.stderr.toString();
 
 try {
   let _releaseDir = path.resolve(projectRoot, '_release');
-  fs.mkdirSync(_releaseDir);
 
   // For each subpackage, we release the entire source code for all packages, but
   // with the root package.json swapped out with the esy.json file in the
@@ -96,6 +95,7 @@ try {
       console.log('YOU NEED TO REMOVE THE ' + subpackageReleaseDir + ' DIR FIRST!');
       process.exit(1);
     }
+    fs.mkdirSync(subpackageReleaseDir);
     let subpackageReleasePrepDir = path.resolve(_releaseDir, path.join(jsonRelativePath), '_prep');
     fs.mkdirSync(subpackageReleaseDir);
     fs.mkdirSync(subpackageReleasePrepDir);
