@@ -1,0 +1,71 @@
+FloatMatchers › failure output .not.toBeCloseTo
+Running 1 test suite
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mfailure output .not.toBeCloseTo\027[39m\027[76D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m \027[97mfailure output .not.toBeCloseTo\027[39m
+\027[1m\027[31m  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0. with precision 0\027[39m\027[22m
+
+    \027[2mexpect.float(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeCloseTo(\027[22m\027[32mexpected, precision\027[39m\027[2m)\027[22m
+    
+    Precision: \027[32m0\027[39m-digit
+    Expected: \027[32m0.\027[39m
+    Received: \027[31m0.\027[39m
+
+\027[1m\027[31m  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.96 with precision 1\027[39m\027[22m
+
+    \027[2mexpect.float(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeCloseTo(\027[22m\027[32mexpected, precision\027[39m\027[2m)\027[22m
+    
+    Precision: \027[32m1\027[39m-digit
+    Expected: \027[32m0.96\027[39m
+    Received: \027[31m1.\027[39m
+
+\027[1m\027[31m  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.996 with precision 2\027[39m\027[22m
+
+    \027[2mexpect.float(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeCloseTo(\027[22m\027[32mexpected, precision\027[39m\027[2m)\027[22m
+    
+    Precision: \027[32m2\027[39m-digit
+    Expected: \027[32m0.996\027[39m
+    Received: \027[31m1.\027[39m
+
+\027[1m\027[31m  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.9996 with precision 3\027[39m\027[22m
+
+    \027[2mexpect.float(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeCloseTo(\027[22m\027[32mexpected, precision\027[39m\027[2m)\027[22m
+    
+    Precision: \027[32m3\027[39m-digit
+    Expected: \027[32m0.9996\027[39m
+    Received: \027[31m1.\027[39m
+
+\027[1m\027[31m  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.9995 with precision 3\027[39m\027[22m
+
+    \027[2mexpect.float(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeCloseTo(\027[22m\027[32mexpected, precision\027[39m\027[2m)\027[22m
+    
+    Precision: \027[32m3\027[39m-digit
+    Expected: \027[32m0.9995\027[39m
+    Received: \027[31m1.\027[39m
+
+\027[1m\027[31m  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0.1 with precision 0\027[39m\027[22m
+
+    \027[2mexpect.float(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeCloseTo(\027[22m\027[32mexpected, precision\027[39m\027[2m)\027[22m
+    
+    Precision: \027[32m0\027[39m-digit
+    Expected: \027[32m0.1\027[39m
+    Received: \027[31m0.\027[39m
+
+\027[1m\027[31m  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0.0001 with precision 3\027[39m\027[22m
+
+    \027[2mexpect.float(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeCloseTo(\027[22m\027[32mexpected, precision\027[39m\027[2m)\027[22m
+    
+    Precision: \027[32m3\027[39m-digit
+    Expected: \027[32m0.0001\027[39m
+    Received: \027[31m0.\027[39m
+
+\027[1m\027[31m  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 4e-06 with precision 5\027[39m\027[22m
+
+    \027[2mexpect.float(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeCloseTo(\027[22m\027[32mexpected, precision\027[39m\027[2m)\027[22m
+    
+    Precision: \027[32m5\027[39m-digit
+    Expected: \027[32m4e-06\027[39m
+    Received: \027[31m0.\027[39m
+
+
+\027[97m\027[1mTest Suites: \027[22m\027[39m\027[31m\027[1m1 failed\027[22m\027[39m, 0 passed, 1 total
+\027[97m\027[1mTests:       \027[22m\027[39m\027[31m\027[1m8 failed\027[22m\027[39m, 0 passed, 8 total
+
