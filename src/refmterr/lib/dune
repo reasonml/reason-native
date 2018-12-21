@@ -10,6 +10,8 @@
  (deps    types.atd)
  (action  (run atdgen -t %{deps})))
 
+(copy_files# ../../../common/*)
+
 (library (name Refmterr)
     (public_name refmterr.lib)
     (libraries atdgen re.pcre unix pastel.lib))
