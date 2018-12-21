@@ -153,7 +153,7 @@ class Index extends React.Component {
               `<br/><br/><a class="button" href="${this.docUrl(doc, this.props.language)}" target="_self">
                 Learn More
               </a>`,
-            title
+            title,
           }, {
             content:
               '```' + example + '```\n' +

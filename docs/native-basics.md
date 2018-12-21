@@ -23,3 +23,7 @@ The [hello-reason](https://github.com/esy-ocaml/hello-reason.git) starter descri
 **Native Reason** projects are Reason projects that target native system binaries. We say native Reason projects because Reason can also be compiled to JavaScript through [BuckleScript](https://bucklescript.github.io/).
 
 If you are new to Reason and would like to learn more about the language, please visit the [ReasonML Docs](https://reasonml.github.io/docs/en/what-and-why).
+
+## Dune
+
+Dune is the primary build system used by native Reason projects, and is system of choice used throughout this documentation website. If you are unfamiliar with dune, we highly recommend reading the [Dune Overview](https://dune.readthedocs.io/en/latest/overview.html).

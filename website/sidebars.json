@@ -2,8 +2,8 @@
   "docs": {
     "Overview": [
       "introduction",
-      "getting-started",
-      "native-basics"
+      "native-basics",
+      "getting-started"
     ],
     "Rely": [
       "rely/index",

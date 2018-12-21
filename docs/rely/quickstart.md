@@ -3,39 +3,34 @@ id: quickstart
 title: Rely Quickstart
 sidebar_label: Quickstart
 ---
+> This quickstart builds off [Getting Started](../getting-started) and assumes you have a native Reason project set up.
 
-## Installation
-We recommend that you use [`esy`](https://esy.sh/) to handle your package management. To install esy using npm, run
-```bash
-npm install -g esy
+## Install Rely
+
+To install Rely in your project with esy, run
+```sh
+esy add @reason-native/rely
 ```
 
-Add it as a dependency to your package.json (or esy.json) and run ```esy install```. If you don't want to distribute your tests as part of your release, you can utilize  [multiple sandboxes](https://esy.sh/docs/en/multiple-sandboxes.html) and .opam files to separate your dependencies
+This will add `@reason-native/rely` into your `package.json`.
 
-**package.json**
-```
-...
+In order to use Rely, you must add it to your build system. With dune, `rely.lib` must be added to [the relevant `dune` file](https://jbuilder.readthedocs.io/en/latest/dune-files.html#library-dependencies):
 
-dependencies": {
-    ...
-    "@reason-native/rely": "*",
-    ...
-},
-...
+```lisp
+(libraries ... rely.lib)
 ```
 
 ## Create a test
 
-Let's start by creating a library for our tests. First create an opam file for your test package (it should be empty). Then let's create a directory called test and create a dune file for our library (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
-```
-├─my-lib-test.opam
+Let's start by creating a library for our tests. Create a directory called test and create a dune file for our library (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
+```sh
 ├─test/
 │   lib/
 │       dune
 ```
 
-#### dune
-```
+```lisp
+;; dune file
 (library
    (name MyLibTest)
    (public_name my-lib-test.lib)
@@ -49,16 +44,15 @@ Let's start by creating a library for our tests. First create an opam file for y
 ```
 
 Now let's create a file to initialize the test framework. Here we are specifying where snapshots should be stored as well as the root directory of your project for the formatting of terminal output.
-```
-├─my-lib-test.opam
+```sh
 ├─test/
 │   lib/
 │       dune
 │       TestFramework.re
 ```
 
-#### TestFramework.re
 ```reason
+/* TestFramework.re */
 include Rely.Make({
   let config =
     Rely.TestFrameworkConfig.initialize({
@@ -69,8 +63,7 @@ include Rely.Make({
 ```
 
 Now we can finally write our first test!
-```
-├─my-lib-test.opam
+```sh
 ├─test/
 │   lib/
 │       dune
@@ -79,6 +72,7 @@ Now we can finally write our first test!
 ```
 
 ```reason
+/* MyFirstTest.re */
 open TestFramework;
 
 describe("my first test suite", ({test}) => {
@@ -89,8 +83,7 @@ describe("my first test suite", ({test}) => {
 ```
 
 From here let's create an executable to actually run our tests.
-```
-├─my-lib-test.opam
+```sh
 ├─test/
 │   lib/
 │       dune
@@ -101,18 +94,18 @@ From here let's create an executable to actually run our tests.
 │       MyLibTest.re
 ```
 
-#### dune
-```
+```lisp
+;; dune file
 (executable
    (name MyLibTest)
    (public_name MyLibTest.exe)
-   (libraries  my-lib.test )
+   (libraries  my-lib.test)
    (package my-lib-test)
 )
 ```
 
-#### MyLibTest.re
 ```reason
+/* MyLibTest.re */
 MyLibTest.TestFramework.cli()
 ```
 
