@@ -4,7 +4,7 @@ title: Pastel Quickstart
 sidebar_label: Quickstart
 ---
 
-> This quickstart builds off [Getting Started](/getting-started) and assumes you have a native Reason project set up.
+> This quickstart builds off [Getting Started](../getting-started) and assumes you have a native Reason project set up.
 
 ## Install Pastel
 

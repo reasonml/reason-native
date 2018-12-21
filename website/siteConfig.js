@@ -22,7 +22,7 @@ const users = [
 
 const siteConfig = {
   title: 'Reason Native', // Title for your website.
-  tagline: 'Testing, printing, coloring, and other tools to effectively write native Reason code.',
+  tagline: 'Libraries for building and testing native Reason programs.',
   url: 'https://kpsuperplane.github.io', // Your website URL
   baseUrl: '/reason-native/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
@@ -40,7 +40,7 @@ const siteConfig = {
   headerLinks: [
     { doc: 'introduction', label: 'Docs' },
     { page: 'help', label: 'Help' },
-    { blog: true, label: 'Blog' },
+    // { blog: true, label: 'Blog' },
   ],
 
   // If you have users set above, you add it here:

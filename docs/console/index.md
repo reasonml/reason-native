@@ -4,11 +4,7 @@ title: Console: No effort, universal logger
 sidebar_label: Introduction
 ---
 
-Part of the
-[reason-native](https://github.com/facebookexperimental/reason-native) native
-utility collection.
-
-**Browser Inspired**: `Console` is modelled after the browser console. It
+`Console` is modelled after the browser console. It
 doesn't require that you define any printers, and `Console.log/warn/error`
 accept any type of input. Record fields and variant label names are lost at
 compile time so they aren't printed.
@@ -37,11 +33,10 @@ Records/variant types that occupy more than one word in a block are all
 printed as their corresponding integer (if a payloadless variant), or `{x, y,
 ...z}` for a record or variant that contains data.
 
-    Console.log(Some("hi"));
-    > {"hi"}
-
-    Console.log(None);
-    > 0
+```re
+Console.log(Some("hi")); /* {"hi"} */
+Console.log(None); /* 0 */
+```
 
 **Extensible**: Allows customization of printing in order to change where the
 logs are written to, how they are highlighted, and anything else you would

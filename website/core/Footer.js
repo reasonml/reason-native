@@ -12,7 +12,7 @@ class Footer extends React.Component {
     const baseUrl = this.props.config.baseUrl;
     const docsUrl = this.props.config.docsUrl;
     const docsPart = `${docsUrl ? `${docsUrl}/` : ''}`;
-    const langPart = `${language ? `${language}/` : ''}`;
+    const langPart = '';//`${language ? `${language}/` : ''}`;
     return `${baseUrl}${docsPart}${langPart}${doc}`;
   }
 
@@ -37,25 +37,24 @@ class Footer extends React.Component {
           </a>
           <div>
             <h5>Projects</h5>
-            <a href={this.docUrl('doc1.html', this.props.language)}>
-              Pastel
+            <a href={this.docUrl('rely', this.props.language)}>
+              Rely
             </a>
-            <a href={this.docUrl('doc2.html', this.props.language)}>
+            <a href={this.docUrl('console', this.props.language)}>
               Console
             </a>
-            <a href={this.docUrl('doc3.html', this.props.language)}>
-              File Context Printer
+            <a href={this.docUrl('pastel', this.props.language)}>
+              Pastel
             </a>
-            <a href={this.docUrl('doc3.html', this.props.language)}>
+            <a href={this.docUrl('refmterr', this.props.language)}>
               Refmterr
             </a>
-            <a href={this.docUrl('doc3.html', this.props.language)}>
-              Rely
+            <a href={this.docUrl('file-context-printer', this.props.language)}>
+              File Context Printer
             </a>
           </div>
           <div>
             <h5>More</h5>
-            <a href={`${this.props.config.baseUrl}blog`}>Blog</a>
             <a href={this.props.config.repoUrl}>GitHub</a>
             <a
               className="github-button"

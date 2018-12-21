@@ -5,20 +5,20 @@
       "getting-started",
       "native-basics"
     ],
-    "Pastel": [
-      "pastel/index",
-      "pastel/quickstart",
-      "pastel/api",
-      "pastel/console"
+    "Rely": [
+      "rely/index",
+      "rely/quickstart"
     ],
     "Console": [
       "console/index",
       "console/quickstart",
       "console/api"
     ],
-    "Rely": [
-      "rely/index",
-      "rely/quickstart"
+    "Pastel": [
+      "pastel/index",
+      "pastel/quickstart",
+      "pastel/api",
+      "pastel/console"
     ],
     "Refmterr": [
       "refmterr/index"

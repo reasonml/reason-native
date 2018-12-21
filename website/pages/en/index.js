@@ -168,11 +168,11 @@ class Index extends React.Component {
         <HomeSplash siteConfig={siteConfig} language={language} />
         <div className="mainContainer examples" style={{ padding: 0 }}>
           <Description
-            title="Pastel"
-            doc="pastel"
-            content="Terminal highlighting with support for nesting and style propagation."
-            example={PastelExample}
-            output={PastelExampleOutput}
+            title="Rely"
+            doc="rely"
+            content="Fast, native, Jest-style test framework"
+            example={RelyExample}
+            output={RelyExampleOutput}
           />
           <Description
             title="Console"
@@ -182,11 +182,11 @@ class Index extends React.Component {
             output={ConsoleExampleOutput}
           />
           <Description
-            title="Rely"
-            doc="rely"
-            content="Fast, native, Jest-style test framework"
-            example={RelyExample}
-            output={RelyExampleOutput}
+            title="Pastel"
+            doc="pastel"
+            content="Terminal highlighting with support for nesting and style propagation."
+            example={PastelExample}
+            output={PastelExampleOutput}
           />
           <Description
             title="Refmterr"

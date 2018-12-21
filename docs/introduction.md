@@ -9,11 +9,11 @@ Testing, printing, coloring, and other tools to effectively write native Reason 
 
 ## Packages
 
-- [`@reason-native/pastel`](./pastel/index.md): Terminal highlighting with support for nesting and style propagation.
-- [`@reason-native/console`](./console/index.md): `Console.log(anything)`. At Runtime. Natively.
-- [`@reason-native/file-context-printer`](./file-context-printer/index.md): Utility for displaying snippets of files on the command line.
-- [`@reason-native/refmterr`](./refmterr/index.md): Utility for extracting structure from unstructured ocaml compiler errors, and displaying them.
 - [`@reason-native/rely`](./rely/index.md): Native Jest style API.
+- [`@reason-native/console`](./console/index.md): `Console.log(anything)`. At Runtime. Natively.
+- [`@reason-native/pastel`](./pastel/index.md): Terminal highlighting with support for nesting and style propagation.
+- [`@reason-native/refmterr`](./refmterr/index.md): Utility for extracting structure from unstructured ocaml compiler errors, and displaying them.
+- [`@reason-native/file-context-printer`](./file-context-printer/index.md): Utility for displaying snippets of files on the command line.
 - [`@reason-native/pastel-console`](./pastel/console.md): To be used in `devDependencies`. Enhances `console` with colors.
 
 ## Status
