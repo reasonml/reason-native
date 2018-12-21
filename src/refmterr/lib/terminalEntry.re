@@ -19,25 +19,40 @@ let parseFromStdin =
   let reverseErrBuffer = {contents: []};
   let prettyPrintParsedResult =
     TerminalReporter.prettyPrintParsedResult(~refmttypePath, ~rawOutput);
+
+  let tryParseJson = line => Re.Pcre.pmatch(~rex=hasJsonError, line) ?
+    try (Some(Types_j.jsonResult_of_string(line))){
+      | e => None
+    } :
+    None;
   let forEachLine = line =>
     switch (
       reverseErrBuffer.contents,
       Re.Pcre.pmatch(~rex=fileR, line),
       Re.Pcre.pmatch(~rex=hasErrorOrWarningR, line),
       Re.Pcre.pmatch(~rex=hasIndentationR, line),
+      tryParseJson(line),
     ) {
-    | ([], false, false, false) =>
+    | (_, _, _, _, Some(jsonResult)) =>
+      prettyPrintParsedResult(
+        ~originalRevLines=Str.(split(
+          regexp({|\n|}), jsonResult.originalLines)),
+        jsonResult.data
+      )
+      |> revBufferToStr
+      |> print_endline;
+    | ([], false, false, false, None) =>
       /* no error, just stream on the line */
       print_endline(
         TerminalReporter.processLogOutput(~customLogOutputProcessors, line),
       )
-    | ([], true, _, _)
-    | ([], _, true, _)
-    | ([], _, _, true) =>
+    | ([], true, _, _, None)
+    | ([], _, true, _, None)
+    | ([], _, _, true, None) =>
       /* the beginning of a new error! */
       reverseErrBuffer.contents = [line]
     /* don't parse it yet. Maybe the error's continuing on the next line */
-    | (_, true, _, _) =>
+    | (_, true, _, _, None) =>
       /* we have a file match, AND the current reverseErrBuffer isn't empty? We'll
          just assume here that this is also the beginning of a new error, unless
          a single error might span many (non-indented, god forbid) fileNames.
@@ -50,10 +65,10 @@ let parseFromStdin =
       reverseErrBuffer.contents = [line];
     /* buffer not empty, and we're seeing an error/indentation line. This is
        the continuation of a currently streaming error/warning */
-    | (_, _, _, true)
-    | (_, _, true, _) =>
+    | (_, _, _, true, None)
+    | (_, _, true, _, None) =>
       reverseErrBuffer.contents = [line, ...reverseErrBuffer.contents]
-    | (_, false, false, false) =>
+    | (_, false, false, false, None) =>
       /* woah this case was previously forgotten but caught by the
              compiler. Man I don't ever wanna write an if-else anymore
              buffer not empty, and no indentation and not an error/file

@@ -155,6 +155,9 @@ let hasErrorOrWarningR =
 let hasIndentationR =
   Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], {|^       +|});
 
+let hasJsonError =
+  Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], {|^\{"data": \[|});
+
 /* TODO: make the below work. the "Here is an example..." is followed by even more lines of hints */
 /* let hasHintRStr = {|^(Hint: Did you mean |Here is an example of a value that is not matched:)|} */
 /* let hasHintRStr = {|^(Here is an example of a value that is not matched:|Hint: Did you mean )|} */
@@ -289,4 +292,5 @@ let line_stream_of_channel = channel =>
       What about errors of the form:
 
    */
+
 let revBufferToStr = revBuffer => String.concat("\n", List.rev(revBuffer));
