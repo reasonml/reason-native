@@ -28,18 +28,22 @@ Go ahead and `Console.log` anything you like! Check out the [API documentation](
 ```re
 Console.log((1, (2, 3)));
 Console.log(2.3323);
-Console.error("I am an error");
-Console.debug(Some(5));
+
+Console.warn("\nI'm in stderr");
+Console.error(Some(5));
 Console.warn(() => {/* anonymous function */});
-Console.log("I can be meta too:");
+
+Console.log("\nI can be meta too:");
 Console.debug(Console.debug);
 ```
 ```sh-stacked
 {1, {2, 3}}
 2.3323
-I am an error
+
+I'm in stderr
 {5}
 closure(2257708960)
+
 I can be meta too:
 closure(2256368436)
 ```
