@@ -21,10 +21,12 @@
       "pastel/console"
     ],
     "Refmterr": [
-      "refmterr/index"
+      "refmterr/index",
+      "refmterr/quickstart"
     ],
     "File Context Printer": [
-      "file-context-printer/index"
+      "file-context-printer/index",
+      "file-context-printer/quickstart"
     ]
   }
 }
