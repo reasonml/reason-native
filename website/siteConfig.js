@@ -8,22 +8,10 @@
 // See https://docusaurus.io/docs/site-config for all the possible
 // site configuration options.
 
-// List of projects/orgs using your project for the users page.
-const users = [
-  {
-    caption: 'User1',
-    // You will need to prepend the image path with your baseUrl
-    // if it is not '/', like: '/test-site/img/docusaurus.svg'.
-    image: '/img/docusaurus.svg',
-    infoLink: 'https://www.facebook.com',
-    pinned: true,
-  },
-];
-
 const siteConfig = {
   title: 'Reason Native', // Title for your website.
   tagline: 'Libraries for building and testing native Reason programs.',
-  url: 'https://kpsuperplane.github.io', // Your website URL
+  url: 'https://facebookexperimental.github.io', // Your website URL
   baseUrl: '/reason-native/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
@@ -31,7 +19,7 @@ const siteConfig = {
 
   // Used for publishing and more
   projectName: 'reason-native',
-  organizationName: 'kpsuperplane',
+  organizationName: 'facebookexperimental',
   // For top-level user or org sites, the organization is still the same.
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
   //   organizationName: 'JoelMarcey'
@@ -42,9 +30,6 @@ const siteConfig = {
     { page: 'help', label: 'Help' },
     // { blog: true, label: 'Blog' },
   ],
-
-  // If you have users set above, you add it here:
-  users,
 
   /* path to images for header/footer */
   headerIcon: 'img/logo-inverted.svg',
