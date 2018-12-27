@@ -15,6 +15,11 @@ module type Collection = {
   let emptyDisplay: string;
 };
 
+type matchers('a, 'b) = {
+  toEqual: (~equals: equalsFn('a)=?, 'b) => unit,
+  toBeEmpty: unit => unit,
+};
+
 module Make = (Collection: Collection) => {
   type matchers('a) = {
     toEqual: (~equals: equalsFn('a)=?, Collection.t('a)) => unit,
