@@ -5,8 +5,8 @@ Running 1 test suite
 
     \027[2mexpect.list(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toEqual(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
     
-    Expected: \027[32m0\027[39m
-    Received: \027[31m0\027[39m
+    Expected: \027[32m[]\027[39m
+    Received: \027[31m[]\027[39m
 
 \027[1m\027[31m  \226\128\162 expect.list.not.toEqual failure output \226\128\186 int list\027[39m\027[22m
 
@@ -33,8 +33,8 @@ Running 1 test suite
 
     \027[2mexpect.list(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toEqual(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
     
-    Expected: \027[32m0\027[39m
-    Received: \027[31m0\027[39m
+    Expected: \027[32m[]\027[39m
+    Received: \027[31m[]\027[39m
 
 \027[1m\027[31m  \226\128\162 expect.list.not.toEqual failure output \226\128\186 within 42\027[39m\027[22m
 

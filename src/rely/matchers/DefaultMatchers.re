@@ -21,7 +21,7 @@ type matchers('ext) = {
   int: int => intMatchersWithNot,
   float: float => floatMatchersWithNot,
   fn: 'a. (unit => 'a) => fnMatchersWithNot,
-  list: 'a. list('a) => listMatchersWithNot('a),
+  list: 'a. list('a) => ListMatchers.matchersWithNot('a),
   ext: 'ext
 };
 
