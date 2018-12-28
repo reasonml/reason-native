@@ -17,6 +17,7 @@ module Reporter = Reporter;
 module TestResult = TestResult;
 module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
+module ArrayMatchers = ArrayMatchers;
 open Reporter;
 
 module Test = {

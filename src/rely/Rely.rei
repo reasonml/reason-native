@@ -6,6 +6,7 @@
  */;
 module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
+module ArrayMatchers = ArrayMatchers;
 
 module Test: {
   type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
