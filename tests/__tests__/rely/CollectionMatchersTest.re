@@ -51,7 +51,11 @@ module Make =
       let defaultEqualityTestCases = [
         DefaultEqualityTestCase([], [], "empty " ++ T.collectionName),
         DefaultEqualityTestCase([1, 2], [1, 2], "int " ++ T.collectionName),
-        DefaultEqualityTestCase([1.0, 2.0], [1.0, 2.0], "float " ++ T.collectionName),
+        DefaultEqualityTestCase(
+          [1.0, 2.0],
+          [1.0, 2.0],
+          "float " ++ T.collectionName,
+        ),
         DefaultEqualityTestCase(
           ["bacon", "delicious"],
           ["bacon", "delicious"],
@@ -73,7 +77,12 @@ module Make =
            )
       );
       let customEqualityTestCases = [
-        CustomEqualityTestCase([], [], (a, b) => false, "empty " ++ T.collectionName),
+        CustomEqualityTestCase(
+          [],
+          [],
+          (a, b) => false,
+          "empty " ++ T.collectionName,
+        ),
         CustomEqualityTestCase(
           [1],
           [41],
@@ -90,6 +99,38 @@ module Make =
                test(testName, t =>
                  T.expectPath(t, T.ofList(actual)).toEqual(
                    ~equals,
+                   T.ofList(expected),
+                 )
+               )
+             }
+           )
+      );
+
+      let unequalTestCases = [
+        DefaultEqualityTestCase(
+          [1, 2],
+          [1, 2, 3],
+          "actual shorter than expected",
+        ),
+        DefaultEqualityTestCase(
+          [1, 2, 3],
+          [1, 2],
+          "actual longer than expected",
+        ),
+        DefaultEqualityTestCase(
+          ["mismatched"],
+          ["values"],
+          "mismatched values",
+        ),
+      ];
+      describe(
+        "default inequality " ++ T.collectionName ++ " test cases", ({test}) =>
+        unequalTestCases
+        |> List.iter(testCase =>
+             switch (testCase) {
+             | DefaultEqualityTestCase(actual, expected, testName) =>
+               test(testName, t =>
+                 T.expectPath(t, T.ofList(actual)).not.toEqual(
                    T.ofList(expected),
                  )
                )
@@ -116,39 +157,21 @@ module Make =
         testRunnerOutputSnapshotTest(
           "expect." ++ T.collectionName ++ ".toEqualfailure output",
           describeUtils,
-          ({test}) => {
-            let failureTestCases = [
-              DefaultEqualityTestCase(
-                [1, 2],
-                [1, 2, 3],
-                "actual shorter than expected",
-              ),
-              DefaultEqualityTestCase(
-                [1, 2, 3],
-                [1, 2],
-                "actual longer than expected",
-              ),
-              DefaultEqualityTestCase(
-                ["mismatched"],
-                ["values"],
-                "mismatched values",
-              ),
-            ];
-            failureTestCases
-            |> List.iter(testCase =>
-                 switch (testCase) {
-                 | DefaultEqualityTestCase(actual, expected, testName) =>
-                   test(testName, t =>
-                     T.expectPath(t, T.ofList(actual)).toEqual(
-                       T.ofList(expected),
-                     )
+          ({test}) =>
+          unequalTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | DefaultEqualityTestCase(actual, expected, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).toEqual(
+                     T.ofList(expected),
                    )
-                 }
-               );
-          },
+                 )
+               }
+             )
         );
         testRunnerOutputSnapshotTest(
-          "expect."++ T.collectionName ++ ".not.toEqual failure output",
+          "expect." ++ T.collectionName ++ ".not.toEqual failure output",
           describeUtils,
           ({test}) => {
             defaultEqualityTestCases
