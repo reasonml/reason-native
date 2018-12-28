@@ -1,4 +1,4 @@
-Rely array matchers › Failurre output › expect.array.not.toEqual failure output
+Rely array matchers › Failure output › expect.array.not.toEqual failure output
 Running 1 test suite
 \r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mexpect.array.not.toEqual failure output\027[39m\027[84D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m \027[97mexpect.array.not.toEqual failure output\027[39m
 \027[1m\027[31m  \226\128\162 expect.array.not.toEqual failure output \226\128\186 empty array\027[39m\027[22m

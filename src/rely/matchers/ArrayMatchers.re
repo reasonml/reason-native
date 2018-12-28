@@ -31,6 +31,8 @@ module Array = {
     };
   };
   let emptyDisplay = "[||]";
+  let contains = (target, equals) => Array.exists(item => equals(item, target));
+  let collectionName = "array";
 }
 
 include CollectionMatchers.Make(Array);

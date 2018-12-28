@@ -23,6 +23,8 @@ module List = {
     | _ => false
     };
   let emptyDisplay = "[]";
+  let contains = (target, equals) => List.exists(item => equals(item, target));
+  let collectionName = "list";
 };
 
 include CollectionMatchers.Make(List);

@@ -12,7 +12,6 @@ module type TestConfiguration = {
   type matchersWithNot('a);
   let ofList: list('a) => t('a);
   let expectPath: (Rely.Test.testUtils('a), t('b)) => matchersWithNot('b);
-  let collectionName: string;
 };
 
 type defaultEqualityTestCase =
@@ -23,6 +22,19 @@ type customEqualityTestCase =
   | CustomEqualityTestCase(list('a), list('a), ('a, 'a) => bool, string)
     : customEqualityTestCase;
 
+type defaulteEqualityContainsTestCase =
+  | DefaultEqualityContainsTestCase(list('a), 'a, string)
+    : defaulteEqualityContainsTestCase;
+type customEqualityContainsTestCase =
+  | CustomEqualityContainsTestCase(list('a), 'a, ('a, 'a) => bool, string)
+    : customEqualityContainsTestCase;
+type simplePersonRecord = {
+  name: string,
+  age: int,
+};
+
+let comparePeople = (p1, p2) => p1.name == p2.name && p1.age == p2.age;
+
 module Make =
        (
          Collection: Rely.CollectionMatchers.Collection,
@@ -32,13 +44,13 @@ module Make =
              type matchersWithNot('a) =
                Rely.CollectionMatchers.Make(Collection).matchersWithNot('a),
        ) => {
-  let _ = "foo";
+  let collectionName = Collection.collectionName;
   describe(
-    "Rely " ++ T.collectionName ++ " matchers",
+    "Rely " ++ collectionName ++ " matchers",
     ({describe}) => {
       let emptyCollection = T.ofList([]);
       describe(
-        "empty " ++ T.collectionName,
+        "empty " ++ collectionName,
         ({test}) => {
           test("empty should be empty", t =>
             T.expectPath(t, emptyCollection).toBeEmpty()
@@ -49,21 +61,21 @@ module Make =
         },
       );
       let defaultEqualityTestCases = [
-        DefaultEqualityTestCase([], [], "empty " ++ T.collectionName),
-        DefaultEqualityTestCase([1, 2], [1, 2], "int " ++ T.collectionName),
+        DefaultEqualityTestCase([], [], "empty " ++ collectionName),
+        DefaultEqualityTestCase([1, 2], [1, 2], "int " ++ collectionName),
         DefaultEqualityTestCase(
           [1.0, 2.0],
           [1.0, 2.0],
-          "float " ++ T.collectionName,
+          "float " ++ collectionName,
         ),
         DefaultEqualityTestCase(
           ["bacon", "delicious"],
           ["bacon", "delicious"],
-          "string " ++ T.collectionName,
+          "string " ++ collectionName,
         ),
       ];
       describe(
-        "default equality " ++ T.collectionName ++ " test cases", ({test}) =>
+        "default equality " ++ collectionName ++ " test cases", ({test}) =>
         defaultEqualityTestCases
         |> List.iter(testCase =>
              switch (testCase) {
@@ -81,7 +93,7 @@ module Make =
           [],
           [],
           (a, b) => false,
-          "empty " ++ T.collectionName,
+          "empty " ++ collectionName,
         ),
         CustomEqualityTestCase(
           [1],
@@ -91,7 +103,7 @@ module Make =
         ),
       ];
       describe(
-        "custom equality " ++ T.collectionName ++ " test cases", ({test}) =>
+        "custom equality " ++ collectionName ++ " test cases", ({test}) =>
         customEqualityTestCases
         |> List.iter(testCase =>
              switch (testCase) {
@@ -124,7 +136,7 @@ module Make =
         ),
       ];
       describe(
-        "default inequality " ++ T.collectionName ++ " test cases", ({test}) =>
+        "default inequality " ++ collectionName ++ " test cases", ({test}) =>
         unequalTestCases
         |> List.iter(testCase =>
              switch (testCase) {
@@ -137,9 +149,99 @@ module Make =
              }
            )
       );
-      describe("Failurre output", describeUtils => {
+
+      let defaultEqualityContainsTestCases = [
+        DefaultEqualityContainsTestCase([1, 2, 3], 1, "integer contains"),
+        DefaultEqualityContainsTestCase(
+          ["foo", "bar"],
+          "foo",
+          "string contains",
+        ),
+      ];
+      let customEqualityContainsTestCases = [
+        CustomEqualityContainsTestCase(
+          [1.0, 2.0],
+          1.2,
+          (a, b) => abs_float(a -. b) < 0.3,
+          "float comparsion",
+        ),
+        CustomEqualityContainsTestCase(
+          [{name: "Sally", age: 42}, {name: "Steve", age: 37}],
+          {name: "Steve", age: 37},
+          comparePeople,
+          "record comparison",
+        ),
+      ];
+      describe(
+        "expect." ++ collectionName ++ ".toContain",
+        ({test}) => {
+          defaultEqualityContainsTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | DefaultEqualityContainsTestCase(actual, item, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).toContain(item)
+                 )
+               }
+             );
+        customEqualityContainsTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | CustomEqualityContainsTestCase(actual, item, equals, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).toContain(~equals, item)
+                 )
+               }
+             );
+        },
+      );
+
+      let doesNotContainDefaultEqualityTestCases = [
+        DefaultEqualityContainsTestCase([], 7, "empty " ++ collectionName),
+        DefaultEqualityContainsTestCase([1, 2], 7, "missing element")
+      ];
+
+      let doesNotContainCustomEqualityTestCases = [
+        CustomEqualityContainsTestCase(
+          [1.0, 2.0],
+          1.2,
+          (a, b) => abs_float(a -. b) < 0.1,
+          "float comparsion",
+        ),
+        CustomEqualityContainsTestCase(
+          [{name: "Sally", age: 42}, {name: "Steve", age: 37}],
+          {name: "Eve", age: 35},
+          comparePeople,
+          "record comparison",
+        ),
+      ];
+      describe(
+        "expect." ++ collectionName ++ ".not.toContain",
+        ({test}) => {
+          doesNotContainDefaultEqualityTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | DefaultEqualityContainsTestCase(actual, item, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).not.toContain(item)
+                 )
+               }
+             );
+             doesNotContainCustomEqualityTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | CustomEqualityContainsTestCase(actual, item, equals, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).not.toContain(~equals, item)
+                 )
+               }
+             );
+        },
+      );
+
+      describe("Failure output", describeUtils => {
         testRunnerOutputSnapshotTest(
-          "expect." ++ T.collectionName ++ ".toBeEmpty output",
+          "expect." ++ collectionName ++ ".toBeEmpty output",
           describeUtils,
           ({test}) =>
           test("something should be empty failure output", t =>
@@ -147,7 +249,7 @@ module Make =
           )
         );
         testRunnerOutputSnapshotTest(
-          "expect." ++ T.collectionName ++ ".not.toBeEmpty output",
+          "expect." ++ collectionName ++ ".not.toBeEmpty output",
           describeUtils,
           ({test}) =>
           test("empty should not be empty failure output", t =>
@@ -155,7 +257,7 @@ module Make =
           )
         );
         testRunnerOutputSnapshotTest(
-          "expect." ++ T.collectionName ++ ".toEqualfailure output",
+          "expect." ++ collectionName ++ ".toEqual failure output",
           describeUtils,
           ({test}) =>
           unequalTestCases
@@ -171,7 +273,7 @@ module Make =
              )
         );
         testRunnerOutputSnapshotTest(
-          "expect." ++ T.collectionName ++ ".not.toEqual failure output",
+          "expect." ++ collectionName ++ ".not.toEqual failure output",
           describeUtils,
           ({test}) => {
             defaultEqualityTestCases
@@ -193,6 +295,52 @@ module Make =
                      T.expectPath(t, T.ofList(actual)).not.toEqual(
                        ~equals,
                        T.ofList(expected),
+                     )
+                   )
+                 }
+               );
+          },
+        );
+        testRunnerOutputSnapshotTest(
+          "expect." ++ collectionName ++ ".toContain failure output",
+          describeUtils,
+          ({test}) =>
+          doesNotContainDefaultEqualityTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | DefaultEqualityContainsTestCase(actual, item, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).toContain(
+                     item
+                   )
+                 )
+               }
+             )
+        );
+
+        testRunnerOutputSnapshotTest(
+          "expect." ++ collectionName ++ ".not.toContain failure output",
+          describeUtils,
+          ({test}) => {
+            defaultEqualityContainsTestCases
+            |> List.iter(testCase =>
+                 switch (testCase) {
+                 | DefaultEqualityContainsTestCase(actual, item, testName) =>
+                   test(testName, t =>
+                     T.expectPath(t, T.ofList(actual)).not.toContain(
+                       item
+                     )
+                   )
+                 }
+               );
+            customEqualityContainsTestCases
+            |> List.iter(testCase =>
+                 switch (testCase) {
+                 | CustomEqualityContainsTestCase(actual, item, equals, testName) =>
+                   test(testName, t =>
+                     T.expectPath(t, T.ofList(actual)).not.toContain(
+                       ~equals,
+                       item
                      )
                    )
                  }
