@@ -22,14 +22,16 @@ module Make = (Collection: Collection) => {
   type matchers('a) = {
     toEqual: (~equals: equalsFn('a)=?, Collection.t('a)) => unit,
     toBeEmpty: unit => unit,
-    toContain: (~equals: equalsFn('a)=?, 'a) => unit,
+    toContain: 'a => unit,
+    toContainEqual: (~equals: equalsFn('a)=?, 'a) => unit,
   };
 
   type matchersWithNot('a) = {
     not: matchers('a),
     toEqual: (~equals: equalsFn('a)=?, Collection.t('a)) => unit,
     toBeEmpty: unit => unit,
-    toContain: (~equals: equalsFn('a)=?, 'a) => unit,
+    toContain: 'a => unit,
+    toContainEqual: (~equals: equalsFn('a)=?, 'a) => unit,
   };
 
   let passMessageThunk = () => "";
@@ -143,8 +145,8 @@ module Make = (Collection: Collection) => {
             expectedThunk,
           ) => {
           let actual = actualThunk();
-          let (equals, expected) = expectedThunk();
-          let pass = Collection.contains(expected, equals, actual);
+          let expected = expectedThunk();
+          let pass = Collection.contains(expected, (===), actual);
           if (pass) {
             (passMessageThunk, pass);
           } else {
@@ -181,8 +183,8 @@ module Make = (Collection: Collection) => {
             expectedThunk,
           ) => {
           let actual = actualThunk();
-          let (equals, expected) = expectedThunk();
-          let pass = !Collection.contains(expected, equals, actual);
+          let expected = expectedThunk();
+          let pass = !Collection.contains(expected, (===), actual);
           if (pass) {
             (passMessageThunk, pass);
           } else {
@@ -212,6 +214,83 @@ module Make = (Collection: Collection) => {
           };
         });
 
+        let toContainEqual =
+        createMatcher(
+          (
+            {matcherHint, formatReceived, formatExpected, indent},
+            actualThunk,
+            expectedThunk,
+          ) => {
+          let actual = actualThunk();
+          let (equals, expected) = expectedThunk();
+          let pass = Collection.contains(expected, equals, actual);
+          if (pass) {
+            (passMessageThunk, pass);
+          } else {
+            let message =
+              String.concat(
+                "",
+                [
+                  matcherHint(
+                    ~matcherName=".toContainEqual",
+                    ~expectType=accessorPath,
+                    ~expected="value",
+                    ~received=Collection.collectionName,
+                    (),
+                  ),
+                  "\n\n",
+                  "Expected " ++ Collection.collectionName ++ ":",
+                  "\n",
+                  indent(formatReceived(printCollection(actual))),
+                  "\n",
+                  "To contain value: ",
+                  "\n",
+                  indent(formatExpected(PolymorphicPrint.print(expected))),
+                ],
+              );
+            (() => message, pass);
+          };
+        });
+
+      let notToContainEqual =
+        createMatcher(
+          (
+            {matcherHint, formatReceived, formatExpected, indent},
+            actualThunk,
+            expectedThunk,
+          ) => {
+          let actual = actualThunk();
+          let (equals, expected) = expectedThunk();
+          let pass = !Collection.contains(expected, equals, actual);
+          if (pass) {
+            (passMessageThunk, pass);
+          } else {
+            let message =
+              String.concat(
+                "",
+                [
+                  matcherHint(
+                    ~matcherName=".toContainEqual",
+                    ~expectType=accessorPath,
+                    ~isNot=true,
+                    ~expected="value",
+                    ~received=Collection.collectionName,
+                    (),
+                  ),
+                  "\n\n",
+                  "Expected " ++ Collection.collectionName ++ ":",
+                  "\n",
+                  indent(formatReceived(printCollection(actual))),
+                  "\n",
+                  "Not to contain value: ",
+                  "\n",
+                  indent(formatExpected(PolymorphicPrint.print(expected))),
+                ],
+              );
+            (() => message, pass);
+          };
+        });
+
       let makecollectionMatchers = isNot => {
         toEqual: (~equals=(==), expected) =>
           toEqual(isNot, () => actual, () => (equals, expected)),
@@ -219,10 +298,14 @@ module Make = (Collection: Collection) => {
           isNot ?
             expected => notToBeEmpty(() => actual, () => ()) :
             (expected => toBeEmpty(() => actual, () => ())),
-        toContain: (~equals=(==), expected) =>
+        toContain: (expected) =>
           isNot ?
-            notToContain(() => actual, () => (equals, expected)) :
-            toContain(() => actual, () => (equals, expected)),
+            notToContain(() => actual, () => expected) :
+            toContain(() => actual, () => expected),
+        toContainEqual: (~equals=(==), expected) =>
+          isNot ?
+            notToContainEqual(() => actual, () => (equals, expected)) :
+            toContainEqual(() => actual, () => (equals, expected)),
       };
 
       let collectionMatchers = makecollectionMatchers(false);
@@ -231,6 +314,7 @@ module Make = (Collection: Collection) => {
         toEqual: collectionMatchers.toEqual,
         toBeEmpty: collectionMatchers.toBeEmpty,
         toContain: collectionMatchers.toContain,
+        toContainEqual: collectionMatchers.toContainEqual
       };
     };
     createcollectionMatchers;

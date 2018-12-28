@@ -173,14 +173,14 @@ module Make =
         ),
       ];
       describe(
-        "expect." ++ collectionName ++ ".toContain",
+        "expect." ++ collectionName ++ ".toContainEqual",
         ({test}) => {
           defaultEqualityContainsTestCases
           |> List.iter(testCase =>
                switch (testCase) {
                | DefaultEqualityContainsTestCase(actual, item, testName) =>
                  test(testName, t =>
-                   T.expectPath(t, T.ofList(actual)).toContain(item)
+                   T.expectPath(t, T.ofList(actual)).toContainEqual(item)
                  )
                }
              );
@@ -189,7 +189,7 @@ module Make =
                switch (testCase) {
                | CustomEqualityContainsTestCase(actual, item, equals, testName) =>
                  test(testName, t =>
-                   T.expectPath(t, T.ofList(actual)).toContain(~equals, item)
+                   T.expectPath(t, T.ofList(actual)).toContainEqual(~equals, item)
                  )
                }
              );
@@ -216,14 +216,14 @@ module Make =
         ),
       ];
       describe(
-        "expect." ++ collectionName ++ ".not.toContain",
+        "expect." ++ collectionName ++ ".not.toContainEqual",
         ({test}) => {
           doesNotContainDefaultEqualityTestCases
           |> List.iter(testCase =>
                switch (testCase) {
                | DefaultEqualityContainsTestCase(actual, item, testName) =>
                  test(testName, t =>
-                   T.expectPath(t, T.ofList(actual)).not.toContain(item)
+                   T.expectPath(t, T.ofList(actual)).not.toContainEqual(item)
                  )
                }
              );
@@ -232,7 +232,7 @@ module Make =
                switch (testCase) {
                | CustomEqualityContainsTestCase(actual, item, equals, testName) =>
                  test(testName, t =>
-                   T.expectPath(t, T.ofList(actual)).not.toContain(~equals, item)
+                   T.expectPath(t, T.ofList(actual)).not.toContainEqual(~equals, item)
                  )
                }
              );
@@ -302,7 +302,7 @@ module Make =
           },
         );
         testRunnerOutputSnapshotTest(
-          "expect." ++ collectionName ++ ".toContain failure output",
+          "expect." ++ collectionName ++ ".toContainEqual failure output",
           describeUtils,
           ({test}) =>
           doesNotContainDefaultEqualityTestCases
@@ -310,7 +310,7 @@ module Make =
                switch (testCase) {
                | DefaultEqualityContainsTestCase(actual, item, testName) =>
                  test(testName, t =>
-                   T.expectPath(t, T.ofList(actual)).toContain(
+                   T.expectPath(t, T.ofList(actual)).toContainEqual(
                      item
                    )
                  )
@@ -319,7 +319,7 @@ module Make =
         );
 
         testRunnerOutputSnapshotTest(
-          "expect." ++ collectionName ++ ".not.toContain failure output",
+          "expect." ++ collectionName ++ ".not.toContainEqual failure output",
           describeUtils,
           ({test}) => {
             defaultEqualityContainsTestCases
@@ -327,7 +327,7 @@ module Make =
                  switch (testCase) {
                  | DefaultEqualityContainsTestCase(actual, item, testName) =>
                    test(testName, t =>
-                     T.expectPath(t, T.ofList(actual)).not.toContain(
+                     T.expectPath(t, T.ofList(actual)).not.toContainEqual(
                        item
                      )
                    )
@@ -338,7 +338,7 @@ module Make =
                  switch (testCase) {
                  | CustomEqualityContainsTestCase(actual, item, equals, testName) =>
                    test(testName, t =>
-                     T.expectPath(t, T.ofList(actual)).not.toContain(
+                     T.expectPath(t, T.ofList(actual)).not.toContainEqual(
                        ~equals,
                        item
                      )
