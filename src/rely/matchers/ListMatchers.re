@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-include CollectionMatchers.Make({
+module List = {
   type t('a) = list('a);
   let isEmpty = l => List.length(l) == 0;
   let rec collectionEquals =
@@ -23,4 +23,6 @@ include CollectionMatchers.Make({
     | _ => false
     };
   let emptyDisplay = "[]";
-});
+};
+
+include CollectionMatchers.Make(List);

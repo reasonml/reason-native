@@ -15,6 +15,8 @@ module MatcherUtils = MatcherUtils;
 module MatcherTypes = MatcherTypes;
 module Reporter = Reporter;
 module TestResult = TestResult;
+module CollectionMatchers = CollectionMatchers;
+module ListMatchers = ListMatchers;
 open Reporter;
 
 module Test = {

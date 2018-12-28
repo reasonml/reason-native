@@ -13,6 +13,8 @@ module type Collection = {
   let isEmpty: t('a) => bool;
   let collectionEquals: (~memberEquals: equalsFn('a), t('a), t('a)) => bool;
   let emptyDisplay: string;
+  /* let collectionName: string; */
+  /* let contains: ('a, t('a)) => bool; */
 };
 
 type matchers('a, 'b) = {
