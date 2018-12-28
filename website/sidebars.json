@@ -7,7 +7,8 @@
     ],
     "Rely": [
       "rely/index",
-      "rely/quickstart"
+      "rely/quickstart",
+      "rely/api"
     ],
     "Console": [
       "console/index",
@@ -26,7 +27,8 @@
     ],
     "File Context Printer": [
       "file-context-printer/index",
-      "file-context-printer/quickstart"
+      "file-context-printer/quickstart",
+      "file-context-printer/api"
     ]
   }
 }
