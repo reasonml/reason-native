@@ -7,7 +7,7 @@
 open MatcherTypes;
 
 type equalsFn('a) = ('a, 'a) => bool;
-type predicate('a) = ('a) => bool;
+type predicate('a) = 'a => bool;
 
 module type Collection = {
   type t('a);
@@ -22,7 +22,7 @@ module Make = (Collection: Collection) => {
   type matchers('a) = {
     toEqual: (~equals: equalsFn('a)=?, Collection.t('a)) => unit,
     toBeEmpty: unit => unit,
-    toContain: (~equals: equalsFn('a)=?, 'a) => unit
+    toContain: (~equals: equalsFn('a)=?, 'a) => unit,
   };
 
   type matchersWithNot('a) = {
@@ -42,7 +42,7 @@ module Make = (Collection: Collection) => {
       let toEqual = isNot =>
         createMatcher(
           (
-            {matcherHint, formatReceived, formatExpected},
+            {matcherHint, formatReceived, formatExpected, indent},
             actualThunk,
             expectedThunk,
           ) => {
@@ -68,11 +68,13 @@ module Make = (Collection: Collection) => {
                     (),
                   ),
                   "\n\n",
-                  "Expected: ",
-                  formatExpected(printCollection(expected)),
+                  isNot ?
+                    "Expected value not to equal:\n" :
+                    "Expected value to equal:\n",
+                  indent(formatExpected(printCollection(expected))),
                   "\n",
-                  "Received: ",
-                  formatReceived(printCollection(actual)),
+                  "Received:\n",
+                  indent(formatReceived(printCollection(actual))),
                 ],
               );
             (() => message, pass);
@@ -134,7 +136,12 @@ module Make = (Collection: Collection) => {
         });
 
       let toContain =
-        createMatcher(({matcherHint, formatReceived, formatExpected, indent}, actualThunk, expectedThunk) => {
+        createMatcher(
+          (
+            {matcherHint, formatReceived, formatExpected, indent},
+            actualThunk,
+            expectedThunk,
+          ) => {
           let actual = actualThunk();
           let (equals, expected) = expectedThunk();
           let pass = Collection.contains(expected, equals, actual);
@@ -167,7 +174,12 @@ module Make = (Collection: Collection) => {
         });
 
       let notToContain =
-        createMatcher(({matcherHint, formatReceived, formatExpected, indent}, actualThunk, expectedThunk) => {
+        createMatcher(
+          (
+            {matcherHint, formatReceived, formatExpected, indent},
+            actualThunk,
+            expectedThunk,
+          ) => {
           let actual = actualThunk();
           let (equals, expected) = expectedThunk();
           let pass = !Collection.contains(expected, equals, actual);
@@ -207,10 +219,10 @@ module Make = (Collection: Collection) => {
           isNot ?
             expected => notToBeEmpty(() => actual, () => ()) :
             (expected => toBeEmpty(() => actual, () => ())),
-        toContain:
-          (~equals=(==), expected) =>
-            isNot ? notToContain(() => actual, () => (equals, expected))
-            : toContain(() => actual, () => (equals, expected))
+        toContain: (~equals=(==), expected) =>
+          isNot ?
+            notToContain(() => actual, () => (equals, expected)) :
+            toContain(() => actual, () => (equals, expected)),
       };
 
       let collectionMatchers = makecollectionMatchers(false);
@@ -218,7 +230,7 @@ module Make = (Collection: Collection) => {
         not: makecollectionMatchers(true),
         toEqual: collectionMatchers.toEqual,
         toBeEmpty: collectionMatchers.toBeEmpty,
-        toContain: collectionMatchers.toContain
+        toContain: collectionMatchers.toContain,
       };
     };
     createcollectionMatchers;
