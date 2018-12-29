@@ -11,7 +11,7 @@
 const siteConfig = {
   title: 'Reason Native', // Title for your website.
   tagline: 'Libraries for building and testing native Reason programs.',
-  url: 'https://facebookexperimental.github.io', // Your website URL
+  url: 'https://kpsuperplane.github.io', // Your website URL
   baseUrl: '/reason-native/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
@@ -19,7 +19,7 @@ const siteConfig = {
 
   // Used for publishing and more
   projectName: 'reason-native',
-  organizationName: 'facebookexperimental',
+  organizationName: 'kpsuperplane',
   // For top-level user or org sites, the organization is still the same.
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
   //   organizationName: 'JoelMarcey'
