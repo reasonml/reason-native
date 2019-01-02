@@ -20,7 +20,8 @@
     "native"
   ],
   "esy": {
-    "build": "refmterr dune build -p rely",
+    "build": "dune build -p rely",
+    "buildDev": "refmterr dune build -p rely",
     "install": "esy-installer rely.install"
   },
   "scripts": {

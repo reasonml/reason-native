@@ -8,7 +8,8 @@
   },
   "license": "MIT",
   "esy": {
-    "build": "refmterr dune build -p file-context-printer",
+    "build": "dune build -p file-context-printer",
+    "buildDev": "refmterr dune build -p file-context-printer",
     "install": "esy-installer file-context-printer.install"
   },
   "scripts": {
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",
+    "refmterr": "*",
     "ocaml": "~4.6.0"
   }
 }

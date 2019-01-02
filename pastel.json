@@ -52,7 +52,6 @@
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0",
-    "@reason-native/rely": "*"
+    "ocaml": "~4.6.0"
   }
 }
