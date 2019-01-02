@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "description": "My Project",
   "esy": {
-    "build": "refmterr dune build -p pastel-console",
-    "install": "esy-installer pastel-console.install"
+    "build": "esydune build",
+    "buildDev": "refmterr esydune build",
+    "install": "esydune install"
   },
   "scripts": {
     "test": "esy x TestPastelConsole.exe",
@@ -16,6 +17,7 @@
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
+    "esydune": "*",
     "ocaml": ">= 4.2.0  <= 4.7.0"
   },
   "devDependencies": {

@@ -9,6 +9,7 @@
     ; The main module that will become the binary.
     (name berror)
     (ocamlopt_flags (-g -verbose))
+    (flags (:standard -warn-error -a-27-9))
 
     ; Depends on:
     ; - 2 local libraries defined in this project.

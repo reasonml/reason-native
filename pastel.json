@@ -38,8 +38,8 @@
     "native"
   ],
   "esy": {
-    "build": "dune build -p pastel",
-    "install": "esy-installer pastel.install"
+    "build": "esydune build",
+    "install": "esydune install"
   },
   "scripts": {
     "test": "esy x TestPastel.exe",
@@ -48,7 +48,8 @@
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
-    "ocaml": ">= 4.2.0  <= 4.7.0"
+    "ocaml": ">= 4.2.0  <= 4.7.0",
+    "esydune": "*"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",

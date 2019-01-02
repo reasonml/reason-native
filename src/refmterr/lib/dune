@@ -12,6 +12,8 @@
 
 (library (name Refmterr)
     (public_name refmterr.lib)
-    (libraries atdgen re.pcre unix pastel.lib))
+    (libraries atdgen re.pcre unix pastel.lib)
+    (flags (:standard -warn-error -a-27-9))
+    )
 
 (copy_files# ../../../common/*)

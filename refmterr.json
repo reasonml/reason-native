@@ -9,7 +9,8 @@
     "ocaml": " >= 4.2.0  < 4.8.0",
     "@reason-native/pastel": "*",
     "@opam/atdgen": "*",
-    "@reason-native/console": "*"
+    "@reason-native/console": "*",
+    "esydune": "*"
   },
   "author": {
     "name": "chenglou"
@@ -20,8 +21,8 @@
     "@esy-ocaml/reason": "3.3.3"
   },
   "esy": {
-    "build": "dune build -p refmterr",
-    "install": "esy-installer refmterr.install"
+    "build": "esydune build",
+    "install": "esydune install"
   },
   "scripts": {
     "test": "esy src/refmterr/runTests.cmd",

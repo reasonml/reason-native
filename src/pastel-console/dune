@@ -2,4 +2,5 @@
    (name PastelConsole)
    (public_name pastel-console.lib)
    (libraries  console.lib pastel.lib )
+   (flags (:standard -warn-error -a-27-9))
   )

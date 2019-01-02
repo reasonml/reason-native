@@ -8,5 +8,6 @@
    ; The name of the executable (runnable via esy x TestFCP.exe)
    (public_name TestFCP.exe)  ;  From package.json name field
    (libraries  file-context-printer.lib ) ;  From package.json require field (array of strings)
+   (flags (:standard -warn-error -a-27-9))
    (package file-context-printer)
 )

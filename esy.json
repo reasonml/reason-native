@@ -29,6 +29,7 @@
     "@reason-native/pastel-console": "link-dev:./pastel-console.json",
     "refmterr": "link-dev:./refmterr.json",
     "@reason-native/rely": "link-dev:./rely.json",
-    "@reason-native/tests": "link-dev:./tests.json"
+    "@reason-native/tests": "link-dev:./tests.json",
+    "esydune": "esy-ocaml/esydune#0126f46"
   }
 }

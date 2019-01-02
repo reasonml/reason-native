@@ -8,6 +8,7 @@
     console.lib
     pastel-console.lib
   )
+  (flags (:standard -warn-error -a-27-9))
 )
 (include_subdirs unqualified)
 (dirs :standard __tests__)

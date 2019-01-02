@@ -6,4 +6,5 @@
   (libraries
     Tests
   )
+  (flags (:standard -warn-error -a-27-9))
 )

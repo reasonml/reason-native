@@ -3,4 +3,5 @@
    (name Pastel)
    (public_name pastel.lib)
    (libraries  str )
+   (flags (:standard -warn-error -a-27-9))
 )

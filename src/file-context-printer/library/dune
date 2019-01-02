@@ -3,4 +3,5 @@
    (name FileContextPrinter)
    (public_name file-context-printer.lib)
    (libraries  str re pastel.lib )
+   (flags (:standard -warn-error -a-27-9))
 )
