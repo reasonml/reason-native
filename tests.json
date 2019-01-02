@@ -1,0 +1,18 @@
+{
+  "name": "@reason-native/tests",
+  "version": "0.0.0",
+  "esy": {
+    "build": "dune build -p tests",
+    "buildDev": "refmterr dune build -p tests",
+    "install": "esy-installer tests.install"
+  },
+  "dependencies": {
+    "@reason-native/rely": "*",
+    "@reason-native/pastel": "*",
+    "@reason-native/console": "*",
+    "@reason-native/pastel-console": "*"
+  },
+  "devDependencies": {
+    "refmterr": "*"
+  }
+}

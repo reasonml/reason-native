@@ -14,7 +14,8 @@
     "@reason-native/pastel": "*",
     "@reason-native/pastel-console": "*",
     "refmterr": "*",
-    "@reason-native/rely": "*"
+    "@reason-native/rely": "*",
+    "@reason-native/tests": "*"
   },
   "devDependencies": {
     "@opam/merlin": "*",
@@ -27,6 +28,7 @@
     "@reason-native/pastel": "link-dev:./pastel.json",
     "@reason-native/pastel-console": "link-dev:./pastel-console.json",
     "refmterr": "link-dev:./refmterr.json",
-    "@reason-native/rely": "link-dev:./rely.json"
+    "@reason-native/rely": "link-dev:./rely.json",
+    "@reason-native/tests": "link-dev:./tests.json"
   }
 }
