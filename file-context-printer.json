@@ -24,7 +24,7 @@
     "esydune": "*"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*",
+    "@opam/merlin": "*",
     "refmterr": "*",
     "ocaml": "~4.6.0"
   }

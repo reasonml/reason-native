@@ -16,7 +16,7 @@
     "name": "chenglou"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*",
+    "@opam/merlin": "*",
     "ocaml": "~4.6.0",
     "@esy-ocaml/reason": "3.3.3"
   },

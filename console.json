@@ -20,7 +20,7 @@
     "ocaml": ">= 4.2.0  <= 4.7.0"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*",
+    "@opam/merlin": "*",
     "ocaml": "~4.6.0"
   }
 }
