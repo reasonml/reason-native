@@ -3,7 +3,7 @@ Running 1 test suite
 \r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mexpect.array.not.toContain failure output\027[39m\027[86D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m \027[97mexpect.array.not.toContain failure output\027[39m
 \027[1m\027[31m  \226\128\162 expect.array.not.toContain failure output \226\128\186 integer contains\027[39m\027[22m
 
-    \027[2mexpect.array(\027[22m\027[31marray\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m
+    \027[2mexpect.array(\027[22m\027[31marray\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m \027[2m/* using === */\027[22m
     
     Expected array:
       \027[31m{1, 2, 3}\027[39m
@@ -12,16 +12,18 @@ Running 1 test suite
 
 \027[1m\027[31m  \226\128\162 expect.array.not.toContain failure output \226\128\186 string reference equality\027[39m\027[22m
 
-    \027[2mexpect.array(\027[22m\027[31marray\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m
+    \027[2mexpect.array(\027[22m\027[31marray\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m \027[2m/* using === */\027[22m
     
     Expected array:
       \027[31m{\"string\", \"bacon\"}\027[39m
     Not to contain value: 
       \027[32mstring\027[39m
+    
+    \027[2mNote that you are testing for referential equality with the stricter `toContain` matcher. You probably need to use `toContainEqual` instead.\027[22m
 
 \027[1m\027[31m  \226\128\162 expect.array.not.toContain failure output \226\128\186 record reference equality\027[39m\027[22m
 
-    \027[2mexpect.array(\027[22m\027[31marray\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m
+    \027[2mexpect.array(\027[22m\027[31marray\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m \027[2m/* using === */\027[22m
     
     Expected array:
       \027[31m{{\"Tom\", 42}, {\"Jerry\", 100}}\027[39m

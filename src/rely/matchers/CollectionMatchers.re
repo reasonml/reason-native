@@ -18,6 +18,34 @@ module type Collection = {
   let contains: ('a, equalsFn('a), t('a)) => bool;
 };
 
+let suggest_to_contain_equal =
+  Pastel.dim(
+    "Note that you are testing for referential equality with the stricter `toContain` matcher. You probably need to use `toContainEqual` instead.",
+  );
+
+let suggest_custom_equality_for_float =
+  Pastel.dim(
+    "Note that you are testing for float equality using (==). You probably need to specify a ~equals function to the matcher.",
+  );
+
+let isTypeThatMightNotWantToUseReferentialEquality = value =>
+  switch (Obj.tag(Obj.magic(value))) {
+  | tag when tag == Obj.object_tag => true
+  | tag when tag == Obj.string_tag => true
+  | tag when tag == Obj.double_tag => true
+  | tag when tag == Obj.double_array_tag => true
+  | _ => false
+  };
+
+let isFloatOrArrayOfFloat = value =>
+  switch (Obj.tag(Obj.magic(value))) {
+  | tag when tag == Obj.double_tag => true
+  | tag when tag == Obj.double_array_tag => true
+  | _ => false
+  };
+
+let defaultEqualityFn = (==);
+
 module Make = (Collection: Collection) => {
   type matchers('a) = {
     toEqual: (~equals: equalsFn('a)=?, Collection.t('a)) => unit,
@@ -66,6 +94,11 @@ module Make = (Collection: Collection) => {
                   matcherHint(
                     ~expectType=accessorPath,
                     ~matcherName=".toEqual",
+                    ~options={
+                      comment:
+                        equals === defaultEqualityFn ?
+                          Some("using ==") : None,
+                    },
                     ~isNot,
                     (),
                   ),
@@ -150,6 +183,9 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
+            let suggestToContainEqual =
+              Collection.contains(expected, defaultEqualityFn, actual)
+              || isTypeThatMightNotWantToUseReferentialEquality(expected);
             let message =
               String.concat(
                 "",
@@ -159,6 +195,7 @@ module Make = (Collection: Collection) => {
                     ~expectType=accessorPath,
                     ~expected="value",
                     ~received=Collection.collectionName,
+                    ~options={comment: Some("using ===")},
                     (),
                   ),
                   "\n\n",
@@ -170,6 +207,9 @@ module Make = (Collection: Collection) => {
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
                 ],
+              )
+              ++ (
+                suggestToContainEqual ? "\n\n" ++ suggest_to_contain_equal : ""
               );
             (() => message, pass);
           };
@@ -188,6 +228,8 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
+            let suggestToContainEqual =
+              isTypeThatMightNotWantToUseReferentialEquality(expected);
             let message =
               String.concat(
                 "",
@@ -197,6 +239,7 @@ module Make = (Collection: Collection) => {
                     ~expectType=accessorPath,
                     ~isNot=true,
                     ~expected="value",
+                    ~options={comment: Some("using ===")},
                     ~received=Collection.collectionName,
                     (),
                   ),
@@ -209,12 +252,15 @@ module Make = (Collection: Collection) => {
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
                 ],
+              )
+              ++ (
+                suggestToContainEqual ? "\n\n" ++ suggest_to_contain_equal : ""
               );
             (() => message, pass);
           };
         });
 
-        let toContainEqual =
+      let toContainEqual =
         createMatcher(
           (
             {matcherHint, formatReceived, formatExpected, indent},
@@ -227,6 +273,8 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
+            let suggestCustomEquality =
+              isFloatOrArrayOfFloat(expected) && equals === defaultEqualityFn;
             let message =
               String.concat(
                 "",
@@ -236,6 +284,11 @@ module Make = (Collection: Collection) => {
                     ~expectType=accessorPath,
                     ~expected="value",
                     ~received=Collection.collectionName,
+                    ~options={
+                      comment:
+                        equals === defaultEqualityFn ?
+                          Some("using ==") : None,
+                    },
                     (),
                   ),
                   "\n\n",
@@ -247,6 +300,10 @@ module Make = (Collection: Collection) => {
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
                 ],
+              )
+              ++ (
+                suggestCustomEquality ?
+                  "\n\n" ++ suggest_custom_equality_for_float : ""
               );
             (() => message, pass);
           };
@@ -265,6 +322,8 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
+            let suggestCustomEquality =
+              isFloatOrArrayOfFloat(expected) && equals === defaultEqualityFn;
             let message =
               String.concat(
                 "",
@@ -275,6 +334,11 @@ module Make = (Collection: Collection) => {
                     ~isNot=true,
                     ~expected="value",
                     ~received=Collection.collectionName,
+                    ~options={
+                      comment:
+                        equals === defaultEqualityFn ?
+                          Some("using ==") : None,
+                    },
                     (),
                   ),
                   "\n\n",
@@ -286,23 +350,27 @@ module Make = (Collection: Collection) => {
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
                 ],
+              )
+              ++ (
+                suggestCustomEquality ?
+                  "\n\n" ++ suggest_custom_equality_for_float : ""
               );
             (() => message, pass);
           };
         });
 
       let makecollectionMatchers = isNot => {
-        toEqual: (~equals=(==), expected) =>
+        toEqual: (~equals=defaultEqualityFn, expected) =>
           toEqual(isNot, () => actual, () => (equals, expected)),
         toBeEmpty:
           isNot ?
             expected => notToBeEmpty(() => actual, () => ()) :
             (expected => toBeEmpty(() => actual, () => ())),
-        toContain: (expected) =>
+        toContain: expected =>
           isNot ?
             notToContain(() => actual, () => expected) :
             toContain(() => actual, () => expected),
-        toContainEqual: (~equals=(==), expected) =>
+        toContainEqual: (~equals=defaultEqualityFn, expected) =>
           isNot ?
             notToContainEqual(() => actual, () => (equals, expected)) :
             toContainEqual(() => actual, () => (equals, expected)),
@@ -314,7 +382,7 @@ module Make = (Collection: Collection) => {
         toEqual: collectionMatchers.toEqual,
         toBeEmpty: collectionMatchers.toBeEmpty,
         toContain: collectionMatchers.toContain,
-        toContainEqual: collectionMatchers.toContainEqual
+        toContainEqual: collectionMatchers.toContainEqual,
       };
     };
     createcollectionMatchers;
