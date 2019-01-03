@@ -20,7 +20,7 @@
   "scripts": {
     "bootstrap": "esy x bash -cx ./bootstrap.cmd",
     "all": "./scripts/run-all.sh",
-    "test": "./scripts/test.sh"
+    "test": "esy x bash -cx ./scripts/test.cmd"
   },
   "dependencies": {
     "@opam/dune": "*",
