@@ -38,8 +38,7 @@
     "native"
   ],
   "esy": {
-    "build": "esydune build",
-    "install": "esydune install"
+    "build": "esydune build"
   },
   "scripts": {
     "test": "esy x TestPastel.exe",

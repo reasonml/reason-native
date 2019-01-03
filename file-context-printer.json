@@ -9,8 +9,7 @@
   "license": "MIT",
   "esy": {
     "build": "esydune build",
-    "buildDev": "refmterr esydune build",
-    "install": "esydune install"
+    "buildDev": "refmterr esydune build"
   },
   "scripts": {
     "release": "node ./scripts/esy-prepublish.js file-context-printer.json"

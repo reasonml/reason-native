@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "esy": {
     "build": "esydune build",
-    "buildDev": "refmterr esydune build",
-    "install": "esydune install"
+    "buildDev": "refmterr esydune build"
   },
   "dependencies": {
     "@reason-native/rely": "*",

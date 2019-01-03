@@ -4,8 +4,7 @@
   "description": "No effort, universal logger",
   "license": "MIT",
   "esy": {
-    "build": "esydune build",
-    "install": "esydune install"
+    "build": "esydune build"
   },
   "scripts": {
     "test": "esy x TestConsole.exe",

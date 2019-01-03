@@ -21,8 +21,7 @@
   ],
   "esy": {
     "build": "esydune build",
-    "buildDev": "refmterr esydune build",
-    "install": "esydune install"
+    "buildDev": "refmterr esydune build"
   },
   "scripts": {
     "test": "esy x TestRely.exe",

@@ -21,8 +21,7 @@
     "@esy-ocaml/reason": "3.3.3"
   },
   "esy": {
-    "build": "esydune build",
-    "install": "esydune install"
+    "build": "esydune build"
   },
   "scripts": {
     "test": "esy src/refmterr/runTests.cmd",
