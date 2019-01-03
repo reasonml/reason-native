@@ -373,6 +373,92 @@ module Make =
           },
         );
       });
+
+      describe("toContain", describeUtils => {
+        let {describe, test} = describeUtils;
+        let recordInstance = {name: "Tom", age: 42};
+        let string = "string";
+        let defaultEqualityContainsTestCases = [
+          DefaultEqualityContainsTestCase([1, 2, 3], 1, "integer contains"),
+          DefaultEqualityContainsTestCase(
+            [string, "bacon"],
+            string,
+            "string reference equality",
+          ),
+          DefaultEqualityContainsTestCase(
+            [recordInstance, {name: "Jerry", age: 100}],
+            recordInstance,
+            "record reference equality",
+          ),
+        ];
+        describe("expect." ++ collectionName ++ ".toContain", ({test}) =>
+          defaultEqualityContainsTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | DefaultEqualityContainsTestCase(actual, item, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).toContain(item)
+                 )
+               }
+             )
+        );
+        let doesNotContainDefaultEqualityTestCases = [
+          DefaultEqualityContainsTestCase([], 7, "empty " ++ collectionName),
+          DefaultEqualityContainsTestCase([1, 2], 7, "missing element"),
+          DefaultEqualityContainsTestCase(
+            ["foo", "bar"],
+            "foo",
+            "separate string references",
+          ),
+          DefaultEqualityContainsTestCase(
+            [{name: "Amy", age: 19}],
+            {name: "Amy", age: 19},
+            "separate record references",
+          ),
+        ];
+
+        describe("expect." ++ collectionName ++ ".not.toContain", ({test}) =>
+          doesNotContainDefaultEqualityTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | DefaultEqualityContainsTestCase(actual, item, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).not.toContain(item)
+                 )
+               }
+             )
+        );
+
+        testRunnerOutputSnapshotTest(
+          "expect." ++ collectionName ++ ".toContain failure output",
+          describeUtils,
+          ({test}) =>
+          doesNotContainDefaultEqualityTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | DefaultEqualityContainsTestCase(actual, item, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).toContain(item)
+                 )
+               }
+             )
+        );
+
+        testRunnerOutputSnapshotTest(
+          "expect." ++ collectionName ++ ".not.toContain failure output",
+          describeUtils,
+          ({test}) =>
+          defaultEqualityContainsTestCases
+          |> List.iter(testCase =>
+               switch (testCase) {
+               | DefaultEqualityContainsTestCase(actual, item, testName) =>
+                 test(testName, t =>
+                   T.expectPath(t, T.ofList(actual)).not.toContain(item)
+                 )
+               }
+             )
+        );
+      });
     },
   );
 };
