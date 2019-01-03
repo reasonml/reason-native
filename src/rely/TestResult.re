@@ -39,9 +39,9 @@ type describeResult = {
 };
 
 type snapshotSummary = {
-    numCreatedSnapshots: int,
-    numRemovedSnapshots: int,
-    numUpdatedSnapshots: int,
+  numCreatedSnapshots: int,
+  numRemovedSnapshots: int,
+  numUpdatedSnapshots: int,
 };
 
 module TestSuiteResult = {
@@ -52,59 +52,39 @@ module TestSuiteResult = {
     displayName: string,
   };
 
-  let rec ofDescribeResult = describeResult =>
-    switch (describeResult) {
-    | {testResults, path, describeResults: [], duration} =>
-      let numFailedTests = ref(0);
-      let numPassedTests = ref(0);
+  let rec ofDescribeResult = describeResult => {
+    let {testResults, path, describeResults, duration} = describeResult;
+    let childResults = List.map(ofDescribeResult, describeResults);
 
-      List.iter(
-        r =>
-          switch (r.testStatus) {
-          | Passed => incr(numPassedTests)
-          | Failed(_, _, _)
-          | Exception(_, _, _) => incr(numFailedTests)
-          },
-        testResults,
-      );
-      {
-        numFailedTests: numFailedTests^,
-        numPassedTests: numPassedTests^,
-        testResults,
-        displayName: path |> TestPath.describeToString,
-      };
-    | {testResults, path, describeResults, duration} =>
-      let childResults = List.map(ofDescribeResult, describeResults);
+    let numFailedTests = ref(0);
+    let numPassedTests = ref(0);
+    let aggregateTestResults = ref(testResults);
 
-      let numFailedTests = ref(0);
-      let numPassedTests = ref(0);
-      let aggregateTestResults = ref([]);
+    List.iter(
+      r => {
+        numFailedTests := numFailedTests^ + r.numFailedTests;
+        numPassedTests := numPassedTests^ + r.numPassedTests;
+        aggregateTestResults := aggregateTestResults^ @ r.testResults;
+      },
+      childResults,
+    );
 
-      List.iter(
-        r => {
-          numFailedTests := numFailedTests^ + r.numFailedTests;
-          numPassedTests := numPassedTests^ + r.numPassedTests;
-          aggregateTestResults := aggregateTestResults^ @ r.testResults;
+    List.iter(
+      r =>
+        switch (r.testStatus) {
+        | Passed => incr(numPassedTests)
+        | Failed(_, _, _)
+        | Exception(_, _, _) => incr(numFailedTests)
         },
-        childResults,
-      );
-
-      List.iter(
-        r =>
-          switch (r.testStatus) {
-          | Passed => incr(numPassedTests)
-          | Failed(_, _, _)
-          | Exception(_, _, _) => incr(numFailedTests)
-          },
-        testResults,
-      );
-      {
-        numFailedTests: numFailedTests^,
-        numPassedTests: numPassedTests^,
-        testResults: aggregateTestResults^,
-        displayName: path |> TestPath.describeToString,
-      };
+      testResults,
+    );
+    {
+      numFailedTests: numFailedTests^,
+      numPassedTests: numPassedTests^,
+      testResults: aggregateTestResults^,
+      displayName: path |> TestPath.describeToString,
     };
+  };
 };
 
 module AggregatedResult = {
@@ -155,7 +135,7 @@ module AggregatedResult = {
         + testSuiteResult.numFailedTests,
       numTotalTestSuites: aggregatedResult.numTotalTestSuites,
       testSuiteResults: aggregatedResult.testSuiteResults @ [testSuiteResult],
-      snapshotSummary: aggregatedResult.snapshotSummary
+      snapshotSummary: aggregatedResult.snapshotSummary,
     };
   };
 };
