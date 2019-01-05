@@ -13,6 +13,8 @@ include TestFrameworkConfig;
 include RunConfig;
 module MatcherUtils = MatcherUtils;
 module MatcherTypes = MatcherTypes;
+module Reporter = Reporter;
+module TestResult = TestResult;
 open Reporter;
 
 module Test = {
@@ -29,6 +31,7 @@ module Describe = {
   type describeUtils('ext) = {
     describe: describeFn('ext),
     test: Test.testFn('ext),
+    testSkip: Test.testFn('ext),
   }
   and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
 };
@@ -145,6 +148,27 @@ module Make = (UserConfig: FrameworkConfig) => {
       };
       /* Convert describeName to something reasonable for a file name. */
       let describeFileName = describeName |> sanitizeName;
+
+      let testSkip = (testName, usersTest) => {
+        let testPath = (testName, describePath);
+        let testId = Counter.next(testCounter);
+        let testTitle = TestPath.testToString(testPath);
+
+        let _ =
+          MIntMap.set(
+            testId,
+            FinalTestResult({
+              path: testPath,
+              duration: None,
+              testStatus: Skipped,
+              title: testName,
+              fullName: testTitle,
+            }),
+            testMap,
+          );
+        ();
+      };
+
       /* Create the test function we will pass around. */
       let testFn: Test.testFn('ext) =
         (testName, usersTest) => {
@@ -301,15 +325,16 @@ module Make = (UserConfig: FrameworkConfig) => {
           );
         childDescribeResults := childDescribeResults^ @ [childDescribeResult];
       };
-      let utils = {describe: describeFn, test: testFn};
+      let describeUtils = {describe: describeFn, test: testFn, testSkip};
       /* Gather all the tests */
-      fn(utils);
+      fn(describeUtils);
       /* Now run them */
       let _ =
         MIntMap.forEach(
           (test, _) =>
             switch (test) {
             | PendingTestResult(t) => t.runTest()
+            | FinalTestResult({testStatus: Skipped}) => ()
             | FinalTestResult(t) => raise(TestAlreadyRan(t.fullName))
             },
           testMap,
@@ -365,14 +390,14 @@ module Make = (UserConfig: FrameworkConfig) => {
   let run = (config: RunConfig.t) =>
     Util.withBacktrace(() => {
       let notifyReporters = f => List.iter(f, config.reporters);
-      let reporterTestSuites = testSuites^ |> List.map(s => switch(s) {
-        | TestSuiteInternal({name}) => {{name: name}}
-      });
-      notifyReporters(r =>
-        r.onRunStart({
-          testSuites: reporterTestSuites
-        })
-      );
+      let reporterTestSuites =
+        testSuites^
+        |> List.map(s =>
+             switch (s) {
+             | TestSuiteInternal({name}) => {name: name}
+             }
+           );
+      notifyReporters(r => r.onRunStart({testSuites: reporterTestSuites}));
       let initialState = {
         testHashes: MStringSet.empty(),
         snapshotState:
@@ -386,38 +411,36 @@ module Make = (UserConfig: FrameworkConfig) => {
       let result =
         testSuites^
         |> List.fold_left(
-             (acc, testSuite) => {
-               switch(testSuite){
-               | TestSuiteInternal({name, fn, matchersExtensionFn}) => {
-                let reporterSuite = {name: name};
-                notifyReporters(r => r.onTestSuiteStart(reporterSuite));
-                let describeResult =
-                  runDescribe(
-                    ~config={
-                      updateSnapshots: config.updateSnapshots,
-                      snapshotDir: UserConfig.config.snapshotDir,
-                    },
-                    ~state=acc.testRunState,
-                    ~describePath=Terminal(name),
-                    matchersExtensionFn,
-                    fn,
-                  );
-                let testSuiteResult =
-                  TestSuiteResult.ofDescribeResult(describeResult);
-                let newResult =
-                  acc.aggregatedResult
-                  |> AggregatedResult.addTestSuiteResult(testSuiteResult);
-                notifyReporters(r =>
-                  r.onTestSuiteResult(
-                    reporterSuite,
-                    newResult,
-                    testSuiteResult,
-                  )
-                );
-                {...acc, aggregatedResult: newResult};
-               }
-               }
-             },
+             (acc, testSuite) =>
+               switch (testSuite) {
+               | TestSuiteInternal({name, fn, matchersExtensionFn}) =>
+                 let reporterSuite = {name: name};
+                 notifyReporters(r => r.onTestSuiteStart(reporterSuite));
+                 let describeResult =
+                   runDescribe(
+                     ~config={
+                       updateSnapshots: config.updateSnapshots,
+                       snapshotDir: UserConfig.config.snapshotDir,
+                     },
+                     ~state=acc.testRunState,
+                     ~describePath=Terminal(name),
+                     matchersExtensionFn,
+                     fn,
+                   );
+                 let testSuiteResult =
+                   TestSuiteResult.ofDescribeResult(describeResult);
+                 let newResult =
+                   acc.aggregatedResult
+                   |> AggregatedResult.addTestSuiteResult(testSuiteResult);
+                 notifyReporters(r =>
+                   r.onTestSuiteResult(
+                     reporterSuite,
+                     newResult,
+                     testSuiteResult,
+                   )
+                 );
+                 {...acc, aggregatedResult: newResult};
+               },
              {
                testRunState: initialState,
                aggregatedResult:
