@@ -18,6 +18,6 @@ module TestFrameworkConfig = {
   let initialize: requiredConfiguration => t =
     config => {
       snapshotDir: config.snapshotDir,
-      projectDir: config.projectDir
-    }
+      projectDir: config.projectDir,
+    };
 };

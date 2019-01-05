@@ -30,13 +30,13 @@ let testToString = t => Test(t) |> toString;
 let hash = (path, attempt) => {
   let testTitle = toString(path);
   let testHash =
-              String.sub(
-                Common.Strs.Crypto.md5(
-                  Str.global_replace(ancestryRegex, "", testTitle)
-                  ++ string_of_int(attempt),
-                ),
-                0,
-                8,
-              );
-            testHash;
+    String.sub(
+      Common.Strs.Crypto.md5(
+        Str.global_replace(ancestryRegex, "", testTitle)
+        ++ string_of_int(attempt),
+      ),
+      0,
+      8,
+    );
+  testHash;
 };

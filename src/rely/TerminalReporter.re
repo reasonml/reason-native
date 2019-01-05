@@ -244,13 +244,15 @@ let createTerminalReporter = (printer: terminalPrinter): Reporter.t => {
             <Pastel color=WhiteBright> {testSuite.name} </Pastel>,
           ],
         );
-        runningDisplayLength := String.length(update);
-        printer.printString("\r" ++ update);
-        printer.flush(stdout);
+      runningDisplayLength := String.length(update);
+      printer.printString("\r" ++ update);
+      printer.flush(stdout);
       ();
     },
     onTestSuiteResult: (aggregatedResult, testSuite, testSuiteResult) => {
-      printer.printString("\027[" ++ string_of_int(runningDisplayLength^) ++ "D\027[K",);
+      printer.printString(
+        "\027[" ++ string_of_int(runningDisplayLength^) ++ "D\027[K",
+      );
       switch (testSuiteResult) {
       | {numFailedTests: 0, numPassedTests: n, testResults: _, displayName} =>
         printer.printEndline(
@@ -272,15 +274,15 @@ let createTerminalReporter = (printer: terminalPrinter): Reporter.t => {
         );
         printer.printEndline("");
       | _ => raise(Invalid_argument("todo handle"))
-      }
+      };
     },
     onRunStart: runStartInfo => {
       let numTestSuites = List.length(runStartInfo.testSuites);
-    printer.printEndline(
-      "Running "
-      ++ string_of_int(numTestSuites)
-      ++ (numTestSuites == 1 ? " test suite" : " test suites"),
-    )
+      printer.printEndline(
+        "Running "
+        ++ string_of_int(numTestSuites)
+        ++ (numTestSuites == 1 ? " test suite" : " test suites"),
+      );
     },
     onRunComplete: aggregatedResult => {
       printer.printEndline(

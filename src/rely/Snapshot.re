@@ -6,7 +6,7 @@
  */;
 open SnapshotIO;
 open Common.Collections;
-open TestResult
+open TestResult;
 
 type state = {
   unusedSnapshotSet: MStringSet.t,
@@ -92,7 +92,7 @@ module Make = (IO: SnapshotIO) => {
     {
       numCreatedSnapshots: createdSnapshotCount^,
       numRemovedSnapshots: removedSnapshotCount^,
-      numUpdatedSnapshots: updatedSnapshotCount^
+      numUpdatedSnapshots: updatedSnapshotCount^,
     };
   };
 

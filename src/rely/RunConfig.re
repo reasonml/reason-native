@@ -28,7 +28,7 @@ module RunConfig = {
         printString: print_string,
         flush,
       }),
-    ]
+    ],
   };
 
   let updateSnapshots: (bool, t) => t =
@@ -43,7 +43,7 @@ module RunConfig = {
         printString: printer.printString,
         printEndline: printer.printEndline,
         printNewline: printer.printNewline,
-        flush: printer.flush
+        flush: printer.flush,
       }),
     ],
   };

@@ -5,6 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */;
 module Test = {
-    type testUtils = {expect: DefaultMatchers.matchers};
-    type testFn = (string, testUtils => unit) => unit;
-  };
+  type testUtils = {expect: DefaultMatchers.matchers};
+  type testFn = (string, testUtils => unit) => unit;
+};
