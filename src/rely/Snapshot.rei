@@ -13,7 +13,7 @@ module Make:
     let initializeState:
       (~snapshotDir: string, ~updateSnapshots: bool) => state;
     let markSnapshotsAsCheckedForTest: (string, state) => state;
-    let getSnapshotStatus: state => option(string);
+    let getSnapshotStatus: state => TestResult.snapshotSummary;
     let removeUnusedSnapshots: state => unit;
     let markSnapshotUsed: (string, state) => state;
     let markSnapshotUpdated: (string, state) => state;

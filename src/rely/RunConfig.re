@@ -14,19 +14,21 @@ module RunConfig = {
 
   type t = {
     updateSnapshots: bool,
-    printer,
     onTestFrameworkFailure: unit => unit,
+    reporters: list(Reporter.t),
   };
 
   let initialize = () => {
     updateSnapshots: false,
-    printer: {
-      printEndline: print_endline,
-      printNewline: print_newline,
-      printString: print_string,
-      flush,
-    },
     onTestFrameworkFailure: () => exit(1),
+    reporters: [
+      TerminalReporter.createTerminalReporter({
+        printEndline: print_endline,
+        printNewline: print_newline,
+        printString: print_string,
+        flush,
+      }),
+    ],
   };
 
   let updateSnapshots: (bool, t) => t =
@@ -34,9 +36,16 @@ module RunConfig = {
 
   /* When external use becomes a priority, this should be handled by a test reporters API, for now this
      is just used in testing the test runner itself to prevent writing to standard out*/
-  let printer_internal_do_not_use = (printer, config) => {
+  let printer_internal_do_not_use = (printer: printer, config) => {
     ...config,
-    printer,
+    reporters: [
+      TerminalReporter.createTerminalReporter({
+        printString: printer.printString,
+        printEndline: printer.printEndline,
+        printNewline: printer.printNewline,
+        flush: printer.flush,
+      }),
+    ],
   };
 
   let onTestFrameworkFailure = (onTestFrameworkFailure, config) => {
