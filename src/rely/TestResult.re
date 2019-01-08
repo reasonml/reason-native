@@ -128,7 +128,7 @@ module AggregatedResult = {
         aggregatedResult.numPassedTests + testSuiteResult.numPassedTests,
       numPassedTestSuites:
         aggregatedResult.numPassedTestSuites + (didSuitePass ? 1 : 0),
-      numPendingTestSuites: aggregatedResult.numPassedTestSuites - 1,
+      numPendingTestSuites: aggregatedResult.numPendingTestSuites - 1,
       numTotalTests:
         aggregatedResult.numTotalTests
         + testSuiteResult.numPassedTests
