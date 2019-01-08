@@ -6,7 +6,7 @@
  */;
 type matcherHintOptions = {comment: option(string)};
 
-type matcherUtils = {
+type t = {
   matcherHint:
     (
       ~matcherName: string,
@@ -24,4 +24,4 @@ type matcherUtils = {
   indent: string => string,
 };
 
-let matcherUtils: matcherUtils;
+let matcherUtils: t;

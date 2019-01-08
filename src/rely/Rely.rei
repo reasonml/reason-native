@@ -5,15 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */;
 module Test: {
-  type testUtils = {expect: DefaultMatchers.matchers};
-  type testFn = (string, testUtils => unit) => unit;
+  type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
+  type testFn('ext) = (string, testUtils('ext) => unit) => unit;
 };
 module Describe: {
-  type describeUtils = {
-    describe: describeFn,
-    test: Test.testFn,
+  type describeUtils('ext) = {
+    describe: describeFn('ext),
+    test: Test.testFn('ext),
   }
-  and describeFn = (string, describeUtils => unit) => unit;
+  and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
 };
 
 module RunConfig: {
@@ -21,8 +21,8 @@ module RunConfig: {
     printString: string => unit,
     printEndline: string => unit,
     printNewline: unit => unit,
-    flush: out_channel => unit
-  }
+    flush: out_channel => unit,
+  };
   type t;
   let initialize: unit => t;
   let updateSnapshots: (bool, t) => t;
@@ -30,8 +30,45 @@ module RunConfig: {
   let onTestFrameworkFailure: (unit => unit, t) => t;
 };
 
+module MatcherUtils: {
+  type matcherHintOptions = {comment: option(string)};
+
+  type t = {
+    matcherHint:
+      (
+        ~matcherName: string,
+        ~expectType: string,
+        ~isNot: bool=?,
+        ~received: string=?,
+        ~expected: string=?,
+        ~options: matcherHintOptions=?,
+        unit
+      ) =>
+      string,
+    formatReceived: string => string,
+    formatExpected: string => string,
+    prepareDiff: (string, string) => string,
+    indent: string => string,
+  };
+};
+
+module MatcherTypes: {
+  type thunk('a) = unit => 'a;
+  type matcher('a, 'b) =
+    (MatcherUtils.t, thunk('a), thunk('b)) => (thunk(string), bool);
+  type matcherConfig('a, 'b) =
+    (MatcherUtils.t, unit => 'a, unit => 'b) => (unit => string, bool);
+  type matcherResult('a, 'b) = (unit => 'a, unit => 'b) => unit;
+  type createMatcher('a, 'b) =
+    matcherConfig('a, 'b) => matcherResult('a, 'b);
+  type extendUtils = {createMatcher: 'a 'b. createMatcher('a, 'b)};
+  type matchersExtensionFn('ext) = extendUtils => 'ext;
+};
+
 module type TestFramework = {
-  let describe: Describe.describeFn;
+  let describe: Describe.describeFn(unit);
+  let extendDescribe:
+    MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
   let run: RunConfig.t => unit;
   let cli: unit => unit;
 };
