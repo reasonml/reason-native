@@ -69,7 +69,7 @@ module Make = (UserConfig: FrameworkConfig) => {
   module StackTrace =
     StackTrace.Make({
       let baseDir = UserConfig.config.projectDir;
-      let exclude = [Filename.dirname(__FILE__)];
+      let exclude = [Filename.dirname(__FILE__) ++ Filename.dir_sep];
       let formatLink = Pastel.cyan;
       let formatText = Pastel.dim;
     });
