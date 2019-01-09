@@ -1,7 +1,7 @@
 open TestFramework;
 open Rely.Test;
 
-module Foo =
+module ListMatchersTests =
   CollectionMatchersTest.Make(
     Rely.ListMatchers.List,
     {
