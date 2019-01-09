@@ -25,12 +25,12 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
         ) => {
         let (digits, expected) = expectedThunk();
         let actual = actualThunk();
-        let precision = (10.0 ** float_of_int(-digits)) /. 2.0;
+        let precision = 10.0 ** float_of_int(- digits) /. 2.0;
 
         let actualEqualsExpected = abs_float(actual -. expected) < precision;
 
         let pass =
-          (actualEqualsExpected && !isNot) || (!actualEqualsExpected && isNot);
+          actualEqualsExpected && !isNot || !actualEqualsExpected && isNot;
         if (!pass) {
           let message =
             String.concat(
@@ -61,7 +61,8 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
       });
 
     let makeFloatMatchers = isNot => {
-      toBeCloseTo: (~digits=2, expected) => toBeCloseTo(isNot, () => actual, () => (digits, expected)),
+      toBeCloseTo: (~digits=2, expected) =>
+        toBeCloseTo(isNot, () => actual, () => (digits, expected)),
     };
 
     let floatMatchers = makeFloatMatchers(false);

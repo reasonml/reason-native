@@ -20,7 +20,7 @@ type matchers('ext) = {
   int: int => intMatchersWithNot,
   float: float => floatMatchersWithNot,
   fn: 'a. (unit => 'a) => fnMatchersWithNot,
-  ext: 'ext
+  ext: 'ext,
 };
 
 let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
@@ -38,5 +38,5 @@ let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
   int: i => IntMatchers.makeMatchers(".int", utils, i),
   float: f => FloatMatchers.makeMatchers(".float", utils, f),
   fn: f => FnMatchers.makeMatchers(".fn", utils, f),
-  ext: makeMatchers(utils)
+  ext: makeMatchers(utils),
 };
