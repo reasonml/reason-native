@@ -55,7 +55,7 @@ Running 1 test suite
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.bool.not.toBe(false)\027[39m\027[22m
 
-    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).not.toBe(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
+    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBe(\027[22m\027[32mexpected\027[39m\027[2m)\027[22m
     
     Expected: \027[32mfalse\027[39m
     Received: \027[31mfalse\027[39m
@@ -68,7 +68,7 @@ Running 1 test suite
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.bool.not.toBeTrue\027[39m\027[22m
 
-    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).not.toBeTrue(\027[22m\027[2m)\027[22m
+    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeTrue(\027[22m\027[2m)\027[22m
     
     Received: \027[31mtrue\027[39m
 
@@ -80,7 +80,7 @@ Running 1 test suite
 
 \027[1m\027[31m  \226\128\162 failing tests \226\128\186 expect.bool.not.toBeFalse\027[39m\027[22m
 
-    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).not.toBeFalse(\027[22m\027[2m)\027[22m
+    \027[2mexpect.bool(\027[22m\027[31mreceived\027[39m\027[2m).\027[22mnot\027[2m.toBeFalse(\027[22m\027[2m)\027[22m
     
     Received: \027[31mfalse\027[39m
 
