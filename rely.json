@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/rely",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A native Reason test runner that is heavily inspired by Jest",
   "repository": {
     "type": "git",
@@ -24,14 +24,13 @@
     "install": "esy-installer rely.install"
   },
   "scripts": {
-    "test": "esy x TestRely.exe",
     "release": "node ./scripts/esy-prepublish.js rely.json"
   },
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
-    "ocaml": ">= 4.2.0  <= 4.7.0",
+    "ocaml": ">= 4.4.0 <= 4.7.0",
     "@reason-native/pastel": "*",
     "@reason-native/file-context-printer": "*"
   },
