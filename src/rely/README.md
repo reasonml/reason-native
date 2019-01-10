@@ -22,13 +22,12 @@ dependencies": {
 ```
 ## Creating a test package
 
-Let's start by creating a library for our tests. First create an opam file for your test package (it should be empty). Then let's create a directory called test and create a dune file for our library (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
+Let's start by creating a library for our tests. First create an opam file for your test package (it should be empty). Then let's create a directory called test and create a dune file to define compilation targets for our test library and executable (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
 ```
 │
 ├─my-lib-test.opam
 ├─test/
-│   lib/
-│       dune
+│   dune
 │
 ```
 
@@ -43,6 +42,18 @@ Let's start by creating a library for our tests. First create an opam file for y
    ; you will want to depend on the library you are testing as well, however for
    ; the purposes of this example we are only depending on the test runner itself
    (libraries rely.lib )
+   (modules (:standard \ RunTests))
+)
+(executable
+  ; the for the library is automatically detected because of the name, but we
+  ; need to explicitly specify the package here
+  (package my-lib-test)
+  (name RunTests)
+  (public_name RunTests.exe)
+  (libraries
+    my-lib-test.lib
+  )
+  (modules RunTests)
 )
 ```
 
@@ -51,9 +62,8 @@ Now let's create a file to initialize the test framework. Here we are specifying
 │
 ├─my-lib-test.opam
 ├─test/
-│   lib/
-│       dune
-│       TestFramework.re
+│   dune
+│   TestFramework.re
 ```
 
 #### TestFramework.re
@@ -61,7 +71,7 @@ Now let's create a file to initialize the test framework. Here we are specifying
 include Rely.Make({
   let config =
     Rely.TestFrameworkConfig.initialize({
-      snapshotDir: "path/to/test/lib/__snapshots__"
+      snapshotDir: "path/to/test/lib/__snapshots__",
       projectDir: "path/to/your/project"
     });
 });
@@ -72,10 +82,9 @@ Now we can finally write our first test!
 │
 ├─my-lib-test.opam
 ├─test/
-│   lib/
-│       dune
-│       TestFramework.re
-│       MyFirstTest.re
+│   dune
+│   TestFramework.re
+│   MyFirstTest.re
 ```
 
 ```reason
@@ -88,36 +97,23 @@ describe("my first test suite", ({test}) => {
 });
 ```
 
-From here let's create an executable to actually run our tests.
+From here let's create an executable to actually run our tests (the name of this file corresponds to the name specified in the executable stanza in the dune file).
 ```
 │
 ├─my-lib-test.opam
 ├─test/
-│   lib/
-│       dune
-│       TestFramework.re
-│       MyFirstTest.re
-│   exe/
-│       dune
-│       MyLibTest.re
+│   dune
+│   TestFramework.re
+│   MyFirstTest.re
+│   RunTests.re
 ```
 
-#### dune
-```
-(executable
-   (name MyLibTest)
-   (public_name MyLibTest.exe)
-   (libraries  my-lib.test )
-   (package my-lib-test)
-)
-```
-
-#### MyLibTest.re
+#### RunTests.re
 ```reason
 MyLibTest.TestFramework.cli()
 ```
 
-Finally we can run `esy build && esy x MyLibTest.exe` to build and run our tests.
+Finally we can run `esy build && esy x RunTests.exe` to build and run our tests.
 
 ## Developing:
 
@@ -131,7 +127,7 @@ esy build
 ## Running Tests:
 
 ```
-esy x TestRely.exe
+esy test
 ```
 
 ## License
