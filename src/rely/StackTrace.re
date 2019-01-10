@@ -39,7 +39,11 @@ module Make = (Config: Config) => {
   let getTopLocation = optSlots =>
     switch (optSlots) {
     | None => None
-    | Some(slots) => Slot.location(List.hd(slots))
+    | Some(slots) =>
+      switch (slots) {
+      | [hd, ...rest] => Slot.location(hd)
+      | [] => None
+      }
     };
 
   let getCallstack = () => get_callstack(maxStacklength);
