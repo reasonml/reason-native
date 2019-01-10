@@ -16,7 +16,7 @@
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
-    "ocaml": ">= 4.2.0  <= 4.7.0"
+    "ocaml": "^4.2.0"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",
