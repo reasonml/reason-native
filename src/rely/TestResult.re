@@ -128,11 +128,11 @@ module AggregatedResult = {
 
   let addTestSuiteResult =
       (testSuiteResult: TestSuiteResult.t, aggregatedResult) => {
-    let wasSuiteSkipped =
+    let didSuiteSkip =
       testSuiteResult.numSkippedTests
       == List.length(testSuiteResult.testResults);
     let didSuiteFail = testSuiteResult.numFailedTests > 0;
-    let didSuitePass = !didSuiteFail && !wasSuiteSkipped;
+    let didSuitePass = !didSuiteFail && !didSuiteSkip;
     {
       numFailedTests:
         aggregatedResult.numFailedTests + testSuiteResult.numFailedTests,
@@ -146,7 +146,7 @@ module AggregatedResult = {
       numSkippedTests:
         aggregatedResult.numSkippedTests + testSuiteResult.numSkippedTests,
       numSkippedTestSuites:
-        aggregatedResult.numSkippedTestSuites + (wasSuiteSkipped ? 1 : 0),
+        aggregatedResult.numSkippedTestSuites + (didSuiteSkip ? 1 : 0),
       numTotalTests:
         aggregatedResult.numTotalTests
         + testSuiteResult.numPassedTests
