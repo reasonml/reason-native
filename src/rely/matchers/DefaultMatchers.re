@@ -8,18 +8,22 @@ open StringMatchers;
 open BoolMatchers;
 open SnapshotMatchers;
 open IntMatchers;
+open FloatMatchers;
 open FnMatchers;
+open MatcherTypes;
 
-type matchers = {
+type matchers('ext) = {
   string: string => stringMatchersWithNot,
   file: string => stringMatchersWithNot,
   lines: list(string) => stringMatchersWithNot,
   bool: bool => boolMatchersWithNot,
   int: int => intMatchersWithNot,
+  float: float => floatMatchersWithNot,
   fn: 'a. (unit => 'a) => fnMatchersWithNot,
+  ext: 'ext,
 };
 
-let makeDefaultMatchers = (utils, snapshotMatcher) => {
+let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
   string: s =>
     StringMatchers.makeMatchers(".string", snapshotMatcher, utils, s),
   file: filePath => {
@@ -32,5 +36,7 @@ let makeDefaultMatchers = (utils, snapshotMatcher) => {
   },
   bool: b => BoolMatchers.makeMatchers(".bool", utils, b),
   int: i => IntMatchers.makeMatchers(".int", utils, i),
+  float: f => FloatMatchers.makeMatchers(".float", utils, f),
   fn: f => FnMatchers.makeMatchers(".fn", utils, f),
+  ext: makeMatchers(utils),
 };

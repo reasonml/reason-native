@@ -1,9 +1,7 @@
 TestRunner › nested describes
-\027[97mnested describes \226\128\186 Root \226\128\186 Describe 1\027[39m
-\r[2/2] Pending  \027[2m[0/2] Passed\027[22m  \027[2m[0/2] Failed\027[22m\r[1/2] Pending  \027[2m[1/2] Passed\027[22m  \027[2m[0/2] Failed\027[22m\r\027[2m[0/2] Pending\027[22m  \027[32m[2/2] Passed\027[39m  \027[2m[0/2] Failed\027[22m
-\027[97mnested describes \226\128\186 Root \226\128\186 Describe 2 \226\128\186 Describe 3\027[39m
-\r[2/2] Pending  \027[2m[0/2] Passed\027[22m  \027[2m[0/2] Failed\027[22m\r[1/2] Pending  \027[2m[1/2] Passed\027[22m  \027[2m[0/2] Failed\027[22m\r\027[2m[0/2] Pending\027[22m  \027[32m[2/2] Passed\027[39m  \027[2m[0/2] Failed\027[22m
-\027[97mnested describes \226\128\186 Root \226\128\186 Describe 2\027[39m
-\r[2/2] Pending  \027[2m[0/2] Passed\027[22m  \027[2m[0/2] Failed\027[22m\r[1/2] Pending  \027[2m[1/2] Passed\027[22m  \027[2m[0/2] Failed\027[22m\r\027[2m[0/2] Pending\027[22m  \027[32m[2/2] Passed\027[39m  \027[2m[0/2] Failed\027[22m
-\027[97mnested describes \226\128\186 Root\027[39m
-\r[1/1] Pending  \027[2m[0/1] Passed\027[22m  \027[2m[0/1] Failed\027[22m\r\027[2m[0/1] Pending\027[22m  \027[32m[1/1] Passed\027[39m  \027[2m[0/1] Failed\027[22m
+Running 1 test suite
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mnested describes\027[39m\027[61D\027[K\027[32m\027[1m\027[7m PASS \027[27m\027[22m\027[39m \027[97mnested describes\027[39m
+
+\027[97m\027[1mTest Suites: \027[22m\027[39m0 failed, \027[32m\027[1m1 passed\027[22m\027[39m, 1 total
+\027[97m\027[1mTests:       \027[22m\027[39m0 failed, \027[32m\027[1m7 passed\027[22m\027[39m, 7 total
+

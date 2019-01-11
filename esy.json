@@ -20,13 +20,13 @@
   "scripts": {
     "bootstrap": "esy x bash -cx ./bootstrap.cmd",
     "all": "./scripts/run-all.sh",
-    "test": "./scripts/test.sh"
+    "test": "esy x bash -cx ./scripts/test.cmd"
   },
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
-    "ocaml": ">= 4.2.0  <= 4.7.0",
+    "ocaml": "^4.2.0",
     "@opam/re": "*",
     "@opam/atdgen": "*"
   },
