@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/pastel",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Native Reason ANSI terminal styling with an awesome API",
   "repository": {
     "type": "git",
