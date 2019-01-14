@@ -73,6 +73,7 @@ let gatherFormattedFailureOutput = (testResults: list(testResult)) =>
   |> List.fold_left(
        (acc, r) =>
          switch (r) {
+         | {testStatus: Skipped, _}
          | {testStatus: Passed, _} => acc
          | {testStatus: Failed(message, loc, stack), fullName, _} =>
            let titleBullet = "• ";
@@ -117,51 +118,89 @@ let createRunSummary = (result: AggregatedResult.t) => {
   let testSuitePassFormatter =
     result.numPassedTestSuites > 0 ?
       s => <Pastel color=Green bold=true> s </Pastel> : (s => s);
+  let testSuiteSkipFormatter =
+    result.numPassedTestSuites > 0 ?
+      s => <Pastel color=Yellow bold=true> s </Pastel> : (s => s);
   let testSuiteFailFormatter =
     result.numFailedTestSuites > 0 ?
       s => <Pastel color=Red bold=true> s </Pastel> : (s => s);
   let testPassFormatter =
     result.numPassedTests > 0 ?
       s => <Pastel color=Green bold=true> s </Pastel> : (s => s);
+  let testSkipFormatter =
+    result.numPassedTests > 0 ?
+      s => <Pastel color=Yellow bold=true> s </Pastel> : (s => s);
   let testFailFormatter =
     result.numFailedTests > 0 ?
       s => <Pastel color=Red bold=true> s </Pastel> : (s => s);
+  let testSuiteSummaryParts =
+    [
+      Some(
+        testSuiteFailFormatter(
+          string_of_int(result.numFailedTestSuites) ++ " failed",
+        ),
+      ),
+      result.numSkippedTestSuites == 0 ?
+        None :
+        Some(
+          testSuiteSkipFormatter(
+            string_of_int(result.numSkippedTestSuites) ++ " skipped",
+          ),
+        ),
+      Some(
+        testSuitePassFormatter(
+          string_of_int(result.numPassedTestSuites) ++ " passed",
+        ),
+      ),
+      Some(string_of_int(result.numTotalTestSuites) ++ " total"),
+    ]
+    |> List.fold_left(
+         (acc, part) =>
+           switch (part) {
+           | Some(part) => acc @ [part]
+           | None => acc
+           },
+         [],
+       );
   let testSuiteSummary =
     String.concat(
       "",
       [
         <Pastel bold=true color=WhiteBright> "Test Suites: " </Pastel>,
-        String.concat(
-          ", ",
-          [
-            testSuiteFailFormatter(
-              string_of_int(result.numFailedTestSuites) ++ " failed",
-            ),
-            testSuitePassFormatter(
-              string_of_int(result.numPassedTestSuites) ++ " passed",
-            ),
-            string_of_int(result.numTotalTestSuites) ++ " total",
-          ],
-        ),
+        String.concat(", ", testSuiteSummaryParts),
       ],
     );
+  let testSummaryParts =
+    [
+      Some(
+        testFailFormatter(string_of_int(result.numFailedTests) ++ " failed"),
+      ),
+      result.numSkippedTests == 0 ?
+        None :
+        Some(
+          testSkipFormatter(
+            string_of_int(result.numSkippedTests) ++ " skipped",
+          ),
+        ),
+      Some(
+        testPassFormatter(string_of_int(result.numPassedTests) ++ " passed"),
+      ),
+      Some(string_of_int(result.numTotalTests) ++ " total"),
+    ]
+    |> List.fold_left(
+         (acc, part) =>
+           switch (part) {
+           | Some(part) => acc @ [part]
+           | None => acc
+           },
+         [],
+       );
   let testSummary =
     String.concat(
       "",
       [
         <Pastel bold=true color=WhiteBright> "Tests:       " </Pastel>,
-        String.concat(
-          ", ",
-          [
-            testFailFormatter(
-              string_of_int(result.numFailedTests) ++ " failed",
-            ),
-            testPassFormatter(
-              string_of_int(result.numPassedTests) ++ " passed",
-            ),
-            string_of_int(result.numTotalTests) ++ " total",
-          ],
-        ),
+        String.concat(", ", testSummaryParts),
       ],
     );
 
@@ -254,6 +293,7 @@ let createTerminalReporter = (printer: terminalPrinter): Reporter.t => {
         "\027[" ++ string_of_int(runningDisplayLength^) ++ "D\027[K",
       );
       switch (testSuiteResult) {
+      | {numFailedTests: 0, numPassedTests: 0, numSkippedTests} => ()
       | {numFailedTests: 0, numPassedTests: n, testResults: _, displayName} =>
         printer.printEndline(
           String.concat(

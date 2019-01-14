@@ -48,6 +48,11 @@ module RunConfig = {
     ],
   };
 
+  let internal_reporters_api_do_not_use = (reporter: Reporter.t, config) => {
+    ...config,
+    reporters: [reporter],
+  };
+
   let onTestFrameworkFailure = (onTestFrameworkFailure, config) => {
     ...config,
     onTestFrameworkFailure,

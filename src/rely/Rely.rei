@@ -8,13 +8,18 @@ module Test: {
   type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
   type testFn('ext) = (string, testUtils('ext) => unit) => unit;
 };
+
 module Describe: {
   type describeUtils('ext) = {
     describe: describeFn('ext),
     test: Test.testFn('ext),
+    testSkip: Test.testFn('ext),
   }
   and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
 };
+
+module Reporter = Reporter;
+module TestResult = TestResult;
 
 module RunConfig: {
   type printer = {
@@ -27,6 +32,7 @@ module RunConfig: {
   let initialize: unit => t;
   let updateSnapshots: (bool, t) => t;
   let printer_internal_do_not_use: (printer, t) => t;
+  let internal_reporters_api_do_not_use: (Reporter.t, t) => t;
   let onTestFrameworkFailure: (unit => unit, t) => t;
 };
 
