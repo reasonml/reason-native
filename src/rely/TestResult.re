@@ -8,6 +8,7 @@ open Common.Collections;
 
 type status =
   | Passed
+  | Skipped
   | Failed(string, option(Printexc.location), string)
   | Exception(exn, option(Printexc.location), string);
 
@@ -48,6 +49,7 @@ module TestSuiteResult = {
   type t = {
     numFailedTests: int,
     numPassedTests: int,
+    numSkippedTests: int,
     testResults: list(testResult),
     displayName: string,
   };
@@ -58,12 +60,14 @@ module TestSuiteResult = {
 
     let numFailedTests = ref(0);
     let numPassedTests = ref(0);
+    let numSkippedTests = ref(0);
     let aggregateTestResults = ref(testResults);
 
     List.iter(
       r => {
         numFailedTests := numFailedTests^ + r.numFailedTests;
         numPassedTests := numPassedTests^ + r.numPassedTests;
+        numSkippedTests := numSkippedTests^ + r.numSkippedTests;
         aggregateTestResults := aggregateTestResults^ @ r.testResults;
       },
       childResults,
@@ -75,12 +79,14 @@ module TestSuiteResult = {
         | Passed => incr(numPassedTests)
         | Failed(_, _, _)
         | Exception(_, _, _) => incr(numFailedTests)
+        | Skipped => incr(numSkippedTests)
         },
       testResults,
     );
     {
       numFailedTests: numFailedTests^,
       numPassedTests: numPassedTests^,
+      numSkippedTests: numSkippedTests^,
       testResults: aggregateTestResults^,
       displayName: path |> TestPath.describeToString,
     };
@@ -94,6 +100,8 @@ module AggregatedResult = {
     numPassedTests: int,
     numPassedTestSuites: int,
     numPendingTestSuites: int,
+    numSkippedTests: int,
+    numSkippedTestSuites: int,
     numTotalTests: int,
     numTotalTestSuites: int,
     snapshotSummary: option(snapshotSummary),
@@ -108,6 +116,8 @@ module AggregatedResult = {
     numPassedTests: 0,
     numPassedTestSuites: 0,
     numPendingTestSuites: numTestSuites,
+    numSkippedTests: 0,
+    numSkippedTestSuites: 0,
     numTotalTests: 0,
     numTotalTestSuites: numTestSuites,
     snapshotSummary: None,
@@ -118,21 +128,30 @@ module AggregatedResult = {
 
   let addTestSuiteResult =
       (testSuiteResult: TestSuiteResult.t, aggregatedResult) => {
-    let didSuitePass = testSuiteResult.numFailedTests == 0;
+    let didSuiteSkip =
+      testSuiteResult.numSkippedTests
+      == List.length(testSuiteResult.testResults);
+    let didSuiteFail = testSuiteResult.numFailedTests > 0;
+    let didSuitePass = !didSuiteFail && !didSuiteSkip;
     {
       numFailedTests:
         aggregatedResult.numFailedTests + testSuiteResult.numFailedTests,
       numFailedTestSuites:
-        aggregatedResult.numFailedTestSuites + (didSuitePass ? 0 : 1),
+        aggregatedResult.numFailedTestSuites + (didSuiteFail ? 1 : 0),
       numPassedTests:
         aggregatedResult.numPassedTests + testSuiteResult.numPassedTests,
       numPassedTestSuites:
         aggregatedResult.numPassedTestSuites + (didSuitePass ? 1 : 0),
       numPendingTestSuites: aggregatedResult.numPendingTestSuites - 1,
+      numSkippedTests:
+        aggregatedResult.numSkippedTests + testSuiteResult.numSkippedTests,
+      numSkippedTestSuites:
+        aggregatedResult.numSkippedTestSuites + (didSuiteSkip ? 1 : 0),
       numTotalTests:
         aggregatedResult.numTotalTests
         + testSuiteResult.numPassedTests
-        + testSuiteResult.numFailedTests,
+        + testSuiteResult.numFailedTests
+        + testSuiteResult.numSkippedTests,
       numTotalTestSuites: aggregatedResult.numTotalTestSuites,
       testSuiteResults: aggregatedResult.testSuiteResults @ [testSuiteResult],
       snapshotSummary: aggregatedResult.snapshotSummary,
