@@ -56,7 +56,7 @@ Now let's create a file to initialize the test framework. Here we are specifying
 include Rely.Make({
   let config =
     Rely.TestFrameworkConfig.initialize({
-      snapshotDir: "path/to/test/lib/__snapshots__"
+      snapshotDir: "path/to/test/lib/__snapshots__",
       projectDir: "path/to/your/project"
     });
 });

@@ -33,7 +33,37 @@ TestFramework.run(sampleRunConfig); /* custom config */
 ```
 
 ## Testing
-### `describe`
+> For a full list of available matchers, visit the [Github Repository](https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers)
+```reason
+/* MyFirstTest.re */
+open TestFramework;
 
-### `test`
-### `expect`
+describe("my first test suite", ({test, testSkip}) => {
+  /* test suite */
+  test("all the expects", ({expect}) => {
+    /* string type */
+    expect.string("a").not.toEqual("b");
+
+    /* file type */
+    expect.file("hello.txt").toEqual("Hello world!");
+
+    /* line type */
+    expect.lines(["a", "b"]).toEqual("a\nb");
+
+    /* bool type */
+    expect.bool(false).toBe(false);
+
+    /* int type */
+    expect.int(1 + 1).toBe(2);
+
+    /* float type */
+    expect.float(0.1 +. 0.2).toBeCloseTo(2.0);
+
+    /* fn type */
+    expect.fn(() => {2;}).not.toThrow();
+  });
+  testSkip("incorrect test", ({expect}) => {
+    expect.int(1 + 1).toBe(3);
+  });
+});
+```
