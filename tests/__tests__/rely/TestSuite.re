@@ -10,6 +10,7 @@ type t = {
   numSkippedTests: int,
   nestedSuites: list(t),
   name: string,
+  isSkipped: bool,
 };
 
 let init = name => {
@@ -18,6 +19,7 @@ let init = name => {
   numSkippedTests: 0,
   nestedSuites: [],
   name,
+  isSkipped: false,
 };
 
 let withNestedTestSuite: (~child: t, t) => t =
@@ -34,7 +36,7 @@ let withPassingTests = (numPassingTests, suite) => {
   ...suite,
   numPassingTests,
 };
-
+let skipSuite = suite => {...suite, isSkipped: true};
 let withSkippedTests = (numSkippedTests, suite) => {
   ...suite,
   numSkippedTests,
@@ -61,18 +63,29 @@ let rec toFunction = config => {
       );
     };
 
-  let nestedSuites = (describe: Rely.Describe.describeFn(unit)) =>
-    config.nestedSuites |> List.iter(suite => toFunction(suite, describe));
+  let nestedSuites =
+      (
+        ~describe: Rely.Describe.describeFn(unit),
+        ~describeSkip: Rely.Describe.describeFn(unit),
+      ) =>
+    config.nestedSuites
+    |> List.iter(suite => toFunction(suite, ~describe, ~describeSkip));
 
-  let fn = (describe: Rely.Describe.describeFn(unit)) =>
-    describe(
+  let fn =
+      (
+        ~describe: Rely.Describe.describeFn(unit),
+        ~describeSkip: Rely.Describe.describeFn(unit),
+      ) => {
+    let describeFnToUse = config.isSkipped ? describeSkip : describe;
+    describeFnToUse(
       config.name,
       ({describe, test, testSkip}) => {
         failingTests(test);
         passingTests(test);
         skippedTests(testSkip);
-        nestedSuites(describe);
+        nestedSuites(describe, describeSkip);
       },
     );
+  };
   fn;
 };

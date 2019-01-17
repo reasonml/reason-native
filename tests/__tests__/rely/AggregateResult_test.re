@@ -251,7 +251,6 @@ describe("Rely AggregateResult", ({describe, test}) => {
       );
     singleSuiteTestCases |> List.iter(testSingleSuite);
   });
-
   describe("Multiple suite cases", ({test}) => {
     let singletonPassingTestSuite =
       TestSuite.(init("passing") |> withPassingTests(1));
@@ -391,5 +390,95 @@ describe("Rely AggregateResult", ({describe, test}) => {
         },
       );
     testCases |> List.iter(runTestCases);
+  });
+  describe("usage of describe skip", ({test}) => {
+    let executeTestCase = (input: singleSuiteInput) =>
+      test(
+        input.name,
+        ({expect}) => {
+          module Reporter =
+            TestReporter.Make({});
+          let result = ref(None);
+          let testSuites = [
+            TestSuite.(
+              init(input.name)
+              |> withSkippedTests(input.numSkippedTests)
+              |> withPassingTests(input.numPassingTests)
+              |> withFailingTests(input.numFailingTests)
+              |> skipSuite
+            ),
+          ];
+
+          Reporter.onRunComplete(res => result := Some(res));
+
+          TestSuiteRunner.run(testSuites, Reporter.reporter);
+
+          switch (result^) {
+          | None => raise(OnRunCompleteNotCalled)
+          | Some(aggregatedResult) =>
+            expect.int(aggregatedResult.numSkippedTestSuites).toBe(1);
+            expect.int(aggregatedResult.numPassedTests).toBe(0);
+            expect.int(aggregatedResult.numFailedTests).toBe(0);
+            expect.int(aggregatedResult.numSkippedTests).toBe(
+              input.numPassingTests
+              + input.numFailingTests
+              + input.numSkippedTests,
+            );
+          };
+        },
+      );
+    let singleSuiteSkipTestCases = [
+      {
+        name: "no tests",
+        numPassingTests: 0,
+        numFailingTests: 0,
+        numSkippedTests: 0,
+      },
+      {
+        name: "some passing and failing tests",
+        numPassingTests: 5,
+        numFailingTests: 10,
+        numSkippedTests: 0,
+      },
+      {
+        name: "some passing, failing, and skipped tests",
+        numPassingTests: 5,
+        numFailingTests: 10,
+        numSkippedTests: 2,
+      },
+    ];
+    let _ = singleSuiteSkipTestCases |> List.map(executeTestCase);
+    ();
+    test("nested describes should be skipped as well", ({expect}) => {
+      let nestedSuite =
+        TestSuite.(
+          init("parent")
+          |> withPassingTests(5)
+          |> withFailingTests(3)
+          |> withSkippedTests(1)
+          |> skipSuite
+          |> withNestedTestSuite(
+               ~child=
+                 init("child") |> withPassingTests(2) |> withFailingTests(4),
+             )
+        );
+      module Reporter =
+        TestReporter.Make({});
+      let result = ref(None);
+
+      Reporter.onRunComplete(res => result := Some(res));
+
+      TestSuiteRunner.run([nestedSuite, nestedSuite], Reporter.reporter);
+
+      switch (result^) {
+      | None => raise(OnRunCompleteNotCalled)
+      | Some(aggregatedResult) =>
+        expect.int(aggregatedResult.numSkippedTestSuites).toBe(2);
+        expect.int(aggregatedResult.numPassedTests).toBe(0);
+        expect.int(aggregatedResult.numFailedTests).toBe(0);
+        expect.int(aggregatedResult.numSkippedTests).toBe(30);
+      };
+      ();
+    });
   });
 });

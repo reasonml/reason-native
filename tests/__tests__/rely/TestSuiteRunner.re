@@ -19,7 +19,10 @@ let run = (testSuites: list(TestSuite.t), reporter: Rely.Reporter.t) => {
 
   testSuites
   |> List.map(TestSuite.toFunction)
-  |> List.iter(ts => ts(TestFramework.describe));
+  |> List.iter(ts => ts(
+    ~describe=TestFramework.describe,
+    ~describeSkip=TestFramework.describeSkip,
+  ));
 
   TestFramework.run(
     Rely.RunConfig.(
@@ -42,7 +45,12 @@ let runWithCustomTime = (getTime, testSuites, reporter) => {
 
   testSuites
   |> List.map(TestSuite.toFunction)
-  |> List.iter(ts => ts(TestFramework.describe));
+  |> List.iter(ts =>
+       ts(
+         ~describe=TestFramework.describe,
+         ~describeSkip=TestFramework.describeSkip,
+       )
+     );
 
   TestFramework.run(
     Rely.RunConfig.(

@@ -17,6 +17,7 @@ module Test: {
 module Describe: {
   type describeUtils('ext) = {
     describe: describeFn('ext),
+    describeSkip: describeFn('ext),
     test: Test.testFn('ext),
     testSkip: Test.testFn('ext),
   }
@@ -78,6 +79,7 @@ module MatcherTypes: {
 
 module type TestFramework = {
   let describe: Describe.describeFn(unit);
+  let describeSkip: Describe.describeFn('a);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
   let run: RunConfig.t => unit;
