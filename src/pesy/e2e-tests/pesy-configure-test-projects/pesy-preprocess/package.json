@@ -1,0 +1,40 @@
+{
+  "name": "pesy-preprocess",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "dune build -p #{self.name}",
+    "release": { "releasedBinaries": [ "PesyPreprocessApp.exe" ] }
+  },
+  "buildDirs": {
+    "test": {
+      "require": [ "pesy-preprocess.lib" ],
+      "main": "TestPesyPreprocess",
+      "name": "TestPesyPreprocess.exe"
+    },
+    "library": {
+      "name": "pesy-preprocess.lib",
+      "namespace": "PesyPreprocess"
+    },
+    "executable": {
+      "require": [  "lwt", "lwt.unix", "pesy-preprocess.lib" ],
+      "main": "PesyPreprocessApp",
+      "name": "PesyPreprocessApp.exe",
+      "preprocess": [ "pps", "lwt_ppx" ]
+    }
+  },
+  "scripts": {
+    "pesy": "bash -c 'env PESY_MODE=update pesy'",
+    "test": "esy x TestPesyPreprocess.exe"
+  },
+  "dependencies": {
+    "@esy-ocaml/reason": "*",
+    "@opam/dune": ">=1.6.0",
+    "@opam/lwt": "4.1.0",
+    "@opam/lwt_ppx": "1.2.1",
+    "ocaml": "^4.4.0",
+    "pesy": "*",
+    "refmterr": "*"
+  },
+  "devDependencies": { "@opam/merlin": "*" }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "pesy-mode",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "dune build -p #{self.name}",
+    "buildsInSource": "_build",
+    "release": {
+      "releasedBinaries": [
+        "PesyModeApp.exe"
+      ]
+    }
+  },
+  "buildDirs": {
+    "test": {
+      "require": ["pesy-mode.lib"],
+      "main": "TestPesyMode",
+      "name": "TestPesyMode.exe",
+        "modes": ["byte", "exe"]
+    },
+    "library": {
+      "name": "pesy-mode.lib",
+      "namespace": "PesyMode",
+      "modes": ["byte"]
+    },
+    "executable": {
+      "require": ["pesy-mode.lib"],
+      "main": "PesyModeApp",
+      "name": "PesyModeApp.exe",
+        "modes": ["byte", "exe"]
+    }
+  },
+  "scripts": {
+    "pesy": "bash -c 'env PESY_MODE=update pesy'",
+    "test": "esy x TestPesyMode.exe"
+  },
+  "dependencies": {
+    "@opam/dune": ">=1.6.0",
+    "@esy-ocaml/reason": "*",
+    "refmterr": "*",
+    "ocaml": "^4.4.0",
+    "pesy": "*"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*"
+  }
+}

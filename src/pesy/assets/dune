@@ -1,0 +1,18 @@
+(library
+   (name PesyAssets)
+   (public_name pesy.assets)
+)
+ 
+(install
+ (section share_root)
+ (files 
+         (pesy-package.template.json as template-repo/pesy-package.template.json)
+         (pesy-gitignore.template as template-repo/pesy-gitignore.template)
+         (pesy-Util.template.re as template-repo/pesy-Util.template.re)
+         (pesy-README.template.md as template-repo/pesy-README.template.md)
+         (pesy-Test.template.re as template-repo/pesy-Test.template.re)
+         (pesy-App.template.re as template-repo/pesy-App.template.re)
+         (azure-pipeline-templates/pesy-azure-pipelines.yml as template-repo/azure-pipeline-templates/pesy-azure-pipelines.yml)
+         (azure-pipeline-templates/pesy-esy-build-steps.template.yml as template-repo/azure-pipeline-templates/pesy-esy-build-steps.template.yml)
+         (azure-pipeline-templates/pesy-publish-build-cache.yml as template-repo/azure-pipeline-templates/pesy-publish-build-cache.yml)
+         (azure-pipeline-templates/pesy-restore-build-cache.yml as template-repo/azure-pipeline-templates/pesy-restore-build-cache.yml)))

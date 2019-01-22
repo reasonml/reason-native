@@ -1,0 +1,4 @@
+(executable
+(name Pesy)
+(public_name pesy)
+(libraries pesy.lib pesy.utils))

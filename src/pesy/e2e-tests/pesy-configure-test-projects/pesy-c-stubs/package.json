@@ -1,0 +1,44 @@
+{
+  "name": "pesy-c-stubs",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "dune build -p #{self.name}",
+    "release": {
+      "releasedBinaries": [
+        "PesyCStubsApp.exe"
+      ]
+    }
+  },
+  "buildDirs": {
+    "test": {
+      "require": ["pesy-c-stubs.lib"],
+      "main": "TestPesyCStubs",
+      "name": "TestPesyCStubs.exe"
+    },
+    "library": {
+      "name": "pesy-c-stubs.lib",
+      "cNames": ["stubs"],
+      "namespace": "PesyCStubs"
+    },
+    "executable": {
+      "require": ["pesy-c-stubs.lib"],
+      "main": "PesyCStubsApp",
+      "name": "PesyCStubsApp.exe"
+    }
+  },
+  "scripts": {
+    "pesy": "bash -c 'env PESY_MODE=update pesy'",
+    "test": "esy x TestPesyCStubs.exe"
+  },
+  "dependencies": {
+    "@opam/dune": ">=1.6.0",
+    "@esy-ocaml/reason": "*",
+    "refmterr": "*",
+    "ocaml": "^4.4.0",
+    "pesy": "*"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*"
+  }
+}

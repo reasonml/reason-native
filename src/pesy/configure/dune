@@ -1,0 +1,4 @@
+(executable
+(name PesyConfigure)
+(public_name pesy-configure)
+(libraries pesy.lib pesy.utils))

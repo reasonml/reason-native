@@ -1,0 +1,29 @@
+{
+  "name": "pesy",
+  "version": "0.0.0",
+  "description": "Pesy.",
+  "esy": {
+    "build": [ "refmterr dune build -p #{self.name}" ],
+    "buildsInSource": "_build",
+    "release": {
+      "bin": [ "pesy", "pesy-configure" ],
+      "includePackages": [ "root" ]
+    }
+  },
+  "scripts": {
+    "test": "esy dune runtest"
+  },
+  "dependencies": {
+    "@esy-ocaml/reason": "*",
+    "@opam/bos": "*",
+    "@opam/dune": "*",
+    "@opam/fpath": "*",
+    "@opam/ppx_expect": "v0.11.1",
+    "@opam/ppx_inline_test": "v0.11.0",
+    "@opam/sexplib": "v0.11.0",
+    "@opam/yojson": "1.4.1",
+    "ocaml": "~4.6.0",
+    "refmterr": "*"
+  },
+  "devDependencies": { "@opam/merlin": "*" }
+}

@@ -1,0 +1,11 @@
+npm-debug.log
+.merlin
+yarn-error.log
+node_modules/
+_build
+_esy
+_release
+pesy.install
+.DS_Store
+*.install
+*~

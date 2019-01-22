@@ -1,0 +1,42 @@
+{
+  "name": "<PACKAGE_NAME_FULL>",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "dune build -p #{self.name}",
+    "release": {
+      "releasedBinaries": [
+        "<PACKAGE_NAME_UPPER_CAMEL>App.exe"
+      ]
+    }
+  },
+  "buildDirs": {
+    "test": {
+      "require": ["<PUBLIC_LIB_NAME>"],
+      "main": "Test<PACKAGE_NAME_UPPER_CAMEL>",
+      "name": "Test<PACKAGE_NAME_UPPER_CAMEL>.exe"
+    },
+    "library": {
+      "name": "<PUBLIC_LIB_NAME>",
+      "namespace": "<PACKAGE_NAME_UPPER_CAMEL>"
+    },
+    "executable": {
+      "require": ["<PUBLIC_LIB_NAME>"],
+      "main": "<PACKAGE_NAME_UPPER_CAMEL>App",
+      "name": "<PACKAGE_NAME_UPPER_CAMEL>App.exe"
+    }
+  },
+  "scripts": {
+    "test": "esy x Test<PACKAGE_NAME_UPPER_CAMEL>.exe"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "refmterr": "*",
+    "ocaml": "~4.6.0",
+    "pesy": "*"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*"
+  }
+}
