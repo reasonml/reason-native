@@ -4,21 +4,21 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open MatcherUtils;
-open SnapshotIO;
-open Common.Option.Infix;
 open Common.Collections;
+open Common.Option.Infix;
+open MatcherUtils;
+open Reporter;
+open SnapshotIO;
 open TestResult;
-include TestFrameworkConfig;
 include RunConfig;
-module MatcherUtils = MatcherUtils;
-module MatcherTypes = MatcherTypes;
-module Reporter = Reporter;
-module TestResult = TestResult;
+include TestFrameworkConfig;
+module ArrayMatchers = ArrayMatchers;
 module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
-module ArrayMatchers = ArrayMatchers;
-open Reporter;
+module MatcherTypes = MatcherTypes;
+module MatcherUtils = MatcherUtils;
+module Reporter = Reporter;
+module TestResult = TestResult;
 
 module Test = {
   type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
@@ -76,7 +76,10 @@ module Make = (UserConfig: FrameworkConfig) => {
     StackTrace.Make({
       let baseDir = UserConfig.config.projectDir;
       /* using both "/" and "\\" here because Filename.dir_sep is flaky on windows */
-      let exclude = [Filename.dirname(__FILE__) ++ "/", Filename.dirname(__FILE__) ++ "\\"];
+      let exclude = [
+        Filename.dirname(__FILE__) ++ "/",
+        Filename.dirname(__FILE__) ++ "\\",
+      ];
       let formatLink = Pastel.cyan;
       let formatText = Pastel.dim;
     });

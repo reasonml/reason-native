@@ -5,7 +5,7 @@
 )
 (copy_files# ../../common/*)
 ; objectPrinter lives separately from Common for now because Common has an
-; implicit dpeendency on Pastel which Console does not want. Common should
+; implicit dependency on Pastel which Console does not want. Common should
 ; ideally be split up into sub directories/packages which can be more precisely
 ; consumed
 (copy_files# ../../objectPrinter/*)

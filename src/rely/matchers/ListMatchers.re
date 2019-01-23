@@ -6,7 +6,11 @@
  */;
 module List = {
   type t('a) = list('a);
-  let isEmpty = l => List.length(l) == 0;
+  let isEmpty = l =>
+    switch (l) {
+    | [] => true
+    | _ => false
+    };
   let rec collectionEquals =
           (
             ~memberEquals: ('a, 'a) => bool,
@@ -23,7 +27,8 @@ module List = {
     | _ => false
     };
   let emptyDisplay = "[]";
-  let contains = (target, equals) => List.exists(item => equals(item, target));
+  let contains = (target, equals) =>
+    List.exists(item => equals(item, target));
   let collectionName = "list";
 };
 

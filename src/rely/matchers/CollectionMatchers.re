@@ -359,7 +359,7 @@ module Make = (Collection: Collection) => {
           };
         });
 
-      let makecollectionMatchers = isNot => {
+      let makeCollectionMatchers = isNot => {
         toEqual: (~equals=defaultEqualityFn, expected) =>
           toEqual(isNot, () => actual, () => (equals, expected)),
         toBeEmpty:
@@ -376,9 +376,9 @@ module Make = (Collection: Collection) => {
             toContainEqual(() => actual, () => (equals, expected)),
       };
 
-      let collectionMatchers = makecollectionMatchers(false);
+      let collectionMatchers = makeCollectionMatchers(false);
       {
-        not: makecollectionMatchers(true),
+        not: makeCollectionMatchers(true),
         toEqual: collectionMatchers.toEqual,
         toBeEmpty: collectionMatchers.toBeEmpty,
         toContain: collectionMatchers.toContain,
