@@ -5,6 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
+type mode =
+  | Terminal
+  | HumanReadable
+  | Disabled;
+
+let getMode: unit => mode;
+let setMode: mode => unit;
+
 type decorator = string => string;
 
 type colorName =

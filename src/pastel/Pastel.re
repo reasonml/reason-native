@@ -5,48 +5,92 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-open MakeDecorator;
+type mode =
+  | Terminal
+  | HumanReadable
+  | Disabled;
 
-type decorator = string => string;
+include Decorators;
 
-type modifier = {
-  bold: decorator,
-  dim: decorator,
-  italic: decorator,
-  underline: decorator,
-  inverse: decorator,
-  hidden: decorator,
-  strikethrough: decorator,
+let modifierInternal = ref(TerminalImplementation.modifier);
+let colorInternal = ref(TerminalImplementation.color);
+let bgInternal = ref(TerminalImplementation.bg);
+
+let mode = ref(Terminal);
+
+let setMode = m => {
+  switch (m) {
+  | Terminal =>
+    modifierInternal := TerminalImplementation.modifier;
+    colorInternal := TerminalImplementation.color;
+    bgInternal := TerminalImplementation.bg;
+  | Disabled =>
+    modifierInternal := DisabledImplementation.modifier;
+    colorInternal := DisabledImplementation.color;
+    bgInternal := DisabledImplementation.bg;
+  | HumanReadable =>
+    modifierInternal := HumanReadableImplementation.modifier;
+    colorInternal := HumanReadableImplementation.color;
+    bgInternal := HumanReadableImplementation.bg;
+  };
+  mode := m;
 };
 
-type color = {
-  black: decorator,
-  red: decorator,
-  green: decorator,
-  yellow: decorator,
-  blue: decorator,
-  magenta: decorator,
-  cyan: decorator,
-  white: decorator,
-  blackBright: decorator,
-  redBright: decorator,
-  greenBright: decorator,
-  yellowBright: decorator,
-  blueBright: decorator,
-  magentaBright: decorator,
-  cyanBright: decorator,
-  whiteBright: decorator,
-};
+let getMode = () => mode^;
 
 let modifier: modifier = {
-  bold: makeDecorator(Ansi.modifier.bold),
-  dim: makeDecorator(Ansi.modifier.dim),
-  italic: makeDecorator(Ansi.modifier.italic),
-  underline: makeDecorator(Ansi.modifier.underline),
-  inverse: makeDecorator(Ansi.modifier.inverse),
-  hidden: makeDecorator(Ansi.modifier.hidden),
-  strikethrough: makeDecorator(Ansi.modifier.strikethrough),
+  bold: s => modifierInternal^.bold(s),
+  dim: s => modifierInternal^.dim(s),
+  italic: s => modifierInternal^.italic(s),
+  underline: s => modifierInternal^.underline(s),
+  inverse: s => modifierInternal^.inverse(s),
+  hidden: s => modifierInternal^.hidden(s),
+  strikethrough: s => modifierInternal^.strikethrough(s),
 };
+
+let color = {
+  black: s => colorInternal^.black(s),
+  red: s => colorInternal^.red(s),
+  green: s => colorInternal^.green(s),
+  yellow: s => colorInternal^.yellow(s),
+  blue: s => colorInternal^.blue(s),
+  magenta: s => colorInternal^.magenta(s),
+  cyan: s => colorInternal^.cyan(s),
+  white: s => colorInternal^.white(s),
+  blackBright: s => colorInternal^.blackBright(s),
+  redBright: s => colorInternal^.redBright(s),
+  greenBright: s => colorInternal^.greenBright(s),
+  yellowBright: s => colorInternal^.yellowBright(s),
+  blueBright: s => colorInternal^.blueBright(s),
+  magentaBright: s => colorInternal^.magentaBright(s),
+  cyanBright: s => colorInternal^.cyanBright(s),
+  whiteBright: s => colorInternal^.whiteBright(s),
+};
+let bg = {
+  black: s => bgInternal^.black(s),
+  red: s => bgInternal^.red(s),
+  green: s => bgInternal^.green(s),
+  yellow: s => bgInternal^.yellow(s),
+  blue: s => bgInternal^.blue(s),
+  magenta: s => bgInternal^.magenta(s),
+  cyan: s => bgInternal^.cyan(s),
+  white: s => bgInternal^.white(s),
+  blackBright: s => bgInternal^.blackBright(s),
+  redBright: s => bgInternal^.redBright(s),
+  greenBright: s => bgInternal^.greenBright(s),
+  yellowBright: s => bgInternal^.yellowBright(s),
+  blueBright: s => bgInternal^.blueBright(s),
+  magentaBright: s => bgInternal^.magentaBright(s),
+  cyanBright: s => bgInternal^.cyanBright(s),
+  whiteBright: s => bgInternal^.whiteBright(s),
+};
+
+let length = (s: string): int =>
+  switch (mode^) {
+  | HumanReadable => HumanReadableImplementation.length(s)
+  | Terminal => TerminalImplementation.length(s)
+  | Disabled => DisabledImplementation.length(s)
+  };
 
 let bold = modifier.bold;
 
@@ -61,38 +105,6 @@ let inverse = modifier.inverse;
 let hidden = modifier.hidden;
 
 let strikethrough = modifier.strikethrough;
-
-let color: color = {
-  black: makeDecorator(Ansi.color.black),
-  red: makeDecorator(Ansi.color.red),
-  green: makeDecorator(Ansi.color.green),
-  yellow: makeDecorator(Ansi.color.yellow),
-  blue: makeDecorator(Ansi.color.blue),
-  magenta: makeDecorator(Ansi.color.magenta),
-  cyan: makeDecorator(Ansi.color.cyan),
-  white: makeDecorator(Ansi.color.white),
-  blackBright: makeDecorator(Ansi.color.blackBright),
-  redBright: makeDecorator(Ansi.color.redBright),
-  greenBright: makeDecorator(Ansi.color.greenBright),
-  yellowBright: makeDecorator(Ansi.color.yellowBright),
-  blueBright: makeDecorator(Ansi.color.blueBright),
-  magentaBright: makeDecorator(Ansi.color.magentaBright),
-  cyanBright: makeDecorator(Ansi.color.cyanBright),
-  whiteBright: makeDecorator(Ansi.color.whiteBright),
-};
-
-let lengthRegex = {
-  let start = "\027\\[";
-  let middle = "[0-9]+";
-  let stop = "m";
-  Str.regexp(start ++ middle ++ stop);
-};
-
-let length = (s: string): int => {
-  let parts = Str.split(lengthRegex, s);
-  let noColor = String.concat("", parts);
-  String.length(noColor);
-};
 
 let black = color.black;
 
@@ -125,25 +137,6 @@ let magentaBright = color.magentaBright;
 let cyanBright = color.cyanBright;
 
 let whiteBright = color.whiteBright;
-
-let bg: color = {
-  black: makeDecorator(Ansi.bg.black),
-  red: makeDecorator(Ansi.bg.red),
-  green: makeDecorator(Ansi.bg.green),
-  yellow: makeDecorator(Ansi.bg.yellow),
-  blue: makeDecorator(Ansi.bg.blue),
-  magenta: makeDecorator(Ansi.bg.magenta),
-  cyan: makeDecorator(Ansi.bg.cyan),
-  white: makeDecorator(Ansi.bg.white),
-  blackBright: makeDecorator(Ansi.bg.blackBright),
-  redBright: makeDecorator(Ansi.bg.redBright),
-  greenBright: makeDecorator(Ansi.bg.greenBright),
-  yellowBright: makeDecorator(Ansi.bg.yellowBright),
-  blueBright: makeDecorator(Ansi.bg.blueBright),
-  magentaBright: makeDecorator(Ansi.bg.magentaBright),
-  cyanBright: makeDecorator(Ansi.bg.cyanBright),
-  whiteBright: makeDecorator(Ansi.bg.whiteBright),
-};
 
 type colorName =
   | Black
