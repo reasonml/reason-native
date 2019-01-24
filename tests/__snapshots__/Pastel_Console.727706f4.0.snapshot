@@ -1,7 +1,10 @@
 Pastel Console › Records
 ===== Standard Out =====
-{\027[32m\"joe\"\027[39m, \027[33m100\027[39m}
-[{\027[32m\"joe\"\027[39m, \027[33m100\027[39m}, {\027[32m\"sue\"\027[39m, \027[33m18\027[39m}]
+{<green>\"joe\"</green>, <yellow>100</yellow>}
+[
+  {<green>\"joe\"</green>, <yellow>100</yellow>},
+  {<green>\"sue\"</green>, <yellow>18</yellow>}
+]
 ===== Standard Err =====
 
 ========================

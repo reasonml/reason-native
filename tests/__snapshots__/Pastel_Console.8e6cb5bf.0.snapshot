@@ -2,6 +2,12 @@ Pastel Console › Max length
 ===== Standard Out =====
 
 ===== Standard Err =====
-[\027[33m2\027[39m, \027[33m3\027[39m, \027[33m4\027[39m, \027[33m5\027[39m, \027[33m6\027[39m]
+[
+  <yellow>2</yellow>,
+  <yellow>3</yellow>,
+  <yellow>4</yellow>,
+  <yellow>5</yellow>,
+  <yellow>6</yellow>
+]
 ========================
 

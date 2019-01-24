@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-let sanitizeClosures = (s) => {
+let sanitizeClosures = s => {
   let r = Str.regexp("closure(\\@?[0-9]+)");
   Str.global_replace(r, "closure(<id-sanitized>)", s);
 };
@@ -16,3 +16,16 @@ let allOut = (stdout, stderr) =>
   ++ "\n===== Standard Err =====\n"
   ++ sanitizeClosures(stderr)
   ++ "\n========================\n";
+
+let withHumanReadablePastel = f => {
+  let prevMode = Pastel.getMode();
+  Pastel.setMode(HumanReadable);
+  let value =
+    try (f()) {
+    | e =>
+      Pastel.setMode(prevMode);
+      raise(e);
+    };
+  Pastel.setMode(prevMode);
+  value;
+};

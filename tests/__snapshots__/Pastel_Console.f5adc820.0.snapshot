@@ -1,14 +1,14 @@
 Pastel Console › Lists
 ===== Standard Out =====
 [
-  \027[32m\"this\"\027[39m,
-  \027[32m\"is\"\027[39m,
-  \027[32m\"a\"\027[39m,
-  \027[32m\"list\"\027[39m,
-  \027[32m\"of\"\027[39m,
-  \027[31m@max-length\027[39m
+  <green>\"this\"</green>,
+  <green>\"is\"</green>,
+  <green>\"a\"</green>,
+  <green>\"list\"</green>,
+  <green>\"of\"</green>,
+  <red>@max-length</red>
 ]
-[\027[35m4.9\027[39m, \027[35m5.\027[39m, \027[35m999.99\027[39m]
+[<magenta>4.9</magenta>, <magenta>5.</magenta>, <magenta>999.99</magenta>]
 ===== Standard Err =====
 
 ========================
