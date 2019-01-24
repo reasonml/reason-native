@@ -95,11 +95,11 @@ Running 1 test suite
 
     <dim>expect.string(</dim><red>received</red><dim>).toMatchSnapshot(</dim><green>expected</green><dim>)</dim>
     
-    <green>- something else</green>
+    <green>- anything else</green>
     <red>+ bacon3</red>
     
     Difference:
-      <red>bacon3</red><green>something else</green>
+      <red>bacon3</red><green>anything else</green>
 
 <bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot no snapshot exists</red></bold>
 
