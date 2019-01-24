@@ -8,6 +8,7 @@
 include Mode;
 include Decorators;
 include ColorName;
+module ColorName = ColorName;
 
 module Make = PastelFactory.Make;
 include PastelFactory.Make({});

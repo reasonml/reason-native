@@ -6,6 +6,8 @@
  */;
 
 open TestFramework;
+open Pastel.ColorName;
+module Pastel = Pastel.Make();
 open Pastel;
 
 describe("Exhaustiveness test", ({test}) =>
@@ -31,14 +33,13 @@ describe("Exhaustiveness test", ({test}) =>
           "to *not* render bold text as bright.\n"
           "Instead bold and bright should remain independent concepts. \n"
         </Pastel>
-        <Pastel bold=true color=Pastel.Yellow>
+        <Pastel bold=true color=Yellow>
           "This tester does not test nesting of attributes. It is only meant for seeing all possible combinations."
         </Pastel>
       </Pastel>,
     );
 
     let intToBool = i => i === 0 ? false : true;
-
     let intToColor = i =>
       switch (i) {
       | 0 => Black
