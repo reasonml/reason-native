@@ -34,6 +34,7 @@ module Make = (()) => {
   };
 
   let getMode = () => mode^;
+  let resetMode = () => setMode(Terminal);
 
   let modifier: modifier = {
     bold: s => modifierInternal^.bold(s),
