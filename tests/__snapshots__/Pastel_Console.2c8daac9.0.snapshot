@@ -2,6 +2,6 @@ Pastel Console › Max depth
 ===== Standard Out =====
 
 ===== Standard Err =====
-[[[[\027[31m@max-depth\027[39m]]], [[\027[33m0\027[39m]], [\027[33m0\027[39m]]
+[[[[<red>@max-depth</red>]]], [[<yellow>0</yellow>]], [<yellow>0</yellow>]]
 ========================
 

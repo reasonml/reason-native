@@ -13,13 +13,15 @@ type user = {
 };
 
 let captureOutput = fn =>
-  IO.captureOutput(() => {
-    /* Initialize pastel console before running. */
-    PastelConsole.init();
-    Console.ObjectPrinter.setPrintWidth(80);
-    fn() /* Reset the console when we finish. */;
-    Console.currentGlobalConsole.contents = Console.defaultGlobalConsole;
-  });
+  Pastel.useMode(HumanReadable, () =>
+    IO.captureOutput(() => {
+      /* Initialize pastel console before running. */
+      PastelConsole.init();
+      Console.ObjectPrinter.setPrintWidth(80);
+      fn() /* Reset the console when we finish. */;
+      Console.currentGlobalConsole.contents = Console.defaultGlobalConsole;
+    })
+  );
 
 describe("Pastel Console", ({test}) => {
   test("Primitive types", ({expect}) => {

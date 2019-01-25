@@ -1,6 +1,6 @@
 Pastel Console › Array of floats
 ===== Standard Out =====
-[|\027[35m2.3\027[39m, \027[35m8.9\027[39m, \027[35m9.\027[39m|]
+[|<magenta>2.3</magenta>, <magenta>8.9</magenta>, <magenta>9.</magenta>|]
 ===== Standard Err =====
 
 ========================

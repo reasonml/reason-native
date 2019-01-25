@@ -1,6 +1,6 @@
 Pastel Console › Array of strings
 ===== Standard Out =====
-{\027[32m\"a\"\027[39m, \027[32m\"b\"\027[39m, \027[32m\"c\"\027[39m}
+{<green>\"a\"</green>, <green>\"b\"</green>, <green>\"c\"</green>}
 ===== Standard Err =====
 
 ========================
