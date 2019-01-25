@@ -15,7 +15,8 @@ type mode =
 
 let getMode: unit => mode;
 let setMode: mode => unit;
-let resetMode: unit => unit;
+let defaultMode: mode;
+let useMode: (mode, unit => 'a) => 'a;
 
 type decorator = string => string;
 

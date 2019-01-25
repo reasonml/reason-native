@@ -57,7 +57,7 @@ let testRunnerOutputSnapshotTest =
             Str.global_replace(blankSpaceRegex, "_", testName);
         });
       let (stdout, _, _) =
-        Utils.withHumanReadablePastel(() =>
+        Pastel.useMode(HumanReadable, () =>
           IO.captureOutput(() => {
             TestFramework.describe(testName, utils =>
               testFn(utils)

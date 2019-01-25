@@ -13,7 +13,7 @@ type user = {
 };
 
 let captureOutput = fn =>
-  Utils.withHumanReadablePastel(() =>
+  Pastel.useMode(HumanReadable, () =>
     IO.captureOutput(() => {
       /* Initialize pastel console before running. */
       PastelConsole.init();

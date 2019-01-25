@@ -34,7 +34,20 @@ module Make = (()) => {
   };
 
   let getMode = () => mode^;
-  let resetMode = () => setMode(Terminal);
+  let defaultMode = Terminal;
+
+  let useMode = (mode, f) => {
+    let prevMode = getMode();
+    setMode(mode);
+    let value =
+      try (f()) {
+      | e =>
+        setMode(prevMode);
+        raise(e);
+      };
+    setMode(prevMode);
+    value;
+  };
 
   let modifier: modifier = {
     bold: s => modifierInternal^.bold(s),

@@ -27,14 +27,16 @@ describe("Pastel modes", ({test}) => {
     let output = <Pastel color=Red> "Hello" </Pastel>;
     expect.string(output).toEqual("\027[31mHello\027[39m");
   });
-  test("Reset mode should switch back to terminal output", ({expect}) => {
+  test("Use mode should switch back to previous output", ({expect}) => {
     module Pastel =
       Pastel.Make({});
     Pastel.setMode(Disabled);
     let output = <Pastel color=Red> "Hello" </Pastel>;
     expect.string(output).toEqual("Hello");
-    Pastel.resetMode();
-    let output = <Pastel color=Red> "Hello" </Pastel>;
+    let output =
+      Pastel.useMode(Terminal, () => <Pastel color=Red> "Hello" </Pastel>);
     expect.string(output).toEqual("\027[31mHello\027[39m");
+    let output = <Pastel color=Red> "Hello" </Pastel>;
+    expect.string(output).toEqual("Hello");
   });
 });

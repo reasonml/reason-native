@@ -11,7 +11,7 @@ open ColorName;
 module type PastelSig = {
   let getMode: unit => mode;
   let setMode: mode => unit;
-  let resetMode: unit => unit;
+  let useMode: (mode, unit => 'a) => 'a;
   let length: string => int;
 
   let modifier: modifier;

@@ -16,16 +16,3 @@ let allOut = (stdout, stderr) =>
   ++ "\n===== Standard Err =====\n"
   ++ sanitizeClosures(stderr)
   ++ "\n========================\n";
-
-let withHumanReadablePastel = f => {
-  let prevMode = Pastel.getMode();
-  Pastel.setMode(HumanReadable);
-  let value =
-    try (f()) {
-    | e =>
-      Pastel.setMode(prevMode);
-      raise(e);
-    };
-  Pastel.setMode(prevMode);
-  value;
-};
