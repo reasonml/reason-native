@@ -10,3 +10,9 @@
      (javascript_files  nativeChannels.js )  ; From package.json jsooFiles field
    )
   )
+; objectPrinter lives separately from Common for now because Common has an
+; implicit dependency on Pastel which Console does not want. Common should
+; ideally be split up into sub directories/packages which can be more precisely
+; consumed
+(copy_files# ../../objectPrinter/*)
+
