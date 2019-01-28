@@ -19,7 +19,7 @@ Running 1 test suite
     Not to contain value: 
       \027[32mstring\027[39m
     
-    \027[2mNote that you are testing for referential equality with the stricter `toContain` matcher. You probably need to use `toContainEqual` instead.\027[22m
+    \027[2mNote that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.\027[22m
 
 \027[1m\027[31m  \226\128\162 expect.list.not.toContain failure output \226\128\186 record reference equality\027[39m\027[22m
 

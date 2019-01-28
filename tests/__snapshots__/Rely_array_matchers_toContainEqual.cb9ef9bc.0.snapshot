@@ -27,6 +27,8 @@ Running 1 test suite
       \027[31m[|1., 2.|]\027[39m
     Not to contain value: 
       \027[32m1.2\027[39m
+    
+    \027[2mNote that you are testing for float equality using (==). You probably need to specify a ~equals function to the matcher.\027[22m
 
 \027[1m\027[31m  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 record comparison\027[39m\027[22m
 

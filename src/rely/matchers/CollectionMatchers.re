@@ -4,6 +4,8 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
+open CommonOption.Infix;
+open EqualityValidator;
 open MatcherTypes;
 
 type equalsFn('a) = ('a, 'a) => bool;
@@ -18,31 +20,10 @@ module type Collection = {
   let contains: ('a, equalsFn('a), t('a)) => bool;
 };
 
-let suggest_to_contain_equal =
-  Pastel.dim(
-    "Note that you are testing for referential equality with the stricter `toContain` matcher. You probably need to use `toContainEqual` instead.",
-  );
-
-let suggest_custom_equality_for_float =
-  Pastel.dim(
-    "Note that you are testing for float equality using (==). You probably need to specify a ~equals function to the matcher.",
-  );
-
-let isTypeThatMightNotWantToUseReferentialEquality = value =>
-  switch (Obj.tag(Obj.magic(value))) {
-  | tag when tag == Obj.object_tag => true
-  | tag when tag == Obj.string_tag => true
-  | tag when tag == Obj.double_tag => true
-  | tag when tag == Obj.double_array_tag => true
-  | _ => false
-  };
-
-let isFloatOrArrayOfFloat = value =>
-  switch (Obj.tag(Obj.magic(value))) {
-  | tag when tag == Obj.double_tag => true
-  | tag when tag == Obj.double_array_tag => true
-  | _ => false
-  };
+let suggestToContainEqualForFloats = "Note that you are testing for referential equality between floats. You probably need to use `toContainEqual` with a custom ~equals function instead.";
+let suggestToContainEqualForStrings = "Note that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.";
+let suggestToContainEqual = "Note that you are testing for referential equality with the stricter `toContain` matcher. You probably need to use `toContainEqual` instead.";
+let suggestCustomEqualityForFloat = "Note that you are testing for float equality using (==). You probably need to specify a ~equals function to the matcher.";
 
 let defaultEqualityFn = (==);
 
@@ -183,10 +164,21 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
-            let suggestToContainEqual =
-              Collection.contains(expected, defaultEqualityFn, actual)
-              || isTypeThatMightNotWantToUseReferentialEquality(expected);
-            let message =
+
+            let actualContainsEqualExpected = Collection.contains(expected, defaultEqualityFn, actual);
+
+            let suggestToContainEqualMessage = switch((actualContainsEqualExpected, validateUsageOfReferentialEquality(expected))) {
+            | (_, Fail(DoubleTag))
+            | (_, Fail(DoubleArrayTag)) => Some(suggestToContainEqualForFloats)
+            | (_, Fail(StringTag)) => Some(suggestToContainEqualForStrings)
+            | (_, Fail(ObjectTag))
+            | (true, Pass) => Some(suggestToContainEqual)
+            | (false, Pass) => None
+            }
+            >>| (m => "\n\n" ++ Pastel.dim(m))
+            |?: "";
+
+              let message =
               String.concat(
                 "",
                 [
@@ -206,10 +198,8 @@ module Make = (Collection: Collection) => {
                   "To contain value: ",
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
+                  suggestToContainEqualMessage
                 ],
-              )
-              ++ (
-                suggestToContainEqual ? "\n\n" ++ suggest_to_contain_equal : ""
               );
             (() => message, pass);
           };
@@ -228,8 +218,15 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
-            let suggestToContainEqual =
-              isTypeThatMightNotWantToUseReferentialEquality(expected);
+            let suggestToContainEqualMessage = switch(validateUsageOfReferentialEquality(expected)) {
+              | Fail(DoubleTag)
+              | Fail(DoubleArrayTag) => Some(suggestToContainEqualForFloats)
+              | Fail(StringTag) => Some(suggestToContainEqualForStrings)
+              | Fail(ObjectTag) => Some(suggestToContainEqual)
+              | Pass => None
+              }
+              >>| (m => "\n\n" ++ Pastel.dim(m))
+              |?: "";
             let message =
               String.concat(
                 "",
@@ -251,10 +248,8 @@ module Make = (Collection: Collection) => {
                   "Not to contain value: ",
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
+                  suggestToContainEqualMessage,
                 ],
-              )
-              ++ (
-                suggestToContainEqual ? "\n\n" ++ suggest_to_contain_equal : ""
               );
             (() => message, pass);
           };
@@ -273,8 +268,13 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
-            let suggestCustomEquality =
-              isFloatOrArrayOfFloat(expected) && equals === defaultEqualityFn;
+            let suggestCustomEqualityMessage = switch(validateUsageOfStructuralEquality(expected)) {
+            | Pass => None
+            | Fail(DoubleTag)
+            | Fail(DoubleArrayTag) => Some(suggestCustomEqualityForFloat)
+            }
+            >>| (m => "\n\n" ++ Pastel.dim(m))
+            |?: "";
             let message =
               String.concat(
                 "",
@@ -299,11 +299,8 @@ module Make = (Collection: Collection) => {
                   "To contain value: ",
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
+                  suggestCustomEqualityMessage
                 ],
-              )
-              ++ (
-                suggestCustomEquality ?
-                  "\n\n" ++ suggest_custom_equality_for_float : ""
               );
             (() => message, pass);
           };
@@ -322,8 +319,13 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
-            let suggestCustomEquality =
-              isFloatOrArrayOfFloat(expected) && equals === defaultEqualityFn;
+            let suggestCustomEqualityMessage = switch(validateUsageOfStructuralEquality(expected)) {
+              | Pass => None
+              | Fail(DoubleTag)
+              | Fail(DoubleArrayTag) => Some(suggestCustomEqualityForFloat)
+              }
+              >>| (m => "\n\n" ++ Pastel.dim(m))
+              |?: "";
             let message =
               String.concat(
                 "",
@@ -349,11 +351,8 @@ module Make = (Collection: Collection) => {
                   "Not to contain value: ",
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
+                  suggestCustomEqualityMessage
                 ],
-              )
-              ++ (
-                suggestCustomEquality ?
-                  "\n\n" ++ suggest_custom_equality_for_float : ""
               );
             (() => message, pass);
           };
