@@ -1,36 +1,36 @@
 Rely list matchers › toContain › expect.list.not.toContain failure output
 Running 1 test suite
-\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mexpect.list.not.toContain failure output\027[39m\027[85D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m \027[97mexpect.list.not.toContain failure output\027[39m
-\027[1m\027[31m  \226\128\162 expect.list.not.toContain failure output \226\128\186 integer contains\027[39m\027[22m
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m <whiteBright>expect.list.not.toContain failure output</whiteBright>\027[102D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m <whiteBright>expect.list.not.toContain failure output</whiteBright>
+<bold><red>  \226\128\162 expect.list.not.toContain failure output \226\128\186 integer contains</red></bold>
 
-    \027[2mexpect.list(\027[22m\027[31mlist\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m \027[2m/* using === */\027[22m
+    <dim>expect.list(</dim><red>list</red><dim>).</dim>not<dim>.toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
     
     Expected list:
-      \027[31m[1, 2, 3]\027[39m
+      <red>[1, 2, 3]</red>
     Not to contain value: 
-      \027[32m1\027[39m
+      <green>1</green>
 
-\027[1m\027[31m  \226\128\162 expect.list.not.toContain failure output \226\128\186 string reference equality\027[39m\027[22m
+<bold><red>  \226\128\162 expect.list.not.toContain failure output \226\128\186 string reference equality</red></bold>
 
-    \027[2mexpect.list(\027[22m\027[31mlist\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m \027[2m/* using === */\027[22m
+    <dim>expect.list(</dim><red>list</red><dim>).</dim>not<dim>.toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
     
     Expected list:
-      \027[31m[\"string\", \"bacon\"]\027[39m
+      <red>[\"string\", \"bacon\"]</red>
     Not to contain value: 
-      \027[32mstring\027[39m
+      <green>string</green>
     
-    \027[2mNote that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.\027[22m
+    <dim>Note that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.</dim>
 
-\027[1m\027[31m  \226\128\162 expect.list.not.toContain failure output \226\128\186 record reference equality\027[39m\027[22m
+<bold><red>  \226\128\162 expect.list.not.toContain failure output \226\128\186 record reference equality</red></bold>
 
-    \027[2mexpect.list(\027[22m\027[31mlist\027[39m\027[2m).\027[22mnot\027[2m.toContain(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m \027[2m/* using === */\027[22m
+    <dim>expect.list(</dim><red>list</red><dim>).</dim>not<dim>.toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
     
     Expected list:
-      \027[31m[{\"Tom\", 42}, {\"Jerry\", 100}]\027[39m
+      <red>[{\"Tom\", 42}, {\"Jerry\", 100}]</red>
     Not to contain value: 
-      \027[32m{\"Tom\", 42}\027[39m
+      <green>{\"Tom\", 42}</green>
 
 
-\027[97m\027[1mTest Suites: \027[22m\027[39m\027[31m\027[1m1 failed\027[22m\027[39m, 0 passed, 1 total
-\027[97m\027[1mTests:       \027[22m\027[39m\027[31m\027[1m3 failed\027[22m\027[39m, 0 passed, 3 total
+<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
+<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>3 failed</bold></red>, 0 passed, 3 total
 

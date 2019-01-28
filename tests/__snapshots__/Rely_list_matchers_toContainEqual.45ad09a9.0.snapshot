@@ -1,25 +1,25 @@
 Rely list matchers › toContainEqual › expect.list.toContainEqual failure output
 Running 1 test suite
-\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mexpect.list.toContainEqual failure output\027[39m\027[86D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m \027[97mexpect.list.toContainEqual failure output\027[39m
-\027[1m\027[31m  \226\128\162 expect.list.toContainEqual failure output \226\128\186 empty list\027[39m\027[22m
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m <whiteBright>expect.list.toContainEqual failure output</whiteBright>\027[103D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m <whiteBright>expect.list.toContainEqual failure output</whiteBright>
+<bold><red>  \226\128\162 expect.list.toContainEqual failure output \226\128\186 empty list</red></bold>
 
-    \027[2mexpect.list(\027[22m\027[31mlist\027[39m\027[2m).toContainEqual(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m \027[2m/* using == */\027[22m
+    <dim>expect.list(</dim><red>list</red><dim>).toContainEqual(</dim><green>value</green><dim>)</dim> <dim>/* using == */</dim>
     
     Expected list:
-      \027[31m[]\027[39m
+      <red>[]</red>
     To contain value: 
-      \027[32m7\027[39m
+      <green>7</green>
 
-\027[1m\027[31m  \226\128\162 expect.list.toContainEqual failure output \226\128\186 missing element\027[39m\027[22m
+<bold><red>  \226\128\162 expect.list.toContainEqual failure output \226\128\186 missing element</red></bold>
 
-    \027[2mexpect.list(\027[22m\027[31mlist\027[39m\027[2m).toContainEqual(\027[22m\027[32mvalue\027[39m\027[2m)\027[22m \027[2m/* using == */\027[22m
+    <dim>expect.list(</dim><red>list</red><dim>).toContainEqual(</dim><green>value</green><dim>)</dim> <dim>/* using == */</dim>
     
     Expected list:
-      \027[31m[1, 2]\027[39m
+      <red>[1, 2]</red>
     To contain value: 
-      \027[32m7\027[39m
+      <green>7</green>
 
 
-\027[97m\027[1mTest Suites: \027[22m\027[39m\027[31m\027[1m1 failed\027[22m\027[39m, 0 passed, 1 total
-\027[97m\027[1mTests:       \027[22m\027[39m\027[31m\027[1m2 failed\027[22m\027[39m, 0 passed, 2 total
+<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
+<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>2 failed</bold></red>, 0 passed, 2 total
 

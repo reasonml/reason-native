@@ -1,13 +1,13 @@
 Rely list matchers › toBeEmpty › expect.list.not.toBeEmpty output
 Running 1 test suite
-\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mexpect.list.not.toBeEmpty output\027[39m\027[77D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m \027[97mexpect.list.not.toBeEmpty output\027[39m
-\027[1m\027[31m  \226\128\162 expect.list.not.toBeEmpty output \226\128\186 empty should not be empty failure output\027[39m\027[22m
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m <whiteBright>expect.list.not.toBeEmpty output</whiteBright>\027[94D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m <whiteBright>expect.list.not.toBeEmpty output</whiteBright>
+<bold><red>  \226\128\162 expect.list.not.toBeEmpty output \226\128\186 empty should not be empty failure output</red></bold>
 
-    \027[2mexpect.list(\027[22m\027[31mreceived\027[39m\027[2m).not.toBeEmpty(\027[22m\027[2m)\027[22m
+    <dim>expect.list(</dim><red>received</red><dim>).not.toBeEmpty(</dim><green></green><dim>)</dim>
     
-    Expected value not to be empty, but received: \027[31m[]\027[39m
+    Expected value not to be empty, but received: <red>[]</red>
 
 
-\027[97m\027[1mTest Suites: \027[22m\027[39m\027[31m\027[1m1 failed\027[22m\027[39m, 0 passed, 1 total
-\027[97m\027[1mTests:       \027[22m\027[39m\027[31m\027[1m1 failed\027[22m\027[39m, 0 passed, 1 total
+<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
+<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
 
