@@ -4,7 +4,6 @@
 
 Testing, printing, coloring, and other tools to effectively write native Reason code.
 
-
 ## Packages:
 
 - `@reason-native/pastel`: Terminal highlighting with support for nesting and style propagation.
@@ -16,22 +15,21 @@ Testing, printing, coloring, and other tools to effectively write native Reason 
 
 ## Status:
 
-The packages included in this repo are not yet released to npm/opam. They are being made public
-as a way to gather feedback and share progress on native command line tooling.
-
 Inside of this repo, there are several packages inside the `src` directory that are to be individually
 released when their APIs are sufficiently stable.
 
-
 ## Examples
 
-* [Test Runner](src/rely)
+* [Rely](src/rely)
 
 ## Contributing
 
 * install esy (https://esy.sh/)
 * run `esy install` and `esy build`
 * test executables are currently defined in the respective .json files for each repository, to run them run `esy x ExecutableName.exe`
+
+## Breaking changes
+The packages in reason-native adhere to [semantic versioning](https://semver.org/). Notably we do not consider changes that may induce [warning 9 errors](https://caml.inria.fr/pub/docs/manual-ocaml/comp.html#sec287) (such as adding new fields to records) to be breaking changes. Consequently minor version upgrades may cause warning 9 errors.
 
 ## License
 
