@@ -1,7 +1,7 @@
 TestRunner › string operations
 Running 1 test suite
-\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m \027[97mstring operations\027[39m\027[62D\027[K\027[32m\027[1m\027[7m PASS \027[27m\027[22m\027[39m \027[97mstring operations\027[39m
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m <whiteBright>string operations</whiteBright>\027[79D\027[K\027[32m\027[1m\027[7m PASS \027[27m\027[22m\027[39m <whiteBright>string operations</whiteBright>
 
-\027[97m\027[1mTest Suites: \027[22m\027[39m0 failed, \027[32m\027[1m1 passed\027[22m\027[39m, 1 total
-\027[97m\027[1mTests:       \027[22m\027[39m0 failed, \027[32m\027[1m1 passed\027[22m\027[39m, 1 total
+<whiteBright><bold>Test Suites: </bold></whiteBright>0 failed, <green><bold>1 passed</bold></green>, 1 total
+<whiteBright><bold>Tests:       </bold></whiteBright>0 failed, <green><bold>1 passed</bold></green>, 1 total
 

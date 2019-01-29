@@ -1,8 +1,8 @@
 Pastel Console › Primitive types
 ===== Standard Out =====
-\027[35m4.6\027[39m
+<magenta>4.6</magenta>
 This is a string
-\027[36m\027[2mclosure(<id-sanitized>)\027[22m\027[39m
+<cyan><dim>closure(<id-sanitized>)</dim></cyan>
 ===== Standard Err =====
 
 ========================

@@ -18,8 +18,7 @@ module MakeTestFramework = (SnapshotDir: SnapshotDir) : Rely.TestFramework =>
             GetProjectRoot.get()
             |> (dir => Filename.concat(dir, "tests"))
             |> (
-              dir =>
-                Filename.concat(dir, "__snapshots_test_runner_output__")
+              dir => Filename.concat(dir, "__snapshots_test_runner_output__")
             )
             |> (dir => Filename.concat(dir, SnapshotDir.snapshotDir))
           ),
@@ -58,15 +57,17 @@ let testRunnerOutputSnapshotTest =
             Str.global_replace(blankSpaceRegex, "_", testName);
         });
       let (stdout, _, _) =
-        IO.captureOutput(() => {
-          TestFramework.describe(testName, utils =>
-            testFn(utils)
-          );
-          TestFramework.run(
-            Rely.RunConfig.(initialize() |> updateSnapshots(doUpdate)),
-          );
-          ();
-        });
+        Pastel.useMode(HumanReadable, () =>
+          IO.captureOutput(() => {
+            TestFramework.describe(testName, utils =>
+              testFn(utils)
+            );
+            TestFramework.run(
+              Rely.RunConfig.(initialize() |> updateSnapshots(doUpdate)),
+            );
+            ();
+          })
+        );
 
       if (debugPrintOutputToConsole) {
         print_endline("\n" ++ stdout ++ "\n");

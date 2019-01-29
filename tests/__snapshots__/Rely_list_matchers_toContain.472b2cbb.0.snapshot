@@ -1,0 +1,47 @@
+Rely list matchers › toContain › expect.list.toContain failure output
+Running 1 test suite
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m <whiteBright>expect.list.toContain failure output</whiteBright>\027[98D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m <whiteBright>expect.list.toContain failure output</whiteBright>
+<bold><red>  \226\128\162 expect.list.toContain failure output \226\128\186 empty list</red></bold>
+
+    <dim>expect.list(</dim><red>list</red><dim>).toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    
+    Expected list:
+      <red>[]</red>
+    To contain value: 
+      <green>7</green>
+
+<bold><red>  \226\128\162 expect.list.toContain failure output \226\128\186 missing element</red></bold>
+
+    <dim>expect.list(</dim><red>list</red><dim>).toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    
+    Expected list:
+      <red>[1, 2]</red>
+    To contain value: 
+      <green>7</green>
+
+<bold><red>  \226\128\162 expect.list.toContain failure output \226\128\186 separate string references</red></bold>
+
+    <dim>expect.list(</dim><red>list</red><dim>).toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    
+    Expected list:
+      <red>[\"foo\", \"bar\"]</red>
+    To contain value: 
+      <green>foo</green>
+    
+    <dim>Note that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.</dim>
+
+<bold><red>  \226\128\162 expect.list.toContain failure output \226\128\186 separate record references</red></bold>
+
+    <dim>expect.list(</dim><red>list</red><dim>).toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    
+    Expected list:
+      <red>[{\"Amy\", 19}]</red>
+    To contain value: 
+      <green>{\"Amy\", 19}</green>
+    
+    <dim>Note that you are testing for referential equality with the stricter `toContain` matcher. You probably need to use `toContainEqual` instead.</dim>
+
+
+<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
+<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>4 failed</bold></red>, 0 passed, 4 total
+

@@ -1,0 +1,34 @@
+Rely array matchers › toEqual › expect.array.toEqual failure output
+Running 1 test suite
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m <whiteBright>expect.array.toEqual failure output</whiteBright>\027[97D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m <whiteBright>expect.array.toEqual failure output</whiteBright>
+<bold><red>  \226\128\162 expect.array.toEqual failure output \226\128\186 actual shorter than expected</red></bold>
+
+    <dim>expect.array(</dim><red>received</red><dim>).toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    
+    Expected value to equal:
+      <green>{1, 2, 3}</green>
+    Received:
+      <red>{1, 2}</red>
+
+<bold><red>  \226\128\162 expect.array.toEqual failure output \226\128\186 actual longer than expected</red></bold>
+
+    <dim>expect.array(</dim><red>received</red><dim>).toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    
+    Expected value to equal:
+      <green>{1, 2}</green>
+    Received:
+      <red>{1, 2, 3}</red>
+
+<bold><red>  \226\128\162 expect.array.toEqual failure output \226\128\186 mismatched values</red></bold>
+
+    <dim>expect.array(</dim><red>received</red><dim>).toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    
+    Expected value to equal:
+      <green>{\"values\"}</green>
+    Received:
+      <red>{\"mismatched\"}</red>
+
+
+<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
+<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>3 failed</bold></red>, 0 passed, 3 total
+

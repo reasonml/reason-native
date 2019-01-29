@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/console",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "No effort, universal logger",
   "license": "MIT",
   "esy": {
@@ -16,7 +16,7 @@
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "^3.3.0",
-    "ocaml": ">= 4.2.0  <= 4.7.0"
+    "ocaml": "^4.2.0"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",

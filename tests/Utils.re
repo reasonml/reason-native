@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-let sanitizeClosures = (s) => {
+let sanitizeClosures = s => {
   let r = Str.regexp("closure(\\@?[0-9]+)");
   Str.global_replace(r, "closure(<id-sanitized>)", s);
 };

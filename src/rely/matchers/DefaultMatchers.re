@@ -11,6 +11,8 @@ open IntMatchers;
 open FloatMatchers;
 open FnMatchers;
 open MatcherTypes;
+open ListMatchers;
+open ArrayMatchers;
 
 type matchers('ext) = {
   string: string => stringMatchersWithNot,
@@ -20,7 +22,9 @@ type matchers('ext) = {
   int: int => intMatchersWithNot,
   float: float => floatMatchersWithNot,
   fn: 'a. (unit => 'a) => fnMatchersWithNot,
-  ext: 'ext,
+  list: 'a. list('a) => ListMatchers.matchersWithNot('a),
+  array: 'a. array('a) => ArrayMatchers.matchersWithNot('a),
+  ext: 'ext
 };
 
 let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
@@ -38,5 +42,7 @@ let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
   int: i => IntMatchers.makeMatchers(".int", utils, i),
   float: f => FloatMatchers.makeMatchers(".float", utils, f),
   fn: f => FnMatchers.makeMatchers(".fn", utils, f),
-  ext: makeMatchers(utils),
+  list: l => ListMatchers.makeMatchers(".list", utils, l),
+  array: a => ArrayMatchers.makeMatchers(".array", utils, a),
+  ext: makeMatchers(utils)
 };

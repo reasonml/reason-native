@@ -5,6 +5,19 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
+module Make: () => PastelSig.PastelSig;
+module ColorName = ColorName;
+
+type mode =
+  | Terminal
+  | HumanReadable
+  | Disabled;
+
+let getMode: unit => mode;
+let setMode: mode => unit;
+let defaultMode: mode;
+let useMode: (mode, unit => 'a) => 'a;
+
 type decorator = string => string;
 
 type colorName =
