@@ -68,4 +68,5 @@ Running 1 test suite
 
 <whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
 <whiteBright><bold>Tests:       </bold></whiteBright><red><bold>8 failed</bold></red>, 0 passed, 8 total
+<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
 
