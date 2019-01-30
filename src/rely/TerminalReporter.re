@@ -7,6 +7,7 @@
 open Common.Option.Infix;
 open TestResult;
 open TestResult.AggregatedResult;
+open Time;
 
 type terminalPrinter = {
   printString: string => unit,
@@ -203,8 +204,19 @@ let createRunSummary = (result: AggregatedResult.t) => {
         String.concat(", ", testSummaryParts),
       ],
     );
+  let Seconds(duration) = Time.subtract(Clock.getTime(), result.startTime);
+  let timeString =
+    duration *. 1000. > 1. ? Printf.sprintf("%.3fs", duration) : "< 1ms";
+  let timeSummary =
+    String.concat(
+      "",
+      [
+        <Pastel bold=true color=WhiteBright> "Time:        " </Pastel>,
+        timeString,
+      ],
+    );
 
-  String.concat("\n", [testSuiteSummary, testSummary]);
+  String.concat("\n", [testSuiteSummary, testSummary, timeSummary]);
 };
 
 let printSnapshotStatus = testResult =>
