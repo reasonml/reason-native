@@ -12,12 +12,9 @@ type status =
   | Failed(string, option(Printexc.location), string)
   | Exception(exn, option(Printexc.location), string);
 
-type time =
-  | Milliseconds(int);
-
 type testResult = {
   path: TestPath.test,
-  duration: option(time),
+  duration: option(Time.t),
   testStatus: status,
   title: string,
   fullName: string,
@@ -36,7 +33,8 @@ type describeResult = {
   testResults: list(testResult),
   path: TestPath.describe,
   describeResults: list(describeResult),
-  duration: option(time),
+  endTime: option(Time.t),
+  startTime: option(Time.t),
 };
 
 type snapshotSummary = {
@@ -52,10 +50,12 @@ module TestSuiteResult = {
     numSkippedTests: int,
     testResults: list(testResult),
     displayName: string,
+    startTime: option(Time.t),
+    endTime: option(Time.t),
   };
 
   let rec ofDescribeResult = describeResult => {
-    let {testResults, path, describeResults, duration} = describeResult;
+    let {testResults, path, describeResults, startTime, endTime} = describeResult;
     let childResults = List.map(ofDescribeResult, describeResults);
 
     let numFailedTests = ref(0);
@@ -89,6 +89,8 @@ module TestSuiteResult = {
       numSkippedTests: numSkippedTests^,
       testResults: aggregateTestResults^,
       displayName: path |> TestPath.describeToString,
+      startTime,
+      endTime,
     };
   };
 };
@@ -105,12 +107,12 @@ module AggregatedResult = {
     numTotalTests: int,
     numTotalTestSuites: int,
     snapshotSummary: option(snapshotSummary),
-    /* startTime: number, */
-    /* success: boolean, */
+    startTime: Time.t,
+    success: bool,
     testSuiteResults: list(TestSuiteResult.t),
   };
 
-  let initialAggregatedResult = numTestSuites => {
+  let initialAggregatedResult = (numTestSuites, startTime) => {
     numFailedTests: 0,
     numFailedTestSuites: 0,
     numPassedTests: 0,
@@ -121,8 +123,8 @@ module AggregatedResult = {
     numTotalTests: 0,
     numTotalTestSuites: numTestSuites,
     snapshotSummary: None,
-    /* startTime: number, */
-    /* success: boolean, */
+    startTime,
+    success: true,
     testSuiteResults: [],
   };
 
@@ -155,6 +157,8 @@ module AggregatedResult = {
       numTotalTestSuites: aggregatedResult.numTotalTestSuites,
       testSuiteResults: aggregatedResult.testSuiteResults @ [testSuiteResult],
       snapshotSummary: aggregatedResult.snapshotSummary,
+      startTime: aggregatedResult.startTime,
+      success: aggregatedResult.success && !didSuiteFail,
     };
   };
 };

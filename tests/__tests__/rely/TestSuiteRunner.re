@@ -29,3 +29,26 @@ let run = (testSuites: list(TestSuite.t), reporter: Rely.Reporter.t) => {
     ),
   );
 };
+
+let runWithCustomTime = (getTime, testSuites, reporter) => {
+  module TestFramework =
+    Rely.Make({
+      let config =
+        Rely.TestFrameworkConfig.(
+          initialize({snapshotDir: "unused", projectDir: ""})
+          |> internal_do_not_use_get_time(getTime)
+        );
+    });
+
+  testSuites
+  |> List.map(TestSuite.toFunction)
+  |> List.iter(ts => ts(TestFramework.describe));
+
+  TestFramework.run(
+    Rely.RunConfig.(
+      initialize()
+      |> internal_reporters_api_do_not_use(reporter)
+      |> onTestFrameworkFailure(() => ())
+    ),
+  );
+};

@@ -30,6 +30,8 @@ type singleSuiteExpectedOutput = {
   numFailedTestSuites: int,
 };
 
+exception OnRunCompleteNotCalled;
+
 describe("Rely AggregateResult", ({describe, test}) => {
   describe("Single suite cases", ({test}) => {
     let singleSuiteInput = (passing, failing, skipped) => {
@@ -211,20 +213,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
         input.name,
         ({expect}) => {
           open Rely.TestResult.AggregatedResult;
-          let aggregatedResult =
-            ref({
-              numFailedTests: 0,
-              numFailedTestSuites: 0,
-              numPassedTests: 0,
-              numPassedTestSuites: 0,
-              numPendingTestSuites: 0,
-              numSkippedTests: 0,
-              numSkippedTestSuites: 0,
-              numTotalTests: 0,
-              numTotalTestSuites: 0,
-              snapshotSummary: None,
-              testSuiteResults: [],
-            });
+          let aggregatedResult = ref(None);
 
           let testSuites = [
             TestSuite.(
@@ -236,22 +225,28 @@ describe("Rely AggregateResult", ({describe, test}) => {
           ];
           module Reporter =
             TestReporter.Make({});
-          Reporter.onRunComplete(res => aggregatedResult := res);
+          Reporter.onRunComplete(res => aggregatedResult := Some(res));
 
           TestSuiteRunner.run(testSuites, Reporter.reporter);
-          let actualOutput = {
-            numPassedTestSuites: aggregatedResult^.numPassedTestSuites,
-            numPendingTestSuites: aggregatedResult^.numPendingTestSuites,
-            numTotalTests: aggregatedResult^.numTotalTests,
-            numTotalTestSuites: aggregatedResult^.numTotalTestSuites,
-            numSkippedTestSuites: aggregatedResult^.numSkippedTestSuites,
-            numFailedTestSuites: aggregatedResult^.numFailedTestSuites,
-            numPassedTests: aggregatedResult^.numPassedTests,
-            numFailedTests: aggregatedResult^.numFailedTests,
-            numSkippedTests: aggregatedResult^.numSkippedTests,
-          };
 
-          expect.bool(actualOutput == expectedOutput).toBeTrue();
+          let _ =
+            switch (aggregatedResult^) {
+            | None => raise(OnRunCompleteNotCalled)
+            | Some(aggregatedResult) =>
+              let actualOutput = {
+                numPassedTestSuites: aggregatedResult.numPassedTestSuites,
+                numPendingTestSuites: aggregatedResult.numPendingTestSuites,
+                numTotalTests: aggregatedResult.numTotalTests,
+                numTotalTestSuites: aggregatedResult.numTotalTestSuites,
+                numSkippedTestSuites: aggregatedResult.numSkippedTestSuites,
+                numFailedTestSuites: aggregatedResult.numFailedTestSuites,
+                numPassedTests: aggregatedResult.numPassedTests,
+                numFailedTests: aggregatedResult.numFailedTests,
+                numSkippedTests: aggregatedResult.numSkippedTests,
+              };
+              expect.bool(actualOutput == expectedOutput).toBeTrue();
+            };
+          ();
         },
       );
     singleSuiteTestCases |> List.iter(testSingleSuite);
@@ -367,39 +362,32 @@ describe("Rely AggregateResult", ({describe, test}) => {
         input.name,
         ({expect}) => {
           open Rely.TestResult.AggregatedResult;
-          let aggregatedResult =
-            ref({
-              numFailedTests: 0,
-              numFailedTestSuites: 0,
-              numPassedTests: 0,
-              numPassedTestSuites: 0,
-              numPendingTestSuites: 0,
-              numSkippedTests: 0,
-              numSkippedTestSuites: 0,
-              numTotalTests: 0,
-              numTotalTestSuites: 0,
-              snapshotSummary: None,
-              testSuiteResults: [],
-            });
+          let aggregatedResult = ref(None);
 
           module Reporter =
             TestReporter.Make({});
-          Reporter.onRunComplete(res => aggregatedResult := res);
+          Reporter.onRunComplete(res => aggregatedResult := Some(res));
 
           TestSuiteRunner.run(input.testSuites, Reporter.reporter);
-          let actualOutput = {
-            numPassedTestSuites: aggregatedResult^.numPassedTestSuites,
-            numPendingTestSuites: aggregatedResult^.numPendingTestSuites,
-            numTotalTests: aggregatedResult^.numTotalTests,
-            numTotalTestSuites: aggregatedResult^.numTotalTestSuites,
-            numSkippedTestSuites: aggregatedResult^.numSkippedTestSuites,
-            numFailedTestSuites: aggregatedResult^.numFailedTestSuites,
-            numPassedTests: aggregatedResult^.numPassedTests,
-            numFailedTests: aggregatedResult^.numFailedTests,
-            numSkippedTests: aggregatedResult^.numSkippedTests,
-          };
 
-          expect.bool(actualOutput == expectedOutput).toBeTrue();
+          let _ =
+            switch (aggregatedResult^) {
+            | None => raise(OnRunCompleteNotCalled)
+            | Some(aggregatedResult) =>
+              let actualOutput = {
+                numPassedTestSuites: aggregatedResult.numPassedTestSuites,
+                numPendingTestSuites: aggregatedResult.numPendingTestSuites,
+                numTotalTests: aggregatedResult.numTotalTests,
+                numTotalTestSuites: aggregatedResult.numTotalTestSuites,
+                numSkippedTestSuites: aggregatedResult.numSkippedTestSuites,
+                numFailedTestSuites: aggregatedResult.numFailedTestSuites,
+                numPassedTests: aggregatedResult.numPassedTests,
+                numFailedTests: aggregatedResult.numFailedTests,
+                numSkippedTests: aggregatedResult.numSkippedTests,
+              };
+              expect.bool(actualOutput == expectedOutput).toBeTrue();
+            };
+          ();
         },
       );
     testCases |> List.iter(runTestCases);

@@ -19,6 +19,7 @@ module MatcherTypes = MatcherTypes;
 module MatcherUtils = MatcherUtils;
 module Reporter = Reporter;
 module TestResult = TestResult;
+module Time = Time;
 
 module Test = {
   type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
@@ -135,6 +136,7 @@ module Make = (UserConfig: FrameworkConfig) => {
       open Test;
       open Describe;
       open RunConfig;
+      let startTime = UserConfig.config.getTime();
       let describeName = TestPath.(Describe(describePath) |> toString);
 
       let testHashes = state.testHashes;
@@ -152,6 +154,19 @@ module Make = (UserConfig: FrameworkConfig) => {
         | _ => ()
         };
       };
+      let addTimingData = (testId: int, duration: Time.t): unit => {
+        let prev = MIntMap.getOpt(testId, testMap);
+        switch (prev) {
+        | Some(FinalTestResult(result)) =>
+          MIntMap.set(
+            testId,
+            FinalTestResult({...result, duration: Some(duration)}),
+            testMap,
+          )
+        | _ => ()
+        };
+      };
+
       /* Convert describeName to something reasonable for a file name. */
       let describeFileName = describeName |> sanitizeName;
 
@@ -276,36 +291,45 @@ module Make = (UserConfig: FrameworkConfig) => {
               ),
           };
           let runTest = () => {
-            switch (usersTest(testUtils)) {
-            | () =>
-              updateTestResult({
-                path: testPath,
-                duration: None,
-                testStatus: Passed,
-                title: testName,
-                fullName: testTitle,
-              })
-            | exception e =>
-              let exceptionTrace = StackTrace.getExceptionStackTrace();
-              let location = StackTrace.getTopLocation(exceptionTrace);
-              let stackTrace =
-                StackTrace.stackTraceToString(
-                  exceptionTrace,
-                  maxNumStackFrames,
-                );
-              state.snapshotState :=
-                TestSnapshot.markSnapshotsAsCheckedForTest(
-                  testTitle,
-                  state.snapshotState^,
-                );
-              updateTestResult({
-                path: testPath,
-                duration: None,
-                testStatus: Exception(e, location, stackTrace),
-                title: testName,
-                fullName: testTitle,
+            let timingInfo =
+              Util.time(UserConfig.config.getTime, () => {
+                let _ =
+                  switch (usersTest(testUtils)) {
+                  | () =>
+                    updateTestResult({
+                      path: testPath,
+                      duration: None,
+                      testStatus: Passed,
+                      title: testName,
+                      fullName: testTitle,
+                    })
+                  | exception e =>
+                    let exceptionTrace = StackTrace.getExceptionStackTrace();
+                    let location = StackTrace.getTopLocation(exceptionTrace);
+                    let stackTrace =
+                      StackTrace.stackTraceToString(
+                        exceptionTrace,
+                        maxNumStackFrames,
+                      );
+                    state.snapshotState :=
+                      TestSnapshot.markSnapshotsAsCheckedForTest(
+                        testTitle,
+                        state.snapshotState^,
+                      );
+                    updateTestResult({
+                      path: testPath,
+                      duration: None,
+                      testStatus: Exception(e, location, stackTrace),
+                      title: testName,
+                      fullName: testTitle,
+                    });
+                  };
+                ();
               });
-            };
+            addTimingData(
+              testId,
+              Time.subtract(timingInfo.endTime, timingInfo.startTime),
+            );
             let _ = MStringSet.add(testHash, finishedTestHashes);
             ();
           };
@@ -357,7 +381,8 @@ module Make = (UserConfig: FrameworkConfig) => {
 
       let describeResult = {
         path: describePath,
-        duration: None,
+        endTime: Some(UserConfig.config.getTime()),
+        startTime: Some(startTime),
         describeResults: childDescribeResults^,
         testResults,
       };
@@ -395,6 +420,7 @@ module Make = (UserConfig: FrameworkConfig) => {
 
   let run = (config: RunConfig.t) =>
     Util.withBacktrace(() => {
+      let startTime = UserConfig.config.getTime();
       let notifyReporters = f => List.iter(f, config.reporters);
       let reporterTestSuites =
         testSuites^
@@ -452,6 +478,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                aggregatedResult:
                  AggregatedResult.initialAggregatedResult(
                    List.length(testSuites^),
+                   startTime,
                  ),
              },
            );

@@ -4,9 +4,10 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
+module ArrayMatchers = ArrayMatchers;
 module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
-module ArrayMatchers = ArrayMatchers;
+module Time = Time;
 
 module Test: {
   type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
@@ -88,6 +89,7 @@ type requiredConfiguration = TestFrameworkConfig.requiredConfiguration;
 module TestFrameworkConfig: {
   type t;
   let initialize: requiredConfiguration => t;
+  let internal_do_not_use_get_time: (unit => Time.t, t) => t;
 };
 
 module type FrameworkConfig = {let config: TestFrameworkConfig.t;};

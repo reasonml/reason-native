@@ -4,4 +4,5 @@ Running 1 test suite
 
 <whiteBright><bold>Test Suites: </bold></whiteBright>0 failed, <green><bold>1 passed</bold></green>, 1 total
 <whiteBright><bold>Tests:       </bold></whiteBright>0 failed, <green><bold>2 passed</bold></green>, 2 total
+<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
 
