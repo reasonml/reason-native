@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "examples": "docusaurus-examples",
+    "start": "docusaurus-start",
+    "build": "docusaurus-build",
+    "publish-gh-pages": "docusaurus-publish",
+    "write-translations": "docusaurus-write-translations",
+    "version": "docusaurus-version",
+    "rename-version": "docusaurus-rename-version",
+    "regenerate-ansi": "node_modules/.bin/browserify -p tinyify --require 'ansi-to-html' > static/js/ansi-to-html.js"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "ansi-to-html": "^0.6.9",
+    "docusaurus": "^1.6.2",
+    "tinyify": "^2.5.0"
+  },
+  "dependencies": {
+    "reason-highlightjs": "^0.2.0"
+  }
+}
