@@ -3,4 +3,9 @@
    (name Pastel)
    (public_name pastel.lib)
    (libraries  str )
+   (c_names  enableWinConsoleColors )  ; From package.json cNames field
+   (js_of_ocaml
+     (flags ( --pretty ))  ; From package.json jsooFlags field
+     (javascript_files  enableWinConsoleColors.js )  ; From package.json jsooFiles field
+   )
 )
