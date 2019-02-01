@@ -27,8 +27,6 @@ Running 1 test suite
       <red>[1., 2.]</red>
     Not to contain value: 
       <green>1.2</green>
-    
-    <dim>Note that you are testing for float equality using (==). You probably need to specify a ~equals function to the matcher.</dim>
 
 <bold><red>  \226\128\162 expect.list.not.toContainEqual failure output \226\128\186 record comparison</red></bold>
 
