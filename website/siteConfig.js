@@ -11,8 +11,8 @@
 const siteConfig = {
   title: 'Reason Native', // Title for your website.
   tagline: 'Libraries for building and testing native Reason programs.',
-  url: 'https://facebookexperimental.github.io', // Your website URL
-  baseUrl: '/reason-native/', // Base URL for your project */
+  url: 'https://reason-native.com', // Your website URL
+  baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
@@ -29,6 +29,7 @@ const siteConfig = {
     { doc: 'introduction', label: 'Docs' },
     { page: 'help', label: 'Help' },
     // { blog: true, label: 'Blog' },
+    {href: 'https://github.com/facebookexperimental/reason-native', label: 'GitHub'},
   ],
 
   /* path to images for header/footer */
@@ -67,7 +68,7 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['/reason-native/js/ansi-to-html.js', 'https://buttons.github.io/buttons.js', '/reason-native/js/ansi.js'],
+  scripts: ['/js/ansi-to-html.js', 'https://buttons.github.io/buttons.js', '/js/ansi.js'],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
