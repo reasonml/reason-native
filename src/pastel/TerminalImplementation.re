@@ -7,7 +7,7 @@
 open MakeAnsiDecorator;
 open Decorators;
 
-EnableWinConsoleColors.enable()
+WinConsoleColorsSupport.enable()
 
 let ansiLengthRegex = {
   let start = "\027\\[";

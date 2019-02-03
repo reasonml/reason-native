@@ -3,16 +3,22 @@
 #include <stdio.h>
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
+#include <caml/fail.h>
+
+#ifdef _WIN32
 #include <windows.h>
 
 #ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
 
-CAMLprim value enable_windows_console_ansi_seqences()
+#endif
+
+CAMLprim value enable_windows_console_ansi_sequences()
 {
   CAMLparam0();
 
+#ifdef _WIN32
   int success = 0;
 
   HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -29,10 +35,9 @@ CAMLprim value enable_windows_console_ansi_seqences()
   }
 
   if (success != 1) {
-    // GetLastError()
-    CAMLreturn(Val_unit);  
+    caml_failwith("error in enable_windows_console_ansi_seqences: " + GetLastError());
   }
-  else {
-    CAMLreturn(Val_unit);
-  }  
+#endif
+
+  CAMLreturn(Val_unit);
 }
