@@ -1,6 +1,6 @@
 open TestFramework;
 open Rely.Time;
-open Rely.TestResult;
+open Rely.Reporter;
 
 exception OnRunCompleteNotCalled;
 
@@ -31,7 +31,7 @@ describe("Rely timing data", ({describe, test}) => {
       | Some(aggregatedResult) =>
         let suiteStartBeforeSuiteEnd =
           aggregatedResult.testSuiteResults
-          |> List.map((r: Rely.TestResult.TestSuiteResult.t) =>
+          |> List.map((r: Rely.Reporter.testSuiteResult) =>
                switch (r.startTime, r.endTime) {
                | (Some(start), Some(endT)) => start < endT
                | _ => true
@@ -62,11 +62,11 @@ describe("Rely timing data", ({describe, test}) => {
       | Some(aggregatedResult) =>
         let timingsPopulated =
           aggregatedResult.testSuiteResults
-          |> List.map((r: Rely.TestResult.TestSuiteResult.t) =>
+          |> List.map((r: Rely.Reporter.testSuiteResult) =>
                r.testResults
              )
           |> List.flatten
-          |> List.map((r: Rely.TestResult.testResult) =>
+          |> List.map((r: Rely.Reporter.testResult) =>
                switch (r.duration) {
                /* >= 0 because sometimes it's too dang fast :p,
                 * can verify they aren't all zero with a Console.log, but it's
@@ -101,11 +101,11 @@ describe("Rely timing data", ({describe, test}) => {
       | Some(aggregatedResult) =>
         let timingsNotPopulated =
           aggregatedResult.testSuiteResults
-          |> List.map((r: Rely.TestResult.TestSuiteResult.t) =>
+          |> List.map((r: Rely.Reporter.testSuiteResult) =>
                r.testResults
              )
           |> List.flatten
-          |> List.map((r: Rely.TestResult.testResult) =>
+          |> List.map((r: Rely.Reporter.testResult) =>
                switch (r.duration) {
                | Some(duration) => false
                | None => true

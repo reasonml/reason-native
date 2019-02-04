@@ -7,6 +7,7 @@
 module ArrayMatchers = ArrayMatchers;
 module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
+module Reporter = Reporter;
 module Time = Time;
 
 module Test: {
@@ -23,9 +24,6 @@ module Describe: {
   and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
 };
 
-module Reporter = Reporter;
-module TestResult = TestResult;
-
 module RunConfig: {
   type printer = {
     printString: string => unit,
@@ -33,12 +31,17 @@ module RunConfig: {
     printNewline: unit => unit,
     flush: out_channel => unit,
   };
+  type reporter =
+    | Default
+    | Custom(Reporter.t);
+
   type t;
+
   let initialize: unit => t;
-  let updateSnapshots: (bool, t) => t;
-  let printer_internal_do_not_use: (printer, t) => t;
-  let internal_reporters_api_do_not_use: (Reporter.t, t) => t;
   let onTestFrameworkFailure: (unit => unit, t) => t;
+  let updateSnapshots: (bool, t) => t;
+  let withReporters: (list(reporter), t) => t;
+  let printer_internal_do_not_use: (printer, t) => t;
 };
 
 module MatcherUtils: {

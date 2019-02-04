@@ -6,7 +6,7 @@
  */;
 open SnapshotIO;
 open Common.Collections;
-open TestResult;
+open TestResult.AggregatedResult;
 
 type state = {
   unusedSnapshotSet: MStringSet.t,
