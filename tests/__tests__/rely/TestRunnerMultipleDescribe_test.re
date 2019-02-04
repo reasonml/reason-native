@@ -54,12 +54,7 @@ describe("Multiple TestFramework.describes", ({test}) => {
         InnerTestFramework.run(
           Rely.RunConfig.(
             initialize()
-            |> printer_internal_do_not_use({
-                 printEndline: _ => (),
-                 printString: _ => (),
-                 printNewline: _ => (),
-                 flush: _ => (),
-               })
+            |> withReporters([])
             |> onTestFrameworkFailure(() => onFrameworkFailureCalled := true)
           ),
         );

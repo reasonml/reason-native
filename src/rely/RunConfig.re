@@ -38,20 +38,6 @@ module RunConfig = {
   let updateSnapshots: (bool, t) => t =
     (updateSnapshots, config) => {...config, updateSnapshots};
 
-  /* When external use becomes a priority, this should be handled by a test reporters API, for now this
-     is just used in testing the test runner itself to prevent writing to standard out*/
-  let printer_internal_do_not_use = (printer: printer, config) => {
-    ...config,
-    reporters: [
-      TerminalReporter.createTerminalReporter({
-        printString: printer.printString,
-        printEndline: printer.printEndline,
-        printNewline: printer.printNewline,
-        flush: printer.flush,
-      }),
-    ],
-  };
-
   let withReporters = (reporters: list(reporter), config) => {
     let reporters =
       reporters
