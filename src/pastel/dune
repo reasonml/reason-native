@@ -4,4 +4,8 @@
    (public_name pastel.lib)
    (libraries  str )
    (c_names winConsoleColorsSupport)
+   (js_of_ocaml
+     (flags (--pretty))
+     (javascript_files winConsoleColorsSupport.js)
+   )
 )
