@@ -24,7 +24,7 @@ let run = (testSuites: list(TestSuite.t), reporter: Rely.Reporter.t) => {
   TestFramework.run(
     Rely.RunConfig.(
       initialize()
-      |> internal_reporters_api_do_not_use(reporter)
+      |> withReporters([Custom(reporter)])
       |> onTestFrameworkFailure(() => ())
     ),
   );
@@ -47,7 +47,7 @@ let runWithCustomTime = (getTime, testSuites, reporter) => {
   TestFramework.run(
     Rely.RunConfig.(
       initialize()
-      |> internal_reporters_api_do_not_use(reporter)
+      |> withReporters([Custom(reporter)])
       |> onTestFrameworkFailure(() => ())
     ),
   );

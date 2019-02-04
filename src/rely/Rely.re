@@ -10,6 +10,7 @@ open MatcherUtils;
 open Reporter;
 open SnapshotIO;
 open TestResult;
+open TestResultUtils;
 include RunConfig;
 include TestFrameworkConfig;
 module ArrayMatchers = ArrayMatchers;
@@ -18,7 +19,6 @@ module ListMatchers = ListMatchers;
 module MatcherTypes = MatcherTypes;
 module MatcherUtils = MatcherUtils;
 module Reporter = Reporter;
-module TestResult = TestResult;
 module Time = Time;
 
 module Test = {
@@ -292,40 +292,44 @@ module Make = (UserConfig: FrameworkConfig) => {
           };
           let runTest = () => {
             let timingInfo =
-              Util.time(UserConfig.config.getTime, () => {
-                let _ =
-                  switch (usersTest(testUtils)) {
-                  | () =>
-                    updateTestResult({
-                      path: testPath,
-                      duration: None,
-                      testStatus: Passed,
-                      title: testName,
-                      fullName: testTitle,
-                    })
-                  | exception e =>
-                    let exceptionTrace = StackTrace.getExceptionStackTrace();
-                    let location = StackTrace.getTopLocation(exceptionTrace);
-                    let stackTrace =
-                      StackTrace.stackTraceToString(
-                        exceptionTrace,
-                        maxNumStackFrames,
-                      );
-                    state.snapshotState :=
-                      TestSnapshot.markSnapshotsAsCheckedForTest(
-                        testTitle,
-                        state.snapshotState^,
-                      );
-                    updateTestResult({
-                      path: testPath,
-                      duration: None,
-                      testStatus: Exception(e, location, stackTrace),
-                      title: testName,
-                      fullName: testTitle,
-                    });
-                  };
-                ();
-              });
+              Util.time(
+                UserConfig.config.getTime,
+                () => {
+                  let _ =
+                    switch (usersTest(testUtils)) {
+                    | () =>
+                      updateTestResult({
+                        path: testPath,
+                        duration: None,
+                        testStatus: Passed,
+                        title: testName,
+                        fullName: testTitle,
+                      })
+                    | exception e =>
+                      let exceptionTrace = StackTrace.getExceptionStackTrace();
+                      let location =
+                        StackTrace.getTopLocation(exceptionTrace);
+                      let stackTrace =
+                        StackTrace.stackTraceToString(
+                          exceptionTrace,
+                          maxNumStackFrames,
+                        );
+                      state.snapshotState :=
+                        TestSnapshot.markSnapshotsAsCheckedForTest(
+                          testTitle,
+                          state.snapshotState^,
+                        );
+                      updateTestResult({
+                        path: testPath,
+                        duration: None,
+                        testStatus: Exception(e, location, stackTrace),
+                        title: testName,
+                        fullName: testTitle,
+                      });
+                    };
+                  ();
+                },
+              );
             addTimingData(
               testId,
               Time.subtract(timingInfo.endTime, timingInfo.startTime),
@@ -460,10 +464,10 @@ module Make = (UserConfig: FrameworkConfig) => {
                      fn,
                    );
                  let testSuiteResult =
-                   TestSuiteResult.ofDescribeResult(describeResult);
+                   TestResultUtils.ofDescribeResult(describeResult);
                  let newResult =
                    acc.aggregatedResult
-                   |> AggregatedResult.addTestSuiteResult(testSuiteResult);
+                   |> TestResultUtils.addTestSuiteResult(testSuiteResult);
                  notifyReporters(r =>
                    r.onTestSuiteResult(
                      reporterSuite,
@@ -476,7 +480,7 @@ module Make = (UserConfig: FrameworkConfig) => {
              {
                testRunState: initialState,
                aggregatedResult:
-                 AggregatedResult.initialAggregatedResult(
+                 TestResultUtils.initialAggregatedResult(
                    List.length(testSuites^),
                    startTime,
                  ),

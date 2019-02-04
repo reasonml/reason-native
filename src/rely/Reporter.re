@@ -14,9 +14,13 @@ type relyRunInfo = {
   testSuites: list(testSuite)
 };
 
+type aggregatedResult = AggregatedResult.t;
+type testSuiteResult = TestSuiteResult.t;
+type testResult = TestResult.testResult;
+
 type t = {
   onTestSuiteStart: testSuite => unit,
-  onTestSuiteResult: (testSuite, AggregatedResult.t, TestSuiteResult.t) => unit,
+  onTestSuiteResult: (testSuite, aggregatedResult, testSuiteResult) => unit,
   onRunStart: (relyRunInfo) => unit,
-  onRunComplete: AggregatedResult.t => unit,
+  onRunComplete: aggregatedResult => unit,
 };

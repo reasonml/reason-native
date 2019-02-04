@@ -31,6 +31,10 @@ module RunConfig = {
     ],
   };
 
+  type reporter =
+    | Default
+    | Custom(Reporter.t);
+
   let updateSnapshots: (bool, t) => t =
     (updateSnapshots, config) => {...config, updateSnapshots};
 
@@ -48,9 +52,22 @@ module RunConfig = {
     ],
   };
 
-  let internal_reporters_api_do_not_use = (reporter: Reporter.t, config) => {
-    ...config,
-    reporters: [reporter],
+  let withReporters = (reporters: list(reporter), config) => {
+    let reporters =
+      reporters
+      |> List.map(wrappedReporter =>
+           switch (wrappedReporter) {
+           | Default =>
+             TerminalReporter.createTerminalReporter({
+               printEndline: print_endline,
+               printNewline: print_newline,
+               printString: print_string,
+               flush,
+             })
+           | Custom(reporter) => reporter
+           }
+         );
+    {...config, reporters};
   };
 
   let onTestFrameworkFailure = (onTestFrameworkFailure, config) => {
