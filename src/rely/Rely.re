@@ -17,6 +17,7 @@ module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
 module MatcherTypes = MatcherTypes;
 module MatcherUtils = MatcherUtils;
+module Mock = Mock;
 module Reporter = Reporter;
 module TestResult = TestResult;
 module Time = Time;

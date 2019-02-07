@@ -7,6 +7,9 @@
 module ArrayMatchers = ArrayMatchers;
 module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
+module Mock = Mock;
+module Reporter = Reporter;
+module TestResult = TestResult;
 module Time = Time;
 
 module Test: {
@@ -23,8 +26,6 @@ module Describe: {
   and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
 };
 
-module Reporter = Reporter;
-module TestResult = TestResult;
 
 module RunConfig: {
   type printer = {
