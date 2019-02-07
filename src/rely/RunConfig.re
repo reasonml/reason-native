@@ -31,26 +31,29 @@ module RunConfig = {
     ],
   };
 
+  type reporter =
+    | Default
+    | Custom(Reporter.t);
+
   let updateSnapshots: (bool, t) => t =
     (updateSnapshots, config) => {...config, updateSnapshots};
 
-  /* When external use becomes a priority, this should be handled by a test reporters API, for now this
-     is just used in testing the test runner itself to prevent writing to standard out*/
-  let printer_internal_do_not_use = (printer: printer, config) => {
-    ...config,
-    reporters: [
-      TerminalReporter.createTerminalReporter({
-        printString: printer.printString,
-        printEndline: printer.printEndline,
-        printNewline: printer.printNewline,
-        flush: printer.flush,
-      }),
-    ],
-  };
-
-  let internal_reporters_api_do_not_use = (reporter: Reporter.t, config) => {
-    ...config,
-    reporters: [reporter],
+  let withReporters = (reporters: list(reporter), config) => {
+    let reporters =
+      reporters
+      |> List.map(wrappedReporter =>
+           switch (wrappedReporter) {
+           | Default =>
+             TerminalReporter.createTerminalReporter({
+               printEndline: print_endline,
+               printNewline: print_newline,
+               printString: print_string,
+               flush,
+             })
+           | Custom(reporter) => reporter
+           }
+         );
+    {...config, reporters};
   };
 
   let onTestFrameworkFailure = (onTestFrameworkFailure, config) => {

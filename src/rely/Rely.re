@@ -18,7 +18,6 @@ module ListMatchers = ListMatchers;
 module MatcherTypes = MatcherTypes;
 module MatcherUtils = MatcherUtils;
 module Reporter = Reporter;
-module TestResult = TestResult;
 module Time = Time;
 
 module Test = {

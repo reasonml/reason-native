@@ -212,7 +212,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
       test(
         input.name,
         ({expect}) => {
-          open Rely.TestResult.AggregatedResult;
+          open Rely.Reporter;
           let aggregatedResult = ref(None);
 
           let testSuites = [
@@ -361,7 +361,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
       test(
         input.name,
         ({expect}) => {
-          open Rely.TestResult.AggregatedResult;
+          open Rely.Reporter;
           let aggregatedResult = ref(None);
 
           module Reporter =

@@ -37,12 +37,6 @@ type describeResult = {
   startTime: option(Time.t),
 };
 
-type snapshotSummary = {
-  numCreatedSnapshots: int,
-  numRemovedSnapshots: int,
-  numUpdatedSnapshots: int,
-};
-
 module TestSuiteResult = {
   type t = {
     numFailedTests: int,
@@ -96,6 +90,12 @@ module TestSuiteResult = {
 };
 
 module AggregatedResult = {
+  type snapshotSummary = {
+    numCreatedSnapshots: int,
+    numRemovedSnapshots: int,
+    numUpdatedSnapshots: int,
+  };
+
   type t = {
     numFailedTests: int,
     numFailedTestSuites: int,
