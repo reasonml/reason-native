@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 open TestFramework;
-open Rely;
 
 module type MockTestCase = {
   type fnType;
@@ -64,9 +63,16 @@ module MakeTestSuite = (TestCase: MockTestCase) => {
           MockException,
         );
 
-        expect.list(Mock.getResults(mock)).toEqual([
-          Mock.Exception(MockException),
-        ]);
+        let exceptions =
+          Mock.getResults(mock)
+          |> List.map(r =>
+               switch (r) {
+               | Mock.Exception(e, _, _) => Some(e)
+               | _ => None
+               }
+             );
+
+        expect.list(exceptions).toEqual([Some(MockException)]);
         expect.list(Mock.getCalls(mock)).toEqual([args]);
       });
 

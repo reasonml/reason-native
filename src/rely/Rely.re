@@ -62,6 +62,7 @@ type runDescribeFn('ext) =
   describeResult;
 
 module type TestFramework = {
+  module Mock: Mock.Mock;
   let describe: Describe.describeFn(unit);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
@@ -85,6 +86,7 @@ module Make = (UserConfig: FrameworkConfig) => {
       let formatLink = Pastel.cyan;
       let formatText = Pastel.dim;
     });
+  module Mock = Mock.Make(StackTrace);
 
   let escape = (s: string): string => {
     let lines = Str.split(Str.regexp("\n"), s);
@@ -293,40 +295,44 @@ module Make = (UserConfig: FrameworkConfig) => {
           };
           let runTest = () => {
             let timingInfo =
-              Util.time(UserConfig.config.getTime, () => {
-                let _ =
-                  switch (usersTest(testUtils)) {
-                  | () =>
-                    updateTestResult({
-                      path: testPath,
-                      duration: None,
-                      testStatus: Passed,
-                      title: testName,
-                      fullName: testTitle,
-                    })
-                  | exception e =>
-                    let exceptionTrace = StackTrace.getExceptionStackTrace();
-                    let location = StackTrace.getTopLocation(exceptionTrace);
-                    let stackTrace =
-                      StackTrace.stackTraceToString(
-                        exceptionTrace,
-                        maxNumStackFrames,
-                      );
-                    state.snapshotState :=
-                      TestSnapshot.markSnapshotsAsCheckedForTest(
-                        testTitle,
-                        state.snapshotState^,
-                      );
-                    updateTestResult({
-                      path: testPath,
-                      duration: None,
-                      testStatus: Exception(e, location, stackTrace),
-                      title: testName,
-                      fullName: testTitle,
-                    });
-                  };
-                ();
-              });
+              Util.time(
+                UserConfig.config.getTime,
+                () => {
+                  let _ =
+                    switch (usersTest(testUtils)) {
+                    | () =>
+                      updateTestResult({
+                        path: testPath,
+                        duration: None,
+                        testStatus: Passed,
+                        title: testName,
+                        fullName: testTitle,
+                      })
+                    | exception e =>
+                      let exceptionTrace = StackTrace.getExceptionStackTrace();
+                      let location =
+                        StackTrace.getTopLocation(exceptionTrace);
+                      let stackTrace =
+                        StackTrace.stackTraceToString(
+                          exceptionTrace,
+                          maxNumStackFrames,
+                        );
+                      state.snapshotState :=
+                        TestSnapshot.markSnapshotsAsCheckedForTest(
+                          testTitle,
+                          state.snapshotState^,
+                        );
+                      updateTestResult({
+                        path: testPath,
+                        duration: None,
+                        testStatus: Exception(e, location, stackTrace),
+                        title: testName,
+                        fullName: testTitle,
+                      });
+                    };
+                  ();
+                },
+              );
             addTimingData(
               testId,
               Time.subtract(timingInfo.endTime, timingInfo.startTime),

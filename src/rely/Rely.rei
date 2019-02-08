@@ -7,7 +7,6 @@
 module ArrayMatchers = ArrayMatchers;
 module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
-module Mock = Mock;
 module Reporter = Reporter;
 module TestResult = TestResult;
 module Time = Time;
@@ -25,7 +24,6 @@ module Describe: {
   }
   and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
 };
-
 
 module RunConfig: {
   type printer = {
@@ -78,6 +76,7 @@ module MatcherTypes: {
 };
 
 module type TestFramework = {
+  module Mock: Mock.Mock;
   let describe: Describe.describeFn(unit);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
