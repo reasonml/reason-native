@@ -145,6 +145,21 @@ module MakeTestSuite = (TestCase: MockTestCase) => {
         let expectedResult = call(implementation1, args);
         expect.bool(result == expectedResult).toBeTrue();
       });
+
+      /** This test is relatively expensive, it could be made more performant
+        * by instantiating a new TestFramework and configuring the limit to be
+        * much lower. However currently for Mock1-7 it is only adding a total of
+        * about 70ms, so I am leaving it as is for now.
+        */
+      test("excessive calls should trigger an exception", ({expect}) => {
+        let mock = create(implementation1);
+        let fn = Mock.fn(mock);
+        expect.fn(() => {
+          for(i in 1 to 15000) {
+            let _ = call(fn, args);
+          }
+        }).toThrow();
+      })
     },
   );
 };

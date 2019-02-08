@@ -86,7 +86,13 @@ module Make = (UserConfig: FrameworkConfig) => {
       let formatLink = Pastel.cyan;
       let formatText = Pastel.dim;
     });
-  module Mock = Mock.Make(StackTrace);
+  module Mock =
+    Mock.Make(
+      StackTrace,
+      {
+        let maxNumCalls = UserConfig.config.maxNumMockCalls;
+      },
+    );
 
   let escape = (s: string): string => {
     let lines = Str.split(Str.regexp("\n"), s);

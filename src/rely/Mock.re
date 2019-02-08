@@ -5,8 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */;
 let maxNumStackFrames = 3;
+let defaultNumMaxCalls = 10000;
 
 module type Mock = {
+  exception ExceededMaxNumberOfAllowableCalls(string);
   type t('fn, 'ret, 'tupledArgs);
   type result('a) =
     | Return('a)
@@ -61,7 +63,10 @@ module type Mock = {
     );
 };
 
-module Make = (StackTrace: StackTrace.StackTrace) => {
+module type MockConfig = {let maxNumCalls: int;};
+
+module Make = (StackTrace: StackTrace.StackTrace, MockConfig: MockConfig) => {
+  exception ExceededMaxNumberOfAllowableCalls(string);
   type result('a) =
     | Return('a)
     | Exception(exn, option(Printexc.location), string);
@@ -72,6 +77,7 @@ module Make = (StackTrace: StackTrace.StackTrace) => {
     fn: 'a,
     originalImplementation: 'a,
     implementation: ref('a),
+    numCalls: ref(int),
   };
 
   let fn = mock => mock.fn;
@@ -94,196 +100,97 @@ module Make = (StackTrace: StackTrace.StackTrace) => {
   };
   let changeImplementation = (fn, mock) => mock.implementation := fn;
 
-  let mock1 = fn => {
-    let calls = ref([]);
-    let results = ref([]);
-    let implementation = ref(fn);
-    let wrappedFn = arg => {
-      calls := calls^ @ [arg];
-      switch (implementation^(arg)) {
-      | returnValue =>
-        results := results^ @ [Return(returnValue)];
-        returnValue;
-      | exception e =>
-        let exceptionTrace = StackTrace.getExceptionStackTrace();
-        let location = StackTrace.getTopLocation(exceptionTrace);
-        let stackTrace =
-          StackTrace.stackTraceToString(exceptionTrace, maxNumStackFrames);
-        results := results^ @ [Exception(e, location, stackTrace)];
-        raise(e);
-      };
+  let wrap = (calls, numCalls, results, implementation, tupledArgs, invoke) => {
+    if (numCalls^ > MockConfig.maxNumCalls) {
+      raise(
+        ExceededMaxNumberOfAllowableCalls(
+          "This mock has been called more than "
+          ++ string_of_int(MockConfig.maxNumCalls)
+          ++ " times. You can change the
+        limit by passing an override to TestFrameworkConfig.withMaxNumberOfMockCalls",
+        ),
+      );
     };
-    {
-      fn: wrappedFn,
-      originalImplementation: fn,
-      calls,
-      results,
-      implementation,
-    };
-  };
-
-  let mock2 = fn => {
-    let calls = ref([]);
-    let results = ref([]);
-    let implementation = ref(fn);
-    let wrappedFn = (arg1, arg2) => {
-      calls := calls^ @ [(arg1, arg2)];
-      switch (implementation^(arg1, arg2)) {
-      | returnValue =>
-        results := results^ @ [Return(returnValue)];
-        returnValue;
-      | exception e =>
-        let exceptionTrace = StackTrace.getExceptionStackTrace();
-        let location = StackTrace.getTopLocation(exceptionTrace);
-        let stackTrace =
-          StackTrace.stackTraceToString(exceptionTrace, maxNumStackFrames);
-        results := results^ @ [Exception(e, location, stackTrace)];
-        raise(e);
-      };
-    };
-    {
-      fn: wrappedFn,
-      originalImplementation: fn,
-      calls,
-      results,
-      implementation,
+    incr(numCalls);
+    calls := [tupledArgs, ...calls^];
+    switch (invoke(implementation^, tupledArgs)) {
+    | returnValue =>
+      results := [Return(returnValue), ...results^];
+      returnValue;
+    | exception e =>
+      let exceptionTrace = StackTrace.getExceptionStackTrace();
+      let location = StackTrace.getTopLocation(exceptionTrace);
+      let stackTrace =
+        StackTrace.stackTraceToString(exceptionTrace, maxNumStackFrames);
+      results := [Exception(e, location, stackTrace), ...results^];
+      raise(e);
     };
   };
 
-  let mock3 = fn => {
+  let makeMock = (fn, argProvider) => {
     let calls = ref([]);
     let results = ref([]);
     let implementation = ref(fn);
-    let wrappedFn = (arg1, arg2, arg3) => {
-      calls := calls^ @ [(arg1, arg2, arg3)];
-      switch (implementation^(arg1, arg2, arg3)) {
-      | returnValue =>
-        results := results^ @ [Return(returnValue)];
-        returnValue;
-      | exception e =>
-        let exceptionTrace = StackTrace.getExceptionStackTrace();
-        let location = StackTrace.getTopLocation(exceptionTrace);
-        let stackTrace =
-          StackTrace.stackTraceToString(exceptionTrace, maxNumStackFrames);
-        results := results^ @ [Exception(e, location, stackTrace)];
-        raise(e);
-      };
-    };
+    let numCalls = ref(0);
+    let curriedWrap = wrap(calls, numCalls, results, implementation);
+    let wrappedFn = argProvider(curriedWrap);
     {
       fn: wrappedFn,
       originalImplementation: fn,
       calls,
       results,
       implementation,
-    };
-  };
-  let mock4 = fn => {
-    let calls = ref([]);
-    let results = ref([]);
-    let implementation = ref(fn);
-    let wrappedFn = (arg1, arg2, arg3, arg4) => {
-      calls := calls^ @ [(arg1, arg2, arg3, arg4)];
-      switch (implementation^(arg1, arg2, arg3, arg4)) {
-      | returnValue =>
-        results := results^ @ [Return(returnValue)];
-        returnValue;
-      | exception e =>
-        let exceptionTrace = StackTrace.getExceptionStackTrace();
-        let location = StackTrace.getTopLocation(exceptionTrace);
-        let stackTrace =
-          StackTrace.stackTraceToString(exceptionTrace, maxNumStackFrames);
-        results := results^ @ [Exception(e, location, stackTrace)];
-        raise(e);
-      };
-    };
-    {
-      fn: wrappedFn,
-      originalImplementation: fn,
-      calls,
-      results,
-      implementation,
-    };
-  };
-  let mock5 = fn => {
-    let calls = ref([]);
-    let results = ref([]);
-    let implementation = ref(fn);
-    let wrappedFn = (arg1, arg2, arg3, arg4, arg5) => {
-      calls := calls^ @ [(arg1, arg2, arg3, arg4, arg5)];
-      switch (implementation^(arg1, arg2, arg3, arg4, arg5)) {
-      | returnValue =>
-        results := results^ @ [Return(returnValue)];
-        returnValue;
-      | exception e =>
-        let exceptionTrace = StackTrace.getExceptionStackTrace();
-        let location = StackTrace.getTopLocation(exceptionTrace);
-        let stackTrace =
-          StackTrace.stackTraceToString(exceptionTrace, maxNumStackFrames);
-        results := results^ @ [Exception(e, location, stackTrace)];
-        raise(e);
-      };
-    };
-    {
-      fn: wrappedFn,
-      originalImplementation: fn,
-      calls,
-      results,
-      implementation,
+      numCalls,
     };
   };
 
-  let mock6 = fn => {
-    let calls = ref([]);
-    let results = ref([]);
-    let implementation = ref(fn);
-    let wrappedFn = (arg1, arg2, arg3, arg4, arg5, arg6) => {
-      calls := calls^ @ [(arg1, arg2, arg3, arg4, arg5, arg6)];
-      switch (implementation^(arg1, arg2, arg3, arg4, arg5, arg6)) {
-      | returnValue =>
-        results := results^ @ [Return(returnValue)];
-        returnValue;
-      | exception e =>
-        let exceptionTrace = StackTrace.getExceptionStackTrace();
-        let location = StackTrace.getTopLocation(exceptionTrace);
-        let stackTrace =
-          StackTrace.stackTraceToString(exceptionTrace, maxNumStackFrames);
-        results := results^ @ [Exception(e, location, stackTrace)];
-        raise(e);
-      };
-    };
-    {
-      fn: wrappedFn,
-      originalImplementation: fn,
-      calls,
-      results,
-      implementation,
-    };
-  };
-  let mock7 = fn => {
-    let calls = ref([]);
-    let results = ref([]);
-    let implementation = ref(fn);
-    let wrappedFn = (arg1, arg2, arg3, arg4, arg5, arg6, arg7) => {
-      calls := calls^ @ [(arg1, arg2, arg3, arg4, arg5, arg6, arg7)];
-      switch (implementation^(arg1, arg2, arg3, arg4, arg5, arg6, arg7)) {
-      | returnValue =>
-        results := results^ @ [Return(returnValue)];
-        returnValue;
-      | exception e =>
-        let exceptionTrace = StackTrace.getExceptionStackTrace();
-        let location = StackTrace.getTopLocation(exceptionTrace);
-        let stackTrace =
-          StackTrace.stackTraceToString(exceptionTrace, maxNumStackFrames);
-        results := results^ @ [Exception(e, location, stackTrace)];
-        raise(e);
-      };
-    };
-    {
-      fn: wrappedFn,
-      originalImplementation: fn,
-      calls,
-      results,
-      implementation,
-    };
-  };
+  let mock1 = fn =>
+    makeMock(fn, (curriedWrap, arg) =>
+      curriedWrap(arg, (f, arg) => f(arg))
+    );
+
+  let mock2 = fn =>
+    makeMock(fn, (curriedWrap, arg1, arg2) =>
+      curriedWrap((arg1, arg2), (f, (arg1, arg2)) => f(arg1, arg2))
+    );
+
+  let mock3 = fn =>
+    makeMock(fn, (curriedWrap, arg1, arg2, arg3) =>
+      curriedWrap((arg1, arg2, arg3), (f, (arg1, arg2, arg3)) =>
+        f(arg1, arg2, arg3)
+      )
+    );
+
+  let mock4 = fn =>
+    makeMock(fn, (curriedWrap, arg1, arg2, arg3, arg4) =>
+      curriedWrap((arg1, arg2, arg3, arg4), (f, (arg1, arg2, arg3, arg4)) =>
+        f(arg1, arg2, arg3, arg4)
+      )
+    );
+
+  let mock5 = fn =>
+    makeMock(fn, (curriedWrap, arg1, arg2, arg3, arg4, arg5) =>
+      curriedWrap(
+        (arg1, arg2, arg3, arg4, arg5), (f, (arg1, arg2, arg3, arg4, arg5)) =>
+        f(arg1, arg2, arg3, arg4, arg5)
+      )
+    );
+
+  let mock6 = fn =>
+    makeMock(fn, (curriedWrap, arg1, arg2, arg3, arg4, arg5, arg6) =>
+      curriedWrap(
+        (arg1, arg2, arg3, arg4, arg5, arg6),
+        (f, (arg1, arg2, arg3, arg4, arg5, arg6)) =>
+        f(arg1, arg2, arg3, arg4, arg5, arg6)
+      )
+    );
+
+  let mock7 = fn =>
+    makeMock(fn, (curriedWrap, arg1, arg2, arg3, arg4, arg5, arg6, arg7) =>
+      curriedWrap(
+        (arg1, arg2, arg3, arg4, arg5, arg6, arg7),
+        (f, (arg1, arg2, arg3, arg4, arg5, arg6, arg7)) =>
+        f(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
+      )
+    );
 };

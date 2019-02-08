@@ -4,7 +4,14 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
+let defaultNumMaxCalls: int;
+
+module type MockConfig = {
+  let maxNumCalls: int;
+}
+
 module type Mock = {
+  exception ExceededMaxNumberOfAllowableCalls(string);
   type t('fn, 'ret, 'tupledArgs);
   type result('a) =
     | Return('a)
@@ -59,4 +66,4 @@ module type Mock = {
     );
 };
 
-module Make: (StackTrace: StackTrace.StackTrace) => Mock;
+module Make: (StackTrace: StackTrace.StackTrace, MockConfig: MockConfig) => Mock;
