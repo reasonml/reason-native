@@ -69,8 +69,7 @@ The type [31m[1mwhereAmI[22m[39m can't be found.
 `;
 
 const RelyExample = `re
-describe("Example", describeUtils => {
-  let test = describeUtils.test;
+describe("Example", ({test}) => {
   test("ints", ({expect}) =>
     expect.int(7).toBe(5)
   );
