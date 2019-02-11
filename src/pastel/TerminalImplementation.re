@@ -7,6 +7,8 @@
 open MakeAnsiDecorator;
 open Decorators;
 
+WinConsoleColorsSupport.enable()
+
 let ansiLengthRegex = {
   let start = "\027\\[";
   let middle = "[0-9]+";
