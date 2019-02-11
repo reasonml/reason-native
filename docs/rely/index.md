@@ -9,8 +9,7 @@ Rely is a strongly typed, [Jest-like](https://jestjs.io/) native test framework 
 It comes with built in support for both traditional and snapshot testing, and bootstraps tests in **milliseconds**.
 
 ```re
-describe("Example", describeUtils => {
-  let test = describeUtils.test;
+describe("Example", ({test}) => {  
   test("ints", ({expect}) =>
     expect.int(7).toBe(5)
   );
