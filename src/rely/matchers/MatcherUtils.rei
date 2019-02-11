@@ -24,4 +24,13 @@ type t = {
   indent: string => string,
 };
 
+let singleLevelMatcherHint:
+    (
+      ~expectType: string,
+      ~received:string=?,
+      ~expected:string=?,
+      ~options: matcherHintOptions=?,
+      unit,
+    ) => string;
+
 let matcherUtils: t;

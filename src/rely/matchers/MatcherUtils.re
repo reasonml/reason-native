@@ -85,6 +85,34 @@ let matcherHint =
   };
 };
 
+let singleLevelMatcherHint =
+    (
+      ~expectType,
+      ~received="received",
+      ~expected="expected",
+      ~options={comment: None},
+      (),
+    ) => {
+  let assertion =
+    String.concat(
+      "",
+      [
+        Pastel.dim(String.concat("", ["expect", expectType, "("])),
+        expectedColor(expected),
+        Pastel.dim(", "),
+        receivedColor(received),
+        Pastel.dim(")"),
+      ],
+    );
+  switch (options.comment) {
+  | Some(comment) =>
+    let formattedComment =
+      Pastel.dim(String.concat("", ["/* ", comment, " */"]));
+    String.concat(" ", [assertion, formattedComment]);
+  | None => assertion
+  };
+};
+
 let matcherUtils = {
   matcherHint,
   formatReceived,

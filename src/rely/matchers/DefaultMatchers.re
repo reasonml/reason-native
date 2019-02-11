@@ -24,7 +24,11 @@ type matchers('ext) = {
   fn: 'a. (unit => 'a) => fnMatchersWithNot,
   list: 'a. list('a) => ListMatchers.matchersWithNot('a),
   array: 'a. array('a) => ArrayMatchers.matchersWithNot('a),
-  ext: 'ext
+  ext: 'ext,
+  equal: 'a. EqualsMatcher.equalsMatcher('a),
+  notEqual: 'a. EqualsMatcher.equalsMatcher('a),
+  same: 'a. SameMatcher.sameMatcher('a),
+  notSame: 'a. SameMatcher.sameMatcher('a),
 };
 
 let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
@@ -44,5 +48,25 @@ let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
   fn: f => FnMatchers.makeMatchers(".fn", utils, f),
   list: l => ListMatchers.makeMatchers(".list", utils, l),
   array: a => ArrayMatchers.makeMatchers(".array", utils, a),
-  ext: makeMatchers(utils)
+  ext: makeMatchers(utils),
+  equal: (~equals=?, expected, actual) =>
+    EqualsMatcher.makeEqualMatcher(
+      ".equal",
+      utils,
+      ~equals?,
+      expected,
+      actual,
+    ),
+  notEqual: (~equals=?, expected, actual) =>
+    EqualsMatcher.makeNotEqualMatcher(
+      ".notEqual",
+      utils,
+      ~equals?,
+      expected,
+      actual,
+    ),
+  same: (expected, actual) =>
+    SameMatcher.makeSameMatcher(".same", utils, expected, actual),
+  notSame: (expected, actual) =>
+    SameMatcher.makeNotSameMatcher(".notSame", utils, expected, actual),
 };

@@ -1,0 +1,50 @@
+same matcher › same failure output
+Running 1 test suite
+\r\027[33m\027[1m\027[7m RUNS \027[27m\027[22m\027[39m <whiteBright>same failure output</whiteBright>\027[81D\027[K\027[31m\027[1m\027[7m FAIL \027[27m\027[22m\027[39m <whiteBright>same failure output</whiteBright>
+<bold><red>  \226\128\162 same failure output \226\128\186 ints</red></bold>
+
+    <dim>expect.same(</dim><green>expected</green><dim>, </dim><red>received</red><dim>)</dim> <dim>/* using === */</dim>
+    
+    Expected value to be:
+      <green>1</green>
+    Received:
+      <red>2</red>
+
+<bold><red>  \226\128\162 same failure output \226\128\186 strings</red></bold>
+
+    <dim>expect.same(</dim><green>expected</green><dim>, </dim><red>received</red><dim>)</dim> <dim>/* using === */</dim>
+    
+    Expected value to be:
+      <green>hello</green>
+    Received:
+      <red>hello</red>
+    
+    <dim>Note that you are testing for referential equality between strings. You probably need to use `expect.equal` instead.</dim>
+
+<bold><red>  \226\128\162 same failure output \226\128\186 floats</red></bold>
+
+    <dim>expect.same(</dim><green>expected</green><dim>, </dim><red>received</red><dim>)</dim> <dim>/* using === */</dim>
+    
+    Expected value to be:
+      <green>1.</green>
+    Received:
+      <red>2.</red>
+    
+    <dim>Note that you are testing for referential equality between floats. You probably need to use `expect.equal` with a custom ~equals function instead.</dim>
+
+<bold><red>  \226\128\162 same failure output \226\128\186 records</red></bold>
+
+    <dim>expect.same(</dim><green>expected</green><dim>, </dim><red>received</red><dim>)</dim> <dim>/* using === */</dim>
+    
+    Expected value to be:
+      <green>{7, \"7\"}</green>
+    Received:
+      <red>{7, \"7\"}</red>
+    
+    <dim>Note that you are testing for referential equality with the stricter `expect.same` matcher. You probably need to use `expect.equal` instead.</dim>
+
+
+<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
+<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>4 failed</bold></red>, 0 passed, 4 total
+<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+

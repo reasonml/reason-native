@@ -70,8 +70,9 @@ let testRunnerOutputSnapshotTest =
           let snapshotDir =
             Str.global_replace(blankSpaceRegex, "_", testName);
         });
+      let mode = debugPrintOutputToConsole ? Pastel.Terminal : HumanReadable;
       let (stdout, _, _) =
-        Pastel.useMode(HumanReadable, () =>
+        Pastel.useMode(mode, () =>
           IO.captureOutput(() => {
             TestFramework.describe(testName, utils =>
               testFn(utils)

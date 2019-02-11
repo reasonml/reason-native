@@ -164,21 +164,29 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
+            let actualContainsEqualExpected =
+              Collection.contains(expected, defaultEqualityFn, actual);
 
-            let actualContainsEqualExpected = Collection.contains(expected, defaultEqualityFn, actual);
+            let suggestToContainEqualMessage =
+              (
+                switch (
+                  actualContainsEqualExpected,
+                  validateUsageOfReferentialEquality(expected),
+                ) {
+                | (_, Fail(DoubleTag))
+                | (_, Fail(DoubleArrayTag)) =>
+                  Some(suggestToContainEqualForFloats)
+                | (_, Fail(StringTag)) =>
+                  Some(suggestToContainEqualForStrings)
+                | (_, Fail(ObjectTag))
+                | (true, Pass) => Some(suggestToContainEqual)
+                | (false, Pass) => None
+                }
+              )
+              >>| (m => "\n\n" ++ Pastel.dim(m))
+              |?: "";
 
-            let suggestToContainEqualMessage = switch((actualContainsEqualExpected, validateUsageOfReferentialEquality(expected))) {
-            | (_, Fail(DoubleTag))
-            | (_, Fail(DoubleArrayTag)) => Some(suggestToContainEqualForFloats)
-            | (_, Fail(StringTag)) => Some(suggestToContainEqualForStrings)
-            | (_, Fail(ObjectTag))
-            | (true, Pass) => Some(suggestToContainEqual)
-            | (false, Pass) => None
-            }
-            >>| (m => "\n\n" ++ Pastel.dim(m))
-            |?: "";
-
-              let message =
+            let message =
               String.concat(
                 "",
                 [
@@ -198,7 +206,7 @@ module Make = (Collection: Collection) => {
                   "To contain value: ",
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
-                  suggestToContainEqualMessage
+                  suggestToContainEqualMessage,
                 ],
               );
             (() => message, pass);
@@ -218,13 +226,17 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
-            let suggestToContainEqualMessage = switch(validateUsageOfReferentialEquality(expected)) {
-              | Fail(DoubleTag)
-              | Fail(DoubleArrayTag) => Some(suggestToContainEqualForFloats)
-              | Fail(StringTag) => Some(suggestToContainEqualForStrings)
-              | Fail(ObjectTag) => Some(suggestToContainEqual)
-              | Pass => None
-              }
+            let suggestToContainEqualMessage =
+              (
+                switch (validateUsageOfReferentialEquality(expected)) {
+                | Fail(DoubleTag)
+                | Fail(DoubleArrayTag) =>
+                  Some(suggestToContainEqualForFloats)
+                | Fail(StringTag) => Some(suggestToContainEqualForStrings)
+                | Fail(ObjectTag) => Some(suggestToContainEqual)
+                | Pass => None
+                }
+              )
               >>| (m => "\n\n" ++ Pastel.dim(m))
               |?: "";
             let message =
@@ -268,13 +280,22 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
-            let suggestCustomEqualityMessage = switch(validateUsageOfStructuralEquality(expected)) {
-            | Pass => None
-            | Fail(DoubleTag)
-            | Fail(DoubleArrayTag) => Some(suggestCustomEqualityForFloat)
-            }
-            >>| (m => "\n\n" ++ Pastel.dim(m))
-            |?: "";
+            let isUsingDefaultEquality = equals === defaultEqualityFn;
+            let suggestCustomEqualityMessage =
+              if (!isUsingDefaultEquality) {
+                "";
+              } else {
+                (
+                  switch (validateUsageOfStructuralEquality(expected)) {
+                  | Pass => None
+                  | Fail(DoubleTag)
+                  | Fail(DoubleArrayTag) =>
+                    Some(suggestCustomEqualityForFloat)
+                  }
+                )
+                >>| (m => "\n\n" ++ Pastel.dim(m))
+                |?: "";
+              };
             let message =
               String.concat(
                 "",
@@ -286,8 +307,7 @@ module Make = (Collection: Collection) => {
                     ~received=Collection.collectionName,
                     ~options={
                       comment:
-                        equals === defaultEqualityFn ?
-                          Some("using ==") : None,
+                        isUsingDefaultEquality ? Some("using ==") : None,
                     },
                     (),
                   ),
@@ -299,7 +319,7 @@ module Make = (Collection: Collection) => {
                   "To contain value: ",
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
-                  suggestCustomEqualityMessage
+                  suggestCustomEqualityMessage,
                 ],
               );
             (() => message, pass);
@@ -319,13 +339,22 @@ module Make = (Collection: Collection) => {
           if (pass) {
             (passMessageThunk, pass);
           } else {
-            let suggestCustomEqualityMessage = switch(validateUsageOfStructuralEquality(expected)) {
-              | Pass => None
-              | Fail(DoubleTag)
-              | Fail(DoubleArrayTag) => Some(suggestCustomEqualityForFloat)
-              }
-              >>| (m => "\n\n" ++ Pastel.dim(m))
-              |?: "";
+            let isUsingDefaultEquality = equals === defaultEqualityFn;
+            let suggestCustomEqualityMessage =
+              if (!isUsingDefaultEquality) {
+                "";
+              } else {
+                (
+                  switch (validateUsageOfStructuralEquality(expected)) {
+                  | Pass => None
+                  | Fail(DoubleTag)
+                  | Fail(DoubleArrayTag) =>
+                    Some(suggestCustomEqualityForFloat)
+                  }
+                )
+                >>| (m => "\n\n" ++ Pastel.dim(m))
+                |?: "";
+              };
             let message =
               String.concat(
                 "",
@@ -338,8 +367,7 @@ module Make = (Collection: Collection) => {
                     ~received=Collection.collectionName,
                     ~options={
                       comment:
-                        equals === defaultEqualityFn ?
-                          Some("using ==") : None,
+                        isUsingDefaultEquality ? Some("using ==") : None,
                     },
                     (),
                   ),
@@ -351,7 +379,7 @@ module Make = (Collection: Collection) => {
                   "Not to contain value: ",
                   "\n",
                   indent(formatExpected(PolymorphicPrint.print(expected))),
-                  suggestCustomEqualityMessage
+                  suggestCustomEqualityMessage,
                 ],
               );
             (() => message, pass);
