@@ -12,6 +12,7 @@ const siteConfig = {
   title: 'Reason Native', // Title for your website.
   tagline: 'Libraries for building and testing native Reason programs.',
   url: 'https://reason-native.com', // Your website URL
+  cname: 'reason-native.com\nwww.reason-native.com\n'
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
