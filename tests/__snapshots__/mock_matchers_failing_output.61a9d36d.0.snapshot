@@ -1,0 +1,4 @@
+mock matchers › failing output › expect.mock.toBeCalledTimes called different number of times
+<dim>expect.mock(</dim><red>mock</red><dim>).toBeCalledTimes(</dim><green>expected</green><dim>)</dim>
+
+Expected the mock to have been called <green>two times</green>, but it was called <red>one time</red>.

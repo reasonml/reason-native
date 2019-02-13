@@ -24,32 +24,36 @@ type matchers('ext) = {
   fn: 'a. (unit => 'a) => fnMatchersWithNot,
   list: 'a. list('a) => ListMatchers.matchersWithNot('a),
   array: 'a. array('a) => ArrayMatchers.matchersWithNot('a),
-  ext: 'ext,
   equal: 'a. EqualsMatcher.equalsMatcher('a),
   notEqual: 'a. EqualsMatcher.equalsMatcher('a),
   same: 'a. SameMatcher.sameMatcher('a),
   notSame: 'a. SameMatcher.sameMatcher('a),
+  mock: 'fn 'ret 'tupledArgs. Mock.t('fn, 'ret, 'tupledArgs) => MockMatchers.matchersWithNot('tupledArgs, 'ret),
+  ext: 'ext,
 };
 
-let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
-  string: s =>
-    StringMatchers.makeMatchers(".string", snapshotMatcher, utils, s),
-  file: filePath => {
-    let sActual = IO.readFile(filePath);
-    StringMatchers.makeMatchers(".file", snapshotMatcher, utils, sActual);
-  },
-  lines: lines => {
-    let sActual = String.concat("\n", lines);
-    StringMatchers.makeMatchers(".lines", snapshotMatcher, utils, sActual);
-  },
-  bool: b => BoolMatchers.makeMatchers(".bool", utils, b),
-  int: i => IntMatchers.makeMatchers(".int", utils, i),
-  float: f => FloatMatchers.makeMatchers(".float", utils, f),
-  fn: f => FnMatchers.makeMatchers(".fn", utils, f),
-  list: l => ListMatchers.makeMatchers(".list", utils, l),
-  array: a => ArrayMatchers.makeMatchers(".array", utils, a),
-  ext: makeMatchers(utils),
-  equal: (~equals=?, expected, actual) =>
+module Make = (Mock: Mock.Sig) => {
+  module MockMatchers = MockMatchers.Make(Mock);
+
+  let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
+    string: s =>
+      StringMatchers.makeMatchers(".string", snapshotMatcher, utils, s),
+    file: filePath => {
+      let sActual = IO.readFile(filePath);
+      StringMatchers.makeMatchers(".file", snapshotMatcher, utils, sActual);
+    },
+    lines: lines => {
+      let sActual = String.concat("\n", lines);
+      StringMatchers.makeMatchers(".lines", snapshotMatcher, utils, sActual);
+    },
+    bool: b => BoolMatchers.makeMatchers(".bool", utils, b),
+    int: i => IntMatchers.makeMatchers(".int", utils, i),
+    float: f => FloatMatchers.makeMatchers(".float", utils, f),
+    fn: f => FnMatchers.makeMatchers(".fn", utils, f),
+    list: l => ListMatchers.makeMatchers(".list", utils, l),
+    array: a => ArrayMatchers.makeMatchers(".array", utils, a),
+    mock: m => MockMatchers.makeMatchers(".mock", utils, m),
+    equal: (~equals=?, expected, actual) =>
     EqualsMatcher.makeEqualMatcher(
       ".equal",
       utils,
@@ -69,4 +73,7 @@ let makeDefaultMatchers = (utils, snapshotMatcher, makeMatchers) => {
     SameMatcher.makeSameMatcher(".same", utils, expected, actual),
   notSame: (expected, actual) =>
     SameMatcher.makeNotSameMatcher(".notSame", utils, expected, actual),
-};
+    ext: makeMatchers(utils)
+  };
+}
+

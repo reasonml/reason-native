@@ -1,0 +1,7 @@
+mock matchers › failing output › expect.mock.not.lastReturnedWith single call
+<dim>expect.mock(</dim><red>mock</red><dim>).</dim>not<dim>.lastReturnedWith(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+
+Expected the mock to not have last returned:
+  <green>2</green>
+But it last returned:
+  <red>2</red>

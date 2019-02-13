@@ -9,6 +9,7 @@ module CollectionMatchers = CollectionMatchers;
 module ListMatchers = ListMatchers;
 module Reporter = Reporter;
 module Time = Time;
+module Mock = Mock;
 
 module Test: {
   type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
@@ -73,7 +74,7 @@ module MatcherTypes: {
 };
 
 module type TestFramework = {
-  module Mock: Mock.Mock;
+  module Mock: Mock.Sig;
   let describe: Describe.describeFn(unit);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);

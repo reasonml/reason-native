@@ -113,6 +113,30 @@ let singleLevelMatcherHint =
   };
 };
 
+let numbers = [|
+  "zero",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
+|];
+
+let formatInt = n =>
+  if (0 <= n && n <= Array.length(numbers)) {
+    numbers[n];
+  } else {
+    string_of_int(n);
+  };
+
 let matcherUtils = {
   matcherHint,
   formatReceived,

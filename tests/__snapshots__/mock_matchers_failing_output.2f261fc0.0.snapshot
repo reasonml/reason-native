@@ -1,0 +1,7 @@
+mock matchers › failing output › expect.mock.not.toReturnWith custom equals
+<dim>expect.mock(</dim><red>mock</red><dim>).toReturnWith(</dim><green>expected</green><dim>)</dim>
+
+Expected the mock to have returned:
+  <green>0.8</green>
+But it returned:
+  <red>1.</red>

@@ -33,4 +33,6 @@ let singleLevelMatcherHint:
       unit,
     ) => string;
 
+let formatInt: int => string;
+
 let matcherUtils: t;

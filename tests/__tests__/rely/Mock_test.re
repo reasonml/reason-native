@@ -11,7 +11,7 @@ module type MockTestCase = {
   type returnType;
   type tupledArgs;
   exception MockException;
-  let create: fnType => Mock.t(fnType, returnType, tupledArgs);
+  let create: fnType => Rely.Mock.t(fnType, returnType, tupledArgs);
   let call: (fnType, tupledArgs) => returnType;
   let implementation1: fnType;
   let implementation2: fnType;
@@ -43,7 +43,7 @@ module MakeTestSuite = (TestCase: MockTestCase) => {
             let expectedResults = ref([]);
 
             for (i in 1 to numCalls) {
-              let result = Mock.Return(call(Mock.fn(mock), args));
+              let result = Rely.Mock.Return(call(Mock.fn(mock), args));
               expectedCalls := expectedCalls^ @ [args];
               expectedResults := expectedResults^ @ [result];
             };
@@ -67,7 +67,7 @@ module MakeTestSuite = (TestCase: MockTestCase) => {
           Mock.getResults(mock)
           |> List.map(r =>
                switch (r) {
-               | Mock.Exception(e, _, _) => Some(e)
+               | Rely.Mock.Exception(e, _, _) => Some(e)
                | _ => None
                }
              );

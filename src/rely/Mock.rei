@@ -5,18 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */;
 let defaultNumMaxCalls: int;
+type t('fn, 'ret, 'tupledArgs);
+type result('a) =
+  | Return('a)
+  | Exception(exn, option(Printexc.location), string);
 
-module type MockConfig = {
-  let maxNumCalls: int;
-}
+module type MockConfig = {let maxNumCalls: int;};
 
-module type Mock = {
+module type Sig = {
   exception ExceededMaxNumberOfAllowableCalls(string);
-  type t('fn, 'ret, 'tupledArgs);
-  type result('a) =
-    | Return('a)
-    | Exception(exn, option(Printexc.location), string);
-
   let fn: t('fn, 'ret, 'tupledArgs) => 'fn;
   let getCalls: t('fn, 'ret, 'tupledArgs) => list('tupledArgs);
   let getResults: t('fn, 'ret, 'tupledArgs) => list(result('ret));
@@ -66,4 +63,5 @@ module type Mock = {
     );
 };
 
-module Make: (StackTrace: StackTrace.StackTrace, MockConfig: MockConfig) => Mock;
+module Make:
+  (StackTrace: StackTrace.StackTrace, MockConfig: MockConfig) => Sig;

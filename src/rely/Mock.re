@@ -6,13 +6,21 @@
  */;
 let maxNumStackFrames = 3;
 let defaultNumMaxCalls = 10000;
+type result('a) =
+  | Return('a)
+  | Exception(exn, option(Printexc.location), string);
 
-module type Mock = {
+type t('fn, 'ret, 'tupledArgs) = {
+  calls: ref(list('tupledArgs)),
+  results: ref(list(result('ret))),
+  fn: 'fn,
+  originalImplementation: 'fn,
+  implementation: ref('fn),
+  numCalls: ref(int),
+};
+
+module type Sig = {
   exception ExceededMaxNumberOfAllowableCalls(string);
-  type t('fn, 'ret, 'tupledArgs);
-  type result('a) =
-    | Return('a)
-    | Exception(exn, option(Printexc.location), string);
 
   let fn: t('fn, 'ret, 'tupledArgs) => 'fn;
   let getCalls: t('fn, 'ret, 'tupledArgs) => list('tupledArgs);
@@ -67,18 +75,6 @@ module type MockConfig = {let maxNumCalls: int;};
 
 module Make = (StackTrace: StackTrace.StackTrace, MockConfig: MockConfig) => {
   exception ExceededMaxNumberOfAllowableCalls(string);
-  type result('a) =
-    | Return('a)
-    | Exception(exn, option(Printexc.location), string);
-
-  type t('a, 'b, 'c) = {
-    calls: ref(list('c)),
-    results: ref(list(result('b))),
-    fn: 'a,
-    originalImplementation: 'a,
-    implementation: ref('a),
-    numCalls: ref(int),
-  };
 
   let fn = mock => mock.fn;
   let getCalls = mock => mock.calls^;
