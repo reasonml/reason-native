@@ -73,6 +73,7 @@ module MatcherTypes: {
 };
 
 module type TestFramework = {
+  module Mock: Mock.Mock;
   let describe: Describe.describeFn(unit);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
@@ -85,6 +86,7 @@ type requiredConfiguration = TestFrameworkConfig.requiredConfiguration;
 module TestFrameworkConfig: {
   type t;
   let initialize: requiredConfiguration => t;
+  let withMaxNumberOfMockCalls: (int, t) => t;
   let internal_do_not_use_get_time: (unit => Time.t, t) => t;
 };
 
