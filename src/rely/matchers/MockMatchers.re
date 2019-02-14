@@ -47,11 +47,6 @@ let passMessageThunk = () => "";
 let defaultEqualityFn = (==);
 
 module Make = (M: Mock.Sig) => {
-  let formatExceptions = exceptions =>
-    switch (exceptions) {
-    | [singleton] => Printexc.to_string(singleton)
-    | other => PolymorphicPrint.print(other |> List.map(Printexc.to_string))
-    };
   let split = (list, numToTake) => {
     let rec splitInternal = (list, numToTake, acc) =>
       switch (numToTake) {
@@ -63,6 +58,29 @@ module Make = (M: Mock.Sig) => {
         }
       };
     splitInternal(list, numToTake, []);
+  };
+
+  let formatExceptions = (exceptions, formatException) => {
+    let maxNumExceptions = 3;
+    let (toPrint, remainder) = split(exceptions, maxNumExceptions);
+    let printedExceptions =
+      toPrint
+      |> List.rev
+      |> List.map(ex => ex |> Printexc.to_string)
+      |> String.concat(", ");
+
+    switch (remainder) {
+    | [] => printedExceptions
+    | l =>
+      switch (List.length(l)) {
+      | 1 => printedExceptions ++ formatException(" and one more exception.")
+      | n =>
+        printedExceptions
+        ++ formatException(
+             " and " ++ MatcherUtils.formatInt(n) ++ " more exceptions.",
+           )
+      }
+    };
   };
 
   let formatCalls = (calls, formatCall) => {
@@ -204,7 +222,7 @@ module Make = (M: Mock.Sig) => {
                   "\n\n",
                   "Expected the function not to throw an error.\n",
                   "Instead, it threw: \n",
-                  indent(formatReceived(formatExceptions(arr))),
+                  indent(formatExceptions(arr, formatReceived)),
                 ],
               );
             ((() => message), false);
@@ -288,7 +306,7 @@ module Make = (M: Mock.Sig) => {
                     "\n",
                     "Instead, it threw:\n",
                     indent(
-                      formatReceived(formatExceptions(otherExceptions)),
+                      formatExceptions(otherExceptions, formatReceived),
                     ),
                   ],
                 );
@@ -871,10 +889,11 @@ module Make = (M: Mock.Sig) => {
           | (false, true) => (passMessageThunk, true)
           | (true, true) =>
             exception ShouldNeverGetHere;
-            let actual = switch(lastResult) {
-            | Some(Mock.Return(value)) => value
-            | _ => raise(ShouldNeverGetHere)
-            }
+            let actual =
+              switch (lastResult) {
+              | Some(Mock.Return(value)) => value
+              | _ => raise(ShouldNeverGetHere)
+              };
             let message =
               String.concat(
                 "",
@@ -896,11 +915,7 @@ module Make = (M: Mock.Sig) => {
                     formatExpected(PolymorphicPrint.print(expectedReturn)),
                   ),
                   "\nBut it last returned:\n",
-                  indent(
-                    formatReceived(
-                      PolymorphicPrint.print(actual),
-                    ),
-                  ),
+                  indent(formatReceived(PolymorphicPrint.print(actual))),
                 ],
               );
             ((() => message), false);
@@ -955,11 +970,13 @@ module Make = (M: Mock.Sig) => {
                       formatExpected(PolymorphicPrint.print(expectedReturn)),
                     ),
                     "\nBut the last call returned:\n",
-                    indent(formatReceived(PolymorphicPrint.print(actualValue))),
+                    indent(
+                      formatReceived(PolymorphicPrint.print(actualValue)),
+                    ),
                   ],
                 );
               ((() => message), false);
-              | Some(Exception(e, _, _)) =>
+            | Some(Exception(e, _, _)) =>
               let message =
                 String.concat(
                   "",
