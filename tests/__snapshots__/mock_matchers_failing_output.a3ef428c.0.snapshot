@@ -3,4 +3,4 @@ mock matchers › failing output › expect.mock.not.toThrow multiple exceptions
 
 Expected the function not to throw an error.
 Instead, it threw: 
-  <red>[\"Not_found\", \"Not_found\"]</red>
+  <red>Not_found</red>, <red>Not_found</red>

@@ -4,4 +4,4 @@ mock matchers › failing output › expect.mock.toThrowException multiple wrong
 Expected the function to throw an error matching:
   <green>Not_found</green>
 Instead, it threw:
-  <red>[\"Division_by_zero\", \"Division_by_zero\"]</red>
+  <red>Division_by_zero</red>, <red>Division_by_zero</red>

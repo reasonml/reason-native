@@ -66,7 +66,7 @@ module Make = (M: Mock.Sig) => {
     let printedExceptions =
       toPrint
       |> List.rev
-      |> List.map(ex => ex |> Printexc.to_string)
+      |> List.map(ex => ex |> Printexc.to_string |> formatException)
       |> String.concat(", ");
 
     switch (remainder) {
