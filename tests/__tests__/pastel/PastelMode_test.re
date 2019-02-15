@@ -1,12 +1,6 @@
 open TestFramework;
 
 describe("Pastel modes", ({test}) => {
-  test("Default mode should produce ANSI terminal output", ({expect}) => {
-    module DefaultPastel =
-      Pastel.Make({});
-    let output = <DefaultPastel color=Red> "Hello" </DefaultPastel>;
-    expect.string(output).toEqual("\027[31mHello\027[39m");
-  });
   test("Switching from default to human readable and back", ({expect}) => {
     module Pastel =
       Pastel.Make({});

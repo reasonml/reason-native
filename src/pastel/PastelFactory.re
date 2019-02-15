@@ -9,11 +9,19 @@ open Decorators;
 open ColorName;
 
 module Make = (()) => {
+  let inferMode = fd =>
+    switch (SupportsColor.inferLevel(fd)) {
+    | NoSupport => Disabled
+    | BasicColorSupport
+    | Has256ColorSupport
+    | TrueColorSupport => Terminal
+    };
+
+  let defaultMode = inferMode(Unix.stdin);
+  let mode = ref(defaultMode);
   let modifierInternal = ref(TerminalImplementation.modifier);
   let colorInternal = ref(TerminalImplementation.color);
   let bgInternal = ref(TerminalImplementation.bg);
-
-  let mode = ref(Terminal);
 
   let setMode = m => {
     switch (m) {
@@ -33,8 +41,9 @@ module Make = (()) => {
     mode := m;
   };
 
+  setMode(defaultMode);
+
   let getMode = () => mode^;
-  let defaultMode = Terminal;
 
   let useMode = (mode, f) => {
     let prevMode = getMode();

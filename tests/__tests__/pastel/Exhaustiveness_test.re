@@ -9,6 +9,7 @@ open TestFramework;
 open Pastel.ColorName;
 module Pastel = Pastel.Make();
 open Pastel;
+Pastel.setMode(Terminal);
 
 describe("Exhaustiveness test", ({test}) =>
   test("should match snapshot", ({expect}) => {
