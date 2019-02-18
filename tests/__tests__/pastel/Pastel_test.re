@@ -9,16 +9,20 @@ open TestFramework;
 describe("Pastel", ({describe, test}) => {
   test(
     "ANSI escape sequences should be applied inside pastels and persisted outside of them",
-    ({expect}) => {
-      let testCase =
-        <Pastel dim=true>
-          "oo"
-          <Pastel color=Green> "hello \027[4mworld!" </Pastel>
-          "unpasteled o_O"
-        </Pastel>
-        ++ " reset to prevent underlines on the rest of stdout \027[0m";
-      expect.string(testCase).toMatchSnapshot();
-    },
+    ({expect}) =>
+    Pastel.useMode(
+      Terminal,
+      () => {
+        let testCase =
+          <Pastel dim=true>
+            "oo"
+            <Pastel color=Green> "hello \027[4mworld!" </Pastel>
+            "unpasteled o_O"
+          </Pastel>
+          ++ " reset to prevent underlines on the rest of stdout \027[0m";
+        expect.string(testCase).toMatchSnapshot();
+      },
+    )
   );
 
   let testMode = (mode, name) => {

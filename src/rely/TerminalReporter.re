@@ -26,10 +26,10 @@ let failFormatter = s => Pastel.red(s);
 let messageIndent = "    ";
 let stackIndent = "      ";
 let titleIndent = "  ";
-let passDisplay =
+let passDisplay = () =>
   <Pastel color=Green inverse=true bold=true> " PASS " </Pastel>;
-let failDisplay = <Pastel color=Red inverse=true bold=true> " FAIL " </Pastel>;
-let runningDisplay =
+let failDisplay = () => <Pastel color=Red inverse=true bold=true> " FAIL " </Pastel>;
+let runningDisplay = () =>
   <Pastel color=Yellow inverse=true bold=true> " RUNS " </Pastel>;
 
 module FCP =
@@ -286,31 +286,34 @@ let printSnapshotStatus = testResult =>
 let createTerminalReporter = (printer: terminalPrinter): Reporter.t => {
   let runningDisplayLength = ref(0);
   {
-    onTestSuiteStart: (testSuite: Reporter.testSuite) => {
-      let update =
-        String.concat(
-          " ",
-          [
-            runningDisplay,
-            <Pastel color=WhiteBright> {testSuite.name} </Pastel>,
-          ],
-        );
-      runningDisplayLength := String.length(update);
-      printer.printString("\r" ++ update);
-      printer.flush(stdout);
-      ();
-    },
+    onTestSuiteStart: (testSuite: Reporter.testSuite) =>
+      if (Pastel.getMode() == Terminal) {
+        let update =
+          String.concat(
+            " ",
+            [
+              runningDisplay(),
+              <Pastel color=WhiteBright> {testSuite.name} </Pastel>,
+            ],
+          );
+        runningDisplayLength := String.length(update);
+        printer.printString("\r" ++ update);
+        printer.flush(stdout);
+        ();
+      },
     onTestSuiteResult: (aggregatedResult, testSuite, testSuiteResult) => {
-      printer.printString(
-        "\027[" ++ string_of_int(runningDisplayLength^) ++ "D\027[K",
-      );
+      if (Pastel.getMode() == Terminal) {
+        printer.printString(
+          "\027[" ++ string_of_int(runningDisplayLength^) ++ "D\027[K",
+        );
+      };
       switch (testSuiteResult) {
       | {numFailedTests: 0, numPassedTests: 0, numSkippedTests} => ()
       | {numFailedTests: 0, numPassedTests: n, testResults: _, displayName} =>
         printer.printEndline(
           String.concat(
             " ",
-            [passDisplay, <Pastel color=WhiteBright> displayName </Pastel>],
+            [passDisplay(), <Pastel color=WhiteBright> displayName </Pastel>],
           ),
         )
       | {numFailedTests: n, numPassedTests, testResults, displayName}
@@ -318,7 +321,7 @@ let createTerminalReporter = (printer: terminalPrinter): Reporter.t => {
         printer.printEndline(
           String.concat(
             " ",
-            [failDisplay, <Pastel color=WhiteBright> displayName </Pastel>],
+            [failDisplay(), <Pastel color=WhiteBright> displayName </Pastel>],
           ),
         );
         printer.printEndline(
