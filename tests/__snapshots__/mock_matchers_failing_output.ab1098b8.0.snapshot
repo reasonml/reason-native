@@ -1,0 +1,7 @@
+mock matchers › failing output › expect.mock.not.lastCalledWith multiple calls
+<dim>expect.mock(</dim><red>mock</red><dim>).</dim>not<dim>.lastCalledWith(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+
+Expected the mock not to have been last called with:
+  <green>2</green>
+But it was called with arguments equal to:
+  <red>2</red>

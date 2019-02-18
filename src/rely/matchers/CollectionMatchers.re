@@ -9,7 +9,6 @@ open EqualityValidator;
 open MatcherTypes;
 
 type equalsFn('a) = ('a, 'a) => bool;
-type predicate('a) = 'a => bool;
 
 module type Collection = {
   type t('a);

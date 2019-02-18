@@ -61,7 +61,7 @@ type runDescribeFn('ext) =
   describeResult;
 
 module type TestFramework = {
-  module Mock: Mock.Mock;
+  module Mock: Mock.Sig;
   let describe: Describe.describeFn(unit);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
@@ -92,7 +92,7 @@ module Make = (UserConfig: FrameworkConfig) => {
         let maxNumCalls = UserConfig.config.maxNumMockCalls;
       },
     );
-
+  module DefaultMatchers = DefaultMatchers.Make(Mock);
   let escape = (s: string): string => {
     let lines = Str.split(Str.regexp("\n"), s);
     let lines = List.map(line => String.escaped(line), lines);

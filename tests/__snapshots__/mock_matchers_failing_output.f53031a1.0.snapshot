@@ -1,0 +1,4 @@
+mock matchers › failing output › expect.mock.toBeCalled
+<dim>expect.mock(</dim><red>mock</red><dim>).toBeCalled(</dim><green></green><dim>)</dim>
+
+Expected the mock to be called, but it was not called.

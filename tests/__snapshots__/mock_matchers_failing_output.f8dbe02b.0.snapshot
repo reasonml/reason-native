@@ -1,0 +1,7 @@
+mock matchers › failing output › expect.mock.lastReturnedWith custom equals
+<dim>expect.mock(</dim><red>mock</red><dim>).lastReturnedWith(</dim><green>expected</green><dim>)</dim>
+
+Expected the mock to have last returned:
+  <green>1.</green>
+But the last call returned:
+  <red>2.</red>

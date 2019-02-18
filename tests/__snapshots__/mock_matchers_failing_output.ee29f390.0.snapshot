@@ -1,0 +1,6 @@
+mock matchers › failing output › expect.mock.not.toThrow single exception
+<dim>expect.mock(</dim><red>mock</red><dim>).</dim>not<dim>toThrow(</dim><green></green><dim>)</dim>
+
+Expected the function not to throw an error.
+Instead, it threw: 
+  <red>Not_found</red>

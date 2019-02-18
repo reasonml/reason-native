@@ -1,0 +1,7 @@
+mock matchers › failing output › expect.mock.not.toBeCalledWith custom equals
+<dim>expect.mock(</dim><red>mock</red><dim>).</dim>not<dim>.toBeCalledWith(</dim><green>expected</green><dim>)</dim>
+
+Expected the mock not to have been called with:
+  <green>0.99</green>
+But it was called with arguments equal to:
+  <red>0.99</red>
