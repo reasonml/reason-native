@@ -8,6 +8,16 @@
     console.lib
     pastel-console.lib
   )
+  (modules (:standard \ ReasonNativeTests))
+)
+(executable
+  (package tests)
+  (name ReasonNativeTests)
+  (public_name ReasonNativeTests.exe)
+  (libraries
+    Tests
+  )
+  (modules ReasonNativeTests)
 )
 (include_subdirs unqualified)
 (dirs :standard __tests__)
