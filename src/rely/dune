@@ -3,10 +3,10 @@
    (public_name rely.lib)
    (libraries pastel.lib file-context-printer.lib unix)
 )
-(copy_files# ../../common/*)
+(copy_files# ../../shared-src/common/*)
 ; objectPrinter lives separately from Common for now because Common has an
 ; implicit dependency on Pastel which Console does not want. Common should
 ; ideally be split up into sub directories/packages which can be more precisely
 ; consumed
-(copy_files# ../../objectPrinter/*)
+(copy_files# ../../shared-src/objectPrinter/*)
 (include_subdirs unqualified)

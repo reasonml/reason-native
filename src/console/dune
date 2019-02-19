@@ -14,5 +14,5 @@
 ; implicit dependency on Pastel which Console does not want. Common should
 ; ideally be split up into sub directories/packages which can be more precisely
 ; consumed
-(copy_files# ../../objectPrinter/*)
+(copy_files# ../../shared-src/objectPrinter/*)
 
