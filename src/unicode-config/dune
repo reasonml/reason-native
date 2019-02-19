@@ -1,0 +1,4 @@
+(library
+  (name UnicodeConfig)
+  (public_name unicode-config.lib)
+)

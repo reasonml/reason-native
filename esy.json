@@ -14,7 +14,9 @@
       "esy-installer pastel-console.install",
       "esy-installer file-context-printer.install",
       "esy-installer refmterr.install",
-      "esy-installer tests.install"
+      "esy-installer tests.install",
+      "esy-installer unicode.install",
+      "esy-installer unicode-config.install"
     ]
   },
   "scripts": {
