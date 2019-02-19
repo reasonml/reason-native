@@ -10,4 +10,5 @@ let withNestedTestSuite: (~child: t, t) => t;
 let withFailingTests: (int, t) => t;
 let withPassingTests: (int, t) => t;
 let withSkippedTests: (int, t) => t;
-let toFunction: (t, Rely.Describe.describeFn(unit)) => unit;
+let toFunction: (t, ~describe: Rely.Describe.describeFn(unit), ~describeSkip: Rely.Describe.describeFn(unit)) => unit;
+let skipSuite: (t) => t;

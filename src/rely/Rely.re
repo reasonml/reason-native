@@ -34,6 +34,7 @@ module Describe = {
 
   type describeUtils('ext) = {
     describe: describeFn('ext),
+    describeSkip: describeFn('ext),
     test: Test.testFn('ext),
     testSkip: Test.testFn('ext),
   }
@@ -55,6 +56,7 @@ type runDescribeFn('ext) =
     ~config: Describe.describeConfig,
     ~state: testRunState,
     ~describePath: TestPath.describe,
+    ~skip: bool,
     MatcherTypes.matchersExtensionFn('ext),
     Describe.describeUtils('ext) => unit
   ) =>
@@ -63,6 +65,7 @@ type runDescribeFn('ext) =
 module type TestFramework = {
   module Mock: Mock.Sig;
   let describe: Describe.describeFn(unit);
+  let describeSkip: Describe.describeFn('a);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
   let run: RunConfig.t => unit;
@@ -138,6 +141,7 @@ module Make = (UserConfig: FrameworkConfig) => {
       ~config: Describe.describeConfig,
       ~state,
       ~describePath: TestPath.describe,
+      ~skip: bool,
       makeCustomMatchers,
       fn,
     ) => {
@@ -362,12 +366,31 @@ module Make = (UserConfig: FrameworkConfig) => {
             ~config,
             ~state,
             ~describePath=Nested(describeName, describePath),
+            ~skip=false,
             makeCustomMatchers,
             fn,
           );
         childDescribeResults := childDescribeResults^ @ [childDescribeResult];
       };
-      let describeUtils = {describe: describeFn, test: testFn, testSkip};
+
+      let describeSkip = (describeName, fn) => {
+        let childDescribeResult =
+          runDescribe(
+            ~config,
+            ~state,
+            ~describePath=Nested(describeName, describePath),
+            ~skip=true,
+            makeCustomMatchers,
+            fn,
+          );
+        childDescribeResults := childDescribeResults^ @ [childDescribeResult];
+      };
+
+      let describeUtils =
+        skip ?
+          {describe: describeSkip, describeSkip, test: testSkip, testSkip} :
+          {describe: describeFn, test: testFn, describeSkip, testSkip};
+
       /* Gather all the tests */
       fn(describeUtils);
       /* Now run them */
@@ -405,6 +428,7 @@ module Make = (UserConfig: FrameworkConfig) => {
     name: string,
     fn: Describe.describeUtils('ext) => unit,
     matchersExtensionFn: MatcherTypes.matchersExtensionFn('ext),
+    skip: bool,
   };
 
   type testSuiteInternal =
@@ -414,7 +438,27 @@ module Make = (UserConfig: FrameworkConfig) => {
   let describe = (name, fn) =>
     testSuites :=
       testSuites^
-      @ [TestSuiteInternal({name, fn, matchersExtensionFn: _ => ()})];
+      @ [
+        TestSuiteInternal({
+          name,
+          fn,
+          matchersExtensionFn: _ => (),
+          skip: false,
+        }),
+      ];
+  let describeSkip = (name, fn) =>
+    testSuites :=
+      testSuites^
+      @ [
+        TestSuiteInternal({
+          name,
+          fn,
+          /* quite unsafe, but should never be called and allows us to have
+          describeSkip be polymorphic */
+          matchersExtensionFn: _ => Obj.magic(None),
+          skip: true,
+        }),
+      ];
   let extendDescribe = (createCustomMatchers, name, fn) =>
     testSuites :=
       testSuites^
@@ -423,6 +467,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           name,
           fn,
           matchersExtensionFn: createCustomMatchers,
+          skip: false
         }),
       ];
   type testSuiteAccumulator = {
@@ -457,7 +502,7 @@ module Make = (UserConfig: FrameworkConfig) => {
         |> List.fold_left(
              (acc, testSuite) =>
                switch (testSuite) {
-               | TestSuiteInternal({name, fn, matchersExtensionFn}) =>
+               | TestSuiteInternal({name, fn, matchersExtensionFn, skip}) =>
                  let reporterSuite = {name: name};
                  notifyReporters(r => r.onTestSuiteStart(reporterSuite));
                  let describeResult =
@@ -468,6 +513,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                      },
                      ~state=acc.testRunState,
                      ~describePath=Terminal(name),
+                     ~skip,
                      matchersExtensionFn,
                      fn,
                    );
