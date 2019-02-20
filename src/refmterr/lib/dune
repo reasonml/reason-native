@@ -13,4 +13,4 @@
 (library (name Refmterr)
     (public_name refmterr.lib)
     (libraries atdgen re.pcre unix pastel.lib))
-(copy_files# ../../../common/*)
+(copy_files# ../../../shared-src/common/*)
