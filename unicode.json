@@ -1,0 +1,26 @@
+{
+  "name": "@reason-native/unicode",
+  "version": "0.0.0",
+  "description": "Easy to use and well documented Unicode symbols",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/unicode"
+  },
+  "license": "MIT",
+  "esy": {
+    "build": "dune build -p unicode",
+    "install": "esy-installer unicode.install"
+  },
+  "scripts": {
+    "release": "node ./scripts/esy-prepublish.js unicode.json"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "ocaml": "^4.2.0"
+  },
+  "devDependencies": {
+    "@esy-ocaml/merlin": "*",
+    "ocaml": "~4.6.0"
+  }
+}

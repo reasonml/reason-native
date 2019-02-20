@@ -1,0 +1,26 @@
+{
+  "name": "@reason-native/unicode-config",
+  "version": "0.0.0",
+  "description": "Configuration used to generate the @reason-native/unicode library",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/unicode-config"
+  },
+  "license": "MIT",
+  "esy": {
+    "build": "dune build -p unicode-config",
+    "install": "esy-installer unicode-config.install"
+  },
+  "scripts": {
+    "release": "node ./scripts/esy-prepublish.js unicode-config.json"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "ocaml": "^4.2.0"
+  },
+  "devDependencies": {
+    "@esy-ocaml/merlin": "*",
+    "ocaml": "~4.6.0"
+  }
+}
