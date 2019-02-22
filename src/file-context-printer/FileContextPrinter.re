@@ -15,4 +15,4 @@ module type FileContextPrinter = {
 include Config;
 
 module Make = (UserConfig: FileContextPrinterConfig) =>
-  FileContextPrinterFactory.Make(UserConfig, Stylish.ANSIStylish);
+  Factory.Make(UserConfig, Stylish.ANSIStylish);
