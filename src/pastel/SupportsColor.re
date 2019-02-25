@@ -24,6 +24,12 @@ let (disable, minLevel) =
   | Some(false) => (true, NoSupport)
   };
 
+/*
+ * `isatty` does not correctly detect cygwin interactive terminals.
+ * See vim's source for an example of how to do this eventually
+ * https://fossies.org/linux/vim/src/iscygpty.c
+ * In the mean time you can set `FORCE_COLOR` in your bashrc.
+ */
 let isTTY = fileDescriptor => Unix.isatty(fileDescriptor);
 
 let inferLevel = fileDescriptor =>
