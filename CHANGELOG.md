@@ -1,3 +1,7 @@
+# February 25, 2019
+### file-context-printer 0.0.3
+* Shorten paths for windows relocatable build support
+
 # February 19, 2019
 ### Pastel 0.2.0
 * Windows powershell support for colors

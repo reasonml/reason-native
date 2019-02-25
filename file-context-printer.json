@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/file-context-printer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A utility for pretty printing source code",
   "repository": {
     "type": "git",
