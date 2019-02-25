@@ -30,7 +30,8 @@ let (disable, minLevel) =
  * https://fossies.org/linux/vim/src/iscygpty.c
  * In the mean time you can set `FORCE_COLOR` in your bashrc.
  */
-let isTTY = fileDescriptor => Unix.isatty(fileDescriptor);
+let isTTY = fileDescriptor =>
+  Unix.isatty(fileDescriptor) || WinCygPtySupport.isCygptyUsed();
 
 let inferLevel = fileDescriptor =>
   if (disable) {

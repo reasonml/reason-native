@@ -4,11 +4,12 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-external enableWinConsoleAnsiSequences: unit => unit = "enable_windows_console_ansi_sequences";
+external enableWinConsoleAnsiSequences: unit => unit =
+  "enable_windows_console_ansi_sequences";
 
 let enable = () =>
-  if (Sys.win32) {
-    enableWinConsoleAnsiSequences()
+  if (Sys.win32 && !WinCygPtySupport.isCygptyUsed()) {
+    enableWinConsoleAnsiSequences();
   } else {
-    ()
-  }
+    ();
+  };
