@@ -11,7 +11,7 @@
   Part of the
   [reason-native](https://github.com/facebookexperimental/reason-native) native
   utility collection.
-  
+
 
   **Browser Inspired**: `Console` is modelled after the browser console. It
   doesn't require that you define any printers, and `Console.log/warn/error`
@@ -128,3 +128,34 @@ let error: 'a => unit;
  * suppressed via a "log level".
  */
 let warn: 'a => unit;
+
+/*
+ * Useful for printing in the middle of a pipe chain:
+ *
+ *   foo
+ *   |> List.map(mapper)
+ *   |> Console.Pipe.log
+ *   |> Array.of_list
+ */
+module Pipe: {
+  /**
+   * Same as `Console.log`, but returns the input.
+   */
+  let log: 'a => 'a;
+  /**
+   * Same as `Console.out`, but returns the input.
+   */
+  let out: 'a => 'a;
+  /**
+   * Same as `Console.debug`, but returns the input.
+   */
+  let debug: 'a => 'a;
+  /**
+   * Same as `Console.error`, but returns the input.
+   */
+  let error: 'a => 'a;
+  /**
+   * Same as `Console.warn`, but returns the input.
+   */
+  let warn: 'a => 'a;
+};

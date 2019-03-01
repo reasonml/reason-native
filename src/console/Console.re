@@ -39,3 +39,26 @@ let out = a => currentGlobalConsole.contents.out(a);
 let debug = a => currentGlobalConsole.contents.debug(a);
 let warn = a => currentGlobalConsole.contents.warn(a);
 let error = a => currentGlobalConsole.contents.error(a);
+
+module Pipe = {
+  let log = a => {
+    let () = currentGlobalConsole.contents.log(a);
+    a;
+  };
+  let out = a => {
+    let () = currentGlobalConsole.contents.out(a);
+    a;
+  };
+  let debug = a => {
+    let () = currentGlobalConsole.contents.debug(a);
+    a;
+  };
+  let warn = a => {
+    let () = currentGlobalConsole.contents.warn(a);
+    a;
+  };
+  let error = a => {
+    let () = currentGlobalConsole.contents.error(a);
+    a;
+  };
+};

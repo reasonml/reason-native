@@ -115,3 +115,21 @@ describe("Console", ({test}) => {
     expect.string(out).toMatchSnapshot();
   });
 });
+
+describe("Console.Pipe", ({test}) =>
+  test("Basic output", ({expect}) => {
+    let (stdout, stderr, _) =
+      IO.captureOutput(() => {
+        let foo = [1, 2, 3];
+        let _ =
+          foo
+          |> List.map(x => x - 1)
+          |> Console.Pipe.log
+          |> List.map(x => x * 2)
+          |> Console.Pipe.log;
+        ();
+      });
+    let out = Utils.allOut(stdout, stderr);
+    expect.string(out).toMatchSnapshot();
+  })
+);
