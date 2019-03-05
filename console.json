@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/console",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "No effort, universal logger",
   "license": "MIT",
   "esy": {
