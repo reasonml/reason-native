@@ -6,7 +6,7 @@
 * Console.Pipe feature
 ``` foo
 |> List.map(mapper)
-|> Console.Pipe.log()
+|> Console.Pipe.log
 |> Array.of_list
 ```
 
