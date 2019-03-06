@@ -1,3 +1,15 @@
+# March 5, 2019
+### Pastel 0.2.1
+* Fix bug with windows powershell support
+
+### Console 0.1.0
+* Console.Pipe feature
+``` foo
+|> List.map(mapper)
+|> Console.Pipe.log
+|> Array.of_list
+```
+
 # February 25, 2019
 ### file-context-printer 0.0.3
 * Shorten paths for windows relocatable build support
