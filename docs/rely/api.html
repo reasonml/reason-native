@@ -76,6 +76,22 @@
 <span class="hljs-keyword">let</span> sampleRunConfig = <span class="hljs-module-identifier">RunConfig</span>.initialize()
 <span class="hljs-module-identifier">TestFramework</span>.run(sampleRunConfig); <span class="hljs-comment">/* custom config */</span>
 </code></pre>
+<p><strong>Running with <a href="https://github.com/facebookexperimental/reason-native/blob/master/src/rely/Reporter.re">custom reporters</a></strong></p>
+<pre><code class="hljs css language-reason"><span class="hljs-keyword">let</span> myReporter: <span class="hljs-module-identifier">Rely</span>.<span class="hljs-module-identifier">Reporter</span>.t = {
+  onTestSuiteStart: (testSuite) =&gt; {<span class="hljs-operator">...</span>},
+  onTestSuiteResult: (testSuite, aggregatedResult, testSuiteResult) =&gt; {<span class="hljs-operator">...</span>},
+  onRunStart: (relyRunInfo) =&gt; {<span class="hljs-operator">...</span>},
+  onRunComplete: (aggregatedResult) =&gt; {<span class="hljs-operator">...</span>}
+};
+
+<span class="hljs-keyword">let</span> customReporterConfig = <span class="hljs-module-identifier">RunConfig</span>.initialize() <span class="hljs-operator">|&gt;</span> withReporters(<span class="hljs-literal">[</span>
+  <span class="hljs-constructor">Custom</span>(myReporter),
+  <span class="hljs-comment">/* not required, but the default terminal reporter can also be included */</span>
+  <span class="hljs-constructor">Default</span>
+<span class="hljs-literal">]</span>);
+
+<span class="hljs-module-identifier">TestFramework</span>.run(customReporterConfig);
+</code></pre>
 <h2><a class="anchor" aria-hidden="true" id="testing"></a><a href="#testing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testing</h2>
 <blockquote>
 <p>For a full list of available matchers, visit the <a href="https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers">Github Repository</a></p>
@@ -83,7 +99,7 @@
 <pre><code class="hljs css language-reason"><span class="hljs-comment">/* MyFirstTest.re */</span>
 <span class="hljs-keyword">open</span> <span class="hljs-module-identifier">TestFramework</span>;
 
-describe(<span class="hljs-string">"my first test suite"</span>, ({test, testSkip}) =&gt; {
+describe(<span class="hljs-string">"my first test suite"</span>, ({test, testSkip, describe}) =&gt; {
   <span class="hljs-comment">/* test suite */</span>
   test(<span class="hljs-string">"all the expects"</span>, ({expect}) =&gt; {
     <span class="hljs-comment">/* string type */</span>
@@ -106,9 +122,30 @@ describe(<span class="hljs-string">"my first test suite"</span>, ({test, testSki
 
     <span class="hljs-comment">/* fn type */</span>
     expect.fn(() =&gt; {<span class="hljs-number">2</span>;}).not.toThrow();
+
+    <span class="hljs-comment">/* list type */</span>
+    expect.list(<span class="hljs-literal">[</span><span class="hljs-literal">]</span>).toBeEmpty();
+
+    <span class="hljs-comment">/* array type */</span>
+    expect.array(<span class="hljs-literal">[|</span><span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span><span class="hljs-literal">|]</span>).toContain(<span class="hljs-number">1</span>);
+
+    <span class="hljs-comment">/* polymorphic structural equality */</span>
+    expect.equal(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>);
+
+    <span class="hljs-comment">/* polymorphic referential equality */</span>
+    expect.not.same(<span class="hljs-string">"hello"</span>, <span class="hljs-string">"hello"</span>);
+
+    <span class="hljs-comment">/* mock functions, there are constructors for up to 7 args */</span>
+    <span class="hljs-keyword">let</span> mock = <span class="hljs-module-identifier">Mock</span>.mock1((id) =&gt; id);
+    expect.mock(mock).not.toBeCalled();
   });
   testSkip(<span class="hljs-string">"incorrect test"</span>, ({expect}) =&gt; {
     expect.int(<span class="hljs-number">1</span> <span class="hljs-operator">+</span> <span class="hljs-number">1</span>).toBe(<span class="hljs-number">3</span>);
+  });
+  describe(<span class="hljs-string">"a nested test suite"</span>, ({test}) =&gt; {
+    test(<span class="hljs-string">"snapshots"</span>, ({expect}) =&gt; {
+      expect.string(<span class="hljs-string">"I 💖 Rely"</span>).toMatchSnapshot();
+    });
   });
 });
 </code></pre>
