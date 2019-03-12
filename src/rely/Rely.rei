@@ -10,6 +10,7 @@ module ListMatchers = ListMatchers;
 module Reporter = Reporter;
 module Time = Time;
 module Mock = Mock;
+exception InvalidWhileRunning(string);
 
 module Test: {
   type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
