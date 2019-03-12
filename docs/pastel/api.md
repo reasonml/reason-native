@@ -244,3 +244,28 @@ print_endline(
 ```sh-stacked
 Hello [9mWorld[29m
 ```
+
+## Modes
+```re
+type mode =
+  /* uses ANSI escape sequences to achieve lovely terminal coloring */
+  | Terminal
+  /* Useful for snapshots
+  ex: <Pastel color=Red>"My text"</Pastel> => <red>My text</red> */
+  | HumanReadable
+  /* no coloring */
+  | Disabled
+```
+
+```re
+/* returns the current mode */
+let getMode: unit => mode;
+/* sets the current mode (use with caution, prefer useMode) */
+let setMode: mode => unit;
+/* returns the default inferred mode */
+let defaultMode: mode;
+/* uses the specified mode for the duration of the passed in function
+and then restores the previous mode after execution has completed */
+let useMode: (mode, unit => 'a) => 'a;
+```
+

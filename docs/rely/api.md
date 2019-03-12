@@ -32,13 +32,31 @@ let sampleRunConfig = RunConfig.initialize()
 TestFramework.run(sampleRunConfig); /* custom config */
 ```
 
+**Running with [custom reporters](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/Reporter.re)**
+```reason
+let myReporter: Rely.Reporter.t = {
+  onTestSuiteStart: (testSuite) => {...},
+  onTestSuiteResult: (testSuite, aggregatedResult, testSuiteResult) => {...},
+  onRunStart: (relyRunInfo) => {...},
+  onRunComplete: (aggregatedResult) => {...}
+};
+
+let customReporterConfig = RunConfig.initialize() |> withReporters([
+  Custom(myReporter),
+  /* not required, but the default terminal reporter can also be included */
+  Default
+]);
+
+TestFramework.run(customReporterConfig);
+```
+
 ## Testing
 > For a full list of available matchers, visit the [Github Repository](https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers)
 ```reason
 /* MyFirstTest.re */
 open TestFramework;
 
-describe("my first test suite", ({test, testSkip}) => {
+describe("my first test suite", ({test, testSkip, describe}) => {
   /* test suite */
   test("all the expects", ({expect}) => {
     /* string type */
@@ -61,9 +79,30 @@ describe("my first test suite", ({test, testSkip}) => {
 
     /* fn type */
     expect.fn(() => {2;}).not.toThrow();
+
+    /* list type */
+    expect.list([]).toBeEmpty();
+
+    /* array type */
+    expect.array([|1, 2, 3|]).toContain(1);
+
+    /* polymorphic structural equality */
+    expect.equal(1,1);
+
+    /* polymorphic referential equality */
+    expect.not.same("hello", "hello");
+
+    /* mock functions, there are constructors for up to 7 args */
+    let mock = Mock.mock1((id) => id);
+    expect.mock(mock).not.toBeCalled();
   });
   testSkip("incorrect test", ({expect}) => {
     expect.int(1 + 1).toBe(3);
+  });
+  describe("a nested test suite", ({test}) => {
+    test("snapshots", ({expect}) => {
+      expect.string("I 💖 Rely").toMatchSnapshot();
+    });
   });
 });
 ```
