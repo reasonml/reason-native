@@ -20,6 +20,7 @@ module MatcherUtils = MatcherUtils;
 module Mock = Mock;
 module Reporter = Reporter;
 module Time = Time;
+exception InvalidWhileRunning(string);
 
 module Test = {
   type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
@@ -435,30 +436,60 @@ module Make = (UserConfig: FrameworkConfig) => {
     | TestSuiteInternal(testSuiteWithMatchers('ext)): testSuiteInternal;
 
   let testSuites: ref(list(testSuiteInternal)) = ref([]);
+
+  let isRunning = ref(false);
+  let errorIfRunning = (f, message) =>
+    if (isRunning^) {
+      raise(InvalidWhileRunning(message));
+    } else {
+      f();
+    };
+  let useIsRunning = f => {
+    isRunning := true;
+    let value =
+      try (f()) {
+      | e =>
+        isRunning := false;
+        raise(e);
+      };
+    isRunning := false;
+    value;
+  };
+
   let describe = (name, fn) =>
-    testSuites :=
-      testSuites^
-      @ [
-        TestSuiteInternal({
-          name,
-          fn,
-          matchersExtensionFn: _ => (),
-          skip: false,
-        }),
-      ];
+    errorIfRunning(
+      () =>
+        testSuites :=
+          testSuites^
+          @ [
+            TestSuiteInternal({
+              name,
+              fn,
+              matchersExtensionFn: _ => (),
+              skip: false,
+            }),
+          ],
+      "TestFramework.describe cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
+    );
+
   let describeSkip = (name, fn) =>
-    testSuites :=
-      testSuites^
-      @ [
-        TestSuiteInternal({
-          name,
-          fn,
-          /* quite unsafe, but should never be called and allows us to have
-          describeSkip be polymorphic */
-          matchersExtensionFn: _ => Obj.magic(None),
-          skip: true,
-        }),
-      ];
+    errorIfRunning(
+      () =>
+        testSuites :=
+          testSuites^
+          @ [
+            TestSuiteInternal({
+              name,
+              fn,
+              /* quite unsafe, but should never be called and allows us to have
+                 describeSkip be polymorphic */
+              matchersExtensionFn: _ => Obj.magic(None),
+              skip: true,
+            }),
+          ],
+      "TestFramework.describeSkip cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
+    );
+
   let extendDescribe = (createCustomMatchers, name, fn) =>
     testSuites :=
       testSuites^
@@ -467,7 +498,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           name,
           fn,
           matchersExtensionFn: createCustomMatchers,
-          skip: false
+          skip: false,
         }),
       ];
   type testSuiteAccumulator = {
@@ -476,90 +507,94 @@ module Make = (UserConfig: FrameworkConfig) => {
   };
 
   let run = (config: RunConfig.t) =>
-    Util.withBacktrace(() => {
-      let startTime = UserConfig.config.getTime();
-      let notifyReporters = f => List.iter(f, config.reporters);
-      let reporterTestSuites =
-        testSuites^
-        |> List.map(s =>
-             switch (s) {
-             | TestSuiteInternal({name}) => {name: name}
-             }
-           );
-      notifyReporters(r => r.onRunStart({testSuites: reporterTestSuites}));
-      let initialState = {
-        testHashes: MStringSet.empty(),
-        snapshotState:
-          ref(
-            TestSnapshot.initializeState(
-              ~snapshotDir=UserConfig.config.snapshotDir,
-              ~updateSnapshots=config.updateSnapshots,
+    useIsRunning(() =>
+      Util.withBacktrace(() => {
+        let startTime = UserConfig.config.getTime();
+        let notifyReporters = f => List.iter(f, config.reporters);
+        let reporterTestSuites =
+          testSuites^
+          |> List.map(s =>
+               switch (s) {
+               | TestSuiteInternal({name}) => {name: name}
+               }
+             );
+        notifyReporters(r => r.onRunStart({testSuites: reporterTestSuites}));
+        let initialState = {
+          testHashes: MStringSet.empty(),
+          snapshotState:
+            ref(
+              TestSnapshot.initializeState(
+                ~snapshotDir=UserConfig.config.snapshotDir,
+                ~updateSnapshots=config.updateSnapshots,
+              ),
             ),
-          ),
-      };
-      let result =
-        testSuites^
-        |> List.fold_left(
-             (acc, testSuite) =>
-               switch (testSuite) {
-               | TestSuiteInternal({name, fn, matchersExtensionFn, skip}) =>
-                 let reporterSuite = {name: name};
-                 notifyReporters(r => r.onTestSuiteStart(reporterSuite));
-                 let describeResult =
-                   runDescribe(
-                     ~config={
-                       updateSnapshots: config.updateSnapshots,
-                       snapshotDir: UserConfig.config.snapshotDir,
-                     },
-                     ~state=acc.testRunState,
-                     ~describePath=Terminal(name),
-                     ~skip,
-                     matchersExtensionFn,
-                     fn,
+        };
+        let result =
+          testSuites^
+          |> List.fold_left(
+               (acc, testSuite) =>
+                 switch (testSuite) {
+                 | TestSuiteInternal({name, fn, matchersExtensionFn, skip}) =>
+                   let reporterSuite = {name: name};
+                   notifyReporters(r => r.onTestSuiteStart(reporterSuite));
+                   let describeResult =
+                     runDescribe(
+                       ~config={
+                         updateSnapshots: config.updateSnapshots,
+                         snapshotDir: UserConfig.config.snapshotDir,
+                       },
+                       ~state=acc.testRunState,
+                       ~describePath=Terminal(name),
+                       ~skip,
+                       matchersExtensionFn,
+                       fn,
+                     );
+                   let testSuiteResult =
+                     TestSuiteResult.ofDescribeResult(describeResult);
+                   let newResult =
+                     acc.aggregatedResult
+                     |> AggregatedResult.addTestSuiteResult(testSuiteResult);
+                   notifyReporters(r =>
+                     r.onTestSuiteResult(
+                       reporterSuite,
+                       newResult,
+                       testSuiteResult,
+                     )
                    );
-                 let testSuiteResult =
-                   TestSuiteResult.ofDescribeResult(describeResult);
-                 let newResult =
-                   acc.aggregatedResult
-                   |> AggregatedResult.addTestSuiteResult(testSuiteResult);
-                 notifyReporters(r =>
-                   r.onTestSuiteResult(
-                     reporterSuite,
-                     newResult,
-                     testSuiteResult,
-                   )
-                 );
-                 {...acc, aggregatedResult: newResult};
+                   {...acc, aggregatedResult: newResult};
+                 },
+               {
+                 testRunState: initialState,
+                 aggregatedResult:
+                   AggregatedResult.initialAggregatedResult(
+                     List.length(testSuites^),
+                     startTime,
+                   ),
                },
-             {
-               testRunState: initialState,
-               aggregatedResult:
-                 AggregatedResult.initialAggregatedResult(
-                   List.length(testSuites^),
-                   startTime,
-                 ),
-             },
-           );
-      TestSnapshot.removeUnusedSnapshots(result.testRunState.snapshotState^);
-      let aggregatedResultWithSnapshotStatus = {
-        ...result.aggregatedResult,
-        snapshotSummary:
-          Some(
-            TestSnapshot.getSnapshotStatus(
-              result.testRunState.snapshotState^,
+             );
+        TestSnapshot.removeUnusedSnapshots(
+          result.testRunState.snapshotState^,
+        );
+        let aggregatedResultWithSnapshotStatus = {
+          ...result.aggregatedResult,
+          snapshotSummary:
+            Some(
+              TestSnapshot.getSnapshotStatus(
+                result.testRunState.snapshotState^,
+              ),
             ),
-          ),
-      };
+        };
 
-      let success = aggregatedResultWithSnapshotStatus.numFailedTests == 0;
-      notifyReporters(r =>
-        r.onRunComplete(aggregatedResultWithSnapshotStatus)
-      );
-      if (!success) {
-        config.onTestFrameworkFailure();
-      };
-      ();
-    });
+        let success = aggregatedResultWithSnapshotStatus.numFailedTests == 0;
+        notifyReporters(r =>
+          r.onRunComplete(aggregatedResultWithSnapshotStatus)
+        );
+        if (!success) {
+          config.onTestFrameworkFailure();
+        };
+        ();
+      })
+    );
 
   let cli = () => {
     let shouldUpdateSnapshots =
