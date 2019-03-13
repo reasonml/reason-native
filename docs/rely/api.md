@@ -20,13 +20,16 @@ include Rely.Make({
 ```
 
 **Running with default CLI config:**
+
 ```reason
 /* MyLibTest.re */
 TestFramework.cli(); /* default config */
 ```
 
 ## Testing
+
 > For a full list of available matchers, visit the [Github Repository](https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers)
+
 ```reason
 /* MyFirstTest.re */
 open TestFramework;
@@ -99,14 +102,16 @@ describe("my first test suite", ({test, testSkip, describe}) => {
 
 ## Advanced Setup
 
-**Running with [custom Run Config](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RunConfig.re):**
+### Running with [Custom Run Config](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RunConfig.re)
+
 ```reason
 /* MyLibTest.re */
 let sampleRunConfig = RunConfig.initialize()
 TestFramework.run(sampleRunConfig); /* custom config */
 ```
 
-**Running with [custom reporters](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/Reporter.re)**
+### Running with [Custom Reporters](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/Reporter.re)
+
 ```reason
 let myReporter: Rely.Reporter.t = {
   onTestSuiteStart: (testSuite) => {...},
@@ -122,4 +127,92 @@ let customReporterConfig = RunConfig.initialize() |> withReporters([
 ]);
 
 TestFramework.run(customReporterConfig);
+```
+
+### Using Custom Matchers
+
+```reason
+/*UserMatchers.re*/
+open Rely.MatcherTypes;
+
+type user = {
+  name: string,
+  isLoggedIn: bool,
+};
+
+type userMatchers = {toBeLoggedIn: unit => unit};
+
+type userMatchersWithNot = {
+  toBeLoggedIn: unit => unit,
+  not: userMatchers,
+};
+
+let makeUserMatchers = (accessorPath, user, {createMatcher}) => {
+  let passMessageThunk = () => "";
+  let createLoggedInMatcher = isNot =>
+    createMatcher(
+      ({matcherHint, formatReceived, formatExpected}, actualThunk, _) => {
+      let actualUser = actualThunk();
+      let pass = actualUser.isLoggedIn == !isNot;
+      if (!pass) {
+        let failureMessage =
+          String.concat(
+            "",
+            [
+              matcherHint(
+                ~expectType=accessorPath,
+                ~matcherName=".toBeLoggedIn",
+                ~isNot,
+                ~received="user",
+                ~expected="",
+                (),
+              ),
+              "\n\n",
+              "Expected user ",
+              actualUser.name,
+              " to ",
+              isNot ? "not " : "",
+              "be logged in",
+            ],
+          );
+        (() => failureMessage, false);
+      } else {
+        (passMessageThunk, true);
+      };
+    });
+  {
+    not: {
+      toBeLoggedIn: () => createLoggedInMatcher(true, () => user, () => ()),
+    },
+    toBeLoggedIn: () => createLoggedInMatcher(false, () => user, () => ()),
+  };
+};
+
+```
+
+```reason
+/* UserTest.re*/
+open TestFramework;
+open UserMatchers;
+
+type customMatchers = {user: user => UserMatchers.userMatchersWithNot};
+
+let customMatchers = extendUtils => {
+  user: user => UserMatchers.makeUserMatchers(".ext.user", user, extendUtils),
+};
+
+let describe = extendDescribe(customMatchers);
+
+describe("A test with users", ({test}) => {
+  test("Logged in user should be logged in", ({expect}) => {
+    let bob = {name: "Bob", isLoggedIn: true};
+
+    expect.ext.user(bob).toBeLoggedIn();
+  });
+  test("Logged out user should not be logged in", ({expect}) => {
+    let alice = {name: "Alice", isLoggedIn: false};
+
+    expect.ext.user(alice).not.toBeLoggedIn();
+  });
+});
 ```
