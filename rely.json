@@ -29,6 +29,7 @@
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
+    "@opam/re": "*",
     "refmterr": "*",
     "ocaml": "^4.4.0",
     "@reason-native/pastel": "*",

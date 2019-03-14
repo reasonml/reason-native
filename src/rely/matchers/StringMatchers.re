@@ -284,7 +284,9 @@ let makeMatchers = (accessorPath, snapshotMatcher, utils) => {
         ) => {
         let actual = actualThunk();
         let regex = expectedThunk();
-        let pass = Str.string_match(Str.regexp(regex), actual, 0);
+
+        let regexp = Re.compile(Re.Pcre.re(regex));
+        let pass = Re.execp(regexp, actual);
 
         if (!isNot && !pass) {
           let message =
