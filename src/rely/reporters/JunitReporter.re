@@ -18,23 +18,22 @@ let testResultToTestCase = (testResult: Reporter.testResult) => {
       ~classname=testResult.fullName,
       ~time,
     )
-  | Failed(description, _location_opt, message) =>
+  | Failed(message, location_opt, stack) =>
     Junit.Testcase.failure(
       ~message,
-      ~typ="???",
+      ~typ="Failed Assertion",
       ~name=testResult.title,
       ~classname=testResult.fullName,
       ~time,
-      description,
+      stack,
     )
-  | Exception(_e, _location_opt, message) =>
+  | Exception(e, _location_opt, stack) =>
     Junit.Testcase.error(
-      ~message,
-      ~typ="???",
+      ~typ=Printexc.to_string(e),
       ~name=testResult.title,
       ~classname=testResult.fullName,
       ~time,
-      "description",
+      stack,
     )
   };
 };
