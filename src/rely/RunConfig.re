@@ -33,6 +33,7 @@ module RunConfig = {
 
   type reporter =
     | Default
+    | JUnit(string)
     | Custom(Reporter.t);
 
   let updateSnapshots: (bool, t) => t =
@@ -50,6 +51,7 @@ module RunConfig = {
                printString: print_string,
                flush,
              })
+           | JUnit(path) => JunitReporter.createJUnitReporter(path)
            | Custom(reporter) => reporter
            }
          );

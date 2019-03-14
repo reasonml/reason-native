@@ -1,7 +1,7 @@
 (library
    (name Rely)
    (public_name rely.lib)
-   (libraries pastel.lib file-context-printer.lib unix)
+   (libraries pastel.lib file-context-printer.lib unix junit)
 )
 (copy_files# ../../shared-src/common/*)
 ; objectPrinter lives separately from Common for now because Common has an
