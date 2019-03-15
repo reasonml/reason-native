@@ -31,7 +31,7 @@ let testResultToTestCase = (testResult: Reporter.testResult) => {
       ~name=testResult.title,
       ~classname=testResult.fullName,
       ~time,
-      stack,
+      String.concat("\n\n", [message, stack]),
     )
   | Exception(e, _location_opt, stack) =>
     Junit.Testcase.error(
