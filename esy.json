@@ -30,7 +30,8 @@
     "refmterr": "*",
     "ocaml": "^4.2.0",
     "@opam/re": "*",
-    "@opam/atdgen": "*"
+    "@opam/atdgen": "*",
+    "@opam/junit": "*"
   },
   "devDependencies": {
     "@opam/merlin": "*",

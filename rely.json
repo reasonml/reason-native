@@ -32,7 +32,8 @@
     "refmterr": "*",
     "ocaml": "^4.4.0",
     "@reason-native/pastel": "*",
-    "@reason-native/file-context-printer": "*"
+    "@reason-native/file-context-printer": "*",
+    "@opam/junit": "*"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*"
