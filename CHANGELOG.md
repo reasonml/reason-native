@@ -1,9 +1,12 @@
+# March 19, 2019
+### Rely 1.3.1
+* Fix bug where expect.string.toMatch would only check matches beginning on first character,
+changed to match behavior of Jest and also switched internal implementation from str to re
+
 # March 18, 2019
 ### Rely 1.3.0
 * jUnit reporter
 * throw error when nesting top level TestFramework.describe
-* Fix bug where expect.string.toMatch would only check matches beginning on first character,
-changed to match behavior of Jest and also switched internal implementation from str to re
 
 # March 5, 2019
 ### Pastel 0.2.1
