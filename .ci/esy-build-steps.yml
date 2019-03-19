@@ -19,7 +19,7 @@ steps:
     displayName: 'Publish JUnit file'
     inputs:
       testResultsFormat: JUnit
-      testResultsFiles: './junit.xml'
+      testResultsFiles: '**/junit.xml'
       buildPlatform: ${{ parameters.platform }}
       testRunTitle: ${{ parameters.platform }}
       failTaskOnFailedTests: true
