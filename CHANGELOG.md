@@ -1,3 +1,8 @@
+# March 18, 2019
+### Rely 1.3.0
+* jUnit reporter
+* throw error when nesting top level TestFramework.describe
+
 # March 5, 2019
 ### Pastel 0.2.1
 * Fix bug with windows powershell support
