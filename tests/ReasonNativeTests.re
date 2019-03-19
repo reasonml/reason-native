@@ -5,4 +5,5 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-Tests.TestFramework.cli();
+
+Tests.TestFramework.run(Rely.RunConfig.withReporters([Default, JUnit("./junit.xml")], Rely.RunConfig.initialize()));

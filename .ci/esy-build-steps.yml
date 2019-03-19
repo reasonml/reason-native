@@ -10,6 +10,14 @@ steps:
 
   - script: 'esy test'
     displayName: 'esy test'
+    continueOnError: true
+  
+  - task: PublishTestResults@2
+    displayName: 'Publish JUnit file'
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: './junit.xml'
+      failTaskOnFailedTests: true
 
   - script: |
       :; set -e
