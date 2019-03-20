@@ -16,6 +16,7 @@ module RunConfig = {
     updateSnapshots: bool,
     onTestFrameworkFailure: unit => unit,
     reporters: list(Reporter.t),
+    getTime: unit => Time.t,
   };
 
   let initialize = () => {
@@ -29,6 +30,7 @@ module RunConfig = {
         flush,
       }),
     ],
+    getTime: Clock.getTime,
   };
 
   type reporter =
@@ -57,6 +59,8 @@ module RunConfig = {
          );
     {...config, reporters};
   };
+
+  let internal_do_not_use_get_time = (fn, cfg: t) => {...cfg, getTime: fn};
 
   let onTestFrameworkFailure = (onTestFrameworkFailure, config) => {
     ...config,

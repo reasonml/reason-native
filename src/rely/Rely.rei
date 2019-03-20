@@ -39,6 +39,7 @@ module RunConfig: {
   let onTestFrameworkFailure: (unit => unit, t) => t;
   let updateSnapshots: (bool, t) => t;
   let withReporters: (list(reporter), t) => t;
+  let internal_do_not_use_get_time: (unit => Time.t, t) => t;
 };
 
 module MatcherUtils: {
@@ -92,7 +93,6 @@ module TestFrameworkConfig: {
   type t;
   let initialize: requiredConfiguration => t;
   let withMaxNumberOfMockCalls: (int, t) => t;
-  let internal_do_not_use_get_time: (unit => Time.t, t) => t;
 };
 
 module type FrameworkConfig = {let config: TestFrameworkConfig.t;};

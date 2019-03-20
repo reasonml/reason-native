@@ -26,17 +26,14 @@ module MakeTestFramework = (SnapshotDir: SnapshotDir) : Rely.TestFramework =>
               |> (dir => Filename.concat(dir, SnapshotDir.snapshotDir))
             ),
           projectDir: "",
+          /* evil hack, default reporter not currently exposed and time can't be
+           * passed to reporters, setting time in the future by a second (which is longer
+           * than any tests should take so that when the terminal reporter calculates
+           * how long tests took to run it gets a negative number which gets "rounded"
+           * to < 1 ms. Come either virtual modules/the next major version we can fix this,
+           * until then, I think this is the most reasonable option to ensure our
+           * snapshots are consistent */
         })
-        /* evil hack, default reporter not currently exposed and time can't be
-         * passed to reporters, setting time in the future by a second (which is longer
-         * than any tests should take so that when the terminal reporter calculates
-         * how long tests took to run it gets a negative number which gets "rounded"
-         * to < 1 ms. Come either virtual modules/the next major version we can fix this,
-         * until then, I think this is the most reasonable option to ensure our
-         * snapshots are consistent */
-        |> internal_do_not_use_get_time(() =>
-             Seconds(Unix.gettimeofday() +. 1000.)
-           )
       );
   });
 
@@ -78,7 +75,13 @@ let testRunnerOutputSnapshotTest =
               testFn(utils)
             );
             TestFramework.run(
-              Rely.RunConfig.(initialize() |> updateSnapshots(doUpdate)),
+              Rely.RunConfig.(
+                initialize()
+                |> updateSnapshots(doUpdate)
+                |> internal_do_not_use_get_time(() =>
+                     Seconds(Unix.gettimeofday() +. 1000.)
+                   )
+              ),
             );
             ();
           })
