@@ -25,6 +25,11 @@ module Describe: {
     testSkip: Test.testFn('ext),
   }
   and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
+
+  type extensionResult('ext) = {
+    describe: describeFn('ext),
+    describeSkip: describeFn('ext),
+  };
 };
 
 module RunConfig: {
@@ -78,12 +83,16 @@ module MatcherTypes: {
 
 module type TestFramework = {
   module Mock: Mock.Sig;
+  include (module type of Describe);
+  include (module type of Test);
+
   let describe: Describe.describeFn(unit);
-  let describeSkip: Describe.describeFn('a);
+  let describeSkip: Describe.describeFn(unit);
   let extendDescribe:
-    MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
+    MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
   let run: RunConfig.t => unit;
   let cli: unit => unit;
+
 };
 
 type requiredConfiguration = TestFrameworkConfig.requiredConfiguration;

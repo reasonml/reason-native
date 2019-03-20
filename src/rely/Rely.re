@@ -27,12 +27,12 @@ module Test = {
   type testFn('ext) = (string, testUtils('ext) => unit) => unit;
 };
 
-module Describe = {
-  type describeConfig = {
-    updateSnapshots: bool,
-    snapshotDir: string,
-  };
+type describeConfig = {
+  updateSnapshots: bool,
+  snapshotDir: string,
+};
 
+module Describe = {
   type describeUtils('ext) = {
     describe: describeFn('ext),
     describeSkip: describeFn('ext),
@@ -40,9 +40,12 @@ module Describe = {
     testSkip: Test.testFn('ext),
   }
   and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
-};
 
-open Describe;
+  type extensionResult('ext) = {
+    describe: describeFn('ext),
+    describeSkip: describeFn('ext),
+  };
+};
 
 exception TestAlreadyRan(string);
 exception PendingTestException(string);
@@ -54,7 +57,7 @@ type testRunState = {
 
 type runDescribeFn('ext) =
   (
-    ~config: Describe.describeConfig,
+    ~config: describeConfig,
     ~state: testRunState,
     ~describePath: TestPath.describe,
     ~skip: bool,
@@ -65,10 +68,13 @@ type runDescribeFn('ext) =
 
 module type TestFramework = {
   module Mock: Mock.Sig;
+  include (module type of Describe);
+  include (module type of Test);
+
   let describe: Describe.describeFn(unit);
-  let describeSkip: Describe.describeFn('a);
+  let describeSkip: Describe.describeFn(unit);
   let extendDescribe:
-    MatcherTypes.matchersExtensionFn('ext) => Describe.describeFn('ext);
+    MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
   let run: RunConfig.t => unit;
   let cli: unit => unit;
 };
@@ -76,6 +82,8 @@ module type TestFramework = {
 module type FrameworkConfig = {let config: TestFrameworkConfig.t;};
 
 module Make = (UserConfig: FrameworkConfig) => {
+  include Describe;
+  include Test;
   module TestSnapshot = Snapshot.Make(SnapshotIO.FileSystemSnapshotIO);
   module TestSnapshotIO = SnapshotIO.FileSystemSnapshotIO;
   module StackTrace =
@@ -139,7 +147,7 @@ module Make = (UserConfig: FrameworkConfig) => {
 
   let rec runDescribe: runDescribeFn('ext) =
     (
-      ~config: Describe.describeConfig,
+      ~config: describeConfig,
       ~state,
       ~describePath: TestPath.describe,
       ~skip: bool,
@@ -456,7 +464,8 @@ module Make = (UserConfig: FrameworkConfig) => {
     value;
   };
 
-  let describe = (name, fn) =>
+  let makeDescribeFunction = (extensionFn) => {
+    let describe = (name, fn) =>
     errorIfRunning(
       () =>
         testSuites :=
@@ -465,14 +474,17 @@ module Make = (UserConfig: FrameworkConfig) => {
             TestSuiteInternal({
               name,
               fn,
-              matchersExtensionFn: _ => (),
+              matchersExtensionFn: extensionFn,
               skip: false,
             }),
           ],
       "TestFramework.describe cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
     );
+    describe;
+  };
 
-  let describeSkip = (name, fn) =>
+  let makeDescribeSkipFunction = (extensionFn) => {
+    let describeSkip = (name, fn) =>
     errorIfRunning(
       () =>
         testSuites :=
@@ -481,26 +493,23 @@ module Make = (UserConfig: FrameworkConfig) => {
             TestSuiteInternal({
               name,
               fn,
-              /* quite unsafe, but should never be called and allows us to have
-                 describeSkip be polymorphic */
-              matchersExtensionFn: _ => Obj.magic(None),
+              matchersExtensionFn: extensionFn,
               skip: true,
             }),
           ],
       "TestFramework.describeSkip cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
     );
+    describeSkip;
+  }
 
-  let extendDescribe = (createCustomMatchers, name, fn) =>
-    testSuites :=
-      testSuites^
-      @ [
-        TestSuiteInternal({
-          name,
-          fn,
-          matchersExtensionFn: createCustomMatchers,
-          skip: false,
-        }),
-      ];
+  let describe = makeDescribeFunction(_ => ());
+  let describeSkip = makeDescribeSkipFunction(_ => ());
+
+  let extendDescribe = (createCustomMatchers) => {
+    describe: makeDescribeFunction(createCustomMatchers),
+    describeSkip: makeDescribeSkipFunction(createCustomMatchers)
+  };
+
   type testSuiteAccumulator = {
     testRunState,
     aggregatedResult: AggregatedResult.t,
