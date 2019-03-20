@@ -3,10 +3,10 @@ open Rely.Test;
 
 module ArrayMatchersTests =
   CollectionMatchersTest.Make(
-    Rely.ArrayMatchers.Array,
+    RelyInternal.ArrayMatchers.Array,
     {
       type t('a) = array('a);
-      type matchersWithNot('a) = Rely.ArrayMatchers.matchersWithNot('a);
+      type matchersWithNot('a) = RelyInternal.ArrayMatchers.matchersWithNot('a);
       let ofList = Array.of_list;
       let expectPath:
         (Rely.Test.testUtils('a), t('b)) => matchersWithNot('b) =

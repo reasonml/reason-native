@@ -38,12 +38,12 @@ let comparePeople = (p1, p2) => p1.name == p2.name && p1.age == p2.age;
 
 module Make =
        (
-         Collection: Rely.CollectionMatchers.Collection,
+         Collection: RelyInternal.CollectionMatchers.Collection,
          T:
            TestConfiguration with
              type t('a) = Collection.t('a) and
              type matchersWithNot('a) =
-               Rely.CollectionMatchers.Make(Collection).matchersWithNot('a),
+               RelyInternal.CollectionMatchers.Make(Collection).matchersWithNot('a),
        ) => {
   let collectionName = Collection.collectionName;
   describe(
