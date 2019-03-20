@@ -74,8 +74,8 @@ let gatherFormattedFailureOutput = (testResults: list(testResult)) =>
   |> List.fold_left(
        (acc, r) =>
          switch (r) {
-         | {testStatus: Skipped, _}
-         | {testStatus: Passed, _} => acc
+         | {testStatus: Skipped(_), _}
+         | {testStatus: Passed(_), _} => acc
          | {testStatus: Failed(message, loc, stack), fullName, _} =>
            let titleBullet = "• ";
            let title =

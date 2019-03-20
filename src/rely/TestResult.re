@@ -7,8 +7,8 @@
 open Common.Collections;
 
 type status =
-  | Passed
-  | Skipped
+  | Passed(option(Printexc.location))
+  | Skipped(option(Printexc.location))
   | Failed(string, option(Printexc.location), string)
   | Exception(exn, option(Printexc.location), string);
 
@@ -21,7 +21,7 @@ type testResult = {
 };
 
 type pendingTestResult = {
-  path: TestPath.test,
+  testPath: TestPath.test,
   runTest: unit => unit,
 };
 
@@ -70,10 +70,10 @@ module TestSuiteResult = {
     List.iter(
       r =>
         switch (r.testStatus) {
-        | Passed => incr(numPassedTests)
+        | Passed(_)=> incr(numPassedTests)
         | Failed(_, _, _)
         | Exception(_, _, _) => incr(numFailedTests)
-        | Skipped => incr(numSkippedTests)
+        | Skipped(_) => incr(numSkippedTests)
         },
       testResults,
     );

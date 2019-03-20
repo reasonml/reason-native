@@ -185,6 +185,8 @@ module Make = (UserConfig: FrameworkConfig) => {
 
       let testSkip = (testName, usersTest) => {
         let testPath = (testName, describePath);
+        let testFilePath = StackTrace.(getStackTrace() |> getTopLocation);
+
         let testId = Counter.next(testCounter);
         let testTitle = TestPath.testToString(testPath);
 
@@ -194,7 +196,7 @@ module Make = (UserConfig: FrameworkConfig) => {
             FinalTestResult({
               path: testPath,
               duration: None,
-              testStatus: Skipped,
+              testStatus: Skipped(testFilePath),
               title: testName,
               fullName: testTitle,
             }),
@@ -207,6 +209,8 @@ module Make = (UserConfig: FrameworkConfig) => {
       let testFn: Test.testFn('ext) =
         (testName, usersTest) => {
           let testPath = (testName, describePath);
+          let testFilePath = StackTrace.(getStackTrace() |> getTopLocation);
+
           let testId = Counter.next(testCounter);
           /* This will generate unique IDs for expects within this test call. */
           let expectCounter = Counter.create();
@@ -314,7 +318,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                       updateTestResult({
                         path: testPath,
                         duration: None,
-                        testStatus: Passed,
+                        testStatus: Passed(testFilePath),
                         title: testName,
                         fullName: testTitle,
                       })
@@ -350,11 +354,12 @@ module Make = (UserConfig: FrameworkConfig) => {
             let _ = MStringSet.add(testHash, finishedTestHashes);
             ();
           };
+
           /* Update testMap with initial Pending result. */
           let _ =
             MIntMap.set(
               testId,
-              PendingTestResult({path: testPath, runTest}),
+              PendingTestResult({testPath, runTest}),
               testMap,
             );
           ();
@@ -388,9 +393,9 @@ module Make = (UserConfig: FrameworkConfig) => {
       };
 
       let describeUtils =
-        skip ?
-          {describe: describeSkip, describeSkip, test: testSkip, testSkip} :
-          {describe: describeFn, test: testFn, describeSkip, testSkip};
+        skip
+          ? {describe: describeSkip, describeSkip, test: testSkip, testSkip}
+          : {describe: describeFn, test: testFn, describeSkip, testSkip};
 
       /* Gather all the tests */
       fn(describeUtils);
@@ -400,7 +405,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           (test, _) =>
             switch (test) {
             | PendingTestResult(t) => t.runTest()
-            | FinalTestResult({testStatus: Skipped}) => ()
+            | FinalTestResult({testStatus: Skipped(_)}) => ()
             | FinalTestResult(t) => raise(TestAlreadyRan(t.fullName))
             },
           testMap,
@@ -410,7 +415,9 @@ module Make = (UserConfig: FrameworkConfig) => {
         |> List.map(test =>
              switch (test) {
              | PendingTestResult(t) =>
-               raise(PendingTestException(t.path |> TestPath.testToString))
+               raise(
+                 PendingTestException(t.testPath |> TestPath.testToString),
+               )
              | FinalTestResult(t) => t
              }
            );

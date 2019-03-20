@@ -12,13 +12,13 @@ let testResultToTestCase = (testResult: Reporter.testResult) => {
     };
 
   switch (testResult.testStatus) {
-  | Passed =>
+  | Passed(_) =>
     Junit.Testcase.pass(
       ~name=testResult.title,
       ~classname=testResult.fullName,
       ~time,
     )
-  | Skipped =>
+  | Skipped(_) =>
     Junit.Testcase.skipped(
       ~name=testResult.title,
       ~classname=testResult.fullName,

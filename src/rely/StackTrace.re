@@ -32,7 +32,7 @@ module Make = (Config: Config) => {
   let filters =
     Config.exclude
     |> List.map(Str.regexp)
-    |> List.append([Str.regexp("StackTrace.re")]);
+    |> List.append([Str.regexp(__FILE__)]);
 
   type t = option(list(backtrace_slot));
 
@@ -95,9 +95,9 @@ module Make = (Config: Config) => {
 
   let take = (list, n) => {
     let rec takeHelper = (list, n, acc) =>
-      n <= 0 ?
-        acc :
-        (
+      n <= 0
+        ? acc
+        : (
           switch (list) {
           | [] => acc
           | [hd, ...tl] => takeHelper(tl, n - 1, acc @ [hd])
