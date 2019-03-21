@@ -464,50 +464,50 @@ module Make = (UserConfig: FrameworkConfig) => {
     value;
   };
 
-  let makeDescribeFunction = (extensionFn) => {
+  let makeDescribeFunction = extensionFn => {
     let describe = (name, fn) =>
-    errorIfRunning(
-      () =>
-        testSuites :=
-          testSuites^
-          @ [
-            TestSuiteInternal({
-              name,
-              fn,
-              matchersExtensionFn: extensionFn,
-              skip: false,
-            }),
-          ],
-      "TestFramework.describe cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
-    );
+      errorIfRunning(
+        () =>
+          testSuites :=
+            testSuites^
+            @ [
+              TestSuiteInternal({
+                name,
+                fn,
+                matchersExtensionFn: extensionFn,
+                skip: false,
+              }),
+            ],
+        "TestFramework.describe cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
+      );
     describe;
   };
 
-  let makeDescribeSkipFunction = (extensionFn) => {
+  let makeDescribeSkipFunction = extensionFn => {
     let describeSkip = (name, fn) =>
-    errorIfRunning(
-      () =>
-        testSuites :=
-          testSuites^
-          @ [
-            TestSuiteInternal({
-              name,
-              fn,
-              matchersExtensionFn: extensionFn,
-              skip: true,
-            }),
-          ],
-      "TestFramework.describeSkip cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
-    );
+      errorIfRunning(
+        () =>
+          testSuites :=
+            testSuites^
+            @ [
+              TestSuiteInternal({
+                name,
+                fn,
+                matchersExtensionFn: extensionFn,
+                skip: true,
+              }),
+            ],
+        "TestFramework.describeSkip cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
+      );
     describeSkip;
-  }
+  };
 
   let describe = makeDescribeFunction(_ => ());
   let describeSkip = makeDescribeSkipFunction(_ => ());
 
-  let extendDescribe = (createCustomMatchers) => {
+  let extendDescribe = createCustomMatchers => {
     describe: makeDescribeFunction(createCustomMatchers),
-    describeSkip: makeDescribeSkipFunction(createCustomMatchers)
+    describeSkip: makeDescribeSkipFunction(createCustomMatchers),
   };
 
   type testSuiteAccumulator = {

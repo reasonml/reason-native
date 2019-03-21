@@ -232,7 +232,7 @@ module User = {
  */
 open User;
 
-let { describe } = extendDescribe(User.Test.matchers);
+let {describe} = extendDescribe(User.Test.matchers);
 
 /* Alice is a Facebook user with string data. */
 let alice = {
@@ -317,7 +317,7 @@ module Account = {
  * necessary to combine the custom matchers and use them within the same
  * describe block.
  */
-let { describe } = extendDescribe(Account.Test.matchers)
+let {describe} = extendDescribe(Account.Test.matchers);
 
 describe("Separate type of Custom Matchers", ({test}) => {
   test("Alice tests", ({expect}) => {
@@ -352,7 +352,7 @@ module Combined = {
 };
 
 /* Use the combined matchers */
-let { describe } = extendDescribe(Combined.matchers);
+let {describe} = extendDescribe(Combined.matchers);
 
 describe("Combined Custom Matchers", ({test}) => {
   test("Alice tests", ({expect}) => {
