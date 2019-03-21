@@ -19,10 +19,12 @@ let run = (testSuites: list(TestSuite.t), reporter: Rely.Reporter.t) => {
 
   testSuites
   |> List.map(TestSuite.toFunction)
-  |> List.iter(ts => ts(
-    ~describe=TestFramework.describe,
-    ~describeSkip=TestFramework.describeSkip,
-  ));
+  |> List.iter(ts =>
+       ts(
+         ~describe=TestFramework.describe,
+         ~describeSkip=TestFramework.describeSkip,
+       )
+     );
 
   TestFramework.run(
     Rely.RunConfig.(
@@ -39,7 +41,6 @@ let runWithCustomTime = (getTime, testSuites, reporter) => {
       let config =
         Rely.TestFrameworkConfig.(
           initialize({snapshotDir: "unused", projectDir: ""})
-          |> internal_do_not_use_get_time(getTime)
         );
     });
 
@@ -57,6 +58,7 @@ let runWithCustomTime = (getTime, testSuites, reporter) => {
       initialize()
       |> withReporters([Custom(reporter)])
       |> onTestFrameworkFailure(() => ())
+      |> internal_do_not_use_get_time(getTime)
     ),
   );
 };

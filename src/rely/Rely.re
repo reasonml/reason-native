@@ -31,6 +31,7 @@ module Describe = {
   type describeConfig = {
     updateSnapshots: bool,
     snapshotDir: string,
+    getTime: unit => Time.t,
   };
 
   type describeUtils('ext) = {
@@ -149,7 +150,7 @@ module Make = (UserConfig: FrameworkConfig) => {
       open Test;
       open Describe;
       open RunConfig;
-      let startTime = UserConfig.config.getTime();
+      let startTime = config.getTime();
       let describeName = TestPath.(Describe(describePath) |> toString);
 
       let testHashes = state.testHashes;
@@ -310,7 +311,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           let runTest = () => {
             let timingInfo =
               Util.time(
-                UserConfig.config.getTime,
+                config.getTime,
                 () => {
                   let _ =
                     switch (usersTest(testUtils)) {
@@ -424,7 +425,7 @@ module Make = (UserConfig: FrameworkConfig) => {
 
       let describeResult = {
         path: describePath,
-        endTime: Some(UserConfig.config.getTime()),
+        endTime: Some(config.getTime()),
         startTime: Some(startTime),
         describeResults: childDescribeResults^,
         testResults,
@@ -516,7 +517,7 @@ module Make = (UserConfig: FrameworkConfig) => {
   let run = (config: RunConfig.t) =>
     useIsRunning(() =>
       Util.withBacktrace(() => {
-        let startTime = UserConfig.config.getTime();
+        let startTime = config.getTime();
         let notifyReporters = f => List.iter(f, config.reporters);
         let reporterTestSuites =
           testSuites^
@@ -549,6 +550,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                        ~config={
                          updateSnapshots: config.updateSnapshots,
                          snapshotDir: UserConfig.config.snapshotDir,
+                         getTime: config.getTime
                        },
                        ~state=acc.testRunState,
                        ~describePath=Terminal(name),

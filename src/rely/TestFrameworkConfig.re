@@ -16,7 +16,6 @@ module TestFrameworkConfig = {
     snapshotDir: string,
     projectDir: string,
     maxNumMockCalls: int,
-    getTime: unit => Time.t,
   };
 
   type optionalConfiguration = {getTime: unit => Time.t};
@@ -25,11 +24,9 @@ module TestFrameworkConfig = {
     config => {
       snapshotDir: config.snapshotDir,
       projectDir: config.projectDir,
-      getTime: Clock.getTime,
       maxNumMockCalls: Mock.defaultNumMaxCalls,
     };
 
-  let internal_do_not_use_get_time = (fn, cfg: t) => {...cfg, getTime: fn};
   let withMaxNumberOfMockCalls = (num: int, cfg: t) => {
     ...cfg,
     maxNumMockCalls: num,
