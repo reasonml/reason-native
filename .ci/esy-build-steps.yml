@@ -11,10 +11,10 @@ steps:
   - script: 'esy build'
     displayName: 'esy build'
 
-  - script: 'esy test'
-    displayName: 'esy test'
+  - script: 'esy test-ci'
+    displayName: 'esy test-ci'
     continueOnError: true
-  
+
   - task: PublishTestResults@2
     displayName: 'Publish JUnit file'
     inputs:
