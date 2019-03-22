@@ -1,3 +1,6 @@
+parameters:
+  platform: "macOS"
+
 steps:
   - script: 'npm install -g esy@0.5.6 --unsafe-perm'
     displayName: 'npm install -g esy'
@@ -8,8 +11,18 @@ steps:
   - script: 'esy build'
     displayName: 'esy build'
 
-  - script: 'esy test'
-    displayName: 'esy test'
+  - script: 'esy test-ci'
+    displayName: 'esy test-ci'
+    continueOnError: true
+
+  - task: PublishTestResults@2
+    displayName: 'Publish JUnit file'
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: '**/junit.xml'
+      buildPlatform: ${{ parameters.platform }}
+      testRunTitle: ${{ parameters.platform }}
+      failTaskOnFailedTests: true
 
   - script: |
       :; set -e

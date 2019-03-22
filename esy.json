@@ -22,7 +22,8 @@
   "scripts": {
     "bootstrap": "esy x bash -cx ./bootstrap.cmd",
     "all": "./scripts/run-all.sh",
-    "test": "esy x bash -cx ./scripts/test.cmd"
+    "test": "esy x bash -cx ./scripts/test-dev.cmd",
+    "test-ci": "esy x bash -cx ./scripts/test-ci.cmd"
   },
   "dependencies": {
     "@opam/dune": "*",

@@ -8,16 +8,26 @@
     console.lib
     pastel-console.lib
   )
-  (modules (:standard \ ReasonNativeTests))
+  (modules (:standard \ TestDev TestCi))
 )
 (executable
   (package tests)
-  (name ReasonNativeTests)
-  (public_name ReasonNativeTests.exe)
+  (name TestDev)
+  (public_name TestDev.exe)
   (libraries
     Tests
   )
-  (modules ReasonNativeTests)
+  (modules TestDev)
+)
+(executable
+  (package tests)
+  (name TestCi)
+  (public_name TestCi.exe)
+  (libraries
+    Tests
+  )
+  (modules TestCi)
 )
 (include_subdirs unqualified)
 (dirs :standard __tests__)
+
