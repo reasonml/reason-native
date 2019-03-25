@@ -18,31 +18,15 @@ module Mock = Mock;
 module Reporter = Reporter;
 module Time = Time;
 exception InvalidWhileRunning(string);
-
-module Test = {
-  type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
-  type testFn('ext) = (string, testUtils('ext) => unit) => unit;
-};
+module Test = Test;
+include Test;
+module Describe = Describe;
+include Describe;
 
 type describeConfig = {
   updateSnapshots: bool,
   snapshotDir: string,
   getTime: unit => Time.t,
-};
-
-module Describe = {
-  type describeUtils('ext) = {
-    describe: describeFn('ext),
-    describeSkip: describeFn('ext),
-    test: Test.testFn('ext),
-    testSkip: Test.testFn('ext),
-  }
-  and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
-
-  type extensionResult('ext) = {
-    describe: describeFn('ext),
-    describeSkip: describeFn('ext),
-  };
 };
 
 exception TestAlreadyRan(string);
@@ -399,9 +383,9 @@ module Make = (UserConfig: FrameworkConfig) => {
       };
 
       let describeUtils =
-        skip
-          ? {describe: describeSkip, describeSkip, test: testSkip, testSkip}
-          : {describe: describeFn, test: testFn, describeSkip, testSkip};
+        skip ?
+          {describe: describeSkip, describeSkip, test: testSkip, testSkip} :
+          {describe: describeFn, test: testFn, describeSkip, testSkip};
 
       /* Gather all the tests */
       fn(describeUtils);
@@ -556,7 +540,7 @@ module Make = (UserConfig: FrameworkConfig) => {
                        ~config={
                          updateSnapshots: config.updateSnapshots,
                          snapshotDir: UserConfig.config.snapshotDir,
-                         getTime: config.getTime
+                         getTime: config.getTime,
                        },
                        ~state=acc.testRunState,
                        ~describePath=Terminal(name),

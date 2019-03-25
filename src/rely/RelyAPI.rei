@@ -9,25 +9,13 @@ module Time = Time;
 module Mock = Mock;
 exception InvalidWhileRunning(string);
 
-module Test: {
-  type testUtils('ext) = {expect: DefaultMatchers.matchers('ext)};
-  type testFn('ext) = (string, testUtils('ext) => unit) => unit;
-};
+/* maintained for backwards compatibility */
+module Test = Test;
+include (module type of Test);
 
-module Describe: {
-  type describeUtils('ext) = {
-    describe: describeFn('ext),
-    describeSkip: describeFn('ext),
-    test: Test.testFn('ext),
-    testSkip: Test.testFn('ext),
-  }
-  and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
-
-  type extensionResult('ext) = {
-    describe: describeFn('ext),
-    describeSkip: describeFn('ext),
-  };
-};
+/* maintained for backwards compatibility */
+module Describe = Describe;
+include (module type of Describe);
 
 module RunConfig: {
   type reporter =
