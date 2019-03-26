@@ -20,15 +20,6 @@ type testResult = {
   fullName: string,
 };
 
-type pendingTestResult = {
-  testPath: TestPath.test,
-  runTest: unit => unit,
-};
-
-type intermediateTestResult =
-  | PendingTestResult(pendingTestResult)
-  | FinalTestResult(testResult);
-
 type describeResult = {
   testResults: list(testResult),
   path: TestPath.describe,
