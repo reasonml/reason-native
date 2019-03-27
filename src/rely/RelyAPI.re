@@ -79,58 +79,32 @@ module Make = (UserConfig: FrameworkConfig) => {
     });
 
   let testSuites: ref(list(TestSuite.t)) = ref([]);
-  let isRunning = ref(false);
-  let errorIfRunning = (f, message) =>
-    if (isRunning^) {
-      raise(InvalidWhileRunning(message));
-    } else {
-      f();
-    };
-  let useIsRunning = f => {
-    isRunning := true;
-    let value =
-      try (f()) {
-      | e =>
-        isRunning := false;
-        raise(e);
-      };
-    isRunning := false;
-    value;
-  };
   let makeDescribeFunction = extensionFn => {
     let describe = (name, fn) =>
-      errorIfRunning(
-        () =>
-          testSuites :=
-            testSuites^
-            @ [
-              TestSuiteFactory.makeTestSuite({
-                name,
-                usersDescribeFn: fn,
-                skip: false,
-                extensionFn,
-              }),
-            ],
-        "TestFramework.describe cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
-      );
+      testSuites :=
+        testSuites^
+        @ [
+          TestSuiteFactory.makeTestSuite({
+            name,
+            usersDescribeFn: fn,
+            skip: false,
+            extensionFn,
+          }),
+        ];
     describe;
   };
   let makeDescribeSkipFunction = extensionFn => {
     let describeSkip = (name, fn) =>
-      errorIfRunning(
-        () =>
-          testSuites :=
-            testSuites^
-            @ [
-              TestSuiteFactory.makeTestSuite({
-                name,
-                usersDescribeFn: fn,
-                skip: true,
-                extensionFn,
-              }),
-            ],
-        "TestFramework.describeSkip cannot be nested, instead use the describe supplied by the parent describe block, e.g. describe(\"parent describe\", {test, describe} => { ... });",
-      );
+      testSuites :=
+        testSuites^
+        @ [
+          TestSuiteFactory.makeTestSuite({
+            name,
+            usersDescribeFn: fn,
+            skip: true,
+            extensionFn,
+          }),
+        ];
     describeSkip;
   };
   let describe = makeDescribeFunction(_ => ());
@@ -141,83 +115,27 @@ module Make = (UserConfig: FrameworkConfig) => {
   };
 
   let run = (config: RunConfig.t) =>
-    useIsRunning(() =>
-      Util.withBacktrace(() => {
-        module RunnerConfig = {
-          let getTime = config.getTime;
-          let snapshotDir = UserConfig.config.snapshotDir;
-          let testHashes = MStringSet.empty();
-          let updateSnapshots = config.updateSnapshots;
-          let snapshotState =
-            ref(
-              TestSnapshot.initializeState(
-                ~snapshotDir=UserConfig.config.snapshotDir,
-                ~updateSnapshots=config.updateSnapshots,
-              ),
-            );
-          module SnapshotIO = TestSnapshotIO;
-          module StackTrace = StackTrace;
-          module Mock = Mock;
-          let maxNumStackFrames = 3;
-        };
-        module Runner = TestSuiteRunner.Make(RunnerConfig);
-        let startTime = config.getTime();
-        let notifyReporters = f => List.iter(f, config.reporters);
-        let reporterTestSuites =
-          testSuites^
-          |> List.map(s =>
-               switch (s) {
-               | TestSuite({name}, _, _) => {name: name}
-               }
-             );
-        notifyReporters(r => r.onRunStart({testSuites: reporterTestSuites}));
-
-        let result =
-          testSuites^
-          |> List.fold_left(
-               (prevAggregatedResult, testSuite) => {
-                 let TestSuite({name}, _, _) = testSuite;
-                 let reporterSuite = {name: name};
-                 notifyReporters(r => r.onTestSuiteStart(reporterSuite));
-                 let describeResult = Runner.run(testSuite);
-                 let testSuiteResult =
-                   TestSuiteResult.ofDescribeResult(describeResult);
-                 let newResult =
-                   prevAggregatedResult
-                   |> AggregatedResult.addTestSuiteResult(testSuiteResult);
-                 notifyReporters(r =>
-                   r.onTestSuiteResult(
-                     reporterSuite,
-                     newResult,
-                     testSuiteResult,
-                   )
-                 );
-                 newResult;
-               },
-               AggregatedResult.initialAggregatedResult(
-                 List.length(testSuites^),
-                 startTime,
-               ),
-             );
-        TestSnapshot.removeUnusedSnapshots(RunnerConfig.snapshotState^);
-        let aggregatedResultWithSnapshotStatus = {
-          ...result,
-          snapshotSummary:
-            Some(
-              TestSnapshot.getSnapshotStatus(RunnerConfig.snapshotState^),
+    Util.withBacktrace(() => {
+      module RunnerConfig = {
+        let getTime = config.getTime;
+        let snapshotDir = UserConfig.config.snapshotDir;
+        let testHashes = MStringSet.empty();
+        let updateSnapshots = config.updateSnapshots;
+        let snapshotState =
+          ref(
+            TestSnapshot.initializeState(
+              ~snapshotDir=UserConfig.config.snapshotDir,
+              ~updateSnapshots=config.updateSnapshots,
             ),
-        };
-
-        let success = aggregatedResultWithSnapshotStatus.numFailedTests == 0;
-        notifyReporters(r =>
-          r.onRunComplete(aggregatedResultWithSnapshotStatus)
-        );
-        if (!success) {
-          config.onTestFrameworkFailure();
-        };
-        ();
-      })
-    );
+          );
+        module SnapshotIO = TestSnapshotIO;
+        module StackTrace = StackTrace;
+        module Mock = Mock;
+        let maxNumStackFrames = 3;
+      };
+      module Runner = TestSuiteRunner.Make(RunnerConfig);
+      Runner.runTestSuites(testSuites^, config);
+    });
 
   let cli = () => {
     let shouldUpdateSnapshots =

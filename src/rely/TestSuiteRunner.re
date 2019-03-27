@@ -11,6 +11,8 @@ open MatcherUtils;
 open Test;
 open Describe;
 open Util;
+open RunConfig;
+open Reporter;
 exception PendingTestException(string);
 
 module type TestSuiteRunnerConfig = {
@@ -257,4 +259,51 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       let testSuitePath = TestPath.Terminal(name);
       runDescribe(testSuitePath, tests, describes, extension, skip);
     };
+  let runTestSuites = (testSuites: list(TestSuite.t), config: RunConfig.t) => {
+    let startTime = config.getTime();
+    let notifyReporters = f => List.iter(f, config.reporters);
+    let reporterTestSuites =
+      testSuites
+      |> List.map(s =>
+           switch (s) {
+           | TestSuite({name}, _, _) => {name: name}
+           }
+         );
+    notifyReporters(r => r.onRunStart({testSuites: reporterTestSuites}));
+    let result =
+      testSuites
+      |> List.fold_left(
+           (prevAggregatedResult, testSuite) => {
+             let TestSuite({name}, _, _) = testSuite;
+             let reporterSuite = {name: name};
+             notifyReporters(r => r.onTestSuiteStart(reporterSuite));
+             let describeResult = run(testSuite);
+             let testSuiteResult =
+               TestSuiteResult.ofDescribeResult(describeResult);
+             let newResult =
+               prevAggregatedResult
+               |> AggregatedResult.addTestSuiteResult(testSuiteResult);
+             notifyReporters(r =>
+               r.onTestSuiteResult(reporterSuite, newResult, testSuiteResult)
+             );
+             newResult;
+           },
+           AggregatedResult.initialAggregatedResult(
+             List.length(testSuites),
+             startTime,
+           ),
+         );
+    TestSnapshot.removeUnusedSnapshots(Config.snapshotState^);
+    let aggregatedResultWithSnapshotStatus = {
+      ...result,
+      snapshotSummary:
+        Some(TestSnapshot.getSnapshotStatus(Config.snapshotState^)),
+    };
+    let success = aggregatedResultWithSnapshotStatus.numFailedTests == 0;
+    notifyReporters(r => r.onRunComplete(aggregatedResultWithSnapshotStatus));
+    if (!success) {
+      config.onTestFrameworkFailure();
+    };
+    ();
+  };
 };
