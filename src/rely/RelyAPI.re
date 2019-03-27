@@ -75,6 +75,7 @@ module Make = (UserConfig: FrameworkConfig) => {
   module TestSuiteFactory =
     TestSuite.Factory({
       module StackTrace = StackTrace;
+      module Mock = Mock;
     });
 
   let testSuites: ref(list(TestSuite.t)) = ref([]);
@@ -166,7 +167,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           testSuites^
           |> List.map(s =>
                switch (s) {
-               | TestSuite({name}, _) => {name: name}
+               | TestSuite({name}, _, _) => {name: name}
                }
              );
         notifyReporters(r => r.onRunStart({testSuites: reporterTestSuites}));
@@ -175,7 +176,7 @@ module Make = (UserConfig: FrameworkConfig) => {
           testSuites^
           |> List.fold_left(
                (prevAggregatedResult, testSuite) => {
-                 let TestSuite({name}, _) = testSuite;
+                 let TestSuite({name}, _, _) = testSuite;
                  let reporterSuite = {name: name};
                  notifyReporters(r => r.onTestSuiteStart(reporterSuite));
                  let describeResult = Runner.run(testSuite);

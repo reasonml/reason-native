@@ -31,11 +31,20 @@ type describeInput('ext) = {
   extensionFn: MatcherTypes.matchersExtensionFn('ext),
 };
 
+module type TestFrameworkContext = {
+  module Mock: Mock.Sig;
+  module StackTrace: StackTrace.StackTrace;
+};
+
 type t =
-  | TestSuite(describeRecord('ext), MatcherTypes.matchersExtensionFn('ext))
+  | TestSuite(
+      describeRecord('ext),
+      MatcherTypes.matchersExtensionFn('ext),
+      (module TestFrameworkContext),
+    )
     : t;
 
-module Factory = (Config: {module StackTrace: StackTrace.StackTrace;}) => {
+module Factory = (Context: TestFrameworkContext) => {
   let rec makeDescribeRecord:
     (
       ~name: string,
@@ -53,11 +62,11 @@ module Factory = (Config: {module StackTrace: StackTrace.StackTrace;}) => {
         describes :=
           describes^ @ [makeDescribeRecord(name, describeFn, true)];
       let test = (name, usersTest) => {
-        let location = Config.StackTrace.(getStackTrace() |> getTopLocation);
+        let location = Context.StackTrace.(getStackTrace() |> getTopLocation);
         tests := tests^ @ [Test({name, location, usersTest})];
       };
       let testSkip = (name, usersTest) => {
-        let location = Config.StackTrace.(getStackTrace() |> getTopLocation);
+        let location = Context.StackTrace.(getStackTrace() |> getTopLocation);
         tests := tests^ @ [Skipped({name, location})];
       };
       usersDescribeFn({describe, test, describeSkip, testSkip});
@@ -68,5 +77,6 @@ module Factory = (Config: {module StackTrace: StackTrace.StackTrace;}) => {
     TestSuite(
       makeDescribeRecord(~name, ~usersDescribeFn, ~skip),
       extensionFn,
+      (module Context),
     );
 };
