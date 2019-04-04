@@ -202,7 +202,7 @@ let type_SignatureItemMismatch = (err, cachedContent, _) => {
   get_match_maybe(sigMismatchR, err)
   |>? (
     rest => {
-      let missingItemsR = {|[\s\S]*?(The [a-zA-Z]+ `[a-z_][a-zA-Z0-9_\$\']+' is required but not provided[\s\S]*)|};
+      let missingItemsR = {|[\s\S]*?(The [a-zA-Z]+ `[a-zA-Z0-9_\$\']+' is required but not provided[\s\S]*)|};
       let missingItemsMatch = get_match_maybe(missingItemsR, rest);
       let wrongValMatch = get_match_maybe(wrongValR, rest);
       let wrongTypeMatch = get_match_maybe(wrongTypeR, rest);
