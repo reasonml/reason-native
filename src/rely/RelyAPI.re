@@ -51,8 +51,6 @@ module type FrameworkConfig = {let config: TestFrameworkConfig.t;};
 module Make = (UserConfig: FrameworkConfig) => {
   include Describe;
   include Test;
-  module TestSnapshot = Snapshot.Make(SnapshotIO.FileSystemSnapshotIO);
-  module TestSnapshotIO = SnapshotIO.FileSystemSnapshotIO;
   module StackTrace =
     StackTrace.Make({
       let baseDir = UserConfig.config.projectDir;
@@ -76,6 +74,11 @@ module Make = (UserConfig: FrameworkConfig) => {
     TestSuite.Factory({
       module StackTrace = StackTrace;
       module Mock = Mock;
+      module Snapshot =
+        FileSystemSnapshot.Make({
+          let snapshotDir = UserConfig.config.snapshotDir;
+          module IO = FileSystemSnapshotIO;
+        });
     });
 
   let testSuites: ref(list(TestSuite.t)) = ref([]);
@@ -118,20 +121,8 @@ module Make = (UserConfig: FrameworkConfig) => {
     Util.withBacktrace(() => {
       module RunnerConfig = {
         let getTime = config.getTime;
-        let snapshotDir = UserConfig.config.snapshotDir;
-        let testHashes = MStringSet.empty();
-        let updateSnapshots = config.updateSnapshots;
-        let snapshotState =
-          ref(
-            TestSnapshot.initializeState(
-              ~snapshotDir=UserConfig.config.snapshotDir,
-              ~updateSnapshots=config.updateSnapshots,
-            ),
-          );
-        module SnapshotIO = TestSnapshotIO;
-        module StackTrace = StackTrace;
-        module Mock = Mock;
         let maxNumStackFrames = 3;
+        let updateSnapshots = config.updateSnapshots;
       };
       module Runner = TestSuiteRunner.Make(RunnerConfig);
       Runner.runTestSuites(testSuites^, config);

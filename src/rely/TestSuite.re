@@ -34,6 +34,7 @@ type describeInput('ext) = {
 module type TestFrameworkContext = {
   module Mock: Mock.Sig;
   module StackTrace: StackTrace.StackTrace;
+  module Snapshot: Snapshot.Sig;
 };
 
 type t =

@@ -14,16 +14,16 @@ open Util;
 open RunConfig;
 open Reporter;
 exception PendingTestException(string);
+module SnapshotModuleSet =
+  Set.Make({
+    type t = (module Snapshot.Sig);
+    let compare = (a, b) => a === b ? 0 : (-1);
+  });
 
 module type TestSuiteRunnerConfig = {
   let getTime: unit => Time.t;
   let updateSnapshots: bool;
   let maxNumStackFrames: int;
-
-  let testHashes: MStringSet.t;
-  let snapshotState: ref(Snapshot.state);
-  let snapshotDir: string;
-  module SnapshotIO: SnapshotIO.SnapshotIO;
 };
 
 let sanitizeName = (name: string): string => {
@@ -44,92 +44,42 @@ let sanitizeName = (name: string): string => {
 };
 
 module Make = (Config: TestSuiteRunnerConfig) => {
-  module TestSnapshot = Snapshot.Make(Config.SnapshotIO);
   let run: TestSuite.t => TestResult.describeResult =
     (TestSuite({name, tests, describes, skip}, extension, (module Context))) => {
       module DefaultMatchers = DefaultMatchers.Make(Context.Mock);
-      let makeMakeSnapshotMatchers = (describeFileName, testHash, testTitle) => {
-        let snapshotPrefix =
-          Filename.concat(Config.snapshotDir, describeFileName);
+      let makeMakeSnapshotMatchers = (describeFileName, testPath, testId) => {
         let expectCounter = Counter.create();
         module SnapshotMatchers =
-          SnapshotMatchers.Make(
-            {
-              let markSnapshotUsed = (snapshot: string) => {
-                Config.snapshotState :=
-                  TestSnapshot.markSnapshotUsed(
-                    snapshot,
-                    Config.snapshotState^,
-                  );
-                ();
-              };
-              let markSnapshotUpdated = (snapshot: string) =>
-                Config.snapshotState :=
-                  TestSnapshot.markSnapshotUpdated(
-                    snapshot,
-                    Config.snapshotState^,
-                  );
-              let testHash = testHash;
-              let genExpectID = () => Counter.next(expectCounter);
-              let testTitle = testTitle;
-              let updateSnapshots = Config.updateSnapshots;
-              let snapshotPrefix = snapshotPrefix;
-            },
-            Config.SnapshotIO,
-          );
+          SnapshotMatchers.Make({
+            module Snapshot = Context.Snapshot;
+            let testPath = testPath;
+            let genExpectID = () => Counter.next(expectCounter);
+            let updateSnapshots = Config.updateSnapshots;
+            let testId = testId;
+          });
         SnapshotMatchers.makeMatchers;
-      };
-
-      let getTestHash = testPath => {
-        let testHash = ref(None);
-        let i = ref(0);
-        let break = ref(false);
-        while (! break^ && i^ < 10000) {
-          let testHashAttempt = TestPath.hash(Test(testPath), i^);
-          switch (testHash^) {
-          | None =>
-            if (!MStringSet.has(testHashAttempt, Config.testHashes)) {
-              break := true;
-              testHash := Some(testHashAttempt);
-              let _ = MStringSet.add(testHashAttempt, Config.testHashes);
-              ();
-            }
-          | _ => ()
-          };
-          incr(i);
-        };
-        let testHash =
-          switch (testHash^) {
-          | None => "hash_conflict"
-          | Some(testHash) => testHash
-          };
-        testHash;
       };
 
       let executeTest =
           (describePath, name, location, usersTest, extensionFn, testId) => {
         let testStatus = ref(None);
         let testPath = (name, describePath);
-        let testTitle = TestPath.testToString(testPath);
         let describeFileName =
           TestPath.(Describe(describePath) |> toString) |> sanitizeName;
+        let testId = Context.Snapshot.getNewId(testPath);
 
         let updateTestStatus = status =>
           switch (testStatus^) {
           | None => testStatus := Some(status)
           | _ => ()
           };
-        let testHash = getTestHash(testPath);
         let createMatcher = matcherConfig => {
           let matcher = (actualThunk, expectedThunk) => {
             switch (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {
             | (messageThunk, true) => ()
             | (messageThunk, false) =>
-              Config.snapshotState :=
-                TestSnapshot.markSnapshotsAsCheckedForTest(
-                  testTitle,
-                  Config.snapshotState^,
-                );
+              Context.Snapshot.markSnapshotsAsCheckedForTest(testId);
+
               let stackTrace = Context.StackTrace.getStackTrace();
               let location = Context.StackTrace.getTopLocation(stackTrace);
               let stack =
@@ -148,7 +98,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
         };
 
         let makeSnapshotMatchers =
-          makeMakeSnapshotMatchers(describeFileName, testHash, testTitle);
+          makeMakeSnapshotMatchers(describeFileName, testPath, testId);
 
         let testUtils = {
           expect:
@@ -176,11 +126,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
                       exceptionTrace,
                       Config.maxNumStackFrames,
                     );
-                  Config.snapshotState :=
-                    TestSnapshot.markSnapshotsAsCheckedForTest(
-                      testTitle,
-                      Config.snapshotState^,
-                    );
+                  Context.Snapshot.markSnapshotsAsCheckedForTest(testId);
                   updateTestStatus(Exception(e, location, stackTrace));
                 };
               ();
@@ -259,6 +205,48 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       let testSuitePath = TestPath.Terminal(name);
       runDescribe(testSuitePath, tests, describes, extension, skip);
     };
+
+  let getSnapshotResult = testSuites => {
+    let snapshotModules: list(module Snapshot.Sig) =
+      List.map(
+        (TestSuite(_, _, (module Context))) => {
+          let foo: module Snapshot.Sig = (module Context.Snapshot);
+          foo;
+        },
+        testSuites,
+      );
+
+    let uniqueModules = SnapshotModuleSet.fromList(snapshotModules);
+
+    let _ =
+      SnapshotModuleSet.forEach(
+        (module SnapshotModule: Snapshot.Sig) =>
+          SnapshotModule.removeUnusedSnapshots(),
+        uniqueModules,
+      );
+
+    let aggregateSnapshotResult =
+      SnapshotModuleSet.reduce(
+        (acc, module SnapshotModule: Snapshot.Sig) => {
+          let snapshotSummary = SnapshotModule.getSnapshotStatus();
+          AggregatedResult.{
+            numCreatedSnapshots:
+              acc.numCreatedSnapshots + snapshotSummary.numCreatedSnapshots,
+            numRemovedSnapshots:
+              acc.numRemovedSnapshots + snapshotSummary.numRemovedSnapshots,
+            numUpdatedSnapshots:
+              acc.numUpdatedSnapshots + snapshotSummary.numUpdatedSnapshots,
+          };
+        },
+        {
+          numCreatedSnapshots: 0,
+          numRemovedSnapshots: 0,
+          numUpdatedSnapshots: 0,
+        },
+        uniqueModules,
+      );
+    aggregateSnapshotResult;
+  };
   let runTestSuites = (testSuites: list(TestSuite.t), config: RunConfig.t) => {
     let startTime = config.getTime();
     let notifyReporters = f => List.iter(f, config.reporters);
@@ -293,11 +281,11 @@ module Make = (Config: TestSuiteRunnerConfig) => {
              startTime,
            ),
          );
-    TestSnapshot.removeUnusedSnapshots(Config.snapshotState^);
+    let snapshotSummary = getSnapshotResult(testSuites);
+
     let aggregatedResultWithSnapshotStatus = {
       ...result,
-      snapshotSummary:
-        Some(TestSnapshot.getSnapshotStatus(Config.snapshotState^)),
+      snapshotSummary: Some(snapshotSummary),
     };
     let success = aggregatedResultWithSnapshotStatus.numFailedTests == 0;
     notifyReporters(r => r.onRunComplete(aggregatedResultWithSnapshotStatus));
