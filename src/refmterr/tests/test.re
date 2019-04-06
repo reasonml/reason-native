@@ -14,7 +14,7 @@ let folders = [
   /* first one is special. See the actual tests loop below */
   ("specialTests", 4, [], []),
   /* `textTests` are simply recorded raw texts ran through berror. */
-  ("textTests", 1, [], []),
+  ("textTests", 2, [], []),
   ("noError", 1, [], []),
   ("prettyPrint", 2, [], []),
   ("1_bad_file_name", 1, [], []),
