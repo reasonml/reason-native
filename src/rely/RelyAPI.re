@@ -33,6 +33,21 @@ type describeConfig = {
 exception TestAlreadyRan(string);
 exception PendingTestException(string);
 
+type testLibrary = list(TestSuite.t);
+type combineResult = {
+  run: RunConfig.t => unit,
+  cli: unit => unit,
+  testLibrary,
+};
+
+let combine = libraries => {
+  let testLibrary = List.flatten(libraries);
+  let run = config => TestSuiteRunner.run(config, testLibrary);
+  let cli = () => TestSuiteRunner.cli(testLibrary);
+
+  {testLibrary, run, cli};
+};
+
 module type TestFramework = {
   module Mock: Mock.Sig;
   include (module type of Describe);
@@ -44,6 +59,7 @@ module type TestFramework = {
     MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
   let run: RunConfig.t => unit;
   let cli: unit => unit;
+  let toLibrary: unit => testLibrary;
 };
 
 module type FrameworkConfig = {let config: TestFrameworkConfig.t;};
@@ -117,22 +133,9 @@ module Make = (UserConfig: FrameworkConfig) => {
     describeSkip: makeDescribeSkipFunction(createCustomMatchers),
   };
 
-  let run = (config: RunConfig.t) =>
-    Util.withBacktrace(() => {
-      module RunnerConfig = {
-        let getTime = config.getTime;
-        let maxNumStackFrames = 3;
-        let updateSnapshots = config.updateSnapshots;
-      };
-      module Runner = TestSuiteRunner.Make(RunnerConfig);
-      Runner.runTestSuites(testSuites^, config);
-    });
+  let run = (config: RunConfig.t) => TestSuiteRunner.run(config, testSuites^);
 
-  let cli = () => {
-    let shouldUpdateSnapshots =
-      Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
-    let config =
-      RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
-    run(config);
-  };
+  let cli = () => TestSuiteRunner.cli(testSuites^);
+
+  let toLibrary = () => testSuites^;
 };

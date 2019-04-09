@@ -67,6 +67,15 @@ module MatcherTypes: {
   type matchersExtensionFn('ext) = extendUtils => 'ext;
 };
 
+type testLibrary;
+type combineResult = {
+  run: RunConfig.t => unit,
+  cli: unit => unit,
+  testLibrary,
+};
+
+let combine: list(testLibrary) => combineResult;
+
 module type TestFramework = {
   module Mock: Mock.Sig;
   include (module type of Describe);
@@ -78,6 +87,7 @@ module type TestFramework = {
     MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
   let run: RunConfig.t => unit;
   let cli: unit => unit;
+  let toLibrary: unit => testLibrary;
 };
 
 type requiredConfiguration = TestFrameworkConfig.requiredConfiguration;
