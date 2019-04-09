@@ -16,8 +16,9 @@ open Reporter;
 exception PendingTestException(string);
 module SnapshotModuleSet =
   Set.Make({
-    type t = (module Snapshot.Sig);
-    let compare = (a, b) => a === b ? 0 : (-1);
+    type t = (TestSuite.contextId, module Snapshot.Sig);
+    let compare = ((contextId1, module1), (contextId2, module2)) =>
+      Pervasives.compare(contextId1, contextId2);
   });
 
 module type TestSuiteRunnerConfig = {
@@ -45,7 +46,13 @@ let sanitizeName = (name: string): string => {
 
 module Make = (Config: TestSuiteRunnerConfig) => {
   let run: TestSuite.t => TestResult.describeResult =
-    (TestSuite({name, tests, describes, skip}, extension, (module Context))) => {
+    (
+      TestSuite(
+        {name, tests, describes, skip},
+        extension,
+        (_, (module Context)),
+      ),
+    ) => {
       module DefaultMatchers = DefaultMatchers.Make(Context.Mock);
       let makeMakeSnapshotMatchers = (describeFileName, testPath, testId) => {
         let expectCounter = Counter.create();
@@ -207,26 +214,32 @@ module Make = (Config: TestSuiteRunnerConfig) => {
     };
 
   let getSnapshotResult = testSuites => {
-    let snapshotModules: list(module Snapshot.Sig) =
+    let snapshotModules: list((TestSuite.contextId, module Snapshot.Sig)) =
       List.map(
-        (TestSuite(_, _, (module Context))) => {
-          let foo: module Snapshot.Sig = (module Context.Snapshot);
-          foo;
+        (TestSuite(_, _, (id, (module Context)))) => {
+          let snapshotModule: module Snapshot.Sig = (module Context.Snapshot);
+          (id, snapshotModule);
         },
         testSuites,
       );
 
-    let uniqueModules = SnapshotModuleSet.fromList(snapshotModules);
+    let uniqueModules =
+      SnapshotModuleSet.fromList(snapshotModules)
+      |> SnapshotModuleSet.toList
+      |> List.map(((_, module SnapshotModule: Snapshot.Sig)) => {
+           let snapshotModule: module Snapshot.Sig = (module SnapshotModule);
+           snapshotModule;
+         });
 
     let _ =
-      SnapshotModuleSet.forEach(
+      List.iter(
         (module SnapshotModule: Snapshot.Sig) =>
           SnapshotModule.removeUnusedSnapshots(),
         uniqueModules,
       );
 
     let aggregateSnapshotResult =
-      SnapshotModuleSet.reduce(
+      List.fold_left(
         (acc, module SnapshotModule: Snapshot.Sig) => {
           let snapshotSummary = SnapshotModule.getSnapshotStatus();
           AggregatedResult.{

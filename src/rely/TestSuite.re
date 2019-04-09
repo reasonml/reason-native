@@ -37,15 +37,25 @@ module type TestFrameworkContext = {
   module Snapshot: Snapshot.Sig;
 };
 
+type contextId = int;
+type context = (contextId, (module TestFrameworkContext));
+
 type t =
   | TestSuite(
       describeRecord('ext),
       MatcherTypes.matchersExtensionFn('ext),
-      (module TestFrameworkContext),
+      context,
     )
     : t;
 
+let contextCounter = ref(0);
+let getNewContextId: unit => contextId = () => {
+  incr(contextCounter);
+  contextCounter^;
+};
+
 module Factory = (Context: TestFrameworkContext) => {
+  let contextId = getNewContextId();
   let rec makeDescribeRecord:
     (
       ~name: string,
@@ -78,6 +88,6 @@ module Factory = (Context: TestFrameworkContext) => {
     TestSuite(
       makeDescribeRecord(~name, ~usersDescribeFn, ~skip),
       extensionFn,
-      (module Context),
+      (contextId, (module Context)),
     );
 };
