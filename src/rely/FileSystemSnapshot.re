@@ -41,6 +41,10 @@ module Make: (Config) => Snapshot.Sig =
       index: int,
     };
 
+    if (!Config.IO.existsFile(Config.snapshotDir)) {
+      Config.IO.mkdirp(Config.snapshotDir);
+    };
+
     let initialSnapshots = Config.snapshotDir |> Config.IO.readSnapshotNames;
 
     let state =
@@ -149,10 +153,6 @@ module Make: (Config) => Snapshot.Sig =
         ".",
         [snapshotPrefix, testHash, string_of_int(index), "snapshot"],
       );
-    };
-
-    if (!Config.IO.existsFile(Config.snapshotDir)) {
-      Config.IO.mkdirp(Config.snapshotDir);
     };
 
     let getState = () => state^;
