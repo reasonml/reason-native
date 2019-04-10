@@ -4,7 +4,7 @@
  * @emails oncall+ads_front_end_infra
  */;
 
-let uriSep = "/";
+let sep = "/";
 let homeChar = "~";
 
 type absolute;
@@ -24,7 +24,7 @@ type base('kind) =
   | Rel(relFrom, upDirs): base(relative);
 /**
  * Internal representation of paths. The list of strings represents all
- * subdirectoreis after the base (in reverse order - head of the list is the
+ * subdirectories after the base (in reverse order - head of the list is the
  * rightmost segment of the path).
  */
 type t('kind) = (base('kind), list(string));
@@ -46,18 +46,18 @@ let toString: type kind. t(kind) => string =
         | None => ""
         | Some(txt) => txt
         };
-      lbl ++ "/" ++ (lst |> List.rev |> String.concat(uriSep));
+      lbl ++ "/" ++ (lst |> List.rev |> String.concat(sep));
     | (Rel(w, i), lst) =>
       let init =
         switch (w) {
-        | Any => "./"
-        | Home => "~/"
+        | Any => "." ++ sep
+        | Home => "~" ++ sep
         };
       let rest =
         lst
         |> List.rev
         |> List.append(Array.to_list(Array.init(i, i => "..")))
-        |> String.concat(uriSep);
+        |> String.concat(sep);
       init ++ rest;
     };
 
@@ -91,9 +91,9 @@ let makeToken = s =>
 let lex = s => {
   let s = String.trim(s);
   let len = String.length(s);
-  let r = ref([]);
+  let revTokens = {contents: []};
   /* j is what you are all caught up to */
-  let j = ref(-1);
+  let j = {contents: (-1)};
   let prevEsc = {contents: false};
   for (i in 0 to len - 1) {
     let ch = String.unsafe_get(s, i);
@@ -101,19 +101,19 @@ let lex = s => {
       if (j.contents !== i - 1) {
         let tok =
           makeToken(String.sub(s, j.contents + 1, i - j.contents - 1));
-        r.contents = [tok, ...r.contents];
+        revTokens.contents = [tok, ...revTokens.contents];
       };
-      r.contents = [SLASH, ...r.contents];
+      revTokens.contents = [SLASH, ...revTokens.contents];
       j.contents = i;
     };
     prevEsc.contents = ch === '\\' && !prevEsc.contents;
   };
   let rev =
     j.contents === len - 1 ?
-      r.contents :
+      revTokens.contents :
       [
         makeToken(String.sub(s, j.contents + 1, len - 1 - j.contents)),
-        ...r.contents,
+        ...revTokens.contents,
       ];
   List.rev(rev);
 };
@@ -264,7 +264,7 @@ let sub: type k1. (string, t(k1)) => t(k1) =
  * Append functions always follow their "natural" left/right ordering,
  * regardless of t-first/last.
  *
- * The following pairs are equivalent but not taht `append` is always safe.
+ * The following pairs are equivalent but note that `append` is always safe.
  *
  *     Path.append(Path.root, "foo");
  *     Option.getUnsafe(Path.absolute("/foo"));

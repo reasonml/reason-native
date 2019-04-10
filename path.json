@@ -20,7 +20,6 @@
     "build": "dune build -p path"
   },
   "scripts": {
-    "test": "esy x TestPath.exe",
     "release": "node ./scripts/esy-prepublish.js path.json"
   },
   "dependencies": {
