@@ -3,6 +3,7 @@
   ; IMPORTANT: -linkall flag is required to include all tests.
   (ocamlopt_flags -linkall -g)
   (libraries
+    path.lib
     rely.lib
     rely.internal
     pastel.lib

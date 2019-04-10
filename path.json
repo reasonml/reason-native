@@ -1,0 +1,36 @@
+{
+  "name": "@reason-native/path",
+  "version": "0.0.1",
+  "description": "Reason Native file paths",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/path"
+  },
+  "license": "MIT",
+  "keywords": [
+    "path",
+    "filesystem",
+    "directories",
+    "reasonml",
+    "reason",
+    "ocaml",
+    "esy"
+  ],
+  "esy": {
+    "build": "dune build -p path"
+  },
+  "scripts": {
+    "test": "esy x TestPath.exe",
+    "release": "node ./scripts/esy-prepublish.js path.json"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "ocaml": "^4.2.0"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*",
+    "ocaml": "~4.6.0",
+    "@reason-native/rely": "*"
+  }
+}
