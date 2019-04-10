@@ -37,23 +37,35 @@ let parseFromStdin =
       /* the beginning of a new error! */
       reverseErrBuffer.contents = [line]
     /* don't parse it yet. Maybe the error's continuing on the next line */
-    | (_, true, _, _) =>
+    | ([_, ..._], true, _, _) =>
       /* we have a file match, AND the current reverseErrBuffer isn't empty? We'll
          just assume here that this is also the beginning of a new error, unless
          a single error might span many (non-indented, god forbid) fileNames.
          Print out the current (previous) error and keep accumulating */
       let bufferText = revBufferToStr(reverseErrBuffer.contents);
-      parse(~customLogOutputProcessors, ~customErrorParsers, bufferText)
+      /*
+       * Since this is a common case of mistakenly considering too many
+       * previous lines as being part of the error region, we'll process the
+       * log output here on the way out.
+       */
+      parse(~customErrorParsers, bufferText)
       |> prettyPrintParsedResult(~originalRevLines=reverseErrBuffer.contents)
       |> revBufferToStr
-      |> print_endline;
+      |> (
+        s =>
+          print_endline(
+            TerminalReporter.processLogOutput(~customLogOutputProcessors, s),
+          )
+      );
       reverseErrBuffer.contents = [line];
+
     /* buffer not empty, and we're seeing an error/indentation line. This is
-       the continuation of a currently streaming error/warning */
-    | (_, _, _, true)
-    | (_, _, true, _) =>
+       possibly the continuation of a currently streaming error/warning */
+    | ([_, ..._], _, _, true)
+    | ([_, ..._], _, true, _) =>
       reverseErrBuffer.contents = [line, ...reverseErrBuffer.contents]
-    | (_, false, false, false) =>
+    /* The case of ([], false, false, false) was already covered */
+    | ([_, ..._], false, false, false) =>
       /* woah this case was previously forgotten but caught by the
              compiler. Man I don't ever wanna write an if-else anymore
              buffer not empty, and no indentation and not an error/file
@@ -72,7 +84,7 @@ let parseFromStdin =
         reverseErrBuffer.contents =
           [line, ...reverseErrBuffer.contents];
           /* let bufferText = revBufferToStr(reverseErrBuffer.contents);
-           * parse(~customLogOutputProcessors, ~customErrorParsers, bufferText)
+           * parse(~customErrorParsers, bufferText)
            * |> prettyPrintParsedResult(~originalRevLines=reverseErrBuffer.contents)
            * |> revBufferToStr
            * |> print_endline;
@@ -80,7 +92,7 @@ let parseFromStdin =
            */
       } else {
         let bufferText = revBufferToStr(reverseErrBuffer.contents);
-        parse(~customLogOutputProcessors, ~customErrorParsers, bufferText)
+        parse(~customErrorParsers, bufferText)
         |> prettyPrintParsedResult(
              ~originalRevLines=reverseErrBuffer.contents,
            )
@@ -95,7 +107,7 @@ let parseFromStdin =
       /* might have accumulated a few more lines */
       if (reverseErrBuffer.contents !== []) {
         let bufferText = revBufferToStr(reverseErrBuffer.contents);
-        parse(~customLogOutputProcessors, ~customErrorParsers, bufferText)
+        parse(~customErrorParsers, bufferText)
         |> prettyPrintParsedResult(
              ~originalRevLines=reverseErrBuffer.contents,
            )

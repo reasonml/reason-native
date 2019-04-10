@@ -180,7 +180,7 @@ let theyWillNotBeSelectedStr = {|^They will not be selected|};
 let theyWillNotBeSelectedR =
   Re.Pcre.regexp(~flags=[Re.Pcre.(`MULTILINE)], theyWillNotBeSelectedStr);
 
-let parse = (~customLogOutputProcessors, ~customErrorParsers, err) => {
+let parse = (~customErrorParsers, err) => {
   /* we know whatever err is, it starts with "File: ..." because that's how `parse`
      is used */
   let err = String.trim(err);
