@@ -45,7 +45,7 @@ let sanitizeName = (name: string): string => {
 };
 
 module Make = (Config: TestSuiteRunnerConfig) => {
-  let run: TestSuite.t => TestResult.describeResult =
+  let runTestSuite: TestSuite.t => TestResult.describeResult =
     (
       TestSuite(
         {name, tests, describes, skip},
@@ -278,7 +278,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
              let TestSuite({name}, _, _) = testSuite;
              let reporterSuite = {name: name};
              notifyReporters(r => r.onTestSuiteStart(reporterSuite));
-             let describeResult = run(testSuite);
+             let describeResult = runTestSuite(testSuite);
              let testSuiteResult =
                TestSuiteResult.ofDescribeResult(describeResult);
              let newResult =
@@ -307,4 +307,23 @@ module Make = (Config: TestSuiteRunnerConfig) => {
     };
     ();
   };
+};
+
+let run = (config: RunConfig.t, testSuites) =>
+  Util.withBacktrace(() => {
+    module RunnerConfig = {
+      let getTime = config.getTime;
+      let maxNumStackFrames = 3;
+      let updateSnapshots = config.updateSnapshots;
+    };
+    module Runner = Make(RunnerConfig);
+    Runner.runTestSuites(testSuites, config);
+  });
+
+let cli = testSuites => {
+  let shouldUpdateSnapshots =
+    Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
+  let config =
+    RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
+  run(config, testSuites);
 };
