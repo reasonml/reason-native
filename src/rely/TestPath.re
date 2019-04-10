@@ -16,6 +16,31 @@ type t =
 let ancestrySeparator = " › ";
 let ancestryRegex = Str.regexp_string(ancestrySeparator);
 
+let rec compare = (path1, path2) =>
+  switch (path1, path2) {
+  | (Test((name1, describe1)), Test((name2, describe2))) =>
+    if (name1 == name2) {
+      compare(Describe(describe1), Describe(describe2));
+    } else {
+      String.compare(name1, name2);
+    }
+  | (
+      Describe(Nested(name1, describe1)),
+      Describe(Nested(name2, describe2)),
+    ) =>
+    if (name1 == name2) {
+      compare(Describe(describe1), Describe(describe2));
+    } else {
+      String.compare(name1, name2);
+    }
+  | (Describe(Terminal(string1)), Describe(Terminal(string2))) =>
+    String.compare(string1, string2)
+  | (Describe(Terminal(_)), Describe(Nested(_, _))) => (-1)
+  | (Describe(Nested(_, _)), Describe(Terminal(_))) => 1
+  | (Test(_), Describe(_)) => (-1)
+  | (Describe(_), Test(_)) => 1
+  };
+
 let rec toString = path =>
   switch (path) {
   | Describe(Terminal(name)) => name

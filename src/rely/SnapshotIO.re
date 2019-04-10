@@ -10,6 +10,7 @@ module type SnapshotIO = {
   let removeFile: string => unit;
   let readFile: string => string;
   let readSnapshotNames: string => list(string);
+  let mkdirp: string => unit;
 };
 
 module FileSystemSnapshotIO: SnapshotIO = {
@@ -24,11 +25,12 @@ module FileSystemSnapshotIO: SnapshotIO = {
   let readSnapshotNames = snapshotDir =>
     if (Sys.file_exists(snapshotDir)) {
       snapshotDir
-      |> Sys.readdir
+    |> Sys.readdir
       |> Array.to_list
       |> List.map(fileName => Filename.concat(snapshotDir, fileName))
       |> List.filter(filePath => !Sys.is_directory(filePath));
     } else {
       raise(SnapshotDirectoryNotFound(snapshotDir));
     };
+  let mkdirp = IO.mkdirp;
 };

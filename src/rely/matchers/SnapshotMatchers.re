@@ -5,47 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  */;
 open MatcherTypes;
-open SnapshotIO;
 module type SnapshotMatchersConfig = {
-  let markSnapshotUsed: string => unit;
-  let markSnapshotUpdated: string => unit;
-  let snapshotPrefix: string;
-  let testHash: string;
+  module Snapshot: Snapshot.Sig;
   let genExpectID: unit => int;
-  let testTitle: string;
+  let testPath: TestPath.test;
+  let testId: Snapshot.testId;
   let updateSnapshots: bool;
 };
 
 type snapshotMatchersRecord = {toMatchSnapshot: unit => unit};
 
-module Make = (Config: SnapshotMatchersConfig, IO: SnapshotIO) => {
+module Make = (Config: SnapshotMatchersConfig) => {
   open Config;
-
-  let escapeSnapshot = (title: string, s: string): string => {
-    ();
-    let withoutEndline =
-      s
-      |> Str.split_delim(Str.regexp("\n"))
-      |> List.map(String.escaped)
-      |> String.concat("\n");
-    title ++ "\n" ++ withoutEndline ++ "\n";
-  };
-  let unescapeSnapshot = (s: string): string => {
-    ();
-    let result =
-      s
-      |> Str.split_delim(Str.regexp("\n"))
-      /* This removes the title we manually add */
-      |> List.tl
-      |> List.map(Scanf.unescaped)
-      /*
-       * Since concat does not add the delimeter after the last element we
-       * have correctly unescaped the trailing newline we always add in escape.
-       */
-      |> String.concat("\n");
-    result;
-  };
-
   let makeMatchers = (accessorPath, {createMatcher}) => {
     let passingMessageThunk = () => "";
     let escape = (s: string): string => {
@@ -62,44 +33,37 @@ module Make = (Config: SnapshotMatchersConfig, IO: SnapshotIO) => {
             _,
           ) => {
           let sActual = actualThunk();
-          let snapshotFile =
-            String.concat(
-              ".",
-              [
-                snapshotPrefix,
-                testHash,
-                string_of_int(genExpectID()),
-                "snapshot",
-              ],
-            );
-          let doUpdate = () => {
-            IO.writeFile(snapshotFile, escapeSnapshot(testTitle, sActual));
-            markSnapshotUpdated(snapshotFile);
-          };
-          if (!IO.existsFile(snapshotFile)) {
+          let expectId = genExpectID();
+
+          let doUpdate = () =>
+            Config.Snapshot.updateSnapshot(testId, expectId, sActual);
+
+          switch (Config.Snapshot.readSnapshot(testId, expectId)) {
+          | None =>
             if (updateSnapshots) {
               doUpdate();
               (passingMessageThunk, true);
             } else {
               (
-                () =>
-                  String.concat(
-                    "",
-                    [
-                      "New snapshot was ",
-                      formatReceived("not written"),
-                      ". The update flag must be explicitly passed to write a new snapshot.",
-                      "\n\n",
-                      "Received: ",
-                      formatReceived(sActual),
-                    ],
-                  ),
+                (
+                  () =>
+                    String.concat(
+                      "",
+                      [
+                        "New snapshot was ",
+                        formatReceived("not written"),
+                        ". The update flag must be explicitly passed to write a new snapshot.",
+                        "\n\n",
+                        "Received: ",
+                        formatReceived(sActual),
+                      ],
+                    )
+                ),
                 false,
               );
-            };
-          } else {
-            let sExpected = unescapeSnapshot(IO.readFile(snapshotFile));
-            markSnapshotUsed(snapshotFile);
+            }
+          | Some(sExpected) =>
+            Config.Snapshot.markSnapshotUsed(testId, expectId);
             let didPass = sActual == sExpected;
             if (!didPass) {
               /*
@@ -129,7 +93,7 @@ module Make = (Config: SnapshotMatchersConfig, IO: SnapshotIO) => {
                       indent(prepareDiff(actual, expected)),
                     ],
                   );
-                (() => message, false);
+                ((() => message), false);
               };
             } else {
               (passingMessageThunk, true);
