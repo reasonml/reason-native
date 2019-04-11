@@ -1,0 +1,36 @@
+{
+  "name": "@reason-native/dir",
+  "version": "0.0.1",
+  "description": "Reason native system directories",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/dir"
+  },
+  "license": "MIT",
+  "keywords": [
+    "dir",
+    "filesystem",
+    "directories",
+    "reasonml",
+    "reason",
+    "ocaml",
+    "esy"
+  ],
+  "esy": {
+    "build": "dune build -p dir"
+  },
+  "scripts": {
+    "release": "node ./scripts/esy-prepublish.js dir.json"
+  },
+  "dependencies": {
+    "@reason-native/path": ">= 0.0.0 <= 1.0.0",
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "ocaml": "^4.2.0"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*",
+    "ocaml": "~4.6.0",
+    "@reason-native/rely": "*"
+  }
+}

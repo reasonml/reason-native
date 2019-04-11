@@ -4,6 +4,7 @@
   (ocamlopt_flags -linkall -g)
   (libraries
     path.lib
+    dir.lib
     rely.lib
     rely.internal
     pastel.lib
