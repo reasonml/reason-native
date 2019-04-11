@@ -1,5 +1,6 @@
 (library
-  (name Tests)
+  (name ReasonNativeTests)
+  (public_name reason-native.tests)
   ; IMPORTANT: -linkall flag is required to include all tests.
   (ocamlopt_flags -linkall -g)
   (libraries
@@ -19,7 +20,7 @@
   (name TestDev)
   (public_name TestDev.exe)
   (libraries
-    Tests
+    ReasonNativeTests
   )
   (modules TestDev)
 )
@@ -28,10 +29,9 @@
   (name TestCi)
   (public_name TestCi.exe)
   (libraries
-    Tests
+    ReasonNativeTests
   )
   (modules TestCi)
 )
 (include_subdirs unqualified)
 (dirs :standard __tests__)
-

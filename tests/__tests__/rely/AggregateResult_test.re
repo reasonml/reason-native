@@ -208,7 +208,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
         },
       ),
     ];
-    let testSingleSuite = ((input: singleSuiteInput, expectedOutput)) =>
+    let testSingleSuite = ((input: singleSuiteInput, expectedOutput)) => {
       test(
         input.name,
         ({expect}) => {
@@ -249,6 +249,8 @@ describe("Rely AggregateResult", ({describe, test}) => {
           ();
         },
       );
+      ();
+    };
     singleSuiteTestCases |> List.iter(testSingleSuite);
   });
   describe("Multiple suite cases", ({test}) => {

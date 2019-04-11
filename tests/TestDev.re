@@ -6,4 +6,4 @@
  */;
 
 
-Tests.TestFramework.cli();
+ReasonNativeTests.TestFramework.cli();

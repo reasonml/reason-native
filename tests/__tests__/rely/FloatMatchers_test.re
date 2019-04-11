@@ -18,13 +18,14 @@ describe("FloatMatchers", describeUtils => {
     (1.23, 1.234),
   ];
   defaultPrecisionTestCases
-  |> List.iter(((f1, f2)) =>
+  |> List.iter(((f1, f2)) => {
        test(
          string_of_float(f1) ++ " should be close to " ++ string_of_float(f2),
          ({expect}) =>
          expect.float(f1).toBeCloseTo(f2)
-       )
-     );
+       );
+       ();
+     });
 
   let customPrecisionTestCases = [
     (0.0, 0.0, 0),

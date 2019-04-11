@@ -64,9 +64,10 @@ let testRunnerOutputSnapshotTest =
       let (stdout, _, _) =
         Pastel.useMode(mode, () =>
           IO.captureOutput(() => {
-            TestFramework.describe(testName, utils =>
-              testFn(utils)
-            );
+            TestFramework.describe(testName, utils =>{
+              testFn(utils);
+              ();
+            });
             TestFramework.run(
               Rely.RunConfig.(
                 initialize()
@@ -91,6 +92,8 @@ let testRunnerOutputSnapshotTest =
         print_endline("\n" ++ stdout ++ "\n");
       };
       testUtils.expect.string(stdout).toMatchSnapshot();
+      ();
     },
   );
+  ();
 };
