@@ -7,7 +7,6 @@
 module Reporter = Reporter;
 module Time = Time;
 module Mock = Mock;
-exception InvalidWhileRunning(string);
 
 /* maintained for backwards compatibility */
 module Test = Test;
