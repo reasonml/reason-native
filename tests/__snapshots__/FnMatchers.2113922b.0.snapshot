@@ -14,16 +14,16 @@ Running 1 test suite
     
     Expected the function not to throw an error.
     Instead, it threw: 
-      <red>Invalid_argument(\"the earth is flat\")</red>
+      <red>(Invalid_argument \"the earth is flat\")</red>
 
 <bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect the wrong exception</red></bold>
 
     <dim>expect.fn(</dim><red>function</red><dim>).toThrowException(</dim><green>exception</green><dim>)</dim>
     
     Expected the function to throw an error matching:
-      <green>Invalid_argument(\"with some other message\")</green>
+      <green>(Invalid_argument \"with some other message\")</green>
     Instead, it threw:
-      <red>Invalid_argument(\"with some message\")</red>
+      <red>(Invalid_argument \"with some message\")</red>
 
 <bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect an exception that doesn't throw</red></bold>
 
