@@ -10,13 +10,23 @@ let (>>=) = (o, f) =>
   | None => None
   };
 
+let getenv_opt = s =>
+  try (Some(Sys.getenv(s))) {
+  | Not_found => None
+  };
+
 type level =
   | NoSupport
   | BasicColorSupport
   | Has256ColorSupport
   | TrueColorSupport;
 
-let forceColor = Sys.getenv_opt("FORCE_COLOR") >>= bool_of_string_opt;
+let geEnvOpt = s =>
+  try (Some(Sys.getenv(s))) {
+  | Not_found => None
+  };
+
+let forceColor = geEnvOpt("FORCE_COLOR") >>= bool_of_string_opt;
 let (disable, minLevel) =
   switch (forceColor) {
   | None => (false, NoSupport)

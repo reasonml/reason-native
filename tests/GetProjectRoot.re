@@ -5,8 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
+let getEnvOpt = s =>
+  try (Some(Sys.getenv(s))) {
+  | Not_found => None
+  };
+
 let get = () => {
-  switch (Sys.getenv_opt("REASON_NATIVE_ROOT")) {
+  switch (getEnvOpt("REASON_NATIVE_ROOT")) {
   | Some(dir) => dir
   | None =>
     failwith(
