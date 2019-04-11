@@ -7,6 +7,11 @@
 
 let projectDir = GetProjectRoot.get();
 
+let _ =
+  Sexplib0.Sexp_conv.sexp_of_string(
+    "Forcing Sexplib0 to get linked while we await resolution of https://github.com/janestreet/sexplib0/issues/1",
+  );
+
 include Rely.Make({
   let config =
     Rely.TestFrameworkConfig.initialize({
@@ -16,6 +21,6 @@ include Rely.Make({
           |> (dir => Filename.concat(dir, "tests"))
           |> (dir => Filename.concat(dir, "__snapshots__"))
         ),
-      projectDir: projectDir,
+      projectDir,
     });
 });

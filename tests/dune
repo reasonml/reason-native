@@ -10,6 +10,7 @@
     pastel.lib
     console.lib
     pastel-console.lib
+    sexplib0
   )
   (modules (:standard \ TestDev TestCi))
 )

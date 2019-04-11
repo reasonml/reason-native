@@ -36,15 +36,15 @@ Running 1 test suite
 
 <bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toEqualFile</red></bold>
 
-    Exception <dim>Sys_error(\"tests/testFiles/foo.txt: No such file or directory\")</dim>
+    Exception <dim>(Sys_error \"tests/testFiles/foo.txt: No such file or directory\")</dim>
 
 <bold><red>  \226\128\162 failing tests \226\128\186 expect.string.not.toEqualFile</red></bold>
 
-    Exception <dim>Sys_error(\"tests/testFiles/simple.txt: No such file or directory\")</dim>
+    Exception <dim>(Sys_error \"tests/testFiles/simple.txt: No such file or directory\")</dim>
 
 <bold><red>  \226\128\162 failing tests \226\128\186 expect.file.not.toEqualFile</red></bold>
 
-    Exception <dim>Sys_error(\"tests/testFiles/simple.txt: No such file or directory\")</dim>
+    Exception <dim>(Sys_error \"tests/testFiles/simple.txt: No such file or directory\")</dim>
 
 <bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.toBe(true)</red></bold>
 
