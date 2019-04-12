@@ -4,7 +4,7 @@ title: Rely API
 sidebar_label: API
 ---
 
-> Prefer reading code? Check out [Rely.rei](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RelyAPI.rei)
+> Prefer reading code? Check out [RelyAPI.rei](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RelyAPI.rei)
 
 ## Basic Configuration
 
