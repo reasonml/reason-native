@@ -399,4 +399,77 @@ describe("Rely Snapshot", ({test}) => {
     expect.int(snapshotSummary.numRemovedSnapshots).toBe(1);
     ();
   });
+  test("snapshots for a skipped test should not be deleted", ({expect}) => {
+    let readMock = Mock.mock1(s => s);
+    let removeMock = Mock.mock1(_ => ());
+    let writeMock = Mock.mock2((_, _) => ());
+    let existsMock = Mock.mock1(_ => true);
+    let mkdirpMock = Mock.mock1(_ => ());
+
+    let testPath = (
+      "my test",
+      RelyInternal.TestPath.Terminal("my describe"),
+    );
+    let testHash = RelyInternal.TestPath.(hash(Test(testPath), 0));
+
+    module MockSnapshotIO = {
+      let readSnapshotNames = _ => [
+        "my_describe." ++ testHash ++ ".0.snapshot",
+        "my_describe." ++ testHash ++ ".1.snapshot",
+        "my_describe." ++ testHash ++ ".2.snapshot",
+        "unrelatedDescribe.fakeTestHash.0.snapshot",
+      ];
+      let readFile: string => string = Mock.fn(readMock);
+      let removeFile: string => unit = Mock.fn(removeMock);
+      let writeFile: (string, string) => unit = Mock.fn(writeMock);
+      let existsFile: string => bool = Mock.fn(existsMock);
+      let mkdirp = Mock.fn(mkdirpMock);
+    };
+
+    module TestFramework =
+      RelyInternal.TestFramework.MakeInternal(
+        MockSnapshotIO,
+        {
+          let config =
+            RelyInternal.TestFrameworkConfig.TestFrameworkConfig.initialize({
+              snapshotDir: "",
+              projectDir: "",
+            });
+        },
+      );
+
+    let aggregateResult = ref(None);
+
+    module Reporter =
+      TestReporter.Make({});
+
+    Reporter.onRunComplete(res => aggregateResult := Some(res));
+
+    TestFramework.describe("my describe", ({testSkip}) =>
+      testSkip("my test", ({expect}) => expect.bool(false).toBeTrue())
+    );
+
+    TestFramework.run(
+      RelyInternal.RunConfig.RunConfig.(
+        initialize()
+        |> withReporters([Custom(Reporter.reporter)])
+        |> onTestFrameworkFailure(() => ())
+      ),
+    );
+
+    let res =
+      switch (aggregateResult^) {
+      | None => raise(Invalid_argument("aggregateResult"))
+      | Some(v) => v
+      };
+    let snapshotSummary =
+      switch (res.snapshotSummary) {
+      | None => raise(Invalid_argument("aggregateResult"))
+      | Some(v) => v
+      };
+
+    expect.mock(removeMock).toBeCalledTimes(1);
+    expect.int(snapshotSummary.numRemovedSnapshots).toBe(1);
+    ();
+  });
 });
