@@ -67,8 +67,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
         SnapshotMatchers.makeMatchers;
       };
 
-      let executeTest =
-          (describePath, name, location, usersTest, extensionFn, testId) => {
+      let executeTest = (describePath, name, location, usersTest, extensionFn) => {
         let testStatus = ref(None);
         let testPath = (name, describePath);
         let describeFileName =
@@ -155,6 +154,8 @@ module Make = (Config: TestSuiteRunnerConfig) => {
 
       let skipTest = (describePath, name, location) => {
         let testPath = (name, describePath);
+        let testId = Context.Snapshot.getNewId(testPath);
+        Context.Snapshot.markSnapshotsAsCheckedForTest(testId);
         {
           path: testPath,
           duration: None,
@@ -165,27 +166,17 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       };
 
       let rec runDescribe = (path, tests, describes, extensionFn, skip) => {
-        let testCounter = Counter.create();
         let startTime = Config.getTime();
         let testResults =
           List.map(
-            test => {
-              let testId = Counter.next(testCounter);
+            test =>
               switch (test, skip) {
               | (Test({name, location}), true)
               | (Skipped({name, location}), _) =>
                 skipTest(path, name, location)
               | (Test({name, usersTest, location}), false) =>
-                executeTest(
-                  path,
-                  name,
-                  location,
-                  usersTest,
-                  extensionFn,
-                  testId,
-                )
-              };
-            },
+                executeTest(path, name, location, usersTest, extensionFn)
+              },
             tests,
           );
         let describeResults =
