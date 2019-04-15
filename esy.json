@@ -8,6 +8,9 @@
     "install": [
       "esy-installer pastel.install",
       "esy-installer rely.install",
+      "esy-installer path.install",
+      "esy-installer fs.install",
+      "esy-installer rely-test.install",
       "esy-installer console.install",
       "esy-installer pastel-console.install",
       "esy-installer file-context-printer.install",
