@@ -28,7 +28,8 @@ let stackIndent = "      ";
 let titleIndent = "  ";
 let passDisplay = () =>
   <Pastel color=Green inverse=true bold=true> " PASS " </Pastel>;
-let failDisplay = () => <Pastel color=Red inverse=true bold=true> " FAIL " </Pastel>;
+let failDisplay = () =>
+  <Pastel color=Red inverse=true bold=true> " FAIL " </Pastel>;
 let runningDisplay = () =>
   <Pastel color=Yellow inverse=true bold=true> " RUNS " </Pastel>;
 
@@ -97,12 +98,9 @@ let gatherFormattedFailureOutput = (testResults: list(testResult)) =>
                failFormatter(titleIndent ++ titleBullet ++ fullName),
              );
            let exceptionMessage =
-             String.concat(
-               "",
-               [
-                 indent("Exception ", ~indent=messageIndent),
-                 Pastel.dim(Printexc.to_string(e)),
-               ],
+             indent(
+               "Exception " ++ Pastel.dim(Printexc.to_string(e)),
+               ~indent=messageIndent,
              );
            let parts =
              switch (getStackInfo(loc, stack)) {
