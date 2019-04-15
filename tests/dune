@@ -5,6 +5,7 @@
   (ocamlopt_flags -linkall -g)
   (libraries
     path.lib
+    fs.lib
     dir.lib
     rely.lib
     rely.internal

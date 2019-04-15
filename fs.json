@@ -1,0 +1,37 @@
+{
+  "name": "@reason-native/fs",
+  "version": "0.0.1",
+  "description": "Reason Native file system API",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/fs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "file-system",
+    "fs",
+    "filesystem",
+    "directories",
+    "reasonml",
+    "reason",
+    "ocaml",
+    "esy"
+  ],
+  "esy": {
+    "build": "dune build -p fs"
+  },
+  "scripts": {
+    "release": "node ./scripts/esy-prepublish.js fs.json"
+  },
+  "dependencies": {
+    "@reason-native/path": ">= 0.0.0 <= 1.0.0",
+    "@opam/dune": "*",
+    "@esy-ocaml/reason": "*",
+    "ocaml": "^4.2.0"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*",
+    "ocaml": "~4.6.0",
+    "@reason-native/rely": "*"
+  }
+}
