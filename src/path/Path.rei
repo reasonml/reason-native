@@ -97,9 +97,9 @@ let join: (t('kind1), t('kind2)) => t('kind1);
  Syntactic forms for utilities provided above. These are included in a separate
  module so that it can be opened safely without causing collisions with other
  identifiers in scope such as "root"/"home".
-  
+
  Use like this:
-  
+
      Path.At(Path.root / "foo" / "bar");
      Path.At(Path.dot /../ "bar");
  */
@@ -131,4 +131,9 @@ module At: {
    `append(dirName(dirName(dirName(dirName(dirName(dir))))), s)`
    */
   let (/../../../../../): (t('kind), string) => t('kind);
+  /**
+   `dir /../../../../../../ s` is equivalent to
+   `append(dirName(dirName(dirName(dirName(dirName(dirName(dir)))))), s)`
+   */
+  let (/../../../../../../): (t('kind), string) => t('kind);
 };

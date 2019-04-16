@@ -109,9 +109,9 @@ let lex = s => {
     prevEsc.contents = ch === '\\' && !prevEsc.contents;
   };
   let rev =
-    j.contents === len - 1 ?
-      revTokens.contents :
-      [
+    j.contents === len - 1
+      ? revTokens.contents
+      : [
         makeToken(String.sub(s, j.contents + 1, len - 1 - j.contents)),
         ...revTokens.contents,
       ];
@@ -222,9 +222,9 @@ let rec join: type k1 k2. (t(k1), t(k2)) => t(k1) =
     switch (p1, p2) {
     | ((Rel(w, r1), []), (Rel(Any, r2), s2)) => (Rel(w, r1 + r2), s2)
     | ((Rel(w, r1), [s1hd, ...s1tl] as s1), (Rel(Any, r2), s2)) =>
-      r2 > 0 ?
-        join((Rel(w, r1), s1tl), (Rel(Any, r2 - 1), s2)) :
-        (Rel(w, r1), List.append(s2, s1))
+      r2 > 0
+        ? join((Rel(w, r1), s1tl), (Rel(Any, r2 - 1), s2))
+        : (Rel(w, r1), List.append(s2, s1))
     | ((b1, s1), (Rel(Home, r2), s2)) =>
       join((b1, [homeChar, ...List.append(s2, s1)]), (Rel(Any, r2), s2))
     | ((b1, s1), (Abs(Some(ll)), s2)) => (
@@ -234,9 +234,9 @@ let rec join: type k1 k2. (t(k1), t(k2)) => t(k1) =
     | ((b1, s1), (Abs(None), s2)) => (b1, List.append(s2, s1))
     | ((Abs(_) as d, []), (Rel(Any, r2), s2)) => (d, s2)
     | ((Abs(_) as d, [s1hd, ...s1tl] as s1), (Rel(Any, r2), s2)) =>
-      r2 > 0 ?
-        join((d, s1tl), (Rel(Any, r2 - 1), s2)) :
-        (d, List.append(s2, s1))
+      r2 > 0
+        ? join((d, s1tl), (Rel(Any, r2 - 1), s2))
+        : (d, List.append(s2, s1))
     };
 
 let rec dirName: type k1. t(k1) => t(k1) =
@@ -283,7 +283,6 @@ let append: type k1. (t(k1), string) => t(k1) =
 
 module At = {
   let (/) = append;
-
   /**
    * Applies `dirName` to the first argument, then passes the result to
    * `append` with the second.
@@ -302,4 +301,9 @@ module At = {
     append(dirName(dirName(dirName(dirName(dir)))), s);
   let (/../../../../../) = (dir, s) =>
     append(dirName(dirName(dirName(dirName(dirName(dir))))), s);
+  let (/../../../../../../) = (dir, s) =>
+    append(
+      dirName(dirName(dirName(dirName(dirName(dirName(dir)))))),
+      s,
+    );
 };
