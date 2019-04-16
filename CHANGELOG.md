@@ -1,3 +1,13 @@
+# April 15, 2019
+### Rely 2.0.0
+* [**BREAKING**] Add optional locations to Passed and Skipped test status variant constructors for reporters
+* [**BREAKING**] TestFramework.extendDescribe now returns a record instead of a describe function
+  * changing ```let describe = extendDescribe(...)``` to ```let {describe} = extendDescribe``` should be sufficient for users of this feature
+    * needed for future implementation of describeOnly/testOnly
+* Allow combining of test libraries via Rely.combine and TestFramework.toLibrary
+* Fix bug where skipping snapshot tests would cause snapshots to be deleted
+* Improve printing of exceptions with multiple lines of text
+
 # March 19, 2019
 ### Rely 1.3.1
 * Fix bug where expect.string.toMatch would only check matches beginning on first character,
