@@ -1,0 +1,5 @@
+option matchers › failing output › expect.option.toBe custom equals
+<dim>expect.option(</dim><red>received</red><dim>).toBe(</dim><green>expected</green><dim>)</dim>
+
+Expected: <green>Some(42)</green>
+Received: <red>Some(42)</red>

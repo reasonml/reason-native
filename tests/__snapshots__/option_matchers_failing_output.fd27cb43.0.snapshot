@@ -1,0 +1,5 @@
+option matchers › failing output › expect.option.toBeSome None is Some
+<dim>expect.option(</dim><red>received</red><dim>).toBeSome(</dim><green>expected</green><dim>)</dim>
+
+Expected: <green>Some(failure :()</green>
+Received: <red>None</red>

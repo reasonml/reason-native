@@ -28,7 +28,12 @@ type matchers('ext) = {
   notEqual: 'a. EqualsMatcher.equalsMatcher('a),
   same: 'a. SameMatcher.sameMatcher('a),
   notSame: 'a. SameMatcher.sameMatcher('a),
-  mock: 'fn 'ret 'tupledArgs. Mock.t('fn, 'ret, 'tupledArgs) => MockMatchers.matchersWithNot('tupledArgs, 'ret),
+  mock:
+    'fn 'ret 'tupledArgs.
+    Mock.t('fn, 'ret, 'tupledArgs) =>
+    MockMatchers.matchersWithNot('tupledArgs, 'ret),
+
+  option: 'a. option('a) => OptionMatchers.optionMatchersWithNot('a),
   ext: 'ext,
 };
 
@@ -54,26 +59,26 @@ module Make = (Mock: Mock.Sig) => {
     array: a => ArrayMatchers.makeMatchers(".array", utils, a),
     mock: m => MockMatchers.makeMatchers(".mock", utils, m),
     equal: (~equals=?, expected, actual) =>
-    EqualsMatcher.makeEqualMatcher(
-      ".equal",
-      utils,
-      ~equals?,
-      expected,
-      actual,
-    ),
-  notEqual: (~equals=?, expected, actual) =>
-    EqualsMatcher.makeNotEqualMatcher(
-      ".notEqual",
-      utils,
-      ~equals?,
-      expected,
-      actual,
-    ),
-  same: (expected, actual) =>
-    SameMatcher.makeSameMatcher(".same", utils, expected, actual),
-  notSame: (expected, actual) =>
-    SameMatcher.makeNotSameMatcher(".notSame", utils, expected, actual),
-    ext: makeMatchers(utils)
+      EqualsMatcher.makeEqualMatcher(
+        ".equal",
+        utils,
+        ~equals?,
+        expected,
+        actual,
+      ),
+    notEqual: (~equals=?, expected, actual) =>
+      EqualsMatcher.makeNotEqualMatcher(
+        ".notEqual",
+        utils,
+        ~equals?,
+        expected,
+        actual,
+      ),
+    same: (expected, actual) =>
+      SameMatcher.makeSameMatcher(".same", utils, expected, actual),
+    notSame: (expected, actual) =>
+      SameMatcher.makeNotSameMatcher(".notSame", utils, expected, actual),
+    option: o => OptionMatchers.makeMatchers(".option", utils, o),
+    ext: makeMatchers(utils),
   };
-}
-
+};
