@@ -1,7 +1,7 @@
 ---
 id: api
-title: Rely API
-sidebar_label: API
+title: Basic API
+sidebar_label: Basic API
 ---
 
 > Prefer reading code? Check out [RelyAPI.rei](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RelyAPI.rei)
@@ -100,36 +100,7 @@ describe("my first test suite", ({test, testSkip, describe}) => {
 });
 ```
 
-## Advanced Setup
-
-### Running with [Custom Run Config](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RunConfig.re)
-
-```reason
-/* MyLibTest.re */
-let sampleRunConfig = RunConfig.initialize()
-TestFramework.run(sampleRunConfig); /* custom config */
-```
-
-### Running with [Custom Reporters](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/Reporter.re)
-
-```reason
-let myReporter: Rely.Reporter.t = {
-  onTestSuiteStart: (testSuite) => {...},
-  onTestSuiteResult: (testSuite, aggregatedResult, testSuiteResult) => {...},
-  onRunStart: (relyRunInfo) => {...},
-  onRunComplete: (aggregatedResult) => {...}
-};
-
-let customReporterConfig = RunConfig.initialize() |> withReporters([
-  Custom(myReporter),
-  /* not required, but the default terminal reporter can also be included */
-  Default
-]);
-
-TestFramework.run(customReporterConfig);
-```
-
-### Using Custom Matchers
+## Custom Matchers
 
 ```reason
 /*UserMatchers.re*/
