@@ -13,16 +13,17 @@ module MakeTestFramework = (()) : Rely.TestFramework =>
       });
   });
 
-let run = (testSuites: list(TestSuite.t), reporter: Rely.Reporter.t) => {
+let run = (testSuites: list(TestSuiteBuilder.t), reporter: Rely.Reporter.t) => {
   module TestFramework =
     MakeTestFramework({});
 
   testSuites
-  |> List.map(TestSuite.toFunction)
+  |> List.map(TestSuiteBuilder.toFunction)
   |> List.iter(ts =>
        ts(
          ~describe=TestFramework.describe,
          ~describeSkip=TestFramework.describeSkip,
+         ~describeOnly=TestFramework.describeOnly,
        )
      );
 
@@ -45,11 +46,12 @@ let runWithCustomTime = (getTime, testSuites, reporter) => {
     });
 
   testSuites
-  |> List.map(TestSuite.toFunction)
+  |> List.map(TestSuiteBuilder.toFunction)
   |> List.iter(ts =>
        ts(
          ~describe=TestFramework.describe,
          ~describeSkip=TestFramework.describeSkip,
+         ~describeOnly=TestFramework.describeOnly,
        )
      );
 

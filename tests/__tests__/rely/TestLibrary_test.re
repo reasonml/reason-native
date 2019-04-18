@@ -52,7 +52,7 @@ describe("Rely Test Library", ({test}) => {
           let action = builder =>
             builder
             |> withTestSuite(
-                 TestSuite.(
+                 TestSuiteBuilder.(
                    init("test suite")
                    |> withPassingTests(2)
                    |> withFailingTests(1)
@@ -77,7 +77,7 @@ describe("Rely Test Library", ({test}) => {
           let action = builder =>
             builder
             |> withTestSuite(
-                 TestSuite.(
+                 TestSuiteBuilder.(
                    init("test suite")
                    |> withPassingTests(2)
                    |> withFailingTests(1)
@@ -90,7 +90,7 @@ describe("Rely Test Library", ({test}) => {
           let action = builder =>
             builder
             |> withTestSuite(
-                 TestSuite.(
+                 TestSuiteBuilder.(
                    init("test suite")
                    |> withPassingTests(5)
                    |> withFailingTests(2)
@@ -103,7 +103,7 @@ describe("Rely Test Library", ({test}) => {
           let action = builder =>
             builder
             |> withTestSuite(
-                 TestSuite.(
+                 TestSuiteBuilder.(
                    init("test suite")
                    |> withPassingTests(2)
                    |> withFailingTests(3)
@@ -129,7 +129,7 @@ describe("Rely Test Library", ({test}) => {
         let action = builder =>
           builder
           |> withTestSuite(
-               TestSuite.(
+               TestSuiteBuilder.(
                  init("test suite")
                  |> withPassingTests(2)
                  |> withFailingTests(1)
@@ -142,7 +142,7 @@ describe("Rely Test Library", ({test}) => {
         let action = builder =>
           builder
           |> withTestSuite(
-               TestSuite.(
+               TestSuiteBuilder.(
                  init("test suite")
                  |> withPassingTests(5)
                  |> withFailingTests(2)
@@ -155,7 +155,7 @@ describe("Rely Test Library", ({test}) => {
         let action = builder =>
           builder
           |> withTestSuite(
-               TestSuite.(
+               TestSuiteBuilder.(
                  init("test suite")
                  |> withPassingTests(2)
                  |> withFailingTests(3)

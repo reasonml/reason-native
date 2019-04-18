@@ -7,7 +7,7 @@
 
 open TestFramework;
 
-describe("Path", ({test}) => {
+describe("Path", ({test, testOnly}) => {
   test("Basic creation", ({expect}) => {
     let path = Path.absoluteExn("/foo/bar/baz");
     expect.string(path |> Path.toString).toEqual("/foo/bar/baz");
@@ -131,10 +131,10 @@ describe("Path", ({test}) => {
 
     let path = Path.relativeExn("../../a/../");
     expect.string(path |> Path.toDebugString).toEqual("./../..");
-    
+
     let path = Path.relativeExn("./~");
     expect.string(path |> Path.toDebugString).toEqual("./~");
-    
+
     let path = Path.absoluteExn("/~");
     expect.string(path |> Path.toDebugString).toEqual("/~");
 
