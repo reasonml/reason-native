@@ -45,13 +45,14 @@ let sanitizeName = (name: string): string => {
 };
 
 module Make = (Config: TestSuiteRunnerConfig) => {
-  let runTestSuite: TestSuite.t => TestResult.describeResult =
+  let runTestSuite: (TestSuite.t, TestSuite.mode) => TestResult.describeResult =
     (
       TestSuite(
-        {name, tests, describes, skip},
+        {name, tests, describes, mode},
         extension,
         (_, (module Context)),
       ),
+      executionMode
     ) => {
       module DefaultMatchers = DefaultMatchers.Make(Context.Mock);
       let makeMakeSnapshotMatchers = (describeFileName, testPath, testId) => {
@@ -165,30 +166,35 @@ module Make = (Config: TestSuiteRunnerConfig) => {
         };
       };
 
-      let rec runDescribe = (path, tests, describes, extensionFn, skip) => {
+      let rec runDescribe =
+              (path, tests, describes, extensionFn, executionMode) => {
         let startTime = Config.getTime();
         let testResults =
           List.map(
             test =>
-              switch (test, skip) {
-              | (Test({name, location}), true)
-              | (Skipped({name, location}), _) =>
+              switch (executionMode, test) {
+              | (Skip, {name, location})
+              | (Only, {name, location, mode: Normal})
+              | (_, {name, location, mode: Skip}) =>
                 skipTest(path, name, location)
-              | (Test({name, usersTest, location}), false) =>
+              | (Only, {name, usersTest, location, mode: Only})
+              | (Normal, {name, usersTest, location, _}) =>
                 executeTest(path, name, location, usersTest, extensionFn)
               },
             tests,
           );
         let describeResults =
           List.map(
-            ({name, tests, describes, skip}) =>
+            ({name, tests, describes, mode}) => {
+              let childMode = mode === Skip ? Skip : executionMode;
               runDescribe(
                 TestPath.Nested(name, path),
                 tests,
                 describes,
                 extensionFn,
-                skip,
-              ),
+                childMode,
+              );
+            },
             describes,
           );
         {
@@ -201,7 +207,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       };
 
       let testSuitePath = TestPath.Terminal(name);
-      runDescribe(testSuitePath, tests, describes, extension, skip);
+      runDescribe(testSuitePath, tests, describes, extension, executionMode);
     };
 
   let getSnapshotResult = testSuites => {
@@ -254,6 +260,8 @@ module Make = (Config: TestSuiteRunnerConfig) => {
   let runTestSuites = (testSuites: list(TestSuite.t), config: RunConfig.t) => {
     let startTime = config.getTime();
     let notifyReporters = f => List.iter(f, config.reporters);
+    let hasOnly = testSuites |> List.exists((TestSuite({mode}, _, _)) => mode === Only);
+
     let reporterTestSuites =
       testSuites
       |> List.map(s =>
@@ -266,10 +274,15 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       testSuites
       |> List.fold_left(
            (prevAggregatedResult, testSuite) => {
-             let TestSuite({name}, _, _) = testSuite;
+             let TestSuite({name, mode}, _, _) = testSuite;
              let reporterSuite = {name: name};
              notifyReporters(r => r.onTestSuiteStart(reporterSuite));
-             let describeResult = runTestSuite(testSuite);
+             let executionMode = switch(hasOnly, mode) {
+             | (true, Only) => Only
+             | (true, _) => Skip
+             | (false, mode) => mode
+             };
+             let describeResult = runTestSuite(testSuite, executionMode);
              let testSuiteResult =
                TestSuiteResult.ofDescribeResult(describeResult);
              let newResult =

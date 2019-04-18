@@ -82,6 +82,7 @@ module type TestFramework = {
 
   let describe: Describe.describeFn(unit);
   let describeSkip: Describe.describeFn(unit);
+  let describeOnly: Describe.describeFn(unit);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
   let run: RunConfig.t => unit;
