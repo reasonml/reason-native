@@ -45,20 +45,18 @@ module Make = (Config: SnapshotMatchersConfig) => {
               (passingMessageThunk, true);
             } else {
               (
-                (
-                  () =>
-                    String.concat(
-                      "",
-                      [
-                        "New snapshot was ",
-                        formatReceived("not written"),
-                        ". The update flag must be explicitly passed to write a new snapshot.",
-                        "\n\n",
-                        "Received: ",
-                        formatReceived(sActual),
-                      ],
-                    )
-                ),
+                () =>
+                  String.concat(
+                    "",
+                    [
+                      "New snapshot was ",
+                      formatReceived("not written"),
+                      ". The update flag (-u) must be explicitly passed to write a new snapshot.",
+                      "\n\n",
+                      "Received: ",
+                      formatReceived(sActual),
+                    ],
+                  ),
                 false,
               );
             }
@@ -85,6 +83,7 @@ module Make = (Config: SnapshotMatchersConfig) => {
                         ~matcherName=".toMatchSnapshot",
                         (),
                       ),
+                      Pastel.dim("\n\nInspect your code changes or run Rely with the -u flag to update snapshots."),
                       "\n\n",
                       formatExpected("- " ++ expected),
                       "\n",

@@ -93,7 +93,9 @@ Running 1 test suite
 
 <bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot mismatch</red></bold>
 
-    <dim>expect.string(</dim><red>received</red><dim>).toMatchSnapshot(</dim><green>expected</green><dim>)</dim>
+    <dim>expect.string(</dim><red>received</red><dim>).toMatchSnapshot(</dim><green>expected</green><dim>)</dim><dim>
+    
+    Inspect your code changes or run Rely with the -u flag to update snapshots.</dim>
     
     <green>- anything else</green>
     <red>+ bacon3</red>
@@ -103,7 +105,7 @@ Running 1 test suite
 
 <bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot no snapshot exists</red></bold>
 
-    New snapshot was <red>not written</red>. The update flag must be explicitly passed to write a new snapshot.
+    New snapshot was <red>not written</red>. The update flag (-u) must be explicitly passed to write a new snapshot.
     
     Received: <red>more bacon!</red>
 
