@@ -13,6 +13,23 @@ module MakeTestFramework = (()) : Rely.TestFramework =>
       });
   });
 
+let runWithCustomConfig = (testSuites: list(TestSuiteBuilder.t), config: Rely.RunConfig.t) => {
+  module TestFramework =
+    MakeTestFramework({});
+
+  testSuites
+  |> List.map(TestSuiteBuilder.toFunction)
+  |> List.iter(ts =>
+       ts(
+         ~describe=TestFramework.describe,
+         ~describeSkip=TestFramework.describeSkip,
+         ~describeOnly=TestFramework.describeOnly,
+       )
+     );
+
+  TestFramework.run(config);
+}
+
 let run = (testSuites: list(TestSuiteBuilder.t), reporter: Rely.Reporter.t) => {
   module TestFramework =
     MakeTestFramework({});

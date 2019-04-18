@@ -29,6 +29,7 @@ module RunConfig: {
   let updateSnapshots: (bool, t) => t;
   let withReporters: (list(reporter), t) => t;
   let internal_do_not_use_get_time: (unit => Time.t, t) => t;
+  let ciMode: (bool, t) => t;
 };
 
 module MatcherUtils: {

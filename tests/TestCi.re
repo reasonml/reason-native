@@ -6,8 +6,9 @@
  */;
 
 ReasonNativeTests.TestFramework.run(
-  Rely.RunConfig.withReporters(
-    [Default, JUnit("./junit.xml")],
-    Rely.RunConfig.initialize(),
+  Rely.RunConfig.(
+    initialize()
+    |> withReporters([Default, JUnit("./junit.xml")])
+    |> ciMode(true)
   ),
 );

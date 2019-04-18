@@ -17,6 +17,7 @@ module RunConfig = {
     onTestFrameworkFailure: unit => unit,
     reporters: list(Reporter.t),
     getTime: unit => Time.t,
+    ci: bool,
   };
 
   let initialize = () => {
@@ -31,6 +32,7 @@ module RunConfig = {
       }),
     ],
     getTime: Clock.getTime,
+    ci: false,
   };
 
   type reporter =
@@ -59,6 +61,8 @@ module RunConfig = {
          );
     {...config, reporters};
   };
+
+  let ciMode: (bool, t) => t = (ci, config) => {...config, ci};
 
   let internal_do_not_use_get_time = (fn, cfg: t) => {...cfg, getTime: fn};
 

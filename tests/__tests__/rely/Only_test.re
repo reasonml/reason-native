@@ -91,4 +91,43 @@ describe("Rely .only", ({test}) => {
     expect.int(result.numPassedTestSuites).toBe(1);
     expect.int(result.numSkippedTestSuites).toBe(1);
   });
+  test("CI mode should throw an exception with testOnly", ({expect}) => {
+    let nestedOnlyTestSuite =
+      TestSuiteBuilder.(
+        init("contains nested")
+        |> withSkippedTests(2)
+        |> withPassingTests(1)
+        |> withNestedTestSuite(
+             ~child=TestSuiteBuilder.init("nested") |> withPassingTests(1, ~only=true),
+           )
+      );
+    let normalTestSuite = TestSuiteBuilder.(init("normal") |> withPassingTests(3));
+
+    expect.fn(() => TestSuiteRunner.runWithCustomConfig([nestedOnlyTestSuite, normalTestSuite], Rely.RunConfig.(
+      initialize()
+      |> withReporters([])
+      |> ciMode(true)
+      |> onTestFrameworkFailure(() => ())
+    ))).toThrow();
+  });
+
+  test("CI mode should throw an exception with describeOnly", ({expect}) => {
+    let nestedOnlyTestSuite =
+      TestSuiteBuilder.(
+        init("contains nested")
+        |> withSkippedTests(2)
+        |> withPassingTests(1)
+        |> withNestedTestSuite(
+             ~child=TestSuiteBuilder.init("nested") |> withPassingTests(1) |> only,
+           )
+      );
+    let normalTestSuite = TestSuiteBuilder.(init("normal") |> withPassingTests(3));
+
+    expect.fn(() => TestSuiteRunner.runWithCustomConfig([nestedOnlyTestSuite, normalTestSuite], Rely.RunConfig.(
+      initialize()
+      |> withReporters([])
+      |> ciMode(true)
+      |> onTestFrameworkFailure(() => ())
+    ))).toThrow();
+  });
 });

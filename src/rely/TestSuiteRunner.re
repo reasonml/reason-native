@@ -14,6 +14,8 @@ open Util;
 open RunConfig;
 open Reporter;
 exception PendingTestException(string);
+exception InvalidInCIMode(string);
+
 module SnapshotModuleSet =
   Set.Make({
     type t = (TestSuite.contextId, module Snapshot.Sig);
@@ -25,6 +27,9 @@ module type TestSuiteRunnerConfig = {
   let getTime: unit => Time.t;
   let updateSnapshots: bool;
   let maxNumStackFrames: int;
+  let ci: bool;
+  let reporters: list(Reporter.t);
+  let onTestFrameworkFailure: unit => unit;
 };
 
 let sanitizeName = (name: string): string => {
@@ -52,7 +57,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
         extension,
         (_, (module Context)),
       ),
-      executionMode
+      executionMode,
     ) => {
       module DefaultMatchers = DefaultMatchers.Make(Context.Mock);
       let makeMakeSnapshotMatchers = (describeFileName, testPath, testId) => {
@@ -257,10 +262,19 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       );
     aggregateSnapshotResult;
   };
-  let runTestSuites = (testSuites: list(TestSuite.t), config: RunConfig.t) => {
-    let startTime = config.getTime();
-    let notifyReporters = f => List.iter(f, config.reporters);
-    let hasOnly = testSuites |> List.exists((TestSuite({mode}, _, _)) => mode === Only);
+  let runTestSuites = (testSuites: list(TestSuite.t)) => {
+    let startTime = Config.getTime();
+    let notifyReporters = f => List.iter(f, Config.reporters);
+    let hasOnly =
+      testSuites |> List.exists((TestSuite({mode}, _, _)) => mode === Only);
+
+    if (Config.ci && hasOnly) {
+      raise(
+        InvalidInCIMode(
+          "describeOnly and testOnly should not be called in CI mode or committed. They are intended to be used only while developing locally",
+        ),
+      );
+    };
 
     let reporterTestSuites =
       testSuites
@@ -277,11 +291,12 @@ module Make = (Config: TestSuiteRunnerConfig) => {
              let TestSuite({name, mode}, _, _) = testSuite;
              let reporterSuite = {name: name};
              notifyReporters(r => r.onTestSuiteStart(reporterSuite));
-             let executionMode = switch(hasOnly, mode) {
-             | (true, Only) => Only
-             | (true, _) => Skip
-             | (false, mode) => mode
-             };
+             let executionMode =
+               switch (hasOnly, mode) {
+               | (true, Only) => Only
+               | (true, _) => Skip
+               | (false, mode) => mode
+               };
              let describeResult = runTestSuite(testSuite, executionMode);
              let testSuiteResult =
                TestSuiteResult.ofDescribeResult(describeResult);
@@ -307,7 +322,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
     let success = aggregatedResultWithSnapshotStatus.numFailedTests == 0;
     notifyReporters(r => r.onRunComplete(aggregatedResultWithSnapshotStatus));
     if (!success) {
-      config.onTestFrameworkFailure();
+      Config.onTestFrameworkFailure();
     };
     ();
   };
@@ -319,15 +334,25 @@ let run = (config: RunConfig.t, testSuites) =>
       let getTime = config.getTime;
       let maxNumStackFrames = 3;
       let updateSnapshots = config.updateSnapshots;
+      let ci = config.ci;
+      let reporters = config.reporters;
+      let onTestFrameworkFailure = config.onTestFrameworkFailure;
     };
     module Runner = Make(RunnerConfig);
-    Runner.runTestSuites(testSuites, config);
+    Runner.runTestSuites(testSuites);
   });
 
 let cli = testSuites => {
   let shouldUpdateSnapshots =
-    Array.length(Sys.argv) >= 2 && Sys.argv[1] == "-u";
+    Array.length(Sys.argv) >= 2 && Array.exists(arg => arg == "-u", Sys.argv);
+
+  let ci =
+    Array.length(Sys.argv) >= 2
+    && Array.exists(arg => arg == "--ci", Sys.argv);
+
   let config =
-    RunConfig.(initialize() |> updateSnapshots(shouldUpdateSnapshots));
+    RunConfig.(
+      initialize() |> updateSnapshots(shouldUpdateSnapshots) |> ciMode(ci)
+    );
   run(config, testSuites);
 };
