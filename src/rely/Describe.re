@@ -7,12 +7,15 @@
 type describeUtils('ext) = {
   describe: describeFn('ext),
   describeSkip: describeFn('ext),
+  describeOnly: describeFn('ext),
   test: Test.testFn('ext),
   testSkip: Test.testFn('ext),
+  testOnly: Test.testFn('ext),
 }
 and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
 
 type extensionResult('ext) = {
   describe: describeFn('ext),
   describeSkip: describeFn('ext),
+  describeOnly: describeFn('ext),
 };

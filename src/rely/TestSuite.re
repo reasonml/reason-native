@@ -6,28 +6,31 @@
  */;
 open Describe;
 
-type test('ext) =
-  | Test{
-      name: string,
-      location: option(Printexc.location),
-      usersTest: Test.testUtils('ext) => unit,
-    }
-  | Skipped{
-      name: string,
-      location: option(Printexc.location),
-    };
+type mode =
+  | Skip
+  | Normal
+  | Only;
+
+let maxMode = (mode1: mode, mode2: mode) => mode1 > mode2 ? mode1 : mode2;
+
+type test('ext) = {
+  name: string,
+  location: option(Printexc.location),
+  usersTest: Test.testUtils('ext) => unit,
+  mode,
+};
 
 type describeRecord('ext) = {
   name: string,
   tests: list(test('ext)),
   describes: list(describeRecord('ext)),
-  skip: bool,
+  mode,
 };
 
 type describeInput('ext) = {
   name: string,
   usersDescribeFn: Describe.describeUtils('ext) => unit,
-  skip: bool,
+  mode,
   extensionFn: MatcherTypes.matchersExtensionFn('ext),
 };
 
@@ -38,7 +41,7 @@ module type TestFrameworkContext = {
 };
 
 type contextId = int;
-type context = (contextId, (module TestFrameworkContext));
+type context = (contextId, module TestFrameworkContext);
 
 type t =
   | TestSuite(
@@ -49,10 +52,11 @@ type t =
     : t;
 
 let contextCounter = ref(0);
-let getNewContextId: unit => contextId = () => {
-  incr(contextCounter);
-  contextCounter^;
-};
+let getNewContextId: unit => contextId =
+  () => {
+    incr(contextCounter);
+    contextCounter^;
+  };
 
 module Factory = (Context: TestFrameworkContext) => {
   let contextId = getNewContextId();
@@ -60,33 +64,67 @@ module Factory = (Context: TestFrameworkContext) => {
     (
       ~name: string,
       ~usersDescribeFn: Describe.describeUtils('ext) => unit,
-      ~skip: bool
+      ~mode: mode
     ) =>
     describeRecord('ext) =
-    (~name, ~usersDescribeFn, ~skip) => {
+    (~name, ~usersDescribeFn, ~mode) => {
       let tests = ref([]);
       let describes = ref([]);
       let describe = (name, describeFn) =>
         describes :=
-          describes^ @ [makeDescribeRecord(name, describeFn, skip)];
+          describes^ @ [makeDescribeRecord(name, describeFn, mode)];
       let describeSkip = (name, describeFn) =>
         describes :=
-          describes^ @ [makeDescribeRecord(name, describeFn, true)];
+          describes^ @ [makeDescribeRecord(name, describeFn, Skip)];
+      let describeOnly = (name, describeFn) =>
+        describes :=
+          describes^ @ [makeDescribeRecord(name, describeFn, Only)];
       let test = (name, usersTest) => {
         let location = Context.StackTrace.(getStackTrace() |> getTopLocation);
-        tests := tests^ @ [Test({name, location, usersTest})];
+        tests := tests^ @ [{name, location, usersTest, mode}];
       };
       let testSkip = (name, usersTest) => {
         let location = Context.StackTrace.(getStackTrace() |> getTopLocation);
-        tests := tests^ @ [Skipped({name, location})];
+        tests := tests^ @ [{name, location, usersTest, mode: Skip}];
       };
-      usersDescribeFn({describe, test, describeSkip, testSkip});
-      {name, tests: tests^, describes: describes^, skip};
+      let testOnly = (name, usersTest) => {
+        let location = Context.StackTrace.(getStackTrace() |> getTopLocation);
+        tests := tests^ @ [{name, location, usersTest, mode: Only}];
+      };
+      usersDescribeFn({
+        describe,
+        test,
+        describeSkip,
+        testSkip,
+        describeOnly,
+        testOnly,
+      });
+
+      let maxDescribeMode =
+        describes^
+        |> List.map((d: describeRecord('ext)) => d.mode)
+        |> List.fold_left(maxMode, Skip);
+
+        let maxTestMode = tests^
+        |> List.map((t: test('ext)) => t.mode)
+        |> List.fold_left(maxMode, Skip);
+
+      let maxChildMode =
+        List.fold_left(
+          maxMode,
+          Skip,
+          [maxDescribeMode, maxTestMode],
+        );
+      let treeMode = switch(mode, maxChildMode) {
+      | (Skip, _) => Skip
+      | (_, _) => maxMode(mode, maxChildMode)
+      };
+      {name, tests: tests^, describes: describes^, mode: treeMode};
     };
 
-  let makeTestSuite = ({name, usersDescribeFn, skip, extensionFn}) =>
+  let makeTestSuite = ({name, usersDescribeFn, mode, extensionFn}) =>
     TestSuite(
-      makeDescribeRecord(~name, ~usersDescribeFn, ~skip),
+      makeDescribeRecord(~name, ~usersDescribeFn, ~mode),
       extensionFn,
       (contextId, (module Context)),
     );

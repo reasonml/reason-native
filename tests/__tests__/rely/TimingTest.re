@@ -16,13 +16,13 @@ describe("Rely timing data", ({describe, test}) => {
       TestReporter.Make({});
     let result = ref(None);
     let testSuites = [
-      TestSuite.(
+      TestSuiteBuilder.(
         init("foo") |> withPassingTests(15) |> withFailingTests(10)
       ),
-      TestSuite.(
+      TestSuiteBuilder.(
         init("bar") |> withPassingTests(15) |> withFailingTests(10)
       ),
-      TestSuite.(
+      TestSuiteBuilder.(
         init("baz") |> withPassingTests(15) |> withFailingTests(10)
       ),
     ];
@@ -53,7 +53,7 @@ describe("Rely timing data", ({describe, test}) => {
       TestReporter.Make({});
     let result = ref(None);
     let testSuites = [
-      TestSuite.(
+      TestSuiteBuilder.(
         init("foo") |> withPassingTests(15) |> withFailingTests(10)
       ),
     ];
@@ -92,7 +92,7 @@ describe("Rely timing data", ({describe, test}) => {
       TestReporter.Make({});
     let result = ref(None);
     let testSuites = [
-      TestSuite.(
+      TestSuiteBuilder.(
         init("foo") |> withSkippedTests(15)
       ),
     ];
@@ -127,7 +127,7 @@ describe("Rely timing data", ({describe, test}) => {
       TestReporter.Make({});
     let result = ref(None);
     let testSuites = [
-      TestSuite.(
+      TestSuiteBuilder.(
         init("foo") |> withPassingTests(15) |> withFailingTests(10)
       ),
     ];

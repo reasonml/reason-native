@@ -39,6 +39,7 @@ module type TestFramework = {
 
   let describe: Describe.describeFn(unit);
   let describeSkip: Describe.describeFn(unit);
+  let describeOnly: Describe.describeFn(unit);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
   let run: RunConfig.t => unit;
@@ -84,7 +85,7 @@ module MakeInternal = (SnapshotIO: SnapshotIO.SnapshotIO, UserConfig: FrameworkC
     });
 
   let testSuites: ref(list(TestSuite.t)) = ref([]);
-  let makeDescribeFunction = extensionFn => {
+  let makeDescribeFunction = (extensionFn, mode) => {
     let describe = (name, fn) =>
       testSuites :=
         testSuites^
@@ -92,31 +93,21 @@ module MakeInternal = (SnapshotIO: SnapshotIO.SnapshotIO, UserConfig: FrameworkC
           TestSuiteFactory.makeTestSuite({
             name,
             usersDescribeFn: fn,
-            skip: false,
+            mode,
             extensionFn,
           }),
         ];
     describe;
   };
-  let makeDescribeSkipFunction = extensionFn => {
-    let describeSkip = (name, fn) =>
-      testSuites :=
-        testSuites^
-        @ [
-          TestSuiteFactory.makeTestSuite({
-            name,
-            usersDescribeFn: fn,
-            skip: true,
-            extensionFn,
-          }),
-        ];
-    describeSkip;
-  };
-  let describe = makeDescribeFunction(_ => ());
-  let describeSkip = makeDescribeSkipFunction(_ => ());
+
+  let describe = makeDescribeFunction(_ => (), Normal);
+  let describeSkip = makeDescribeFunction(_ => (), Skip);
+  let describeOnly = makeDescribeFunction(_ => (), Only);
+
   let extendDescribe = createCustomMatchers => {
-    describe: makeDescribeFunction(createCustomMatchers),
-    describeSkip: makeDescribeSkipFunction(createCustomMatchers),
+    describe: makeDescribeFunction(createCustomMatchers, Normal),
+    describeSkip: makeDescribeFunction(createCustomMatchers, Skip),
+    describeOnly: makeDescribeFunction(createCustomMatchers, Only),
   };
 
   let run = (config: RunConfig.t) =>

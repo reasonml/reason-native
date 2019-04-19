@@ -29,6 +29,7 @@ module RunConfig: {
   let updateSnapshots: (bool, t) => t;
   let withReporters: (list(reporter), t) => t;
   let internal_do_not_use_get_time: (unit => Time.t, t) => t;
+  let ciMode: (bool, t) => t;
 };
 
 module MatcherUtils: {
@@ -82,6 +83,7 @@ module type TestFramework = {
 
   let describe: Describe.describeFn(unit);
   let describeSkip: Describe.describeFn(unit);
+  let describeOnly: Describe.describeFn(unit);
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
   let run: RunConfig.t => unit;

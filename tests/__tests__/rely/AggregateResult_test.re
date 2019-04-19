@@ -15,7 +15,7 @@ type singleSuiteInput = {
 
 type multipleSuiteInput = {
   name: string,
-  testSuites: list(TestSuite.t),
+  testSuites: list(TestSuiteBuilder.t),
 };
 
 type singleSuiteExpectedOutput = {
@@ -216,7 +216,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
           let aggregatedResult = ref(None);
 
           let testSuites = [
-            TestSuite.(
+            TestSuiteBuilder.(
               init(input.name)
               |> withSkippedTests(input.numSkippedTests)
               |> withPassingTests(input.numPassingTests)
@@ -255,11 +255,11 @@ describe("Rely AggregateResult", ({describe, test}) => {
   });
   describe("Multiple suite cases", ({test}) => {
     let singletonPassingTestSuite =
-      TestSuite.(init("passing") |> withPassingTests(1));
+      TestSuiteBuilder.(init("passing") |> withPassingTests(1));
     let singletonFailingTestSuite =
-      TestSuite.(init("failing") |> withFailingTests(1));
+      TestSuiteBuilder.(init("failing") |> withFailingTests(1));
     let singletonSkippedTestSuite =
-      TestSuite.(init("skipped") |> withSkippedTests(1));
+      TestSuiteBuilder.(init("skipped") |> withSkippedTests(1));
 
     let repeatHelper = (el, n, l) =>
       switch (n) {
@@ -402,7 +402,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
             TestReporter.Make({});
           let result = ref(None);
           let testSuites = [
-            TestSuite.(
+            TestSuiteBuilder.(
               init(input.name)
               |> withSkippedTests(input.numSkippedTests)
               |> withPassingTests(input.numPassingTests)
@@ -453,7 +453,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
     ();
     test("nested describes should be skipped as well", ({expect}) => {
       let nestedSuite =
-        TestSuite.(
+        TestSuiteBuilder.(
           init("parent")
           |> withPassingTests(5)
           |> withFailingTests(3)

@@ -6,7 +6,7 @@
  */;
 
 type testFrameworkBuilder = {
-  testSuites: list(TestSuite.t),
+  testSuites: list(TestSuiteBuilder.t),
   snapshotDir: string,
   projectDir: string,
 };
@@ -35,11 +35,12 @@ module Build =
     });
 
   builder.testSuites
-  |> List.map(TestSuite.toFunction)
+  |> List.map(TestSuiteBuilder.toFunction)
   |> List.iter(ts =>
        ts(
          ~describe=TestFramework.describe,
          ~describeSkip=TestFramework.describeSkip,
+         ~describeOnly=TestFramework.describeOnly
        )
      );
   include TestFramework;
