@@ -7,6 +7,83 @@
 
 open TestFramework;
 
+module PathMatchers = {
+  open Rely.MatcherTypes;
+  type absolutePathMatchers = {toEqualPath: 'kind. Path.t('kind) => unit};
+
+  type absolutePathMatchersWithNot = {
+    toEqualPath: 'kind. Path.t('kind) => unit,
+    not: absolutePathMatchers,
+  };
+
+  let makeAbsolutePathMatchers =
+      (accessorPath, absolutePath, {createMatcher}) => {
+    let passMessageThunk = () => "";
+    let createAbsolutePathMatcher = isNot =>
+      createMatcher(
+        (
+          {matcherHint, formatReceived, formatExpected},
+          actualThunk,
+          expectedThunk,
+        ) => {
+        let actualAbsolutePath = actualThunk();
+        let expectedAbsolutePath = expectedThunk();
+        let pass =
+          Path.eq(actualAbsolutePath, expectedAbsolutePath) == !isNot;
+        if (!pass) {
+          let failureMessage =
+            String.concat(
+              "",
+              [
+                matcherHint(
+                  ~expectType=accessorPath,
+                  ~matcherName=".toEqualPath",
+                  ~isNot,
+                  ~received="path",
+                  ~expected="path",
+                  (),
+                ),
+                "\n\n",
+                "Expected path ",
+                Path.toDebugString(actualAbsolutePath),
+                " to ",
+                isNot ? "not " : "",
+                "equal path ",
+                Path.toDebugString(expectedAbsolutePath),
+              ],
+            );
+          (() => failureMessage, false);
+        } else {
+          (passMessageThunk, true);
+        };
+      });
+    {
+      not: {
+        toEqualPath: otherPath =>
+          createAbsolutePathMatcher(
+            true,
+            () => absolutePath,
+            () => otherPath,
+          ),
+      },
+      toEqualPath: otherPath =>
+        createAbsolutePathMatcher(false, () => absolutePath, () => otherPath),
+    };
+  };
+};
+open PathMatchers;
+
+type customMatchers = {
+  path: 'kind. Path.t('kind) => PathMatchers.absolutePathMatchersWithNot,
+};
+
+let customMatchers = extendUtils => {
+  path: path =>
+    PathMatchers.makeAbsolutePathMatchers(".ext.path", path, extendUtils),
+};
+
+let describe = extendDescribe(customMatchers).describe;
+
 describe("Path", ({test}) => {
   test("Basic creation", ({expect}) => {
     let path = Path.absoluteExn("/foo/bar/baz");
@@ -26,6 +103,32 @@ describe("Path", ({test}) => {
 
     let path = Path.absoluteExn("C:/");
     expect.string(path |> Path.toString).toEqual("C:/");
+  });
+
+  test("Parent directory", ({expect}) => {
+    let cDrive = Path.absoluteExn("C:/");
+    let cFoo = Path.absoluteExn("C:/foo");
+    let cFooBar = Path.absoluteExn("C:/foo/bar/");
+    let root = Path.absoluteExn("/");
+    let foo = Path.absoluteExn("/foo");
+    let fooBar = Path.absoluteExn("/foo/bar/");
+    expect.bool(cDrive |> Path.hasParentDir).toBeFalse();
+    expect.bool(cFoo |> Path.hasParentDir).toBeTrue();
+    expect.bool(cFooBar |> Path.hasParentDir).toBeTrue();
+    expect.ext.path(Path.dirName(cFooBar)).toEqualPath(cFoo);
+    expect.ext.path(Path.dirName(cFoo)).toEqualPath(cDrive);
+    expect.equal(Path.baseName(cFooBar), Some("bar"));
+    expect.equal(Path.baseName(cFoo), Some("foo"));
+    expect.equal(Path.baseName(cDrive), None);
+
+    expect.bool(root |> Path.hasParentDir).toBeFalse();
+    expect.bool(foo |> Path.hasParentDir).toBeTrue();
+    expect.bool(fooBar |> Path.hasParentDir).toBeTrue();
+    expect.ext.path(Path.dirName(fooBar)).toEqualPath(foo);
+    expect.ext.path(Path.dirName(foo)).toEqualPath(root);
+    expect.equal(Path.baseName(cFooBar), Some("bar"));
+    expect.equal(Path.baseName(cFoo), Some("foo"));
+    expect.equal(Path.baseName(cDrive), None);
   });
 
   test("Weird characters", ({expect}) => {
@@ -131,10 +234,10 @@ describe("Path", ({test}) => {
 
     let path = Path.relativeExn("../../a/../");
     expect.string(path |> Path.toDebugString).toEqual("./../..");
-    
+
     let path = Path.relativeExn("./~");
     expect.string(path |> Path.toDebugString).toEqual("./~");
-    
+
     let path = Path.absoluteExn("/~");
     expect.string(path |> Path.toDebugString).toEqual("/~");
 
@@ -213,5 +316,330 @@ describe("Path", ({test}) => {
 
     let path = Path.At.(root / "a" / "b" /../../ "");
     expect.string(path |> Path.toDebugString).toEqual("/");
+  });
+
+  test("Relativization throws for mismatched drives", ({expect}) => {
+    open Path;
+    let driveC = Path.drive("C:");
+    expect.fn(() =>
+      relativizeExn(
+        ~source=At.(driveC / "a" / "b" / "qqq"),
+        ~dest=At.(root / "f" / "f" / "zzz"),
+      )
+    ).
+      toThrow();
+    expect.fn(() =>
+      relativizeExn(~source=At.(driveC / "a"), ~dest=At.(root / "a"))
+    ).
+      toThrow();
+    expect.fn(() =>
+      relativizeExn(
+        ~source=At.(root / "a" / "b" / "qqq"),
+        ~dest=At.(driveC / "f" / "f" / "zzz"),
+      )
+    ).
+      toThrow();
+    expect.fn(() =>
+      relativizeExn(
+        ~source=At.(dot / "a" / "b" / "qqq"),
+        ~dest=At.(home / "f" / "f" / "zzz"),
+      )
+    ).
+      toThrow();
+  });
+
+  test("Relativization throws for impossible relativization", ({expect}) => {
+    open Path;
+    expect.fn(() =>
+      relativizeExn(~source=At.(dot / ".." / ""), ~dest=At.(dot / "a"))
+    ).
+      toThrow();
+    expect.fn(() =>
+      relativizeExn(
+        ~source=At.(dot / "a" / ".." / ".." / "b"),
+        ~dest=At.(dot / "a" / ".."),
+      )
+    ).
+      toThrow();
+    expect.fn(() => relativizeExn(~source=At.(dot / ".." / ""), ~dest=dot)).
+      toThrow();
+  });
+
+  test("Relativization correctly for absolute paths", ({expect}) => {
+    open Path;
+    let root = Path.root;
+
+    /* let rel = */
+    /*   Path.(relativizeExn(~source=At.(root / "a"), ~dest=At.(root / "a"))); */
+    /* expect.bool(Path.eq(Path.dot, rel)).toBeTrue(); */
+
+    let rel =
+      relativizeExn(
+        ~source=At.(root / "a" / "b" / "qqq"),
+        ~dest=At.(root / "f" / "f" / "zzz"),
+      );
+    let expected = relativeExn("../../../f/f/zzz");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    /* Equality test in the other direction. */
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(root / "a" / "b" / "qqq"),
+        ~dest=At.(root / "a" / "b" / "zzz"),
+      );
+    let expected = relativeExn("../zzz");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    /* Equality test in the other direction. */
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(root / "a" / "b" / "c" / "d"),
+        ~dest=At.(root / "a" / "b" / "qqq"),
+      );
+    let expected = relativeExn("../../qqq");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    /* Equality test in the other direction. */
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(root / "a" / "b" / "c" / "d"),
+        ~dest=At.(root / "a" / "b" / "c" / "d" / "q"),
+      );
+    let expected = relativeExn("./q");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(root / "x" / "y" / "z"),
+        ~dest=At.(root / "a" / "b" / "c"),
+      );
+    let expected = relativeExn("../../../a/b/c");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+  });
+
+  test("Relativization correctly for absolute drives", ({expect}) => {
+    open Path;
+    let driveC = Path.drive("C:");
+
+    let rel =
+      relativizeExn(
+        ~source=At.(driveC / "a" / "b" / "qqq"),
+        ~dest=At.(driveC / "f" / "f" / "zzz"),
+      );
+    let expected = relativeExn("../../../f/f/zzz");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(driveC / "a" / "b" / "qqq"),
+        ~dest=At.(driveC / "a" / "b" / "zzz"),
+      );
+    let expected = relativeExn("../zzz");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(driveC / "a" / "b" / "c" / "d"),
+        ~dest=At.(driveC / "a" / "b" / "qqq"),
+      );
+    let expected = relativeExn("../../qqq");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(driveC / "a" / "b" / "c" / "d"),
+        ~dest=At.(driveC / "a" / "b" / "c" / "d" / "q"),
+      );
+    let expected = relativeExn("./q");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(driveC / "x" / "y" / "z"),
+        ~dest=At.(driveC / "a" / "b" / "c"),
+      );
+    let expected = relativeExn("../../../a/b/c");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+  });
+
+  test("Relativization correctly for relative paths", ({expect}) => {
+    open Path;
+
+    let rel =
+      relativizeExn(~source=At.(dot / "a" / "b"), ~dest=At.(dot / "a"));
+    expect.ext.path(At.(dot /../ "")).toEqualPath(rel);
+    expect.ext.path(At.(rel)).toEqualPath(At.(dot /../ ""));
+
+    let rel =
+      relativizeExn(~source=At.(dot / "a" / "b"), ~dest=At.(dot / "a" / "b"));
+    expect.ext.path(At.(dot)).toEqualPath(rel);
+    expect.ext.path(At.(rel)).toEqualPath(dot);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(dot / "a" / "b" / "qqq"),
+        ~dest=At.(dot / "f" / "f" / "zzz"),
+      );
+    let expected = relativeExn("../../../f/f/zzz");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(dot / "a" / "b" / "qqq"),
+        ~dest=At.(dot / "a" / "b" / "zzz"),
+      );
+    let expected = relativeExn("../zzz");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(dot / "a" / "b" / "c" / "d"),
+        ~dest=At.(dot / "a" / "b" / "qqq"),
+      );
+    let expected = relativeExn("../../qqq");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(dot / "a" / "b" / "c" / "d"),
+        ~dest=At.(dot / "a" / "b" / "c" / "d" / "q"),
+      );
+    let expected = relativeExn("./q");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(dot / "x" / "y" / "z"),
+        ~dest=At.(dot / "a" / "b" / "c"),
+      );
+    let expected = relativeExn("../../../a/b/c");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(dot /../ "a" / "b" / "qqq"),
+        ~dest=At.(dot /../ "a" / "b" / "qqq"),
+      );
+    let expected = relativeExn("./");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel = relativizeExn(~source=At.(dot /../ ""), ~dest=At.(dot /../ ""));
+    let expected = relativeExn("./");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(~source=At.(dot /../ ""), ~dest=At.(dot /../../ ""));
+    let expected = relativeExn("../");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(~source=At.(dot /../ "a"), ~dest=At.(dot /../../ "a"));
+    let expected = relativeExn("../../a");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+  });
+
+  test("Relativization correctly for home relative paths", ({expect}) => {
+    open Path;
+
+    let rel =
+      relativizeExn(~source=At.(home / "a" / "b"), ~dest=At.(home / "a"));
+    expect.ext.path(At.(dot /../ "")).toEqualPath(rel);
+    expect.ext.path(At.(rel)).toEqualPath(At.(dot /../ ""));
+
+    let rel =
+      relativizeExn(
+        ~source=At.(home / "a" / "b"),
+        ~dest=At.(home / "a" / "b"),
+      );
+    expect.ext.path(At.(dot)).toEqualPath(rel);
+    expect.ext.path(At.(rel)).toEqualPath(dot);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(home / "a" / "b" / "qqq"),
+        ~dest=At.(home / "f" / "f" / "zzz"),
+      );
+    let expected = relativeExn("../../../f/f/zzz");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(home / "a" / "b" / "qqq"),
+        ~dest=At.(home / "a" / "b" / "zzz"),
+      );
+    let expected = relativeExn("../zzz");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(home / "a" / "b" / "c" / "d"),
+        ~dest=At.(home / "a" / "b" / "qqq"),
+      );
+    let expected = relativeExn("../../qqq");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(home / "a" / "b" / "c" / "d"),
+        ~dest=At.(home / "a" / "b" / "c" / "d" / "q"),
+      );
+    let expected = relativeExn("./q");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
+
+    let rel =
+      relativizeExn(
+        ~source=At.(home / "x" / "y" / "z"),
+        ~dest=At.(home / "a" / "b" / "c"),
+      );
+    let expected = relativeExn("../../../a/b/c");
+
+    expect.ext.path(rel).toEqualPath(expected);
+    expect.ext.path(expected).toEqualPath(rel);
   });
 });

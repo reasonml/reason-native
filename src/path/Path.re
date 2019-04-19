@@ -28,6 +28,9 @@ type base('kind) =
  * rightmost segment of the path).
  */
 type t('kind) = (base('kind), list(string));
+type firstClass =
+  | Absolute(t(absolute))
+  | Relative(t(relative));
 type opaqueBase =
   | Base(base('exists)): opaqueBase;
 type opaqueT = (opaqueBase, list(string));
@@ -36,6 +39,8 @@ let drive = name => (Abs(Some(name)), []);
 let root = (Abs(None), []);
 let home = (Rel(Home, 0), []);
 let dot = (Rel(Any, 0), []);
+
+let hasParentDir = ((Abs(_), lst): t(absolute)) => lst !== [];
 
 let toString: type kind. t(kind) => string =
   path =>
@@ -213,6 +218,160 @@ let relativeExn = s =>
       )
     | Some(initRelPath) => List.fold_left(parseNextToken, initRelPath, tl)
     }
+  };
+
+/**
+ * Relates two positive integers to zero and eachother.
+ */
+type ord =
+  | /** 0 === i === j */ Zeros
+  | /** 0 === i < j */ ZeroPositive
+  | /** i > 0 === j */ PositiveZero
+  | /** 0 < i && 0 < j */ Positives;
+
+/**
+ * Using `ord` allows us to retain exhaustiveness pattern matching checks that
+ * would normally be lost when adding `when i < j` guards to matches. It's
+ * very likely inlined so there's no performance hit. Annotate as int so that
+ * it isn't inferred to be polymorphic.
+ */
+let ord = (i: int, j: int) =>
+  i === 0 && j === 0 ?
+    Zeros : i === 0 ? ZeroPositive : j === 0 ? PositiveZero : Positives;
+
+let rec repeat = (soFar, i, s) =>
+  i === 0 ? soFar : repeat(soFar ++ s, i - 1, s);
+
+/*
+ *  relativize(a/rest1..., a/rest2...) == relativize(rest1..., rest2...)
+ *  relativize(../rest1..., ../rest2...) == relativize(rest1..., res2...)
+ *  relativize(a/rest1..., b/rest2...) == [...len(1)]/b/rest2
+ *  relativize(../a/rest1..., b/rest2...) == raise
+ *  relativize(a/rest1..., ../b/rest2...) == [...len(1)]../b/rest2
+ *
+ *  "upDirs" is the number of ../ the path is assumed to have. The segments
+ *  `s1`/`s2`, are in the path order from left to right, unlike `Path.t` which
+ *  usually stores them in reverse order. Relativizing paths is one place where
+ *  it's more convenient to have them in the left to right segment order.
+ */
+let rec relativizeDepth = ((upDirs1, s1), (upDirs2, s2)) =>
+  switch (ord(upDirs1, upDirs2), s1, s2) {
+  | (Zeros, [hd1, ...tl1], [hd2, ...tl2]) =>
+    if (String.compare(hd1, hd2) === 0) {
+      relativizeDepth((0, tl1), (0, tl2));
+    } else {
+      (List.length(s1), s2);
+    }
+  | (Zeros, [], []) => (0, [])
+  | (Zeros, [], [hd2, ...tl2] as s2) => (upDirs2, s2)
+  | (Zeros, [hd1, ...tl1] as s1, []) => (List.length(s1), [])
+  | (Positives, _, _) =>
+    relativizeDepth((upDirs1 - 1, s1), (upDirs2 - 1, s2))
+  | (ZeroPositive, _, _) => (List.length(s1) + upDirs2, s2)
+  | (PositiveZero, _, _) =>
+    raise(
+      Invalid_argument(
+        "Cannot relativize paths source='"
+        ++ repeat("", upDirs1, "../")
+        ++ String.concat(sep, s1)
+        ++ "' dest='"
+        ++ repeat("", upDirs2, "../")
+        ++ String.concat(sep, s2),
+      ),
+    )
+  };
+
+let raiseDriveMismatch = (p1, p2) =>
+  raise(
+    Invalid_argument(
+      "Cannot relativize paths with different drives or relative roots "
+      ++ toString(p1)
+      ++ " and "
+      ++ toString(p2),
+    ),
+  );
+
+let relativizeExn: type k. (~source: t(k), ~dest: t(k)) => t(relative) =
+  (~source, ~dest) => {
+    let (depth, segs) =
+      switch (source, dest) {
+      | ((Abs(d1), s1), (Abs(d2), s2)) =>
+        switch (d1, d2) {
+        | (None, None) =>
+          relativizeDepth((0, List.rev(s1)), (0, List.rev(s2)))
+        | (Some(_), None) => raiseDriveMismatch(source, dest)
+        | (None, Some(_)) => raiseDriveMismatch(source, dest)
+        | (Some(d1), Some(d2)) =>
+          String.compare(d1, d2) !== 0 ?
+            raiseDriveMismatch(source, dest) :
+            relativizeDepth((0, List.rev(s1)), (0, List.rev(s2)))
+        }
+      | ((Rel(w1, r1), s1), (Rel(w2, r2), s2)) =>
+        w1 === w2 ?
+          relativizeDepth((r1, List.rev(s1)), (r2, List.rev(s2))) :
+          raiseDriveMismatch(source, dest)
+      };
+    (Rel(Any, depth), List.rev(segs));
+  };
+
+let relativize:
+  type k. (~source: t(k), ~dest: t(k)) => result(t(relative), exn) =
+  (~source, ~dest) =>
+    try (Ok(relativizeExn(~source, ~dest))) {
+    | Invalid_argument(_) as e => Error(e)
+    };
+
+let rec segEq = (l1, l2) =>
+  switch (l1, l2) {
+  | ([], []) => true
+  | ([], [_, ..._]) => false
+  | ([_, ..._], []) => false
+  | ([hd1, ...tl1], [hd2, ...tl2]) =>
+    String.compare(hd1, hd2) === 0 && segEq(tl1, tl2)
+  };
+
+let eq: type k1 k2. (t(k1), t(k2)) => bool =
+  (p1, p2) =>
+    switch (p1, p2) {
+    | ((Abs(_), s1), (Rel(_), s2)) => false
+    | ((Rel(_), s1), (Abs(_), s2)) => false
+    | ((Abs(d1), s1), (Abs(d2), s2)) =>
+      switch (d1, d2) {
+      | (Some(_), None)
+      | (None, Some(_)) => false
+      | (None, None) => segEq(s1, s2)
+      | (Some(d1), Some(d2)) =>
+        String.compare(d1, d2) === 0 && segEq(s1, s2)
+      }
+    | ((Rel(w1, r1), s1), (Rel(w2, r2), s2)) =>
+      w1 === w2 && r1 === r2 && segEq(s1, s2)
+    };
+
+let absoluteEq = eq;
+
+let relativeEq = eq;
+
+let testForPath = s =>
+  switch (absolute(s)) {
+  | Some(abs) => Some(Absolute(abs))
+  | None =>
+    switch (relative(s)) {
+    | Some(r) => Some(Relative(r))
+    | None => None
+    }
+  };
+
+let firstClass: type k. t(k) => firstClass =
+  p =>
+    switch (p) {
+    | (Abs(d), s) => Absolute((Abs(d), s))
+    | (Rel(w, r), s) => Relative((Rel(w, r), s))
+    };
+
+let testForPathExn = s =>
+  switch (testForPath(s)) {
+  | Some(res) => res
+  | None => raise(Invalid_argument("Path neither absolute nor relative."))
   };
 
 let continue = (s, path) => List.fold_left(parseNextToken, path, lex(s));
