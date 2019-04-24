@@ -10,14 +10,14 @@ type equalsFn('a) = ('a, 'a) => bool;
 
 type optionMatchers('a) = {
   toBeNone: unit => unit,
-  toBeSome: (~equals: equalsFn('a)=?, 'a) => unit,
+  toBeSome: unit => unit,
   toBe: (~equals: equalsFn('a)=?, option('a)) => unit,
 };
 
 type optionMatchersWithNot('a) = {
   not: optionMatchers('a),
   toBeNone: unit => unit,
-  toBeSome: (~equals: equalsFn('a)=?, 'a) => unit,
+  toBeSome: unit => unit,
   toBe: (~equals: equalsFn('a)=?, option('a)) => unit,
 };
 
@@ -119,7 +119,7 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
                   (),
                 ),
                 "\n\n",
-                "Expected value not to be None, but received: ",
+                "Expected value to be None, but received: ",
                 formatReceived(printOption(actual)),
               ],
             );
@@ -137,7 +137,7 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
                   (),
                 ),
                 "\n\n",
-                "Expected value to be None, but received: ",
+                "Expected value to not be None, but received: ",
                 formatReceived(printOption(actual)),
               ],
             );
@@ -152,55 +152,58 @@ let makeMatchers = (accessorPath, {createMatcher}) => {
           actualThunk,
           expectedThunk,
         ) => {
-        let actual = actualThunk();
-        let (equals, value) = expectedThunk();
-        let expected = Some(value);
-        let actualEqualsExpected =
-          switch (actual, expected) {
-          | (None, None) => true
-          | (Some(actualValue), Some(expectedValue))
-              when equals(actualValue, expectedValue) =>
-            true
-          | (_, _) => false
+          let actual = actualThunk();
+          let actualIsSome = switch(actual){
+          | Some(_) => true
+          | None => false
+          }
+          switch (actualIsSome, isNot) {
+          | (true, false)
+          | (false, true) => (passMessageThunk, true)
+          | (false, false) =>
+            let message =
+              String.concat(
+                "",
+                [
+                  matcherHint(
+                    ~expectType=accessorPath,
+                    ~matcherName=".toBeSome",
+                    ~expected="",
+                    ~isNot,
+                    (),
+                  ),
+                  "\n\n",
+                  "Expected value to be Some, but received: ",
+                  formatReceived(printOption(actual)),
+                ],
+              );
+            ((() => message), false);
+          | (true, true) =>
+            let message =
+              String.concat(
+                "",
+                [
+                  matcherHint(
+                    ~expectType=accessorPath,
+                    ~matcherName=".toBeSome",
+                    ~expected="",
+                    ~isNot,
+                    (),
+                  ),
+                  "\n\n",
+                  "Expected value to not be Some, but received: ",
+                  formatReceived(printOption(actual)),
+                ],
+              );
+            ((() => message), false);
           };
-        let pass =
-          actualEqualsExpected && !isNot || !actualEqualsExpected && isNot;
-        if (!pass) {
-          let isUsingDefaultEquality = equals === defaultEqualityFn;
-          let displayEqualityMessage =
-            isSome(expected) && isSome(actual) && isUsingDefaultEquality;
-          let message =
-            String.concat(
-              "",
-              [
-                matcherHint(
-                  ~expectType=accessorPath,
-                  ~matcherName=".toBeSome",
-                  ~isNot,
-                  ~options={
-                    comment: displayEqualityMessage ? Some("using ==") : None,
-                  },
-                  (),
-                ),
-                "\n\n",
-                "Expected: ",
-                formatExpected(printOption(expected)),
-                "\n",
-                "Received: ",
-                formatReceived(printOption(actual)),
-              ],
-            );
-          (() => message, pass);
-        } else {
-          (passMessageThunk, pass);
-        };
       });
     let makeOptionMatchers = isNot => {
       toBe: (~equals=defaultEqualityFn, expected) =>
         toBe(isNot, () => actual, () => (equals, expected)),
       toBeNone: () => toBeNone(isNot, () => actual, () => ()),
-      toBeSome: (~equals=defaultEqualityFn, expected) =>
-        toBeSome(isNot, () => actual, () => (equals, expected)),
+      toBeSome: () =>
+        toBeSome(isNot, () => actual, () => ()),
     };
     let optionMatchers = makeOptionMatchers(false);
     {
