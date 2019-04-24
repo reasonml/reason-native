@@ -1,0 +1,6 @@
+qcheck-rely › error test
+<dim>expect.ext.qCheckTest(</dim><red>received</red><dim>)(</dim><green></green><dim>)</dim>
+
+QCheck test \"error_raise_exn\" failed with exception Error
+
+generated input: <red>0 (after 60 shrink steps)</red>

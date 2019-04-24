@@ -1,0 +1,5 @@
+(library
+  (name QCheckRely)
+  (public_name qcheck-rely)
+  (libraries qcheck-core rely.lib console.lib)
+)

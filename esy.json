@@ -6,14 +6,15 @@
   "esy": {
     "build": "refmterr dune build --profile=release",
     "install": [
-      "esy-installer pastel.install",
-      "esy-installer rely.install",
-      "esy-installer path.install",
-      "esy-installer fs.install",
       "esy-installer console.install",
-      "esy-installer pastel-console.install",
       "esy-installer file-context-printer.install",
+      "esy-installer fs.install",
+      "esy-installer pastel.install",
+      "esy-installer pastel-console.install",
+      "esy-installer path.install",
+      "esy-installer qcheck-rely.install",
       "esy-installer refmterr.install",
+      "esy-installer rely.install",
       "esy-installer tests.install",
       "esy-installer unicode.install",
       "esy-installer unicode-config.install"
@@ -32,7 +33,8 @@
     "ocaml": "^4.2.0",
     "@opam/re": "*",
     "@opam/atdgen": "*",
-    "@opam/junit": "*"
+    "@opam/junit": "*",
+    "@opam/qcheck": ">= 0.9 < 0.10"
   },
   "devDependencies": {
     "@opam/merlin": "*",

@@ -12,6 +12,8 @@
     pastel.lib
     console.lib
     pastel-console.lib
+    qcheck-core
+    qcheck-rely
     sexplib0
   )
   (modules (:standard \ TestDev TestCi))
