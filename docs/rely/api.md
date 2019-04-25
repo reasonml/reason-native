@@ -34,7 +34,10 @@ TestFramework.cli(); /* default config */
 /* MyFirstTest.re */
 open TestFramework;
 
-describe("my first test suite", ({test, testSkip, describe}) => {
+describe(
+  "my first test suite",
+  ({test, testSkip, testOnly, describe, describeSkip, describeOnly}) => {
+
   /* test suite */
   test("basic matchers", ({expect}) => {
     /* string type */
@@ -55,7 +58,7 @@ describe("my first test suite", ({test, testSkip, describe}) => {
     /* float type */
     expect.float(0.1 +. 0.2).toBeCloseTo(2.0);
 
-    /* option types */
+    /* option types (as of Rely 2.1.0)*/
     expect.option(None).toBeNone();
     expect.option(Some(42)).toBeSome();
     expect.option(Some("hello")).toBe(Some("hello"));
@@ -93,13 +96,29 @@ describe("my first test suite", ({test, testSkip, describe}) => {
     expect.mock(mock).lastReturnedWith(8);
   });
 
+  /* test skip causes this test to be skipped (not run) */
   testSkip("incorrect test", ({expect}) => {
     expect.int(1 + 1).toBe(3);
   });
 
-  describe("a nested test suite", ({test}) => {
+  /* describe skip skips everything inside the describe */
+  describeSkip("a nested test suite", ({test}) => {
     test("snapshots", ({expect}) => {
       expect.string("I 💖 Rely").toMatchSnapshot();
+    });
+  });
+
+  /* testOnly will cause the test to always be run as long as it's
+   * not inside a skip (since 2.1.0) */
+  testOnly("only test", ({expect}) => {
+    expect.int(1 + 1).toBe(2);
+  });
+
+  /* Everything inside a describe only will always be run as long as it's not
+  inside a skip (since 2.1.0) */
+  describeOnly("a nested test suite", ({test}) => {
+    test("trivial", ({expect}) => {
+      expect.bool(true).toBeTrue();
     });
   });
 });
