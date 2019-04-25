@@ -27,6 +27,7 @@ let rec readLink__ = str =>
  */
 let rec stat = path =>
   try (Some(Unix.lstat(Path.toString(path)))) {
+  | Unix.Unix_error(Unix.ENOTDIR, _, _) => None
   | Unix.Unix_error(Unix.ENOENT, _, _) => None
   | Unix.Unix_error(Unix.EINTR, _, _) => stat(path)
   | Unix.Unix_error(_) as e => Util.reraise(e)

@@ -3,6 +3,14 @@
  */;
 open Types;
 
+let compareBaseName = (p1, p2) =>
+  switch (Path.baseName(p1), Path.baseName(p2)) {
+  | (None, None) => 0
+  | (Some(x), None) => 1
+  | (None, Some(x)) => (-1)
+  | (Some(p1), Some(p2)) => String.compare(p1, p2)
+  };
+
 /*
  * Generalizes walking the file system, and allowing the callback `~onNode` to
  * perform an operation at each query result, and continuing if desired.
@@ -30,7 +38,7 @@ let rec traverseFileSystemFromQueryResult = (~onNode, queryResult) =>
       | Other(_)
       | File(_) => ()
       | Dir(path, _) =>
-        let paths = Query.readDirExn(path);
+        let paths = List.fast_sort(compareBaseName, Query.readDirExn(path));
         List.iter(traverseFileSystemFromPath(~onNode), paths);
       | Link(from, toTarget, _) =>
         let nextAbsPath = Util.resolvePath(from, toTarget);

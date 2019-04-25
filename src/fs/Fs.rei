@@ -286,6 +286,7 @@ the paths may be returned after being processed by `realPath`.
 let resolveLink:
   Path.t(Path.absolute) => result(Path.t(Path.absolute), exn);
 
+
 /**
 Same as `resolveLink` but raises exception instead of returning `Error`.
 */
@@ -328,11 +329,16 @@ let linksExn: Path.t(Path.absolute) => list(Path.t(Path.absolute));
 /**
 Returns the set of paths inside a directory (excluding .. and .) Returns
 `Error` if the directory does not exist or the path is not a directory.
+Does not return directories in any guaranteed ordering.
 */
 let readDir:
   Path.t(Path.absolute) => result(list(Path.t(Path.absolute)), exn);
 
 /**
+Returns the set of paths inside a directory (excluding .. and .) Returns
+`Error` if the directory does not exist or the path is not a directory.
+Does not return directories in any guaranteed ordering.
+
 Same as `readDir` but raises exception instead of returning `Error`.
 */
 let readDirExn: Path.t(Path.absolute) => list(Path.t(Path.absolute));
