@@ -1,7 +1,7 @@
 ---
 id: api
-title: Rely API
-sidebar_label: API
+title: Basic API
+sidebar_label: Basic API
 ---
 
 > Prefer reading code? Check out [RelyAPI.rei](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RelyAPI.rei)
@@ -34,7 +34,10 @@ TestFramework.cli(); /* default config */
 /* MyFirstTest.re */
 open TestFramework;
 
-describe("my first test suite", ({test, testSkip, describe}) => {
+describe(
+  "my first test suite",
+  ({test, testSkip, testOnly, describe, describeSkip, describeOnly}) => {
+
   /* test suite */
   test("basic matchers", ({expect}) => {
     /* string type */
@@ -54,6 +57,11 @@ describe("my first test suite", ({test, testSkip, describe}) => {
 
     /* float type */
     expect.float(0.1 +. 0.2).toBeCloseTo(2.0);
+
+    /* option types (as of Rely 2.1.0)*/
+    expect.option(None).toBeNone();
+    expect.option(Some(42)).toBeSome();
+    expect.option(Some("hello")).toBe(Some("hello"));
 
     /* fn type */
     expect.fn(() => {2;}).not.toThrow();
@@ -88,131 +96,93 @@ describe("my first test suite", ({test, testSkip, describe}) => {
     expect.mock(mock).lastReturnedWith(8);
   });
 
+  /* test skip causes this test to be skipped (not run) */
   testSkip("incorrect test", ({expect}) => {
     expect.int(1 + 1).toBe(3);
   });
 
-  describe("a nested test suite", ({test}) => {
+  /* describe skip skips everything inside the describe */
+  describeSkip("a nested test suite", ({test}) => {
     test("snapshots", ({expect}) => {
       expect.string("I 💖 Rely").toMatchSnapshot();
+    });
+  });
+
+  /* testOnly will cause the test to always be run as long as it's
+   * not inside a skip (since 2.1.0) */
+  testOnly("only test", ({expect}) => {
+    expect.int(1 + 1).toBe(2);
+  });
+
+  /* Everything inside a describe only will always be run as long as it's not
+  inside a skip (since 2.1.0) */
+  describeOnly("a nested test suite", ({test}) => {
+    test("trivial", ({expect}) => {
+      expect.bool(true).toBeTrue();
     });
   });
 });
 ```
 
-## Advanced Setup
-
-### Running with [Custom Run Config](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RunConfig.re)
-
-```reason
-/* MyLibTest.re */
-let sampleRunConfig = RunConfig.initialize()
-TestFramework.run(sampleRunConfig); /* custom config */
-```
-
-### Running with [Custom Reporters](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/Reporter.re)
+## Custom Matchers
+Custom matchers can also be created as below, the API is currently identical to the internal one, so additional examples can be found by looking at the [code for the built in matchers](https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers).
 
 ```reason
-let myReporter: Rely.Reporter.t = {
-  onTestSuiteStart: (testSuite) => {...},
-  onTestSuiteResult: (testSuite, aggregatedResult, testSuiteResult) => {...},
-  onRunStart: (relyRunInfo) => {...},
-  onRunComplete: (aggregatedResult) => {...}
-};
+/*IntExtensions.re*/
+type intExtensions = {toDivide: int => unit};
 
-let customReporterConfig = RunConfig.initialize() |> withReporters([
-  Custom(myReporter),
-  /* not required, but the default terminal reporter can also be included */
-  Default
-]);
+let intExtensions = (actual, {createMatcher}) => {
+  let pass = (() => "", true);
+  let createDividesMatcher = createMatcher(
+      ({formatReceived, formatExpected}, actualThunk, expectedThunk) => {
+      let actual = actualThunk();
+      let expected = expectedThunk();
+      let actualDividesExpected = expected mod actual == 0;
 
-TestFramework.run(customReporterConfig);
-```
-
-### Using Custom Matchers
-
-```reason
-/*UserMatchers.re*/
-open Rely.MatcherTypes;
-
-type user = {
-  name: string,
-  isLoggedIn: bool,
-};
-
-type userMatchers = {toBeLoggedIn: unit => unit};
-
-type userMatchersWithNot = {
-  toBeLoggedIn: unit => unit,
-  not: userMatchers,
-};
-
-let makeUserMatchers = (accessorPath, user, {createMatcher}) => {
-  let passMessageThunk = () => "";
-  let createLoggedInMatcher = isNot =>
-    createMatcher(
-      ({matcherHint, formatReceived, formatExpected}, actualThunk, _) => {
-      let actualUser = actualThunk();
-      let pass = actualUser.isLoggedIn == !isNot;
-      if (!pass) {
+      if (!actualDividesExpected) {
         let failureMessage =
           String.concat(
             "",
             [
-              matcherHint(
-                ~expectType=accessorPath,
-                ~matcherName=".toBeLoggedIn",
-                ~isNot,
-                ~received="user",
-                ~expected="",
-                (),
-              ),
-              "\n\n",
-              "Expected user ",
-              actualUser.name,
-              " to ",
-              isNot ? "not " : "",
-              "be logged in",
+              "Expected actual to divide ",
+              formatExpected(string_of_int(expected)),
+              "\n",
+              "Received: ",
+              formatReceived(string_of_int(actual))
             ],
           );
         (() => failureMessage, false);
       } else {
-        (passMessageThunk, true);
+        pass;
       };
     });
   {
-    not: {
-      toBeLoggedIn: () => createLoggedInMatcher(true, () => user, () => ()),
-    },
-    toBeLoggedIn: () => createLoggedInMatcher(false, () => user, () => ()),
+    toDivide: (expected) => createDividesMatcher(() => actual, () => expected),
   };
 };
-
 ```
 
 ```reason
-/* UserTest.re*/
+/* DividesTest.re*/
 open TestFramework;
-open UserMatchers;
+open IntExtensions;
 
-type customMatchers = {user: user => UserMatchers.userMatchersWithNot};
-
-let customMatchers = extendUtils => {
-  user: user => UserMatchers.makeUserMatchers(".ext.user", user, extendUtils),
+type customMatchers = {
+  int: int => intExtensions
 };
 
-let describe = extendDescribe(customMatchers);
+let customMatchers = createMatcher => {
+  int: i => intExtensions(i, createMatcher)
+}
 
-describe("A test with users", ({test}) => {
-  test("Logged in user should be logged in", ({expect}) => {
-    let bob = {name: "Bob", isLoggedIn: true};
+let { describeOnly } = extendDescribe(customMatchers);
 
-    expect.ext.user(bob).toBeLoggedIn();
+describeOnly("divides matchers example", ({test}) => {
+  test("should divide", ({expect}) => {
+    expect.ext.int(42).toDivide(84);
   });
-  test("Logged out user should not be logged in", ({expect}) => {
-    let alice = {name: "Alice", isLoggedIn: false};
-
-    expect.ext.user(alice).not.toBeLoggedIn();
+  test("this test fails", ({expect}) => {
+    expect.ext.int(43).toDivide(84);
   });
 });
 ```

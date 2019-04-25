@@ -64,9 +64,13 @@
         "title": "Refmterr Quickstart",
         "sidebar_label": "Quickstart"
       },
+      "rely/advanced": {
+        "title": "Advanced Topics - Rely",
+        "sidebar_label": "Advanced"
+      },
       "rely/api": {
-        "title": "Rely API",
-        "sidebar_label": "API"
+        "title": "Basic API",
+        "sidebar_label": "Basic API"
       },
       "rely/index": {
         "title": "Rely Introduction",

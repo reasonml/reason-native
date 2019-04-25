@@ -40,6 +40,18 @@ Let's start by creating a library for our tests. Create a directory called test 
    ; you will want to depend on the library you are testing as well, however for
    ; the purposes of this example we are only depending on the test runner itself
    (libraries rely.lib )
+   (modules (:standard \ RunTests))
+)
+(executable
+  ; the for the library is automatically detected because of the name, but we
+  ; need to explicitly specify the package here
+  (package my-lib-test)
+  (name RunTests)
+  (public_name RunTests.exe)
+  (libraries
+    my-lib-test.lib
+  )
+  (modules RunTests)
 )
 ```
 
@@ -82,31 +94,20 @@ describe("my first test suite", ({test}) => {
 });
 ```
 
-From here let's create an executable to actually run our tests.
+From here let's create an executable to actually run our tests (the name of this file corresponds to the name specified in the executable stanza in the dune file).
 ```sh
+│
+├─my-lib-test.opam
 ├─test/
-│   lib/
-│       dune
-│       TestFramework.re
-│       MyFirstTest.re
-│   exe/
-│       dune
-│       MyLibTest.re
-```
-
-```lisp
-;; dune file
-(executable
-   (name MyLibTest)
-   (public_name MyLibTest.exe)
-   (libraries  my-lib.test)
-   (package my-lib-test)
-)
+│   dune
+│   TestFramework.re
+│   MyFirstTest.re
+│   RunTests.re
 ```
 
 ```reason
-/* MyLibTest.re */
+/* RunTests.re */
 MyLibTest.TestFramework.cli()
 ```
 
-Finally we can run `esy build && esy x MyLibTest.exe` to build and run our tests.
+Finally we can run `esy build && esy x RunTests.exe` to build and run our tests.
