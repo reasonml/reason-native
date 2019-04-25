@@ -55,6 +55,11 @@ describe("my first test suite", ({test, testSkip, describe}) => {
     /* float type */
     expect.float(0.1 +. 0.2).toBeCloseTo(2.0);
 
+    /* option types */
+    expect.option(None).toBeNone();
+    expect.option(Some(42)).toBeSome();
+    expect.option(Some("hello")).toBe(Some("hello"));
+
     /* fn type */
     expect.fn(() => {2;}).not.toThrow();
 
@@ -101,89 +106,64 @@ describe("my first test suite", ({test, testSkip, describe}) => {
 ```
 
 ## Custom Matchers
+Custom matchers can also be created as below, the API is currently identical to the internal one, so additional examples can be found by looking at the [code for the built in matchers](https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers).
 
 ```reason
-/*UserMatchers.re*/
-open Rely.MatcherTypes;
+/*IntExtensions.re*/
+type intExtensions = {toDivide: int => unit};
 
-type user = {
-  name: string,
-  isLoggedIn: bool,
-};
+let intExtensions = (actual, {createMatcher}) => {
+  let pass = (() => "", true);
+  let createDividesMatcher = createMatcher(
+      ({formatReceived, formatExpected}, actualThunk, expectedThunk) => {
+      let actual = actualThunk();
+      let expected = expectedThunk();
+      let actualDividesExpected = expected mod actual == 0;
 
-type userMatchers = {toBeLoggedIn: unit => unit};
-
-type userMatchersWithNot = {
-  toBeLoggedIn: unit => unit,
-  not: userMatchers,
-};
-
-let makeUserMatchers = (accessorPath, user, {createMatcher}) => {
-  let passMessageThunk = () => "";
-  let createLoggedInMatcher = isNot =>
-    createMatcher(
-      ({matcherHint, formatReceived, formatExpected}, actualThunk, _) => {
-      let actualUser = actualThunk();
-      let pass = actualUser.isLoggedIn == !isNot;
-      if (!pass) {
+      if (!actualDividesExpected) {
         let failureMessage =
           String.concat(
             "",
             [
-              matcherHint(
-                ~expectType=accessorPath,
-                ~matcherName=".toBeLoggedIn",
-                ~isNot,
-                ~received="user",
-                ~expected="",
-                (),
-              ),
-              "\n\n",
-              "Expected user ",
-              actualUser.name,
-              " to ",
-              isNot ? "not " : "",
-              "be logged in",
+              "Expected actual to divide ",
+              formatExpected(string_of_int(expected)),
+              "\n",
+              "Received: ",
+              formatReceived(string_of_int(actual))
             ],
           );
         (() => failureMessage, false);
       } else {
-        (passMessageThunk, true);
+        pass;
       };
     });
   {
-    not: {
-      toBeLoggedIn: () => createLoggedInMatcher(true, () => user, () => ()),
-    },
-    toBeLoggedIn: () => createLoggedInMatcher(false, () => user, () => ()),
+    toDivide: (expected) => createDividesMatcher(() => actual, () => expected),
   };
 };
-
 ```
 
 ```reason
-/* UserTest.re*/
+/* DividesTest.re*/
 open TestFramework;
-open UserMatchers;
+open IntExtensions;
 
-type customMatchers = {user: user => UserMatchers.userMatchersWithNot};
-
-let customMatchers = extendUtils => {
-  user: user => UserMatchers.makeUserMatchers(".ext.user", user, extendUtils),
+type customMatchers = {
+  int: int => intExtensions
 };
 
-let describe = extendDescribe(customMatchers);
+let customMatchers = createMatcher => {
+  int: i => intExtensions(i, createMatcher)
+}
 
-describe("A test with users", ({test}) => {
-  test("Logged in user should be logged in", ({expect}) => {
-    let bob = {name: "Bob", isLoggedIn: true};
+let { describeOnly } = extendDescribe(customMatchers);
 
-    expect.ext.user(bob).toBeLoggedIn();
+describeOnly("divides matchers example", ({test}) => {
+  test("should divide", ({expect}) => {
+    expect.ext.int(42).toDivide(84);
   });
-  test("Logged out user should not be logged in", ({expect}) => {
-    let alice = {name: "Alice", isLoggedIn: false};
-
-    expect.ext.user(alice).not.toBeLoggedIn();
+  test("this test fails", ({expect}) => {
+    expect.ext.int(43).toDivide(84);
   });
 });
 ```
