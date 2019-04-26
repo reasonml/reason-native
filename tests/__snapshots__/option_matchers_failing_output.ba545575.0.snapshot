@@ -1,0 +1,5 @@
+option matchers › failing output › expect.option.toBe Some(42) is Some(41)
+<dim>expect.option(</dim><red>received</red><dim>).toBe(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+
+Expected: <green>Some(41)</green>
+Received: <red>Some(42)</red>
