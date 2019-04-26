@@ -1,3 +1,19 @@
+# April 26, 2019
+### Rely 2.1.0
+* describeOnly, testOnly
+  * if there is a describeOnly or testOnly present anywhere in the set of tests
+  to be run, only tests inside of a testOnly or describeOnly will be run. skip
+  takes precedence over only (e.g. a testOnly inside a describeSkip will be skipped)
+  * this is only intended for use in local development as a single only disables
+  every other test
+* ciMode
+  * the ciMode option has been added to runConfig, when run with ciMode(true) or
+  in CLI mode with the --ci flag ci mode will be enabled. Currently this causes
+  Rely to throw an exception if there any testOnly or describeOnly. To skip
+  tests in CI use testSkip/describeSkip
+* expect.option matchers
+  * toBeNone, toBeSome, toBe matchers
+
 # April 15, 2019
 ### Rely 2.0.0
 * [**BREAKING**] Add optional locations to Passed and Skipped test status variant constructors for reporters
