@@ -1,4 +1,6 @@
-# rely
+# @reason-native/rely
+
+Detailed docs can be found at https://reason-native.com/docs/rely/
 
 ## Installation
 
