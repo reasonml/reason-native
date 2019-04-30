@@ -1,3 +1,7 @@
+# April 30, 2019
+### qcheck-rely 1.0.0
+* Initial release, see the README in the src/qcheck-rely directory for usage
+
 # April 26, 2019
 ### Rely 2.1.0
 * describeOnly, testOnly
