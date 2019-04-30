@@ -74,14 +74,4 @@ describe("qcheck-rely", ({test, _}) => {
       },
     )
   );
-
-  /** Alternate syntax, worse matcher output */
-  let {make, _} = QCheckRely.toRely(test);
-
-  let simplePassingTest =
-    QCheck.Test.make(
-      ~count=1000, ~name="list_rev_is_involutive", QCheck.(list(small_int)), l =>
-      List.rev(List.rev(l)) == l
-    );
-  make(~rand=seed, simplePassingTest);
 });

@@ -37,14 +37,6 @@ let long_ =
     }
   );
 
-type qCheckRely = {
-  make: (~long: bool=?, ~rand: Random.State.t=?, QCheck.Test.t) => unit,
-  makeCell:
-    'a.
-    (~long: bool=?, ~rand: Random.State.t=?, QCheck.Test.cell('a)) => unit,
-
-};
-
 module Matchers = {
   type extension = {
     qCheckTest:
@@ -218,30 +210,4 @@ module Matchers = {
         ),
     };
   };
-};
-
-let toRely = (test: Rely.Test.testFn('a)) => {
-  make: (~long=Lazy.force(long_), ~rand=default_rand(), t) => {
-    let QCheck.Test.Test(cell) = t;
-    let name = QCheck.Test.get_name(cell);
-    test(
-      name,
-      _ => {
-        let _ = QCheck.Test.check_cell_exn(~long, ~rand, cell);
-        ();
-      },
-    );
-    ();
-  },
-  makeCell: (~long=Lazy.force(long_), ~rand=default_rand(), cell) => {
-    let name = QCheck.Test.get_name(cell);
-    test(
-      name,
-      _ => {
-        QCheck.Test.check_cell_exn(cell, ~long, ~rand);
-        ();
-      },
-    );
-    ();
-  },
 };
