@@ -642,4 +642,220 @@ describe("Path", ({test}) => {
     expect.ext.path(rel).toEqualPath(expected);
     expect.ext.path(expected).toEqualPath(rel);
   });
+
+  test("Containment for absolute paths", ({expect}) => {
+    open Path;
+    let root = Path.root;
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(root / "a" / "b" / "qqq"),
+        At.(root / "f" / "f" / "zzz"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(root / "a" / "b" / "qqq"),
+        At.(root / "a" / "b" / "zzz"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(root / "a" / "b" / "c" / "d"),
+        At.(root / "a" / "b" / "qqq"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(root / "a" / "b" / "c" / "d"),
+        At.(root / "a" / "b" / "c" / "d" / "q"),
+      );
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(root), At.(root));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(root / "x"), At.(root / "x"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(root / "x"), At.(root / "x" / "y"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(root / "x" / "y"), At.(root / "x"));
+    expect.bool(res).toBeFalse();
+
+    let res = isDescendent(~ofPath=At.(root / "x" / "y"), At.(root));
+    expect.bool(res).toBeFalse();
+
+    let res = isDescendent(~ofPath=At.(root), At.(root / "x" / "y"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(Path.drive("C")), At.(root / "x" / "y"));
+    expect.bool(res).toBeFalse();
+  });
+
+  test("Containment for absolute drives", ({expect}) => {
+    open Path;
+    let drive = Path.drive("C:");
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(drive / "a" / "b" / "qqq"),
+        At.(drive / "f" / "f" / "zzz"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(drive / "a" / "b" / "qqq"),
+        At.(drive / "a" / "b" / "zzz"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(drive / "a" / "b" / "c" / "d"),
+        At.(drive / "a" / "b" / "qqq"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(drive / "a" / "b" / "c" / "d"),
+        At.(drive / "a" / "b" / "c" / "d" / "q"),
+      );
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(drive), At.(drive));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(drive / "x"), At.(drive / "x"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(drive / "x"), At.(drive / "x" / "y"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(drive / "x" / "y"), At.(drive / "x"));
+    expect.bool(res).toBeFalse();
+
+    let res = isDescendent(~ofPath=At.(drive / "x" / "y"), At.(drive));
+    expect.bool(res).toBeFalse();
+
+    let res = isDescendent(~ofPath=At.(drive), At.(drive / "x" / "y"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(Path.root), At.(drive / "x" / "y"));
+    expect.bool(res).toBeFalse();
+  });
+
+  test("Containment for relative paths", ({expect}) => {
+    open Path;
+    let dot = Path.dot;
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(dot / "a" / "b" / "qqq"),
+        At.(dot / "f" / "f" / "zzz"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(dot / "a" / "b" / "qqq"),
+        At.(dot / "a" / "b" / "zzz"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(dot / "a" / "b" / "c" / "d"),
+        At.(dot / "a" / "b" / "qqq"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(dot / "a" / "b" / "c" / "d"),
+        At.(dot / "a" / "b" / "c" / "d" / "q"),
+      );
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(dot), At.(dot));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(dot / "x"), At.(dot / "x"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(dot / "x"), At.(dot / "x" / "y"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(dot / "x" / "y"), At.(dot / "x"));
+    expect.bool(res).toBeFalse();
+
+    let res = isDescendent(~ofPath=At.(dot / "x" / "y"), At.(dot));
+    expect.bool(res).toBeFalse();
+
+    let res = isDescendent(~ofPath=At.(dot), At.(dot / "x" / "y"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(Path.home), At.(dot / "x" / "y"));
+    expect.bool(res).toBeFalse();
+  });
+
+  test("Containment for home relative paths", ({expect}) => {
+    open Path;
+    let home = Path.home;
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(home / "a" / "b" / "qqq"),
+        At.(home / "f" / "f" / "zzz"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(home / "a" / "b" / "qqq"),
+        At.(home / "a" / "b" / "zzz"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(home / "a" / "b" / "c" / "d"),
+        At.(home / "a" / "b" / "qqq"),
+      );
+    expect.bool(res).toBeFalse();
+
+    let res =
+      isDescendent(
+        ~ofPath=At.(home / "a" / "b" / "c" / "d"),
+        At.(home / "a" / "b" / "c" / "d" / "q"),
+      );
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(home), At.(home));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(home / "x"), At.(home / "x"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(home / "x"), At.(home / "x" / "y"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(home / "x" / "y"), At.(home / "x"));
+    expect.bool(res).toBeFalse();
+
+    let res = isDescendent(~ofPath=At.(home / "x" / "y"), At.(home));
+    expect.bool(res).toBeFalse();
+
+    let res = isDescendent(~ofPath=At.(home), At.(home / "x" / "y"));
+    expect.bool(res).toBeTrue();
+
+    let res = isDescendent(~ofPath=At.(Path.dot), At.(home / "x" / "y"));
+    expect.bool(res).toBeFalse();
+  });
 });

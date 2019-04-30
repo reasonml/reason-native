@@ -42,6 +42,37 @@ let dot = (Rel(Any, 0), []);
 
 let hasParentDir = ((Abs(_), lst): t(absolute)) => lst !== [];
 
+let rec revSegmentsAreInside = (~ofSegments, l) =>
+  switch (ofSegments, l) {
+  | ([], [_, ..._]) => true
+  | ([], []) => true
+  | ([_, ..._], []) => false
+  | ([hd, ...tl], [hd2, ...tl2]) =>
+    String.equal(hd, hd2) && revSegmentsAreInside(~ofSegments=tl, tl2)
+  };
+
+let segmentsAreInside = (~ofSegments, l) =>
+  revSegmentsAreInside(~ofSegments=List.rev(ofSegments), List.rev(l));
+
+let isDescendent: type kind. (~ofPath: t(kind), t(kind)) => bool =
+  (~ofPath, p) =>
+    switch (ofPath, p) {
+    | ((Abs(dr1), l1), (Abs(dr2), l2)) =>
+      switch (dr1, dr2) {
+      | (None, None) => segmentsAreInside(~ofSegments=l1, l2)
+      | (Some(d1), Some(d2)) =>
+        String.equal(d1, d2) && segmentsAreInside(~ofSegments=l1, l2)
+      | (Some(_), None)
+      | (None, Some(_)) => false
+      }
+    | ((Rel(Any, d1), l1), (Rel(Any, d2), l2)) =>
+      d1 === d1 && segmentsAreInside(~ofSegments=l1, l2)
+    | ((Rel(Home, d1), l1), (Rel(Home, d2), l2)) =>
+      d1 === d1 && segmentsAreInside(~ofSegments=l1, l2)
+    | ((Rel(Any, _), _), (Rel(Home, _), _)) => false
+    | ((Rel(Home, _), _), (Rel(Any, _), _)) => false
+    };
+
 let toString: type kind. t(kind) => string =
   path =>
     switch (path) {
@@ -114,9 +145,9 @@ let lex = s => {
     prevEsc.contents = ch === '\\' && !prevEsc.contents;
   };
   let rev =
-    j.contents === len - 1
-      ? revTokens.contents
-      : [
+    j.contents === len - 1 ?
+      revTokens.contents :
+      [
         makeToken(String.sub(s, j.contents + 1, len - 1 - j.contents)),
         ...revTokens.contents,
       ];
@@ -381,9 +412,9 @@ let rec join: type k1 k2. (t(k1), t(k2)) => t(k1) =
     switch (p1, p2) {
     | ((Rel(w, r1), []), (Rel(Any, r2), s2)) => (Rel(w, r1 + r2), s2)
     | ((Rel(w, r1), [s1hd, ...s1tl] as s1), (Rel(Any, r2), s2)) =>
-      r2 > 0
-        ? join((Rel(w, r1), s1tl), (Rel(Any, r2 - 1), s2))
-        : (Rel(w, r1), List.append(s2, s1))
+      r2 > 0 ?
+        join((Rel(w, r1), s1tl), (Rel(Any, r2 - 1), s2)) :
+        (Rel(w, r1), List.append(s2, s1))
     | ((b1, s1), (Rel(Home, r2), s2)) =>
       join((b1, [homeChar, ...List.append(s2, s1)]), (Rel(Any, r2), s2))
     | ((b1, s1), (Abs(Some(ll)), s2)) => (
@@ -393,9 +424,9 @@ let rec join: type k1 k2. (t(k1), t(k2)) => t(k1) =
     | ((b1, s1), (Abs(None), s2)) => (b1, List.append(s2, s1))
     | ((Abs(_) as d, []), (Rel(Any, r2), s2)) => (d, s2)
     | ((Abs(_) as d, [s1hd, ...s1tl] as s1), (Rel(Any, r2), s2)) =>
-      r2 > 0
-        ? join((d, s1tl), (Rel(Any, r2 - 1), s2))
-        : (d, List.append(s2, s1))
+      r2 > 0 ?
+        join((d, s1tl), (Rel(Any, r2 - 1), s2)) :
+        (d, List.append(s2, s1))
     };
 
 let rec dirName: type k1. t(k1) => t(k1) =

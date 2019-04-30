@@ -219,10 +219,18 @@ Tests for path equality of two absolute paths.
 let relativeEq: (t(relative), t(relative)) => bool;
 
 /**
-Tests whether or not an abssolute path has a parent path. Absolute
-paths such as "C:/" and "/" have no parent dir.
+Tests whether or not an absolute path has a parent path. Absolute paths such as
+"C:/" and "/" have no parent dir.
 */
 let hasParentDir: t(absolute) => bool;
+
+
+/**
+Returns `true` if a path exists inside another path `~ofPath` or is equal to
+`~ofPath`.
+*/
+let isDescendent: (~ofPath:t('kind), t('kind)) => bool;
+
 
 /**
 Syntactic forms for utilities provided above. These are included in a separate
