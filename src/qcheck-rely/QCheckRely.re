@@ -47,18 +47,17 @@ module Matchers = {
 
   };
 
-  let seedToString = (seed: ref(option(int)), formatSeed) => {
+  let seedToString = (seed: ref(option(int)), formatSeed) =>
     switch (seed^) {
     | None => None
     | Some(s) =>
       Some("qcheck random seed: " ++ formatSeed(string_of_int(s)))
     };
-  };
 
   let pass = (() => "", true);
 
-  let makeTestMatcher = (createMatcher, accessorPath) => {
-    createMatcher(({formatReceived, indent, matcherHint, _}, actualThunk, _) => {
+  let makeTestMatcher = (createMatcher, accessorPath) =>
+    createMatcher(({formatReceived, indent, _}, actualThunk, _) => {
       let (QCheck.Test.Test(cell), rand: Random.State.t, long: bool) =
         actualThunk();
 
@@ -75,21 +74,7 @@ module Matchers = {
           | Some(s) => [testNameFailureMessage, "", inputMessage, s]
           };
 
-        let message =
-          String.concat(
-            "\n",
-            [
-              matcherHint(
-                ~expectType=accessorPath,
-                ~matcherName="",
-                ~isNot=false,
-                ~expected="",
-                (),
-              )
-              ++ "\n",
-              ...messageParts,
-            ],
-          );
+        let message = String.concat("\n", messageParts);
         ((() => message), false);
       | exception (QCheck.Test.Test_error(name, input, e, _)) =>
         let testNameFailureMessage =
@@ -105,28 +90,13 @@ module Matchers = {
           | Some(s) => [testNameFailureMessage, "", inputMessage, s]
           };
 
-        let message =
-          String.concat(
-            "\n",
-            [
-              matcherHint(
-                ~expectType=accessorPath,
-                ~matcherName="",
-                ~isNot=false,
-                ~expected="",
-                (),
-              )
-              ++ "\n",
-              ...messageParts,
-            ],
-          );
+        let message = String.concat("\n", messageParts);
         ((() => message), false);
       };
     });
-  };
 
-  let makeCellMatcher = (createMatcher, accessorPath) => {
-    createMatcher(({formatReceived, indent, matcherHint, _}, actualThunk, _) => {
+  let makeCellMatcher = (createMatcher, accessorPath) =>
+    createMatcher(({formatReceived, indent, _}, actualThunk, _) => {
       let (cell, rand: Random.State.t, long: bool) = actualThunk();
 
       switch (QCheck.Test.check_cell_exn(~long, ~rand, cell)) {
@@ -142,21 +112,7 @@ module Matchers = {
           | Some(s) => [testNameFailureMessage, "", inputMessage, s]
           };
 
-        let message =
-          String.concat(
-            "\n",
-            [
-              matcherHint(
-                ~expectType=accessorPath,
-                ~matcherName="",
-                ~isNot=false,
-                ~expected="",
-                (),
-              )
-              ++ "\n",
-              ...messageParts,
-            ],
-          );
+        let message = String.concat("\n", messageParts);
         ((() => message), false);
       | exception (QCheck.Test.Test_error(name, input, e, _)) =>
         let testNameFailureMessage =
@@ -172,42 +128,25 @@ module Matchers = {
           | Some(s) => [testNameFailureMessage, "", inputMessage, s]
           };
 
-        let message =
-          String.concat(
-            "\n",
-            [
-              matcherHint(
-                ~expectType=accessorPath,
-                ~matcherName="",
-                ~isNot=false,
-                ~expected="",
-                (),
-              )
-              ++ "\n",
-              ...messageParts,
-            ],
-          );
+        let message = String.concat("\n", messageParts);
         ((() => message), false);
       };
     });
-  };
 
   let matchers = ({createMatcher}) => {
-    {
-      qCheckTest: (~long=Lazy.force(long_), ~rand=default_rand(), t) =>
-        makeTestMatcher(
-          createMatcher,
-          ".ext.qCheckTest",
-          () => (t, rand, long),
-          () => (),
-        ),
-      qCheckCell: (~long=Lazy.force(long_), ~rand=default_rand(), c) =>
-        makeCellMatcher(
-          createMatcher,
-          ".ext.qCheckCell",
-          () => (c, rand, long),
-          () => (),
-        ),
-    };
+    qCheckTest: (~long=Lazy.force(long_), ~rand=default_rand(), t) =>
+      makeTestMatcher(
+        createMatcher,
+        ".ext.qCheckTest",
+        () => (t, rand, long),
+        () => (),
+      ),
+    qCheckCell: (~long=Lazy.force(long_), ~rand=default_rand(), c) =>
+      makeCellMatcher(
+        createMatcher,
+        ".ext.qCheckCell",
+        () => (c, rand, long),
+        () => (),
+      ),
   };
 };

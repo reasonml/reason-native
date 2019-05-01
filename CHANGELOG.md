@@ -1,3 +1,7 @@
+# May 1, 2019
+### qcheck-rely 1.0.1
+* Remove confusing matcher hint from qcheck rely output
+
 # April 30, 2019
 ### qcheck-rely 1.0.0
 * Initial release, see the README in the src/qcheck-rely directory for usage
