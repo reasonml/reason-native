@@ -14,13 +14,14 @@ module type SnapshotMatchersConfig = {
 };
 
 type snapshotMatchersRecord = {toMatchSnapshot: unit => unit};
+let newLineRegex = Re.Pcre.regexp("\n");
 
 module Make = (Config: SnapshotMatchersConfig) => {
   open Config;
   let makeMatchers = (accessorPath, {createMatcher}) => {
     let passingMessageThunk = () => "";
     let escape = (s: string): string => {
-      let lines = Str.split(Str.regexp("\n"), s);
+      let lines = Re.Pcre.split(newLineRegex, s);
       let lines = List.map(line => String.escaped(line), lines);
       String.concat("\n", lines);
     };
@@ -45,18 +46,20 @@ module Make = (Config: SnapshotMatchersConfig) => {
               (passingMessageThunk, true);
             } else {
               (
-                () =>
-                  String.concat(
-                    "",
-                    [
-                      "New snapshot was ",
-                      formatReceived("not written"),
-                      ". The update flag (-u) must be explicitly passed to write a new snapshot.",
-                      "\n\n",
-                      "Received: ",
-                      formatReceived(sActual),
-                    ],
-                  ),
+                (
+                  () =>
+                    String.concat(
+                      "",
+                      [
+                        "New snapshot was ",
+                        formatReceived("not written"),
+                        ". The update flag (-u) must be explicitly passed to write a new snapshot.",
+                        "\n\n",
+                        "Received: ",
+                        formatReceived(sActual),
+                      ],
+                    )
+                ),
                 false,
               );
             }
@@ -83,7 +86,9 @@ module Make = (Config: SnapshotMatchersConfig) => {
                         ~matcherName=".toMatchSnapshot",
                         (),
                       ),
-                      Pastel.dim("\n\nInspect your code changes or run Rely with the -u flag to update snapshots."),
+                      Pastel.dim(
+                        "\n\nInspect your code changes or run Rely with the -u flag to update snapshots.",
+                      ),
                       "\n\n",
                       formatExpected("- " ++ expected),
                       "\n",

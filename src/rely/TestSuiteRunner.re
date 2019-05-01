@@ -32,12 +32,15 @@ module type TestSuiteRunnerConfig = {
   let onTestFrameworkFailure: unit => unit;
 };
 
+let nonLetterRegex = Re.compile(Re.Pcre.re("[^a-zA-Z]"));
+let wordBoundary = Re.compile(Re.Pcre.re("\\b"));
+
 let sanitizeName = (name: string): string => {
   ();
   let name =
     name
-    |> Str.split(Str.regexp("\\b"))
-    |> List.map(Str.global_replace(Str.regexp("[^a-zA-Z]"), ""))
+    |> Re.split(wordBoundary)
+    |> List.map(Re.replace_string(nonLetterRegex, ~by=""))
     |> List.filter(part => String.length(part) > 0)
     |> String.concat("_");
   let name =
