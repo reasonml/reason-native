@@ -20,6 +20,8 @@ module type Config = {
   let formatText: string => string;
 };
 
+let fileRegex = Re.compile(Re.Pcre.re("file \".*$"));
+
 let (>>=) = (opt, fn) =>
   switch (opt) {
   | Some(x) => fn(x)
@@ -31,8 +33,8 @@ module Make = (Config: Config) => {
   let maxStacklength = 1000;
   let filters =
     Config.exclude
-    |> List.map(Str.regexp)
-    |> List.append([Str.regexp(__FILE__)]);
+    |> List.map(exp => Re.Pcre.regexp(exp))
+    |> List.append([Re.Pcre.regexp(__FILE__)]);
 
   type t = option(list(backtrace_slot));
 
@@ -47,12 +49,6 @@ module Make = (Config: Config) => {
     };
 
   let getCallstack = () => get_callstack(maxStacklength);
-
-  let hasMatchingSubstring = (s, re) =>
-    switch (Str.search_forward(re, s, 0)) {
-    | index => true
-    | exception Not_found => false
-    };
 
   let formatLocation = (loc: Printexc.location, isInline: bool): string => {
     let path = Filename.concat(Config.baseDir, loc.filename);
@@ -82,10 +78,9 @@ module Make = (Config: Config) => {
       switch (Printexc.Slot.location(slot)) {
       | Some(loc) =>
         /* replacing default non terminal-clickable file information */
-        let fileRegex = Str.regexp("file \".*$");
         let isInline = Printexc.Slot.is_inline(slot);
         let prefix =
-          Config.formatText(Str.global_replace(fileRegex, "", line));
+          Config.formatText(Re.replace_string(fileRegex, ~by="", line));
         acc @ [String.concat("", [prefix, formatLocation(loc, isInline)])];
       | None => acc
       }
@@ -95,9 +90,9 @@ module Make = (Config: Config) => {
 
   let take = (list, n) => {
     let rec takeHelper = (list, n, acc) =>
-      n <= 0
-        ? acc
-        : (
+      n <= 0 ?
+        acc :
+        (
           switch (list) {
           | [] => acc
           | [hd, ...tl] => takeHelper(tl, n - 1, acc @ [hd])
@@ -127,7 +122,7 @@ module Make = (Config: Config) => {
   let slotIsntFiltered = slot =>
     switch (Printexc.Slot.location(slot)) {
     | Some(location) =>
-      !List.exists(hasMatchingSubstring(location.filename), filters)
+      !List.exists(f => Re.Pcre.pmatch(f, location.filename), filters)
     | None => false
     };
 
