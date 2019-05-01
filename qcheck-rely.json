@@ -1,0 +1,27 @@
+{
+  "name": "@reason-native/qcheck-rely",
+  "version": "1.0.0",
+  "description": "Rely matchers for qcheck",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/qcheck-rely"
+  },
+  "license": "MIT",
+  "keywords": ["qcheck", "rely", "unittest", "test", "property test"],
+  "esy": {
+    "build": "dune build -p qcheck-rely",
+    "install": ["esy-installer qcheck-rely.install"],
+    "sandboxEnv": {
+      "PROJECT_DIR": "."
+    }
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "@opam/qcheck": ">= 0.9 < 0.10",
+    "@esy-ocaml/reason": "*",
+    "refmterr": "*",
+    "ocaml": "^4.2.0",
+    "@reason-native/rely": "*",
+    "@reason-native/console": "*"
+  }
+}
