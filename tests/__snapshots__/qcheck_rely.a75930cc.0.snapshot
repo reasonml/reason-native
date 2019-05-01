@@ -1,6 +1,4 @@
 qcheck-rely › simple failure test
-<dim>expect.ext.qCheckTest(</dim><red>received</red><dim>)(</dim><green></green><dim>)</dim>
-
 QCheck test \"fail_check_err_message\" failed
 
 generated input: 
