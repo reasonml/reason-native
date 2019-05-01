@@ -4,7 +4,7 @@
 
 ### Installation (assuming [esy](https://esy.sh/) for package management and dune for building)
 
-You will want to add both `@opam/qcheck` and `@reason-native/qcheck-rely` to your `package.json` or `eys.json` file and
+You will want to add both `@opam/qcheck` and `@reason-native/qcheck-rely` to your `package.json` or `esy.json` file and
 `qcheck-core` and `qcheck-rely` to your `dune` file.
 
 ### Usage
