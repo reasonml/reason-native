@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/qcheck-rely",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Rely matchers for qcheck",
   "repository": {
     "type": "git",
