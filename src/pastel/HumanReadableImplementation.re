@@ -6,12 +6,13 @@
  */;
 open Decorators;
 
+let startRegex = Re.Pcre.regexp("<[a-z|A-Z]+>");
+let stopRegex = Re.Pcre.regexp("</[a-z|A-Z]+>");
+
 let length = s => {
-  let startRegex = Str.regexp("<[a-z|A-Z]+>");
-  let noStartParts = Str.split(startRegex, s);
+  let noStartParts = Re.split(startRegex, s);
   let noStarts = String.concat("", noStartParts);
-  let stopRegex = Str.regexp("</[a-z|A-Z]+>");
-  let noStopParts = Str.split(stopRegex, noStarts);
+  let noStopParts = Re.split(stopRegex, noStarts);
   let noColor = String.concat("", noStopParts);
   String.length(noColor);
 };

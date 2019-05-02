@@ -4,33 +4,14 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
+
 let makeCodesRegex = codes => {
   let start = "\027\\[";
-  let openParen = "\\(";
-  let codesList = codes;
-  let codesExpr =
-    List.fold_left(
-      (s, code) => String.concat("", [s, "\\|", string_of_int(code)]),
-      string_of_int(List.hd(codesList)),
-      List.tl(codesList),
-    );
-  let closeParen = "\\)";
+  let codesExpr = String.concat("|", List.map(string_of_int, codes));
   let stop = "m";
   let regexString =
-    String.concat(
-      "",
-      [
-        openParen,
-        start,
-        openParen,
-        codesExpr,
-        closeParen,
-        stop,
-        closeParen,
-        "+",
-      ],
-    );
-  Str.regexp(regexString);
+    String.concat("", ["(", start, "(", codesExpr, ")", stop, ")", "+"]);
+  Re.Pcre.regexp(regexString);
 };
 
 let startCodesRegex = makeCodesRegex(Ansi.IntSet.elements(Ansi.starts));
@@ -43,21 +24,21 @@ type token =
 
 let tokenize = (s: string): list(token) => {
   let parseNonStarts = nonStarts =>
-    Str.full_split(stopCodesRegex, nonStarts)
+    Re.split_full(stopCodesRegex, nonStarts)
     |> List.map(nonStartSplitResult =>
          switch (nonStartSplitResult) {
-         | Str.Delim(stops) => Stops(stops)
-         | Str.Text(text) => Text(text)
+         | `Delim(g) => Stops(Re.Group.get(g, 0))
+         | `Text(text) => Text(text)
          }
        );
 
   s
-  |> Str.full_split(startCodesRegex)
+  |> Re.split_full(startCodesRegex)
   |> List.fold_left(
        (tokens, splitResult) =>
          switch (splitResult) {
-         | Str.Delim(starts) => tokens @ [Starts(starts)]
-         | Str.Text(nonStarts) => tokens @ parseNonStarts(nonStarts)
+         | `Delim(g) => tokens @ [Starts(Re.Group.get(g, 0))]
+         | `Text(nonStarts) => tokens @ parseNonStarts(nonStarts)
          },
        [],
      );

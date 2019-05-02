@@ -8,12 +8,14 @@
  * Wraps a string at the given number of columns. Will only break on spaces or
  * tab charachters. Does nothing if the string already contains new lines.
  */
+
+let messageSplitRegexp = Re.Pcre.regexp("[ \t]+");
 let wrapString = (cols: int, message: string): string =>
   /* Never attempt to wrap a message that already has new lines */
   if (String.contains(message, '\n')) {
     message;
   } else {
-    let messageParts = Str.full_split(Str.regexp("[ \t]+"), message);
+    let messageParts = Re.split_full(messageSplitRegexp, message);
     let (message, workingLine, _) =
       List.fold_left(
         ((message, workingLine, lastDelim), part) => {
@@ -26,7 +28,7 @@ let wrapString = (cols: int, message: string): string =>
            */
           let result =
             switch (part) {
-            | Str.Text(value) =>
+            | `Text(value) =>
               if (String.length(workingLine)
                   + String.length(lastDelim)
                   + String.length(value) <= cols) {
@@ -34,7 +36,7 @@ let wrapString = (cols: int, message: string): string =>
               } else {
                 (message ++ "\n" ++ workingLine, value, "");
               }
-            | Str.Delim(value) => (message, workingLine, value)
+            | `Delim(g) => (message, workingLine, Re.Group.get(g, 0))
             };
           result;
         },

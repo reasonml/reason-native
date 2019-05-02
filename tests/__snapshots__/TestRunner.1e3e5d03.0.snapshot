@@ -23,7 +23,7 @@ Running 1 test suite
       <red>\"bacon\"</red>
     
     Difference:
-      <red>bacon</red><green>delicious</green><blackBright></blackBright>
+      <red>bacon</red><green>delicious</green>
 
 <bold><red>  \226\128\162 failing tests \226\128\186 expect.string.not.toEqual</red></bold>
 
