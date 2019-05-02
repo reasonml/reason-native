@@ -1,3 +1,8 @@
+# May 2, 2019
+### qcheck-rely 1.0.2
+* depend on @opam/qcheck-core instead of @opam/qcheck to drastically reduce
+dependencies pulled in
+
 # May 1, 2019
 ### qcheck-rely 1.0.1
 * Remove confusing matcher hint from qcheck rely output
