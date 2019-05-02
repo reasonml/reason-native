@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@opam/qcheck": ">= 0.9 < 0.10",
+    "@opam/qcheck-core": ">= 0.9 < 0.10",
     "@esy-ocaml/reason": "*",
     "refmterr": "*",
     "ocaml": "^4.2.0",

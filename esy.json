@@ -34,7 +34,7 @@
     "@opam/re": "*",
     "@opam/atdgen": "*",
     "@opam/junit": "*",
-    "@opam/qcheck": ">= 0.9 < 0.10"
+    "@opam/qcheck-core": ">= 0.9 < 0.10"
   },
   "devDependencies": {
     "@opam/merlin": "*",
