@@ -11,7 +11,7 @@ let sampleRunConfig = Rely.RunConfig.initialize()
 TestFramework.run(sampleRunConfig);
 ```
 
-## Running with [Custom Reporters](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/Reporter.re)
+## Running with [Custom Reporters](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/reporters/Reporter.re)
 
 ```reason
 let myReporter: Rely.Reporter.t = {
