@@ -34,6 +34,9 @@ type matchers('ext) = {
     MockMatchers.matchersWithNot('tupledArgs, 'ret),
 
   option: 'a. option('a) => OptionMatchers.optionMatchersWithNot('a),
+  result:
+    'a 'b.
+    result('a, 'b) => ResultMatchers.resultMatchersWithNot('a, 'b),
   ext: 'ext,
 };
 
@@ -79,6 +82,7 @@ module Make = (Mock: Mock.Sig) => {
     notSame: (expected, actual) =>
       SameMatcher.makeNotSameMatcher(".notSame", utils, expected, actual),
     option: o => OptionMatchers.makeMatchers(".option", utils, o),
+    result: r => ResultMatchers.makeMatchers(".result", utils, r),
     ext: makeMatchers(utils),
   };
 };
