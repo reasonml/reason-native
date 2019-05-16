@@ -130,6 +130,17 @@ let numbers = [|
   "thirteen",
 |];
 
+let nthToString = nth =>
+  switch (nth) {
+  | 1 => "first"
+  | 2 => "second"
+  | 3 => "third"
+  | n when n mod 10 == 1 => string_of_int(n) ++ "st"
+  | n when n mod 10 == 2 => string_of_int(n) ++ "nd"
+  | n when n mod 10 == 3 => string_of_int(n) ++ "rd"
+  | n => string_of_int(n) ++ "th"
+  };
+
 let formatInt = n =>
   if (0 <= n && n <= Array.length(numbers)) {
     numbers[n];

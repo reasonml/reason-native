@@ -1,0 +1,7 @@
+mock matchers › failing output › expect.mock.nthCalledWith different value
+<dim>expect.mock(</dim><red>mock</red><dim>).nthCalledWith(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+
+Expected the mock function to have been called the second time with:
+  <green>3</green>
+But it was called with:
+  <red>2</red>
