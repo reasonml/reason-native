@@ -11,8 +11,9 @@ module Make = (Styl: Stylish.StylishSig) => {
   open Helpers;
   open Printer;
   open Styl;
+  let newLineRegex = Re.Pcre.regexp("\n");
 
-  let printDiff = (bad, good) => "  " ++ Str.global_replace(Str.regexp("\n"), "\n  ", Common.Strs.Diffs.(printDiff(
+  let printDiff = (bad, good) => "  " ++ Re.replace_string(newLineRegex, ~by="\n  ", Common.Strs.Diffs.(printDiff(
     ~oldFormatter= highlight(
       ~bold=true,
       ~color=green,

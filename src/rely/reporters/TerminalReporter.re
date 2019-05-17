@@ -16,8 +16,10 @@ type terminalPrinter = {
   flush: out_channel => unit,
 };
 
+let newLineRegex = Re.Pcre.regexp("\n");
+
 let indent = (~indent: string, s: string): string => {
-  let lines = Str.split(Str.regexp("\n"), s);
+  let lines = Re.Pcre.split(newLineRegex, s);
   let lines = List.map(line => indent ++ line, lines);
   String.concat("\n", lines);
 };

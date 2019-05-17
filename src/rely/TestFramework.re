@@ -58,7 +58,7 @@ module MakeInternal = (SnapshotIO: SnapshotIO.SnapshotIO, UserConfig: FrameworkC
       /* using both "/" and "\\" here because Filename.dir_sep is flaky on windows */
       let exclude = [
         Filename.dirname(__FILE__) ++ "/",
-        Filename.dirname(__FILE__) ++ "\\",
+        Filename.dirname(__FILE__) ++ "\\\\",
       ];
       let formatLink = Pastel.cyan;
       let formatText = Pastel.dim;

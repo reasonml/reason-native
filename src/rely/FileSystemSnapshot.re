@@ -23,6 +23,10 @@ let getX = (key, map) =>
   | None => failwith("shouldn't get here")
   };
 
+let nonLetterRegex = Re.compile(Re.Pcre.re("[^a-zA-Z]"));
+let wordBoundary = Re.compile(Re.Pcre.re("\\b"));
+let newLineRegex = Re.compile(Re.Pcre.re("\n"));
+
 module Make: (Config) => Snapshot.Sig =
   (Config: Config) => {
     type snapshotState = {
@@ -71,11 +75,39 @@ module Make: (Config) => Snapshot.Sig =
       };
     };
 
+    let split_delim = (regex, s) => {
+      let splitResult = Re.split_full(regex, s);
+      let (first, rest) =
+        switch (splitResult) {
+        | [`Delim(_), ...rest] => ([""], rest)
+        | [`Text(s), ...rest] => ([s], rest)
+        | [] => ([], [])
+        };
+      let (last, rest) =
+        switch (List.rev(rest)) {
+        | [`Delim(_), ...rest] => ([""], rest)
+        | [`Text(s), ...rest] => ([s], rest)
+        | [] => ([], [])
+        };
+      let middle =
+        List.fold_left(
+          (acc, token) =>
+            switch (token) {
+            | `Text(s) => [s, ...acc]
+            | `Delim(_) => acc
+            },
+          [],
+          rest,
+        );
+
+      first @ middle @ last;
+    };
+
     let escapeSnapshot = (title: string, s: string): string => {
       ();
       let withoutEndline =
         s
-        |> Str.split_delim(Str.regexp("\n"))
+        |> split_delim(newLineRegex)
         |> List.map(String.escaped)
         |> String.concat("\n");
       title ++ "\n" ++ withoutEndline ++ "\n";
@@ -85,7 +117,7 @@ module Make: (Config) => Snapshot.Sig =
       ();
       let result =
         s
-        |> Str.split_delim(Str.regexp("\n"))
+        |> split_delim(newLineRegex)
         /* This removes the title we manually add */
         |> List.tl
         |> List.map(Scanf.unescaped)
@@ -128,9 +160,9 @@ module Make: (Config) => Snapshot.Sig =
       ();
       let name =
         name
-        |> Str.split(Str.regexp("\\b"))
+        |> Re.split(wordBoundary)
         /* TODO consider 0-9 as well, but would be a breaking change */
-        |> List.map(Str.global_replace(Str.regexp("[^a-zA-Z]"), ""))
+        |> List.map(Re.replace_string(nonLetterRegex, ~by=""))
         |> List.filter(part => String.length(part) > 0)
         |> String.concat("_");
       let name =

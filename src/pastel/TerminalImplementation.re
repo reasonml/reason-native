@@ -13,11 +13,11 @@ let ansiLengthRegex = {
   let start = "\027\\[";
   let middle = "[0-9]+";
   let stop = "m";
-  Str.regexp(start ++ middle ++ stop);
+  Re.Pcre.regexp(start ++ middle ++ stop);
 };
 
 let length = s => {
-  let parts = Str.split(ansiLengthRegex, s);
+  let parts = Re.split(ansiLengthRegex, s);
   let noColor = String.concat("", parts);
   String.length(noColor);
 };

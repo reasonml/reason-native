@@ -40,19 +40,20 @@ type difference =
   | New(string)
   | Both(string);
 
-let split = (splitRe: Str.regexp, s: string): array(string) =>
-  s
-  |> Str.full_split(splitRe)
+let split = (splitRe: Re.Pcre.regexp, s: string): array(string) =>
+  Re.Pcre.full_split(splitRe, s)
   |> List.map(part =>
        switch (part) {
-       | Str.Delim(value) => value
-       | Str.Text(value) => value
+       | Re.Pcre.Delim(value) => value
+       | Text(value) => value
+       | Group(_, _)
+       | NoGroup => raise(Invalid_argument(s))
        }
      )
   |> Array.of_list;
 
 let diff =
-    (~delimeter: Str.regexp, old: string, new_: string): list(difference) => {
+    (~delimeter: Re.Pcre.regexp, old: string, new_: string): list(difference) => {
   /*
    * Throughout the algorithm the comments walk through example of:
    * `diff("foo apple foo orange", "foo orange foo apple")`
@@ -405,9 +406,9 @@ let diff =
   List.rev(stack^);
 };
 
-let diffWords = diff(~delimeter=Str.regexp("\\b+"));
+let diffWords = diff(~delimeter=Re.Pcre.regexp("\\b+"));
 
-let diffLines = diff(~delimeter=Str.regexp("[\n]+"));
+let diffLines = diff(~delimeter=Re.Pcre.regexp("[\n]+"));
 
 let printDiff =
     (

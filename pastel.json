@@ -48,7 +48,8 @@
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "*",
-    "ocaml": "^4.2.0"
+    "ocaml": "^4.2.0",
+    "@opam/re": "*"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*",

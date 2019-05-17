@@ -14,7 +14,7 @@ type t =
   | Test(test);
 
 let ancestrySeparator = " › ";
-let ancestryRegex = Str.regexp_string(ancestrySeparator);
+let ancestryRegex = Re.compile(Re.Pcre.re(ancestrySeparator));
 
 let rec compare = (path1, path2) =>
   switch (path1, path2) {
@@ -57,7 +57,7 @@ let hash = (path, attempt) => {
   let testHash =
     String.sub(
       Common.Strs.Crypto.md5(
-        Str.global_replace(ancestryRegex, "", testTitle)
+        Re.replace_string(ancestryRegex, ~by="", testTitle)
         ++ string_of_int(attempt),
       ),
       0,

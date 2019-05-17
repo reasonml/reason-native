@@ -23,7 +23,7 @@ type stringMatchersWithNot = {
 };
 
 let escape = (s: string): string => {
-  let lines = Str.split(Str.regexp("\n"), s);
+  let lines = Re.Pcre.split(Re.Pcre.regexp("\n"), s);
   let lines = List.map(line => String.escaped(line), lines);
   String.concat("\n", lines);
 };
