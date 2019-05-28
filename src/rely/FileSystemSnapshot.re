@@ -46,7 +46,15 @@ module Make: (Config) => Snapshot.Sig =
     };
 
     if (!Config.IO.existsFile(Config.snapshotDir)) {
-      Config.IO.mkdirp(Config.snapshotDir);
+      switch (Config.IO.mkdirp(Config.snapshotDir)) {
+      | exception e =>
+        failwith(
+          "Error trying to create a snapshot directory. Currently it is required "
+          ++ "to provide a valid (non empty) directory name for snapshots to live "
+          ++ "in. This will likely be made optional in a future release",
+        )
+      | _ => ()
+      };
     };
 
     let initialSnapshots = Config.snapshotDir |> Config.IO.readSnapshotNames;
