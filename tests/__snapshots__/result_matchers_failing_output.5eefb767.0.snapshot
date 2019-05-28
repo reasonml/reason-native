@@ -1,0 +1,5 @@
+result matchers › failing output › expect.result.toBe custom equals
+<dim>expect.result(</dim><red>received</red><dim>).toBe(</dim><green>expected</green><dim>)</dim>
+
+Expected: <green>Ok(42)</green>
+Received: <red>Ok(42)</red>
