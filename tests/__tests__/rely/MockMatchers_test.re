@@ -154,6 +154,31 @@ describe("mock matchers", ({describe}) => {
 
       expect.mock(mock).not.lastCalledWith(~equals, 1.);
     });
+    test("expect.mock.nthCalledWith first elt", ({expect}) => {
+      let mock = Mock.mock1(a => a);
+
+      let _ = Mock.fn(mock, 1);
+      let _ = Mock.fn(mock, 2);
+
+      expect.mock(mock).nthCalledWith(1, 1);
+    });
+    test("expect.mock.nthCalledWith middle elt", ({expect}) => {
+      let mock = Mock.mock1(a => a);
+
+      let _ = Mock.fn(mock, 1);
+      let _ = Mock.fn(mock, 2);
+      let _ = Mock.fn(mock, 3);
+
+      expect.mock(mock).nthCalledWith(2, 2);
+    });
+    test("expect.mock.nthCalledWith last elt", ({expect}) => {
+      let mock = Mock.mock1(a => a);
+
+      let _ = Mock.fn(mock, 1);
+      let _ = Mock.fn(mock, 2);
+
+      expect.mock(mock).nthCalledWith(2, 2);
+    });
     test("expect.mock.toReturnTimes", ({expect}) => {
       let mock = Mock.mock1(a => a);
 
@@ -271,6 +296,31 @@ describe("mock matchers", ({describe}) => {
       let equals = (a, b) => abs_float(a -. b) < 0.1;
 
       expect.mock(mock).not.lastReturnedWith(~equals, 1.);
+    });
+    test("expect.mock.nthReturnedWith first elt", ({expect}) => {
+      let mock = Mock.mock1(a => a);
+
+      let _ = Mock.fn(mock, 1);
+      let _ = Mock.fn(mock, 2);
+
+      expect.mock(mock).nthReturnedWith(1, 1);
+    });
+    test("expect.mock.nthReturnedWith middle elt", ({expect}) => {
+      let mock = Mock.mock1(a => a);
+
+      let _ = Mock.fn(mock, 1);
+      let _ = Mock.fn(mock, 2);
+      let _ = Mock.fn(mock, 3);
+
+      expect.mock(mock).nthReturnedWith(2, 2);
+    });
+    test("expect.mock.nthReturnedWith last elt", ({expect}) => {
+      let mock = Mock.mock1(a => a);
+
+      let _ = Mock.fn(mock, 1);
+      let _ = Mock.fn(mock, 2);
+
+      expect.mock(mock).nthReturnedWith(2, 2);
     });
   });
 
@@ -800,6 +850,112 @@ describe("mock matchers", ({describe}) => {
           };
 
           expect.mock(mock).lastReturnedWith(7);
+        },
+      )
+    );
+    test("expect.mock.nthReturnedWith different value", testUtils =>
+      MatcherSnapshotTestRunner.snapshotFailingTestCase(
+        testUtils,
+        ({expect}) => {
+          let mock = Mock.mock1(a => a);
+
+          let _ = Mock.fn(mock, 1);
+          let _ = Mock.fn(mock, 2);
+
+          expect.mock(mock).nthReturnedWith(2, 3);
+        },
+      )
+    );
+    test("expect.mock.nthReturnedWith threw exception", testUtils =>
+      MatcherSnapshotTestRunner.snapshotFailingTestCase(
+        testUtils,
+        ({expect}) => {
+          let mock = Mock.mock1(_ => raise(Division_by_zero));
+
+          let _ =
+            switch (Mock.fn(mock, 7)) {
+            | exception e => 2
+            | _ => 3
+            };
+
+          expect.mock(mock).nthReturnedWith(1, 2);
+        },
+      )
+    );
+    test("expect.mock.nthReturnedWith n = 0 should warn", testUtils =>
+      MatcherSnapshotTestRunner.snapshotFailingTestCase(
+        testUtils,
+        ({expect}) => {
+          let mock = Mock.mock1(_ => raise(Division_by_zero));
+
+          let _ =
+            switch (Mock.fn(mock, 7)) {
+            | exception e => 2
+            | _ => 3
+            };
+
+          expect.mock(mock).nthReturnedWith(0, 2);
+        },
+      )
+    );
+    test("expect.mock.nthReturnedWith n < 0 should warn", testUtils =>
+      MatcherSnapshotTestRunner.snapshotFailingTestCase(
+        testUtils,
+        ({expect}) => {
+          let mock = Mock.mock1(_ => raise(Division_by_zero));
+
+          let _ =
+            switch (Mock.fn(mock, 7)) {
+            | exception e => 2
+            | _ => 3
+            };
+
+          expect.mock(mock).nthReturnedWith(-42, 2);
+        },
+      )
+    );
+    test("expect.mock.nthCalledWith different value", testUtils =>
+      MatcherSnapshotTestRunner.snapshotFailingTestCase(
+        testUtils,
+        ({expect}) => {
+          let mock = Mock.mock1(a => a);
+
+          let _ = Mock.fn(mock, 1);
+          let _ = Mock.fn(mock, 2);
+
+          expect.mock(mock).nthCalledWith(2, 3);
+        },
+      )
+    );
+    test("expect.mock.nthCalledWith n = 0 should warn", testUtils =>
+      MatcherSnapshotTestRunner.snapshotFailingTestCase(
+        testUtils,
+        ({expect}) => {
+          let mock = Mock.mock1(_ => raise(Division_by_zero));
+
+          let _ =
+            switch (Mock.fn(mock, 7)) {
+            | exception e => 2
+            | _ => 3
+            };
+
+          expect.mock(mock).nthCalledWith(0, 2);
+        },
+      )
+    );
+    test("expect.mock.nthCalledWith n < 0 should warn", testUtils =>
+      MatcherSnapshotTestRunner.snapshotFailingTestCase(
+        testUtils,
+        ({expect}) => {
+          let mock = Mock.mock1(_ => raise(Division_by_zero));
+
+          let _ =
+            switch (Mock.fn(mock, 7)) {
+            | exception e => 2
+            | _ => 3
+            };
+
+          expect.mock(mock).nthCalledWith(-42, 2);
         },
       )
     );

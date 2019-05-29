@@ -35,4 +35,6 @@ let singleLevelMatcherHint:
 
 let formatInt: int => string;
 
+let nthToString: int => string;
+
 let matcherUtils: t;

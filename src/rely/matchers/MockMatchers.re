@@ -25,9 +25,11 @@ type matchers('tupledArgs, 'ret) = {
   toBeCalledTimes: int => unit,
   toBeCalledWith: (~equals: equalsFn('tupledArgs)=?, 'tupledArgs) => unit,
   lastCalledWith: (~equals: equalsFn('tupledArgs)=?, 'tupledArgs) => unit,
+  nthCalledWith: (~equals: equalsFn('tupledArgs)=?, int, 'tupledArgs) => unit,
   toReturnTimes: int => unit,
   toReturnWith: (~equals: equalsFn('ret)=?, 'ret) => unit,
   lastReturnedWith: (~equals: equalsFn('ret)=?, 'ret) => unit,
+  nthReturnedWith: (~equals: equalsFn('ret)=?, int, 'ret) => unit,
 };
 
 type matchersWithNot('tupledArgs, 'ret) = {
@@ -38,9 +40,11 @@ type matchersWithNot('tupledArgs, 'ret) = {
   toBeCalledTimes: int => unit,
   toBeCalledWith: (~equals: equalsFn('tupledArgs)=?, 'tupledArgs) => unit,
   lastCalledWith: (~equals: equalsFn('tupledArgs)=?, 'tupledArgs) => unit,
+  nthCalledWith: (~equals: equalsFn('tupledArgs)=?, int, 'tupledArgs) => unit,
   toReturnTimes: int => unit,
   toReturnWith: (~equals: equalsFn('ret)=?, 'ret) => unit,
   lastReturnedWith: (~equals: equalsFn('ret)=?, 'ret) => unit,
+  nthReturnedWith: (~equals: equalsFn('ret)=?, int, 'ret) => unit,
 };
 
 let passMessageThunk = () => "";
@@ -670,6 +674,132 @@ module Make = (M: Mock.Sig) => {
           };
         });
 
+      let nthCalledWith = isNot =>
+        createMatcher(
+          (
+            {matcherHint, formatReceived, formatExpected, indent},
+            actualThunk,
+            expectedThunk,
+          ) => {
+          let mock = actualThunk();
+          let (equals, n, expectedArgs) = expectedThunk();
+          if (n <= 0) {
+            (
+              () =>
+                "nth value "
+                ++ formatReceived(string_of_int(n))
+                ++ " must be greater than zero",
+              false,
+            );
+          } else {
+            let isUsingDefaultEquality = equals === defaultEqualityFn;
+
+            let calls = M.getCalls(mock);
+            let nthCall = List.nth_opt(calls, List.length(calls) - n);
+
+            let wasNthCalledWithExpected =
+              switch (nthCall) {
+              | Some(args) when equals(expectedArgs, args) => true
+              | _ => false
+              };
+
+            switch (isNot, wasNthCalledWithExpected) {
+            | (true, false)
+            | (false, true) => (passMessageThunk, true)
+            | (true, true) =>
+              let message =
+                String.concat(
+                  "",
+                  [
+                    matcherHint(
+                      ~expectType=accessorPath,
+                      ~isNot,
+                      ~matcherName=".nthCalledWith",
+                      ~received="mock",
+                      ~options={
+                        comment:
+                          isUsingDefaultEquality ? Some("using ==") : None,
+                      },
+                      (),
+                    ),
+                    "\n\n",
+                    "Expected the mock function not to have been called the "
+                    ++ MatcherUtils.nthToString(n)
+                    ++ " time with:\n",
+                    indent(
+                      formatExpected(PolymorphicPrint.print(expectedArgs)),
+                    ),
+                    "\nBut it was called with arguments equal to:\n",
+                    indent(
+                      formatReceived(PolymorphicPrint.print(expectedArgs)),
+                    ),
+                  ],
+                );
+              ((() => message), false);
+            | (false, false) =>
+              switch (nthCall) {
+              | None =>
+                let message =
+                  String.concat(
+                    "",
+                    [
+                      matcherHint(
+                        ~expectType=accessorPath,
+                        ~isNot,
+                        ~matcherName=".nthCalledWith",
+                        ~received="mock",
+                        ~options={
+                          comment:
+                            isUsingDefaultEquality ? Some("using ==") : None,
+                        },
+                        (),
+                      ),
+                      "\n\n",
+                      "Expected the mock function to have been called the "
+                      ++ MatcherUtils.nthToString(n)
+                      ++ " time with:\n",
+                      indent(
+                        formatExpected(PolymorphicPrint.print(expectedArgs)),
+                      ),
+                      "\nBut it was ",
+                      formatReceived("not called"),
+                      ".",
+                    ],
+                  );
+                ((() => message), false);
+              | Some(nthCall) =>
+                let message =
+                  String.concat(
+                    "",
+                    [
+                      matcherHint(
+                        ~expectType=accessorPath,
+                        ~isNot,
+                        ~matcherName=".nthCalledWith",
+                        ~received="mock",
+                        ~options={
+                          comment:
+                            isUsingDefaultEquality ? Some("using ==") : None,
+                        },
+                        (),
+                      ),
+                      "\n\n",
+                      "Expected the mock function to have been called the "
+                      ++ MatcherUtils.nthToString(n)
+                      ++ " time with:\n",
+                      indent(
+                        formatExpected(PolymorphicPrint.print(expectedArgs)),
+                      ),
+                      "\nBut it was called with:\n",
+                      indent(formatCalls([nthCall], formatReceived)),
+                    ],
+                  );
+                ((() => message), false);
+              }
+            };
+          };
+        });
+
       let toReturnTimes = isNot =>
         createMatcher(
           (
@@ -1006,6 +1136,179 @@ module Make = (M: Mock.Sig) => {
           };
         });
 
+      let nthReturnedWith = isNot =>
+        createMatcher(
+          (
+            {matcherHint, formatReceived, formatExpected, indent},
+            actualThunk,
+            expectedThunk,
+          ) => {
+          let mock = actualThunk();
+          let (equals, n, expectedReturn) = expectedThunk();
+          if (n <= 0) {
+            (
+              () =>
+                "nth value "
+                ++ formatReceived(string_of_int(n))
+                ++ " must be greater than zero",
+              false,
+            );
+          } else {
+            let isUsingDefaultEquality = equals === defaultEqualityFn;
+
+            let results = M.getResults(mock);
+            let nthResult = List.nth_opt(results, List.length(results) - n);
+
+            let nthReturnedExpected =
+              switch (nthResult) {
+              | Some(Mock.Return(result))
+                  when equals(expectedReturn, result) =>
+                true
+              | _ => false
+              };
+
+            switch (isNot, nthReturnedExpected) {
+            | (true, false)
+            | (false, true) => (passMessageThunk, true)
+            | (true, true) =>
+              exception ShouldNeverGetHere;
+              let actual =
+                switch (nthResult) {
+                | Some(Mock.Return(value)) => value
+                | _ => raise(ShouldNeverGetHere)
+                };
+              let message =
+                String.concat(
+                  "",
+                  [
+                    matcherHint(
+                      ~expectType=accessorPath,
+                      ~isNot,
+                      ~matcherName=".nthReturnedWith",
+                      ~received="mock",
+                      ~expected="n, expected",
+                      ~options={
+                        comment:
+                          isUsingDefaultEquality ? Some("using ==") : None,
+                      },
+                      (),
+                    ),
+                    "\n\n",
+                    "Expected the "
+                    ++ MatcherUtils.nthToString(n)
+                    ++ " call to the mock function to not have"
+                    ++ " returned:\n",
+                    indent(
+                      formatExpected(PolymorphicPrint.print(expectedReturn)),
+                    ),
+                    "\nBut it returned:\n",
+                    indent(formatReceived(PolymorphicPrint.print(actual))),
+                  ],
+                );
+              ((() => message), false);
+            | (false, false) =>
+              switch (nthResult) {
+              | None =>
+                let message =
+                  String.concat(
+                    "",
+                    [
+                      matcherHint(
+                        ~expectType=accessorPath,
+                        ~isNot,
+                        ~matcherName=".nthReturnedWith",
+                        ~received="mock",
+                        ~options={
+                          comment:
+                            isUsingDefaultEquality ? Some("using ==") : None,
+                        },
+                        (),
+                      ),
+                      "\n\n",
+                      "Expected the "
+                      ++ MatcherUtils.nthToString(n)
+                      ++ " call to the mock function to have"
+                      ++ " returned:\n",
+                      indent(
+                        formatExpected(
+                          PolymorphicPrint.print(expectedReturn),
+                        ),
+                      ),
+                      "\nBut it did ",
+                      formatReceived("not return"),
+                      ".",
+                    ],
+                  );
+                ((() => message), false);
+              | Some(Return(actualValue)) =>
+                let message =
+                  String.concat(
+                    "",
+                    [
+                      matcherHint(
+                        ~expectType=accessorPath,
+                        ~isNot,
+                        ~matcherName=".nthReturnedWith",
+                        ~received="mock",
+                        ~options={
+                          comment:
+                            isUsingDefaultEquality ? Some("using ==") : None,
+                        },
+                        (),
+                      ),
+                      "\n\n",
+                      "Expected the "
+                      ++ MatcherUtils.nthToString(n)
+                      ++ " call to the mock function to have"
+                      ++ " returned:\n",
+                      indent(
+                        formatExpected(
+                          PolymorphicPrint.print(expectedReturn),
+                        ),
+                      ),
+                      "\nBut the call returned:\n",
+                      indent(
+                        formatReceived(PolymorphicPrint.print(actualValue)),
+                      ),
+                    ],
+                  );
+                ((() => message), false);
+              | Some(Exception(e, _, _)) =>
+                let message =
+                  String.concat(
+                    "",
+                    [
+                      matcherHint(
+                        ~expectType=accessorPath,
+                        ~isNot,
+                        ~matcherName=".nthReturnedWith",
+                        ~received="mock",
+                        ~options={
+                          comment:
+                            isUsingDefaultEquality ? Some("using ==") : None,
+                        },
+                        (),
+                      ),
+                      "\n\n",
+                      "Expected the "
+                      ++ MatcherUtils.nthToString(n)
+                      ++ " call to the mock function to have"
+                      ++ " returned:\n",
+                      indent(
+                        formatExpected(
+                          PolymorphicPrint.print(expectedReturn),
+                        ),
+                      ),
+                      "\nBut the call raised:\n",
+                      indent(formatReceived(Printexc.to_string(e))),
+                    ],
+                  );
+                ((() => message), false);
+              }
+            };
+          };
+        });
+
       let matchers = {
         not: {
           toThrow: () => notToThrow(() => mock, () => ()),
@@ -1016,6 +1319,8 @@ module Make = (M: Mock.Sig) => {
             toBeCalledWith(true, () => mock, () => (equals, expectedArgs)),
           lastCalledWith: (~equals=defaultEqualityFn, expectedArgs) =>
             lastCalledWith(true, () => mock, () => (equals, expectedArgs)),
+          nthCalledWith: (~equals=defaultEqualityFn, n, expectedArgs) =>
+            nthCalledWith(true, () => mock, () => (equals, n, expectedArgs)),
           toReturnTimes: numTimes =>
             toReturnTimes(true, () => mock, () => numTimes),
           toReturnWith: (~equals=defaultEqualityFn, expectedReturn) =>
@@ -1025,6 +1330,12 @@ module Make = (M: Mock.Sig) => {
               true,
               () => mock,
               () => (equals, expectedReturn),
+            ),
+          nthReturnedWith: (~equals=defaultEqualityFn, n, expectedArgs) =>
+            nthReturnedWith(
+              true,
+              () => mock,
+              () => (equals, n, expectedArgs),
             ),
         },
         toThrow: () => toThrow(() => mock, () => ()),
@@ -1037,6 +1348,8 @@ module Make = (M: Mock.Sig) => {
           toBeCalledWith(false, () => mock, () => (equals, expectedArgs)),
         lastCalledWith: (~equals=defaultEqualityFn, expectedArgs) =>
           lastCalledWith(false, () => mock, () => (equals, expectedArgs)),
+        nthCalledWith: (~equals=defaultEqualityFn, n, expectedArgs) =>
+          nthCalledWith(false, () => mock, () => (equals, n, expectedArgs)),
         toReturnTimes: numTimes =>
           toReturnTimes(false, () => mock, () => numTimes),
         toReturnWith: (~equals=defaultEqualityFn, expectedReturn) =>
@@ -1046,6 +1359,12 @@ module Make = (M: Mock.Sig) => {
             false,
             () => mock,
             () => (equals, expectedReturn),
+          ),
+        nthReturnedWith: (~equals=defaultEqualityFn, n, expectedReturn) =>
+          nthReturnedWith(
+            false,
+            () => mock,
+            () => (equals, n, expectedReturn),
           ),
       };
       matchers;
