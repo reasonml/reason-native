@@ -4,6 +4,7 @@
 * expect.result matchers for the built in result type
 * various internal changes to support compilation to JS with Js_of_ocaml
   * it works!
+* better failure messages when unable to create a snapshot directory
 
 # May 2, 2019
 ### qcheck-rely 1.0.2
