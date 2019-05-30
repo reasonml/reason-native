@@ -1,3 +1,11 @@
+# May 29, 2019
+### Rely 2.2.0
+* expect.mock.nthCalledWith/nthReturnedWith matchers
+* expect.result matchers for the built in result type
+* various internal changes to support compilation to JS with Js_of_ocaml
+  * it works!
+* better failure messages when unable to create a snapshot directory
+
 # May 2, 2019
 ### qcheck-rely 1.0.2
 * depend on @opam/qcheck-core instead of @opam/qcheck to drastically reduce
