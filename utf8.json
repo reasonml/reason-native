@@ -1,0 +1,21 @@
+{
+  "name": "@reason-native/utf8",
+  "version": "0.1.0",
+  "description": "Utf8 logic with minimal dependencies.",
+  "license": "MIT",
+  "esy": {
+    "build": "dune build -p utf8",
+    "install": "esy-installer utf8.install"
+  },
+  "scripts": {
+    "release": "node ./scripts/esy-prepublish.js utf8.json"
+  },
+  "dependencies": {
+    "@opam/dune": "*",
+    "ocaml": "^4.2.0"
+  },
+  "devDependencies": {
+    "@esy-ocaml/merlin": "*",
+    "ocaml": "~4.6.0"
+  }
+}

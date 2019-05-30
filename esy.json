@@ -6,6 +6,7 @@
   "esy": {
     "build": "refmterr dune build --profile=release",
     "install": [
+      "esy-installer utf8.install",
       "esy-installer console.install",
       "esy-installer file-context-printer.install",
       "esy-installer fs.install",

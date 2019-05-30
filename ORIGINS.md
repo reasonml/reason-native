@@ -7,3 +7,6 @@ to handle various system/terminal integration.
   robustly handle `Unix` exceptions. It is a great reference for which `Unix`
   exceptions are raised for which operations, and demonstrates the robust
   pattern of reattempts on interupt exceptions.
+
+- `utf` was coppied from IwanKaramazow's
+  (unicode.re)[https://github.com/IwanKaramazow/unicode.re].
