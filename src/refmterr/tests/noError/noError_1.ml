@@ -1,1 +1,0 @@
-let thisVariableIsTotallyFine = 5
