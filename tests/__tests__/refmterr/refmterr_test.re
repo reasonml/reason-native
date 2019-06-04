@@ -5,32 +5,29 @@ let folders = [
   /* first one is special. See the actual tests loop below */
   /* ("specialTests", 4, [], []), */
   /* `textTests` are simply recorded raw texts ran through berror. */
+  /* ("textTests", 2, [], []), */
+  ("1_bad_file_name", 1, [], []),
+  ("bad-file-name-2", 1, [], []),
+  ("noError", 1, [], []),
+  ("prettyPrint", 2, [], []),
   ("type_AppliedTooMany", 3, [], []),
-  /*
-   ("textTests", 2, [], []),
-   ("noError", 1, [], []),
-   ("prettyPrint", 2, [], []),
-   ("1_bad_file_name", 1, [], []),
-   ("bad-file-name-2", 1, [], []),
-   ("file_IllegalCharacter", 1, [], []),
-   ("file_SyntaxError", 7, [], [7]),
-   ("type_FunctionWrongLabel", 5, [], []),
-
-   ("type_SignatureItemMismatch", 13, [11, 12], []),
-   ("type_AppliedWithoutLabel", 1, [], []),
-   ("type_IncompatibleType", 10, [], []),
-   ("type_MismatchTypeArguments", 1, [], []),
-   ("type_NotAFunction", 1, [], []),
-   ("type_RecordFieldNotBelong", 3, [], []),
-   ("type_RecordFieldsUndefined", 1, [], []),
-   ("type_UnboundModule", 2, [], []),
-   ("type_UnboundRecordField", 2, [], []),
-   ("type_UnboundTypeConstructor", 2, [], []),
-   ("type_UnboundValue", 4, [], []),
-   ("warning_OptionalArgumentNotErased", 2, [], []),
-   ("warning_PatternNotExhaustive", 2, [], []),
-   ("warning_PatternUnused", 1, [], []),
-   */
+  ("type_AppliedWithoutLabel", 1, [], []),
+  ("type_SignatureItemMismatch", 13, [11, 12], []),
+  ("type_IncompatibleType", 10, [], []),
+  ("type_MismatchTypeArguments", 1, [], []),
+  ("type_NotAFunction", 1, [], []),
+  ("type_RecordFieldNotBelong", 3, [], []),
+  ("type_RecordFieldsUndefined", 1, [], []),
+  ("type_UnboundModule", 2, [], []),
+  ("type_UnboundRecordField", 2, [], []),
+  ("type_UnboundTypeConstructor", 2, [], []),
+  ("type_UnboundValue", 4, [], []),
+  ("type_FunctionWrongLabel", 5, [], []),
+  ("warning_OptionalArgumentNotErased", 2, [], []),
+  ("warning_PatternNotExhaustive", 2, [], []),
+  ("warning_PatternUnused", 1, [], []),
+  ("file_IllegalCharacter", 1, [], []),
+  ("file_SyntaxError", 7, [], [7]),
 ];
 
 exception Not_equal(string);
@@ -110,17 +107,8 @@ let forEachTest =
         Printf.sprintf("%s_%d_actual.txt", dirname, j),
       );
 
-    /* special handling of the first item, specialTests */
     let cmd =
-      if (i === 1) {
-        (
-          switch (Sys.os_type) {
-          | "Win32" => "type "
-          | _ => "cat "
-          }
-        )
-        ++ filename;
-      } else if (List.exists(q => q == j, indicesWithInterfaces)) {
+      if (List.exists(q => q == j, indicesWithInterfaces)) {
         "ocamlc -w +40 "
         ++ interfaceFilename
         ++ " &&  ocamlc -I "
@@ -160,7 +148,8 @@ let forEachTest =
       ({expect}) => {
         /* open the produced error output */
         let expected = readFile(expectedOutputName);
-        expect.file(actualOutputName).toEqual(expected);
+        let actual = readFile(actualOutputName);
+        expect.string(actual).toEqual(expected);
       },
     );
   };
@@ -173,11 +162,11 @@ let rmCommand =
 
 try (
   {
+    ignore(Sys.command(rmCommand));
+
     describe("refmterr", ({test}) =>
       List.iteri(forEachTest(test), folders)
     );
-
-    ignore(Sys.command(rmCommand));
   }
 ) {
 /* trust me I'm not evil */
