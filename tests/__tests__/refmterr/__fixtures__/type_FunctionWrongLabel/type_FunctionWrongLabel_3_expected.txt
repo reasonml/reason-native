@@ -1,23 +1,23 @@
-[1m[2m# Unformatted Error Output:[22m[22m
-[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_FunctionWrongLabel/type_FunctionWrongLabel_3.ml", line 4, characters 29-60:[22m
-[2m# [22m[2mError: This function should have type[22m
-[2m# [22m[2m         int ->[22m
-[2m# [22m[2m         a:string list ->[22m
-[2m# [22m[2m         b:int * int * int * int * int -> c:string list -> unit -> 'a[22m
-[2m# [22m[2m       but its first argument is labelled ~a[22m
+# Unformatted Error Output:
+# File "tests/__tests__/refmterr/__fixtures__/type_FunctionWrongLabel/type_FunctionWrongLabel_3.ml", line 4, characters 29-60:
+# Error: This function should have type
+#          int ->
+#          a:string list ->
+#          b:int * int * int * int * int -> c:string list -> unit -> 'a
+#        but its first argument is labelled ~a
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_FunctionWrongLabel/type_FunctionWrongLabel_3.ml[24m[39m[2m[4m:4 29-60[24m[22m 
+ ERROR  tests/__tests__/refmterr/__fixtures__/type_FunctionWrongLabel/type_FunctionWrongLabel_3.ml:4 29-60 
 
-[2m1 ┆ [22m[35m[2mlet[22m[39m[2m xyz = [22m[34m[2m0[22m[39m
-[2m2 ┆ [22m[35m[2mlet[22m[39m[2m thisFunction [22m[33m[2m~f[22m[39m[2m args = f xyz [22m[33m[2m~a[22m[39m[2m:[[22m[32m[2m"hello"[22m[39m[2m] [22m[33m[2m~b[22m[39m[2m:([22m[34m[2m0[22m[39m[2m, [22m[34m[2m2[22m[39m[2m, [22m[34m[2m3[22m[39m[2m, [22m[34m[2m4[22m[39m[2m, [22m[34m[2m5[22m[39m[2m) [22m[33m[2m~c[22m[39m[2m:[[22m[32m[2m"anotherString"[22m[39m[2m] ()[22m
-[2m3 ┆ [22m
-[31m[2m4 ┆ [22m[39m[35m[2mlet[22m[39m[2m result = thisFunction [22m[33m[2m~f[22m[39m[2m:[22m[31m[1m[4m(fun ~a:0 ~b ~c u -> aa + b +c)[24m[22m[39m
+1 ┆ let xyz = 0
+2 ┆ let thisFunction ~f args = f xyz ~a:["hello"] ~b:(0, 2, 3, 4, 5) ~c:["anotherString"] ()
+3 ┆ 
+4 ┆ let result = thisFunction ~f:(fun ~a:0 ~b ~c u -> aa + b +c)
 
-[1mThis function should have type:[22m
-[32m(int, ~a: list(string), ~b: (int, int, int, int, int), ~c: list(string), unit) =>
-'a[39m
+This function should have type:
+(int, ~a: list(string), ~b: (int, int, int, int, int), ~c: list(string), unit) =>
+'a
 
-[1mBut its first argument is named[22m [31m[1m~a[22m[39m
+But its first argument is named ~a
 
 

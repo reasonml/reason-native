@@ -1,15 +1,15 @@
-[1m[2m# Unformatted Warning Output:[22m[22m
-[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/warning_PatternNotExhaustive/warning_PatternNotExhaustive_1.ml", line 5, characters 12-38:[22m
-[2m# [22m[2mWarning 8: this pattern-matching is not exhaustive.[22m
+# Unformatted Warning Output:
+# File "tests/__tests__/refmterr/__fixtures__/warning_PatternNotExhaustive/warning_PatternNotExhaustive_1.ml", line 5, characters 12-38:
+# Warning 8: this pattern-matching is not exhaustive.
 
 
-[33m[1m[7m WARNING [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/warning_PatternNotExhaustive/warning_PatternNotExhaustive_1.ml[24m[39m[2m[4m:5:12-6:13[24m[22m [33m[1m [Warning Code 8] [22m[39m
+ WARNING  tests/__tests__/refmterr/__fixtures__/warning_PatternNotExhaustive/warning_PatternNotExhaustive_1.ml:5:12-6:13  [Warning Code 8] 
 
-[2m2 ┆ [22m[2m  | [22m[34m[2mHello[22m[39m
-[2m3 ┆ [22m[2m  | [22m[34m[2mGoodbye[22m[39m
-[2m4 ┆ [22m
-[31m[2m5 ┆ [22m[39m[35m[2mlet[22m[39m[2m say a = [22m[31m[1m[4mmatch a with[24m[22m[39m
-[31m[2m6 ┆ [22m[39m[31m[1m[4m| Hello -> ()[24m[22m[39m
+2 ┆   | Hello
+3 ┆   | Goodbye
+4 ┆ 
+5 ┆ let say a = match a with
+6 ┆ | Hello -> ()
 
 
 

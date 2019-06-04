@@ -1,14 +1,14 @@
-[1m[2m# Unformatted Error Output:[22m[22m
-[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_AppliedWithoutLabel/type_AppliedWithoutLabel_1.ml", line 4, characters 6-7:[22m
-[2m# [22m[2mError: The function applied to this argument has type a:'a -> b:'b -> unit[22m
+# Unformatted Error Output:
+# File "tests/__tests__/refmterr/__fixtures__/type_AppliedWithoutLabel/type_AppliedWithoutLabel_1.ml", line 4, characters 6-7:
+# Error: The function applied to this argument has type a:'a -> b:'b -> unit
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_AppliedWithoutLabel/type_AppliedWithoutLabel_1.ml[24m[39m[2m[4m:4 6-7[24m[22m 
+ ERROR  tests/__tests__/refmterr/__fixtures__/type_AppliedWithoutLabel/type_AppliedWithoutLabel_1.ml:4 6-7 
 
-[2m1 ┆ [22m[35m[2mlet[22m[39m[2m f [22m[33m[2m~a[22m[39m[2m [22m[33m[2m~b[22m[39m[2m c = ()[22m
-[2m2 ┆ [22m
-[2m3 ┆ [22m[35m[2mlet[22m[39m[2m () =[22m
-[31m[2m4 ┆ [22m[39m[2m  f [22m[34m[2m1[22m[39m[2m [22m[31m[1m[4m2[24m[22m[39m
+1 ┆ let f ~a ~b c = ()
+2 ┆ 
+3 ┆ let () =
+4 ┆   f 1 2
 
 
 

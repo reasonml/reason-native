@@ -1,13 +1,13 @@
-[1m[2m# Unformatted Error Output:[22m[22m
-[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_UnboundModule/type_UnboundModule_1.ml", line 1, characters 5-11:[22m
-[2m# [22m[2mError: Unbound module Camlp4[22m
+# Unformatted Error Output:
+# File "tests/__tests__/refmterr/__fixtures__/type_UnboundModule/type_UnboundModule_1.ml", line 1, characters 5-11:
+# Error: Unbound module Camlp4
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_UnboundModule/type_UnboundModule_1.ml[24m[39m[2m[4m:1 5-11[24m[22m 
+ ERROR  tests/__tests__/refmterr/__fixtures__/type_UnboundModule/type_UnboundModule_1.ml:1 5-11 
 
-[31m[2m1 ┆ [22m[39m[35m[2mopen[22m[39m[2m [22m[31m[1m[4mCamlp4[24m[22m[39m[2m;;[22m
+1 ┆ open Camlp4;;
 
-Module [31m[1mCamlp4;[22m[39m not found in included libraries.
+Module Camlp4; not found in included libraries.
 
 Hint: You might need to tell your build system to depend on a library that contains Camlp4;.
 You can see which libraries are available by doing `ocamlfind list` (or `esy ocamlfind list` inside your esy project)

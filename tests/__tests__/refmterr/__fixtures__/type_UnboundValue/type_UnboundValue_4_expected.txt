@@ -1,20 +1,20 @@
-[1m[2m# Unformatted Error Output:[22m[22m
-[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_UnboundValue/type_UnboundValue_4.ml", line 6, characters 19-29:[22m
-[2m# [22m[2mError: Unbound value poshanossy[22m
-[2m# [22m[2mHint: Did you mean poshanessy, poshanissy, poshanyssy or poshanassy?[22m
+# Unformatted Error Output:
+# File "tests/__tests__/refmterr/__fixtures__/type_UnboundValue/type_UnboundValue_4.ml", line 6, characters 19-29:
+# Error: Unbound value poshanossy
+# Hint: Did you mean poshanessy, poshanissy, poshanyssy or poshanassy?
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_UnboundValue/type_UnboundValue_4.ml[24m[39m[2m[4m:6 19-29[24m[22m 
+ ERROR  tests/__tests__/refmterr/__fixtures__/type_UnboundValue/type_UnboundValue_4.ml:6 19-29 
 
-[2m3 ┆ [22m[35m[2mlet[22m[39m[2m poshanissy = [22m[34m[2m3[22m[39m
-[2m4 ┆ [22m[35m[2mlet[22m[39m[2m poshanyssy = [22m[34m[2m4[22m[39m
-[2m5 ┆ [22m
-[31m[2m6 ┆ [22m[39m[35m[2mlet[22m[39m[2m () = print_int [22m[31m[1m[4mposhanossy[24m[22m[39m
+3 ┆ let poshanissy = 3
+4 ┆ let poshanyssy = 4
+5 ┆ 
+6 ┆ let () = print_int poshanossy
 
-[31m[1mposhanossy[22m[39m can't be found. Did you mean one of these?
-[33m- poshanassy[39m
-[33m- poshanyssy[39m
-[33m- poshanissy[39m
-[33m- poshanessy[39m
+poshanossy can't be found. Did you mean one of these?
+- poshanassy
+- poshanyssy
+- poshanissy
+- poshanessy
 
 

@@ -1,18 +1,18 @@
-[1m[2m# Unformatted Error Output:[22m[22m
-[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_UnboundRecordField/type_UnboundRecordField_2.ml", line 8, characters 2-6:[22m
-[2m# [22m[2mError: Unbound record field helo[22m
-[2m# [22m[2mHint: Did you mean hello?[22m
+# Unformatted Error Output:
+# File "tests/__tests__/refmterr/__fixtures__/type_UnboundRecordField/type_UnboundRecordField_2.ml", line 8, characters 2-6:
+# Error: Unbound record field helo
+# Hint: Did you mean hello?
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_UnboundRecordField/type_UnboundRecordField_2.ml[24m[39m[2m[4m:8 2-6[24m[22m 
+ ERROR  tests/__tests__/refmterr/__fixtures__/type_UnboundRecordField/type_UnboundRecordField_2.ml:8 2-6 
 
-[2m5 ┆ [22m
-[2m6 ┆ [22m[35m[2mlet[22m[39m[2m bla = {[22m
-[2m7 ┆ [22m[2m  a = [22m[34m[2m5[22m[39m[2m;[22m
-[31m[2m8 ┆ [22m[39m[2m  [22m[31m[1m[4mhelo[24m[22m[39m[2m = [22m[34m[2m6[22m[39m[2m;[22m
-[2m9 ┆ [22m[2m}[22m
+5 ┆ 
+6 ┆ let bla = {
+7 ┆   a = 5;
+8 ┆   helo = 6;
+9 ┆ }
 
-Record field [31m[1mhelo[22m[39m can't be found in any record type. Did you mean [33mhello[39m?
+Record field helo can't be found in any record type. Did you mean hello?
 
 Record fields must be "in scope". That means you need to `open TheModule` where the record type is defined.
 Alternatively, instead of opening a module, you can prefix the record field name like {TheModule.x: 0, y: 100}.

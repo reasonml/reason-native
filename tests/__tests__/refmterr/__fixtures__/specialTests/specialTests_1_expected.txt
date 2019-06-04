@@ -1,4 +1,4 @@
 File "command line", line 1:
 Error: Unbound module NonExistantModule
-[31m[1mError:[22m[39m module [31m[1m[4mNonExistantModule[24m[22m[39m not found.
+Error: module NonExistantModule not found.
 
