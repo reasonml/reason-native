@@ -4,7 +4,7 @@ let folders = [
   /* first one is special. See the actual tests loop below */
   ("specialTests", 4, [], []),
   /* `textTests` are simply recorded raw texts ran through berror. */
-  /* ("textTests", 2, [], []), */
+  ("textTests", 2, [], []),
   ("1_bad_file_name", 1, [], []),
   ("bad-file-name-2", 1, [], []),
   ("noError", 1, [], []),
@@ -28,8 +28,6 @@ let folders = [
   ("file_IllegalCharacter", 1, [], []),
   ("file_SyntaxError", 7, [], [7]),
 ];
-
-exception Not_equal(string);
 
 let beginsWithPrefix = (str, prefix) => {
   let prefixLength = String.length(prefix);
@@ -87,14 +85,27 @@ let forEachTest =
     /* text test */
     let isReason = List.exists(q => q == j, indicesWithReason);
     let filename =
-      Filename.concat(
-        testsDirname,
-        isReason ?
-          Printf.sprintf("%s_%d.re", dirname, j) :
-          Printf.sprintf("%s_%d.ml", dirname, j),
-      );
+      i === 1 ?
+        Filename.concat(
+          testsDirname,
+          Printf.sprintf("%s_%d.txt", dirname, j),
+        ) :
+        Filename.concat(
+          testsDirname,
+          isReason ?
+            Printf.sprintf("%s_%d.re", dirname, j) :
+            Printf.sprintf("%s_%d.ml", dirname, j),
+        );
     let interfaceFilename =
-      Filename.concat(testsDirname, Printf.sprintf("%s_%d.mli", dirname, j));
+      i === 1 ?
+        Filename.concat(
+          testsDirname,
+          Printf.sprintf("%s_%d.txt", dirname, j),
+        ) :
+        Filename.concat(
+          testsDirname,
+          Printf.sprintf("%s_%d.mli", dirname, j),
+        );
     let expectedOutputName =
       Filename.concat(
         testsDirname,
@@ -109,6 +120,14 @@ let forEachTest =
     let cmd =
       if (i === 0) {
         List.nth(specialTestsCommands, j - 1);
+      } else if (i === 1) {
+        (
+          switch (Sys.os_type) {
+          | "Win32" => "type "
+          | _ => "cat "
+          }
+        )
+        ++ filename;
       } else if (List.exists(q => q == j, indicesWithInterfaces)) {
         "ocamlc -w +40 "
         ++ interfaceFilename
