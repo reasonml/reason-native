@@ -1,0 +1,14 @@
+[1m[2m# Unformatted Warning Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/warning_PatternUnused/warning_PatternUnused_1.ml", line 8, characters 2-3:[22m
+[2m# [22m[2mWarning 11: this match case is unused.[22m
+
+
+[33m[1m[7m WARNING [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/warning_PatternUnused/warning_PatternUnused_1.ml[24m[39m[2m[4m:8 2-3[24m[22m [33m[1m [Warning Code 11] [22m[39m
+
+[2m5 ┆ [22m[35m[2mlet[22m[39m[2m say a = match a with[22m
+[2m6 ┆ [22m[2m| [22m[34m[2mHello[22m[39m[2m -> ()[22m
+[2m7 ┆ [22m[2m| [22m[34m[2mGoodbye[22m[39m[2m -> ()[22m
+[31m[2m8 ┆ [22m[39m[2m| [22m[31m[1m[4m_[24m[22m[39m[2m -> ()[22m
+
+
+

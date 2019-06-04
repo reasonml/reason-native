@@ -1,12 +1,12 @@
 [1m[2m# Unformatted Error Output:[22m[22m
-[2m# [22m[2mFile "tests/type_AppliedTooMany/type_AppliedTooMany_2.ml", line 3, characters 21-33:[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_AppliedTooMany/type_AppliedTooMany_2.ml", line 3, characters 21-33:[22m
 [2m# [22m[2mError: This function has type[22m
 [2m# [22m[2m         string ->[22m
 [2m# [22m[2m         string -> string -> string -> string -> string -> string -> string[22m
 [2m# [22m[2m       It is applied to too many arguments; maybe you forgot a `;'.[22m
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/type_AppliedTooMany/type_AppliedTooMany_2.ml[24m[39m[2m[4m:3 21-33[24m[22m 
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_AppliedTooMany/type_AppliedTooMany_2.ml[24m[39m[2m[4m:3 21-33[24m[22m 
 
 [2m1 ┆ [22m[35m[2mlet[22m[39m[2m longFunction a b c d e f g = a ^ b ^ c ^ d ^ e ^ f ^ g[22m
 [2m2 ┆ [22m
