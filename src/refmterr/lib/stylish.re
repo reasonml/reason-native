@@ -97,8 +97,6 @@ module type StylishSig = {
     string;
 };
 
-Pastel.(setMode(Terminal));
-
 module ANSIStylish: StylishSig = {
   let concatList = String.concat;
 

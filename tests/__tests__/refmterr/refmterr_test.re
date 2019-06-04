@@ -160,6 +160,8 @@ let forEachTest =
       | _ => ""
       };
 
+    Pastel.(setMode(Terminal));
+
     ignore(
       Sys.command(
         Printf.sprintf(
