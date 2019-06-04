@@ -1,3 +1,15 @@
+/**	open TestFramework;
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */;
+/* Note: this file must be run at root directory of the project. Otherwise the
+   Sys.command calls below happen in the wrong directory */
+/* File's in ocaml for now, because our `ocaml tests/test.ml` call doesn't allow
+   us to pass the `-pp refmt` option to parse reason code. Would be nice if `ocaml`
+   had that like `ocamlc` */
+
 open TestFramework;
 let folders = [
   /* (directory, number of tests) */
