@@ -184,7 +184,7 @@ try (
   {
     ignore(Sys.command(rmCommand));
 
-    describeOnly("refmterr", ({test}) =>
+    describe("refmterr", ({test}) =>
       List.iteri(forEachTest(test), folders)
     );
   }
