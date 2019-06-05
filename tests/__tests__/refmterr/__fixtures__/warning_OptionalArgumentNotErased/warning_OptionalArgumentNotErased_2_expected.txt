@@ -1,16 +1,16 @@
-# Unformatted Warning Output:
-# File "tests/__tests__/refmterr/__fixtures__/warning_OptionalArgumentNotErased/warning_OptionalArgumentNotErased_2.ml", line 1, characters 18-31:
-# Warning 16: this optional argument cannot be erased.
+[1m[2m# Unformatted Warning Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/warning_OptionalArgumentNotErased/warning_OptionalArgumentNotErased_2.ml", line 1, characters 18-31:[22m
+[2m# [22m[2mWarning 16: this optional argument cannot be erased.[22m
 
 
- WARNING  tests/__tests__/refmterr/__fixtures__/warning_OptionalArgumentNotErased/warning_OptionalArgumentNotErased_2.ml:1 18-31  [Warning Code 16] 
+[33m[1m[7m WARNING [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/warning_OptionalArgumentNotErased/warning_OptionalArgumentNotErased_2.ml[24m[39m[2m[4m:1 18-31[24m[22m [33m[1m [Warning Code 16] [22m[39m
 
-1 ┆ let eat aNumber ?(withFork=true) =
-2 ┆   "Hello, world!"
-3 ┆ 
-4 ┆ let () = print_endline (eat 1 ~withFork:false)
+[31m[2m1 ┆ [22m[39m[35m[2mlet[22m[39m[2m eat aNumber ?([22m[31m[1m[4mwithFork=true[24m[22m[39m[2m) =[22m
+[2m2 ┆ [22m[2m  [22m[32m[2m"Hello, world!"[22m[39m
+[2m3 ┆ [22m
+[2m4 ┆ [22m[35m[2mlet[22m[39m[2m () = print_endline (eat [22m[34m[2m1[22m[39m[2m [22m[33m[2m~withFork[22m[39m[2m:false)[22m
 
-withFork is an optional argument at last position; calling the function by omitting withFork might be confused with currying.
+[31m[1mwithFork[22m[39m is an optional argument at last position; calling the function by omitting withFork might be confused with currying.
 
 The solution is usually to provide a final non-named argument, or a final unit() argument if necessary.
 

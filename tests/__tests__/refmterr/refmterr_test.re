@@ -173,7 +173,7 @@ let forEachTest =
 
     /* swap-comment below two lines if you want to generate new expected
        from the new actual */
-    /* ignore @@ Sys.command @@ Printf.sprintf("cp %s %s", actualOutputName, expectedOutputName); */
+    /* ignore(Sys.command(Printf.sprintf("cp %s %s", actualOutputName, expectedOutputName))); */
 
     test(
       dirname,

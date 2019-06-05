@@ -1,26 +1,26 @@
-# Unformatted Warning Output:
-# File "tests/__tests__/refmterr/__fixtures__/bad-file-name-2/bad-file-name-2_1.ml", line 1:
-# Warning 24: bad source file name: "Bad-file-name-2_1" is not a valid module name.
+[1m[2m# Unformatted Warning Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/bad-file-name-2/bad-file-name-2_1.ml", line 1:[22m
+[2m# [22m[2mWarning 24: bad source file name: "Bad-file-name-2_1" is not a valid module name.[22m
 
 
- WARNING  tests/__tests__/refmterr/__fixtures__/bad-file-name-2/bad-file-name-2_1.ml:1 0-0  [Warning Code 24] 
+[33m[1m[7m WARNING [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/bad-file-name-2/bad-file-name-2_1.ml[24m[39m[2m[4m:1 0-0[24m[22m [33m[1m [Warning Code 24] [22m[39m
 
-1 ┆ asd
+[31m[2m1 ┆ [22m[39m[2masd[22m
 
 File name potentially invalid. The OCaml ecosystem's build systems usually turn file names into module names by simply upper-casing the first letter. In this case, `Bad-file-name-2_1.ml` contains `-`, which doesn't form a legal module name.
 Note: some build systems might e.g. turn kebab-case into CamelCase module, which is why this isn't a hard error.
 
 
-# Unformatted Error Output:
-# File "tests/__tests__/refmterr/__fixtures__/bad-file-name-2/bad-file-name-2_1.ml", line 1, characters 0-3:
-# Error: Unbound value asd
-# Hint: Did you mean asr?
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/bad-file-name-2/bad-file-name-2_1.ml", line 1, characters 0-3:[22m
+[2m# [22m[2mError: Unbound value asd[22m
+[2m# [22m[2mHint: Did you mean asr?[22m
 
 
- ERROR  tests/__tests__/refmterr/__fixtures__/bad-file-name-2/bad-file-name-2_1.ml:1 0-3 
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/bad-file-name-2/bad-file-name-2_1.ml[24m[39m[2m[4m:1 0-3[24m[22m 
 
-1 ┆ asd
+[31m[2m1 ┆ [22m[39m[31m[1m[4masd[24m[22m[39m
 
-The value named asd can't be found. Did you mean asr?
+The value named [31m[1masd[22m[39m can't be found. Did you mean [33masr[39m?
 
 

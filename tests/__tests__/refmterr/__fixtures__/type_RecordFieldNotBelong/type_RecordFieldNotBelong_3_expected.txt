@@ -1,21 +1,21 @@
-# Unformatted Error Output:
-# File "tests/__tests__/refmterr/__fixtures__/type_RecordFieldNotBelong/type_RecordFieldNotBelong_3.ml", line 13, characters 21-25:
-# Error: This expression has type point
-#        The field dogs does not belong to type point
-# Hint: Did you mean dog?
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_RecordFieldNotBelong/type_RecordFieldNotBelong_3.ml", line 13, characters 21-25:[22m
+[2m# [22m[2mError: This expression has type point[22m
+[2m# [22m[2m       The field dogs does not belong to type point[22m
+[2m# [22m[2mHint: Did you mean dog?[22m
 
 
- ERROR  tests/__tests__/refmterr/__fixtures__/type_RecordFieldNotBelong/type_RecordFieldNotBelong_3.ml:13 21-25 
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_RecordFieldNotBelong/type_RecordFieldNotBelong_3.ml[24m[39m[2m[4m:13 21-25[24m[22m 
 
-10 ┆   dog = "hi";
-11 ┆ }
-12 ┆ 
-13 ┆ let result = myPoint.dogs
+[2m10 ┆ [22m[2m  dog = [22m[32m[2m"hi"[22m[39m[2m;[22m
+[2m11 ┆ [22m[2m}[22m
+[2m12 ┆ [22m
+[31m[2m13 ┆ [22m[39m[35m[2mlet[22m[39m[2m result = myPoint.[22m[31m[1m[4mdogs[24m[22m[39m
 
-This field dogs doesn't belong to the record.
+[1mThis field[22m [31m[1mdogs[22m[39m [1mdoesn't belong to the record.[22m
 
-The record expression has type: point
+[1mThe record expression has type: point[22m
 
-Did you mean dog?
+Did you mean [33mdog[39m?
 
 

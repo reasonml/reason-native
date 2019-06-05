@@ -1,51 +1,51 @@
-# Unformatted Error Output:
-# File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 6, characters 24-59:
-# Error: Signature mismatch:
-#        Modules do not match:
-#          sig val hasWrongType : 'a -> int end
-#        is not included in
-#          Sig
-#        Values do not match:
-#          val hasWrongType : 'a -> int
-#        is not included in
-#          val hasWrongType :
-#            stringParam:string ->
-#            intParam:int ->
-#            unitParam:unit -> anotherStringParam:string -> unit
-#        File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 3, characters 2-109:
-#          Expected declaration
-#        File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 7, characters 6-18:
-#          Actual declaration
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 6, characters 24-59:[22m
+[2m# [22m[2mError: Signature mismatch:[22m
+[2m# [22m[2m       Modules do not match:[22m
+[2m# [22m[2m         sig val hasWrongType : 'a -> int end[22m
+[2m# [22m[2m       is not included in[22m
+[2m# [22m[2m         Sig[22m
+[2m# [22m[2m       Values do not match:[22m
+[2m# [22m[2m         val hasWrongType : 'a -> int[22m
+[2m# [22m[2m       is not included in[22m
+[2m# [22m[2m         val hasWrongType :[22m
+[2m# [22m[2m           stringParam:string ->[22m
+[2m# [22m[2m           intParam:int ->[22m
+[2m# [22m[2m           unitParam:unit -> anotherStringParam:string -> unit[22m
+[2m# [22m[2m       File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 3, characters 2-109:[22m
+[2m# [22m[2m         Expected declaration[22m
+[2m# [22m[2m       File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml", line 7, characters 6-18:[22m
+[2m# [22m[2m         Actual declaration[22m
 
 
- ERROR  tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml:6:24-8:3 
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml[24m[39m[2m[4m:6:24-8:3[24m[22m 
 
-3 ┆   val hasWrongType: stringParam:string -> intParam:int -> unitParam:unit -> anotherStringParam:string -> unit
-4 ┆ end
-5 ┆ 
-6 ┆ module MyModule : Sig = struct
-7 ┆   let hasWrongType s = 0
-8 ┆ end
-9 ┆ 
+[2m3 ┆ [22m[2m  val hasWrongType: stringParam:[22m[33m[2mstring[22m[39m[2m -> intParam:[22m[33m[2mint[22m[39m[2m -> unitParam:unit -> anotherStringParam:[22m[33m[2mstring[22m[39m[2m -> unit[22m
+[2m4 ┆ [22m[2mend[22m
+[2m5 ┆ [22m
+[31m[2m6 ┆ [22m[39m[35m[2mmodule[22m[39m[2m [22m[34m[2mMyModule[22m[39m[2m : [22m[34m[2mSig[22m[39m[2m = [22m[31m[1m[4mstruct[24m[22m[39m
+[31m[2m7 ┆ [22m[39m  [31m[1m[4mlet hasWrongType s = 0[24m[22m[39m
+[31m[2m8 ┆ [22m[39m[31m[1m[4mend[24m[22m[39m
+[2m9 ┆ [22m
 
-This module doesn't match its signature because the value hasWrongType has the wrong type
+[1mThis module doesn't match its signature because the[22m [1mvalue[22m [31m[1mhasWrongType[22m[39m [1mhas the wrong type[22m
 
-  At tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml:3
-  the signature required that hasWrongType be of type:
+  At [36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml[39m[2m:3[22m
+  the signature required that [1mhasWrongType[22m be of type:
 
-  (
+[32m[1m  (
     ~stringParam: string,
     ~intParam: int,
     ~unitParam: unit,
     ~anotherStringParam: string
   ) =>
-  unit
+  unit[22m[39m
 
 
-  At tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml:7
-  your module defined hasWrongType having type:
+  At [36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_5.ml[39m[2m:7[22m
+  your module defined [1mhasWrongType[22m having type:
 
-  'a => int
+[31m[1m  'a => int[22m[39m
 
 
 

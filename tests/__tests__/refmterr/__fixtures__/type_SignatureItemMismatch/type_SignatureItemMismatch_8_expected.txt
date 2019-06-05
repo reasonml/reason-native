@@ -1,38 +1,38 @@
-# Unformatted Error Output:
-# File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 6, characters 24-58:
-# Error: Signature mismatch:
-#        Modules do not match:
-#          sig type wrongArity = int end
-#        is not included in
-#          Sig
-#        Type declarations do not match:
-#          type wrongArity = int
-#        is not included in
-#          type 'a wrongArity
-#        File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 3, characters 2-20:
-#          Expected declaration
-#        File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 7, characters 2-23:
-#          Actual declaration
-#        They have different arities.
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 6, characters 24-58:[22m
+[2m# [22m[2mError: Signature mismatch:[22m
+[2m# [22m[2m       Modules do not match:[22m
+[2m# [22m[2m         sig type wrongArity = int end[22m
+[2m# [22m[2m       is not included in[22m
+[2m# [22m[2m         Sig[22m
+[2m# [22m[2m       Type declarations do not match:[22m
+[2m# [22m[2m         type wrongArity = int[22m
+[2m# [22m[2m       is not included in[22m
+[2m# [22m[2m         type 'a wrongArity[22m
+[2m# [22m[2m       File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 3, characters 2-20:[22m
+[2m# [22m[2m         Expected declaration[22m
+[2m# [22m[2m       File "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml", line 7, characters 2-23:[22m
+[2m# [22m[2m         Actual declaration[22m
+[2m# [22m[2m       They have different arities.[22m
 
 
- ERROR  tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml:6:24-8:3 
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml[24m[39m[2m[4m:6:24-8:3[24m[22m 
 
-3 ┆   type 'a wrongArity
-4 ┆ end
-5 ┆ 
-6 ┆ module MyModule : Sig = struct
-7 ┆   type wrongArity = int
-8 ┆ end
-9 ┆ 
+[2m3 ┆ [22m[2m  [22m[35m[2mtype[22m[39m[2m 'a wrongArity[22m
+[2m4 ┆ [22m[2mend[22m
+[2m5 ┆ [22m
+[31m[2m6 ┆ [22m[39m[35m[2mmodule[22m[39m[2m [22m[34m[2mMyModule[22m[39m[2m : [22m[34m[2mSig[22m[39m[2m = [22m[31m[1m[4mstruct[24m[22m[39m
+[31m[2m7 ┆ [22m[39m  [31m[1m[4mtype wrongArity = int[24m[22m[39m
+[31m[2m8 ┆ [22m[39m[31m[1m[4mend[24m[22m[39m
+[2m9 ┆ [22m
 
-This module contains a type definition with the wrong number of type parameters 
+[1mThis module contains a type definition with the wrong number of type parameters [22m
 
-  At tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml:3
-  the expected signature differs from provided signature:
+  At [36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_8.ml[39m[2m:3[22m
+  the [32m[1mexpected signature[22m[39m differs from [31m[1mprovided signature[22m[39m:
 
-  type wrongArity('a);
-  type wrongArity = int;
+  [32m[1mtype wrongArity('a);[22m[39m
+  [31m[1mtype wrongArity = int;[22m[39m
 
 
 
