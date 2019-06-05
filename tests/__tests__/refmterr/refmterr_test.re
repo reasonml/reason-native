@@ -1,4 +1,4 @@
-/**	open TestFramework;
+/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -165,6 +165,7 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
+          "FORCE_COLOR=true",
           "(%s) 2>&1 | berror.exe --path-to-refmttype refmttype %s > %s",
           cmd,
           windowsCompatibilityPipe,
