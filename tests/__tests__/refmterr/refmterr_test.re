@@ -165,8 +165,7 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
-          "FORCE_COLOR=true",
-          "(%s) 2>&1 | berror.exe --path-to-refmttype refmttype %s > %s",
+          "(FORCE_COLOR=true %s) 2>&1 | berror.exe --path-to-refmttype refmttype %s > %s",
           cmd,
           windowsCompatibilityPipe,
           actualOutputName,
