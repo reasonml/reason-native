@@ -66,9 +66,9 @@ let isDescendent: type kind. (~ofPath: t(kind), t(kind)) => bool =
       | (None, Some(_)) => false
       }
     | ((Rel(Any, d1), l1), (Rel(Any, d2), l2)) =>
-      d1 === d1 && segmentsAreInside(~ofSegments=l1, l2)
+      d1 === d2 && segmentsAreInside(~ofSegments=l1, l2)
     | ((Rel(Home, d1), l1), (Rel(Home, d2), l2)) =>
-      d1 === d1 && segmentsAreInside(~ofSegments=l1, l2)
+      d1 === d2 && segmentsAreInside(~ofSegments=l1, l2)
     | ((Rel(Any, _), _), (Rel(Home, _), _)) => false
     | ((Rel(Home, _), _), (Rel(Any, _), _)) => false
     };
