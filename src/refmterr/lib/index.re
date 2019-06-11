@@ -103,7 +103,9 @@ let extractFromFileMatch = fileMatch =>
       let (col1Raw, col2Raw) =
         switch (col1, col2) {
         | (Group(_, c1), Group(_, c2)) =>
-          /* bug: https://github.com/mmottl/pcre-ocaml/issues/5 */
+          /* bug:
+               https://github.com/mmottl/pcre-ocaml/issues/5
+             */
           if (String.trim(c1) == "" || String.trim(c2) == "") {
             (None, None);
           } else {
@@ -211,7 +213,8 @@ let parse = (~customErrorParsers, err) => {
         let (col1Raw, col2Raw) =
           switch (col1, col2) {
           | (Group(_, c1), Group(_, c2)) =>
-            /* bug: https://github.com/mmottl/pcre-ocaml/issues/5 */
+            /* bug: https://github.com/mmottl/pcre-ocaml/issues/5
+             */
             if (String.trim(c1) == "" || String.trim(c2) == "") {
               raise(Invalid_argument("HUHUHUH"));
             } else {

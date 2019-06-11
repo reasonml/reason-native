@@ -1,0 +1,15 @@
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_1.ml", line 2, characters 11-17:[22m
+[2m# [22m[2mError: Syntax error[22m
+
+
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_1.ml[24m[39m[2m[4m:2 11-17[24m[22m 
+
+[2m1 ┆ [22m[35m[2mlet[22m[39m[2m () =[22m
+[31m[2m2 ┆ [22m[39m[2m  [22m[34m[2mI[22m[39m[2m'm glad [22m[31m[1m[4myou're[24m[22m[39m[2m looking at this file =)[22m
+
+This is a syntax error.
+
+Note: the location indicated might not be accurate.
+
+
