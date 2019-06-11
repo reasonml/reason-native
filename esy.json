@@ -5,8 +5,15 @@
   "license": "MIT",
   "esy": {
     "build": "refmterr dune build --profile=release",
+    "exportedEnv": {
+      "BETTERERROR_DEV_BUILD_EXE": {
+        "val": "#{self.root/'_esy'/'default'/'build'/'default'/'src'/'refmterr'/'bin'/'berror.exe'}"
+      },
+      "REASON_NATIVE_ROOT": {
+        "val": "#{self.root}"
+      }
+    },
     "install": [
-      "esy-installer utf8.install",
       "esy-installer console.install",
       "esy-installer file-context-printer.install",
       "esy-installer fs.install",
@@ -19,7 +26,7 @@
       "esy-installer tests.install",
       "esy-installer unicode.install",
       "esy-installer unicode-config.install"
-    ],
+    ]
   },
   "scripts": {
     "bootstrap": "esy x bash -cx ./bootstrap.cmd",
@@ -39,8 +46,8 @@
   },
   "devDependencies": {
     "@opam/merlin": "*",
-    "ocaml": "~4.6.0",
-    "@esy-ocaml/reason": "3.3.3",
+    "ocaml": "~4.6.4",
+    "@esy-ocaml/reason": "3.4.0",
     "@opam/sexplib0": "*"
   }
 }
