@@ -19,7 +19,7 @@
       "esy-installer tests.install",
       "esy-installer unicode.install",
       "esy-installer unicode-config.install"
-    ]
+    ],
   },
   "scripts": {
     "bootstrap": "esy x bash -cx ./bootstrap.cmd",

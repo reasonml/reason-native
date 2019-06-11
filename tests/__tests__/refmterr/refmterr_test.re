@@ -76,6 +76,8 @@ let readFile = filePath => {
   };
 };
 
+let projectRoot = GetProjectRoot.get();
+
 /* these generate ocaml errors that points to nonexistant files. Handle them
    specially here */
 let specialTestsCommands = [
@@ -97,27 +99,27 @@ let forEachTest =
     /* text test */
     let isReason = List.exists(q => q == j, indicesWithReason);
     let filename =
-      i === 1 ?
-        Filename.concat(
-          testsDirname,
-          Printf.sprintf("%s_%d.txt", dirname, j),
-        ) :
-        Filename.concat(
-          testsDirname,
-          isReason ?
-            Printf.sprintf("%s_%d.re", dirname, j) :
-            Printf.sprintf("%s_%d.ml", dirname, j),
-        );
+      i === 1
+        ? Filename.concat(
+            testsDirname,
+            Printf.sprintf("%s_%d.txt", dirname, j),
+          )
+        : Filename.concat(
+            testsDirname,
+            isReason
+              ? Printf.sprintf("%s_%d.re", dirname, j)
+              : Printf.sprintf("%s_%d.ml", dirname, j),
+          );
     let interfaceFilename =
-      i === 1 ?
-        Filename.concat(
-          testsDirname,
-          Printf.sprintf("%s_%d.txt", dirname, j),
-        ) :
-        Filename.concat(
-          testsDirname,
-          Printf.sprintf("%s_%d.mli", dirname, j),
-        );
+      i === 1
+        ? Filename.concat(
+            testsDirname,
+            Printf.sprintf("%s_%d.txt", dirname, j),
+          )
+        : Filename.concat(
+            testsDirname,
+            Printf.sprintf("%s_%d.mli", dirname, j),
+          );
     let expectedOutputName =
       Filename.concat(
         testsDirname,
@@ -163,33 +165,42 @@ let forEachTest =
     ignore(
       Sys.command(
         Printf.sprintf(
-          "(%s) 2>&1 | FORCE_COLOR=true berror.exe --path-to-refmttype refmttype %s > %s",
+          "cd %s && ((%s) 2>&1 | FORCE_COLOR=true %s --path-to-refmttype refmttype %s > %s)",
+          projectRoot,
           cmd,
+          Sys.getenv("BETTERERROR_DEV_BUILD_EXE"),
           windowsCompatibilityPipe,
           actualOutputName,
         ),
       ),
     );
 
+    /* done here instead of above so that the snapshots contain relative instead of absolute paths */
+    let expectedOutputFullPath =
+      Filename.concat(projectRoot, expectedOutputName);
+    let actualOutputFullPath = Filename.concat(projectRoot, actualOutputName);
+
     /* swap-comment below two lines if you want to generate new expected
        from the new actual */
-    /* ignore(Sys.command(Printf.sprintf("cp %s %s", actualOutputName, expectedOutputName))); */
+    /* ignore(Sys.command(Printf.sprintf("cp %s %s", actualOutputFullPath, expectedOutputFullPath))); */
 
     test(
       dirname,
       ({expect}) => {
         /* open the produced error output */
-        let expected = readFile(expectedOutputName);
-        let actual = readFile(actualOutputName);
+        let expected = readFile(expectedOutputFullPath);
+        let actual = readFile(actualOutputFullPath);
         expect.string(actual).toEqual(expected);
       },
     );
   };
 
+let testsDir = Filename.concat(projectRoot, "tests");
 let rmCommand =
   switch (Sys.os_type) {
-  | "Win32" => "cd tests && del /Q /F /S \"*.cmi\" && del /Q /F /S \"*.cmo\""
-  | _ => "rm -rf ./tests/**/*.{cmi,cmo}"
+  | "Win32" =>
+    "cd " ++ testsDir ++ " && del /Q /F /S \"*.cmi\" && del /Q /F /S \"*.cmo\""
+  | _ => "rm -rf " ++ Filename.concat(testsDir, "**/*.{cmi,cmo}")
   };
 
 try (

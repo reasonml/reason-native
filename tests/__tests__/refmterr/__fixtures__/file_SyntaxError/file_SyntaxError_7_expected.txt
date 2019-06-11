@@ -1,6 +1,6 @@
 [1m[2m# Unformatted Error Output:[22m[22m
 [2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_7.re", line 20, characters 22-23:[22m
-[2m# [22m[2mError: 1499: <syntax error>[22m
+[2m# [22m[2mError: Syntax error: ')' expected[22m
 
 
 [31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_7.re[24m[39m[2m[4m:20 22-23[24m[22m 
@@ -10,6 +10,26 @@
 [2m19 ┆ [22m[2m    [22m[34m[2mReact[22m[39m[2m.[22m[34m[2mOne[22m[39m[2m([22m[34m[2mDom[22m[39m[2m.div([22m[33m[2m~className[22m[39m[2m=[22m[32m[2m"helloClass"[22m[39m[2m, [22m[34m[2mEmpty[22m[39m[2m)),[22m
 [31m[2m20 ┆ [22m[39m[2m  ) : [22m[34m[2mReact[22m[39m[2m.elem(tree)[22m[31m[1m[4m;[24m[22m[39m
 [2m21 ┆ [22m[2m};[22m
+
+This is a syntax error: ')' expected
+Make sure all imperative statements, as well as let/type bindings have exactly one semicolon separating them.
+Note: the location indicated might not be accurate.
+
+
+[1m[2m# Unformatted Error Output:[22m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_7.re", line 15, characters 43-44:[22m
+[2m# [22m[2mError: This '(' might be unmatched[22m
+
+
+[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_7.re[24m[39m[2m[4m:15 43-44[24m[22m 
+
+[2m12 ┆ [22m[35m[2mtype[22m[39m[2m subtree = [22m[34m[2mDom[22m[39m[2m.tree([22m[34m[2mReact[22m[39m[2m.empty);[22m
+[2m13 ┆ [22m[35m[2mtype[22m[39m[2m tree = state[22m[31m[2m => [22m[39m[2msubtree;[22m
+[2m14 ┆ [22m[35m[2mlet[22m[39m[2m createElement =[22m
+[31m[2m15 ┆ [22m[39m[2m    ([22m[33m[2m~initialVal[22m[39m[2m=[22m[32m[2m"deafult"[22m[39m[2m, children)[22m[31m[2m => [22m[39m[31m[1m[4m([24m[22m[39m[2m([22m[33m[2m~state[22m[39m[2m=initialVal, self)[22m[31m[2m => [22m[39m[2m([22m
+[2m16 ┆ [22m[2m  state,[22m
+[2m17 ┆ [22m[2m  fun[22m
+[2m18 ┆ [22m[2m  | [22m[34m[2mReact[22m[39m[2m.[22m[34m[2mChanged[22m[39m[2m(s)[22m[31m[2m => [22m[39m[2ms,[22m
 
 
 
@@ -27,5 +47,5 @@
 
 
 
-Command line: refmt 'tests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_7.re' > /var/folders/l6/2bj0c02s3xg8nr4tzczxvtph0000gp/T/ocamlpp464447
+Command line: refmt 'tests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_7.re' > /tmp/ocamlppd26784
 
