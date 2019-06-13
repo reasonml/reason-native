@@ -14,14 +14,7 @@ type testSuite =
 
 let withLifecycle:
   (
-    RelyInternal.TestLifecycle.t(
-      beforeAll(beforeAllNotCalled, unit),
-      afterAll(afterAllNotCalled, unit),
-      beforeEach(beforeEachNotCalled, unit, unit),
-      afterEach(afterEachNotCalled, unit),
-      unit,
-      unit,
-    ) =>
+    RelyInternal.TestLifecycle.defaultLifecycle =>
     RelyInternal.TestLifecycle.t('a, 'b, 'c, 'd, 'e, 'env),
     t('ext, 'f, describeConfigNotFinalized)
   ) =>

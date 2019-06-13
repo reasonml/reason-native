@@ -14,11 +14,6 @@ type beforeEachNotCalled;
 type afterEachCalled;
 type afterEachNotCalled;
 
-type beforeAll('kind, 'ret);
-type afterAll('kind, 'arg);
-type beforeEach('kind, 'arg, 'ret);
-type afterEach('kind, 'arg);
-
 type t('beforeAll, 'afterAll, 'beforeEach, 'afterEach, 'all, 'each) = {
   beforeAll: unit => 'all,
   afterAll: 'all => unit,
@@ -28,23 +23,15 @@ type t('beforeAll, 'afterAll, 'beforeEach, 'afterEach, 'all, 'each) = {
 
 type defaultLifecycle =
   t(
-    beforeAll(beforeAllNotCalled, unit),
-    afterAll(afterAllNotCalled, unit),
-    beforeEach(beforeEachNotCalled, unit, unit),
-    afterEach(afterEachNotCalled, unit),
+    beforeAllNotCalled,
+    afterAllNotCalled,
+    beforeEachNotCalled,
+    afterEachNotCalled,
     unit,
     unit,
   );
 
-let default:
-  t(
-    beforeAll(beforeAllNotCalled, unit),
-    afterAll(afterAllNotCalled, unit),
-    beforeEach(beforeEachNotCalled, unit, unit),
-    afterEach(afterEachNotCalled, unit),
-    unit,
-    unit,
-  ) = {
+let default: defaultLifecycle = {
   beforeAll: () => (),
   afterAll: () => (),
   beforeEach: () => (),
@@ -56,19 +43,19 @@ let beforeAll:
     (
       unit => all,
       t(
-        beforeAll(beforeAllNotCalled, oldAll),
-        afterAll(afterAllNotCalled, oldAll),
-        beforeEach(beforeEachNotCalled, oldAll, each),
-        afterEach(afterEachNotCalled, each),
+        beforeAllNotCalled,
+        afterAllNotCalled,
+        beforeEachNotCalled,
+        afterEachNotCalled,
         oldAll,
         each,
       )
     ) =>
     t(
-      beforeAll(beforeAllCalled, all),
-      afterAll(afterAllNotCalled, all),
-      beforeEach(beforeEachNotCalled, all, all),
-      afterEach(afterEachNotCalled, all),
+      beforeAllCalled,
+      afterAllNotCalled,
+      beforeEachNotCalled,
+      afterEachNotCalled,
       all,
       all,
     ) =
@@ -83,19 +70,19 @@ let afterAll:
     (
       all => unit,
       t(
-        beforeAll(a, all),
-        afterAll(afterAllNotCalled, all),
-        beforeEach(b, all, each),
-        afterEach(c, each),
+        a,
+        afterAllNotCalled,
+        b,
+        c,
         all,
         each,
       )
     ) =>
     t(
-      beforeAll(a, all),
-      afterAll(afterAllCalled, all),
-      beforeEach(b, all, each),
-      afterEach(c, each),
+      a,
+      afterAllCalled,
+      b,
+      c,
       all,
       each,
     ) =
@@ -110,19 +97,19 @@ let beforeEach:
     (
       all => each,
       t(
-        beforeAll(a, all),
-        afterAll(b, all),
-        beforeEach(beforeEachNotCalled, all, oldEach),
-        afterEach(afterEachNotCalled, oldEach),
+        a,
+        b,
+        beforeEachNotCalled,
+        afterEachNotCalled,
         all,
         oldEach,
       )
     ) =>
     t(
-      beforeAll(a, all),
-      afterAll(b, all),
-      beforeEach(beforeEachCalled, all, each),
-      afterEach(afterEachNotCalled, each),
+      a,
+      b,
+      beforeEachCalled,
+      afterEachNotCalled,
       all,
       each,
     ) =
@@ -138,19 +125,19 @@ let afterEach:
     (
       each => unit,
       t(
-        beforeAll(a, all),
-        afterAll(b, all),
-        beforeEach(c, all, each),
-        afterEach(afterEachNotCalled, each),
+        a,
+        b,
+        c,
+        afterEachNotCalled,
         all,
         each,
       )
     ) =>
     t(
-      beforeAll(a, all),
-      afterAll(b, all),
-      beforeEach(c, all, each),
-      afterEach(afterEachCalled, each),
+      a,
+      b,
+      c,
+      afterEachCalled,
       all,
       each,
     ) =

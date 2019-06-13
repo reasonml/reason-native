@@ -37,28 +37,14 @@ type builderConfig('ext, 'env) =
     : builderConfig('ext, unit)
   | BuilderConfigWithLifecycle(
       string,
-      RelyInternal.TestLifecycle.t(
-        beforeAll(beforeAllNotCalled, unit),
-        afterAll(afterAllNotCalled, unit),
-        beforeEach(beforeEachNotCalled, unit, unit),
-        afterEach(afterEachNotCalled, unit),
-        unit,
-        unit,
-      ) =>
+      RelyInternal.TestLifecycle.defaultLifecycle =>
       RelyInternal.TestLifecycle.t(_, _, _, _, _, 'env),
     )
     : builderConfig(unit, 'env)
   | BuilderConfigWithLifecycleAndCustomMatchers(
       string,
       Rely.MatcherTypes.matchersExtensionFn('ext),
-      RelyInternal.TestLifecycle.t(
-        beforeAll(beforeAllNotCalled, unit),
-        afterAll(afterAllNotCalled, unit),
-        beforeEach(beforeEachNotCalled, unit, unit),
-        afterEach(afterEachNotCalled, unit),
-        unit,
-        unit,
-      ) =>
+      RelyInternal.TestLifecycle.defaultLifecycle =>
       RelyInternal.TestLifecycle.t(_, _, _, _, _, 'env),
     )
     : builderConfig('ext, 'env);
@@ -81,14 +67,7 @@ and t('ext, 'env, 'describeConfigState) =
   | WithLifecycleAndCustomMatchers{
       config: testSuiteConfig('ext, 'env),
       testLifecycleFactory:
-        RelyInternal.TestLifecycle.t(
-          beforeAll(beforeAllNotCalled, unit),
-          afterAll(afterAllNotCalled, unit),
-          beforeEach(beforeEachNotCalled, unit, unit),
-          afterEach(afterEachNotCalled, unit),
-          unit,
-          unit,
-        ) =>
+        RelyInternal.TestLifecycle.defaultLifecycle =>
         RelyInternal.TestLifecycle.t('a, 'b, 'c, 'd, 'e, 'env),
       customMatchers: Rely.MatcherTypes.matchersExtensionFn('ext),
     }
@@ -96,14 +75,7 @@ and t('ext, 'env, 'describeConfigState) =
   | WithLifecycle{
       config: testSuiteConfig(unit, 'env),
       testLifecycleFactory:
-        RelyInternal.TestLifecycle.t(
-          beforeAll(beforeAllNotCalled, unit),
-          afterAll(afterAllNotCalled, unit),
-          beforeEach(beforeEachNotCalled, unit, unit),
-          afterEach(afterEachNotCalled, unit),
-          unit,
-          unit,
-        ) =>
+        RelyInternal.TestLifecycle.defaultLifecycle =>
         RelyInternal.TestLifecycle.t('a, 'b, 'c, 'd, 'e, 'env),
     }
     : t(unit, 'env, describeConfigFinalized)
@@ -119,14 +91,7 @@ type testSuite =
 let withLifecycle:
   type ext env a.
     (
-      RelyInternal.TestLifecycle.t(
-        beforeAll(beforeAllNotCalled, unit),
-        afterAll(afterAllNotCalled, unit),
-        beforeEach(beforeEachNotCalled, unit, unit),
-        afterEach(afterEachNotCalled, unit),
-        unit,
-        unit,
-      ) =>
+      RelyInternal.TestLifecycle.defaultLifecycle =>
       RelyInternal.TestLifecycle.t(_, _, _, _, _, env),
       t(ext, a, describeConfigNotFinalized)
     ) =>

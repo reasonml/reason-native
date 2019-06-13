@@ -41,32 +41,24 @@ module type TestFramework = {
   let run: RunConfig.t => unit;
   let cli: unit => unit;
   let toLibrary: unit => testLibrary;
-  let testLifecycle:
-    TestLifecycle.t(
-      beforeAll(beforeAllNotCalled, unit),
-      afterAll(afterAllNotCalled, unit),
-      beforeEach(beforeEachNotCalled, unit, unit),
-      afterEach(afterEachNotCalled, unit),
-      unit,
-      unit,
-    );
+  let testLifecycle: TestLifecycle.defaultLifecycle;
   let beforeAll:
     (
       unit => 'all,
       TestLifecycle.t(
-        beforeAll(beforeAllNotCalled, 'oldAll),
-        afterAll(afterAllNotCalled, 'oldAll),
-        beforeEach(beforeEachNotCalled, 'oldAll, 'each),
-        afterEach(afterEachNotCalled, 'each),
+        beforeAllNotCalled,
+        afterAllNotCalled,
+        beforeEachNotCalled,
+        afterEachNotCalled,
         'oldAll,
         'each,
       )
     ) =>
     TestLifecycle.t(
-      beforeAll(beforeAllCalled, 'all),
-      afterAll(afterAllNotCalled, 'all),
-      beforeEach(beforeEachNotCalled, 'all, 'all),
-      afterEach(afterEachNotCalled, 'all),
+      beforeAllCalled,
+      afterAllNotCalled,
+      beforeEachNotCalled,
+      afterEachNotCalled,
       'all,
       'all,
     );
@@ -75,19 +67,19 @@ module type TestFramework = {
     (
       'all => unit,
       TestLifecycle.t(
-        beforeAll('beforeAllCalled, 'all),
-        afterAll(afterAllNotCalled, 'all),
-        beforeEach('beforeEachCalled, 'all, 'each),
-        afterEach('afterEachCalled, 'each),
+        'beforeAllCalled,
+        afterAllNotCalled,
+        'beforeEachCalled,
+        'afterEachCalled,
         'all,
         'each,
       )
     ) =>
     TestLifecycle.t(
-      beforeAll('beforeAllCalled, 'all),
-      afterAll(afterAllCalled, 'all),
-      beforeEach('beforeEachCalled, 'all, 'each),
-      afterEach('afterEachCalled, 'each),
+      'beforeAllCalled,
+      afterAllCalled,
+      'beforeEachCalled,
+      'afterEachCalled,
       'all,
       'each,
     );
@@ -96,19 +88,19 @@ module type TestFramework = {
     (
       'all => 'each,
       TestLifecycle.t(
-        beforeAll('beforeAllCalled, 'all),
-        afterAll('afterAllCalled, 'all),
-        beforeEach(beforeEachNotCalled, 'all, 'oldEach),
-        afterEach(afterEachNotCalled, 'oldEach),
+        'beforeAllCalled,
+        'afterAllCalled,
+        beforeEachNotCalled,
+        afterEachNotCalled,
         'all,
         'oldEach,
       )
     ) =>
     TestLifecycle.t(
-      beforeAll('beforeAllCalled, 'all),
-      afterAll('afterAllCalled, 'all),
-      beforeEach(beforeEachCalled, 'all, 'each),
-      afterEach(afterEachNotCalled, 'each),
+      'beforeAllCalled,
+      'afterAllCalled,
+      beforeEachCalled,
+      afterEachNotCalled,
       'all,
       'each,
     );
@@ -117,19 +109,19 @@ module type TestFramework = {
     (
       'each => unit,
       TestLifecycle.t(
-        beforeAll('beforeAllCalled, 'all),
-        afterAll('afterAllCalled, 'all),
-        beforeEach('beforeEachCalled, 'all, 'each),
-        afterEach(afterEachNotCalled, 'each),
+        'beforeAllCalled,
+        'afterAllCalled,
+        'beforeEachCalled,
+        afterEachNotCalled,
         'all,
         'each,
       )
     ) =>
     TestLifecycle.t(
-      beforeAll('beforeAllCalled, 'all),
-      afterAll('afterAllCalled, 'all),
-      beforeEach('beforeEachCalled, 'all, 'each),
-      afterEach(afterEachCalled, 'each),
+      'beforeAllCalled,
+      'afterAllCalled,
+      'beforeEachCalled,
+      afterEachCalled,
       'all,
       'each,
     );
