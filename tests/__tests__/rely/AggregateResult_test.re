@@ -15,7 +15,7 @@ type singleSuiteInput = {
 
 type multipleSuiteInput = {
   name: string,
-  testSuites: list(TestSuiteBuilder.t),
+  testSuites: list(TestSuiteBuilder.testSuite),
 };
 
 type singleSuiteExpectedOutput = {
@@ -221,6 +221,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
               |> withSkippedTests(input.numSkippedTests)
               |> withPassingTests(input.numPassingTests)
               |> withFailingTests(input.numFailingTests)
+              |> build
             ),
           ];
           module Reporter =
@@ -255,11 +256,11 @@ describe("Rely AggregateResult", ({describe, test}) => {
   });
   describe("Multiple suite cases", ({test}) => {
     let singletonPassingTestSuite =
-      TestSuiteBuilder.(init("passing") |> withPassingTests(1));
+      TestSuiteBuilder.(init("passing") |> withPassingTests(1) |> build);
     let singletonFailingTestSuite =
-      TestSuiteBuilder.(init("failing") |> withFailingTests(1));
+      TestSuiteBuilder.(init("failing") |> withFailingTests(1) |> build);
     let singletonSkippedTestSuite =
-      TestSuiteBuilder.(init("skipped") |> withSkippedTests(1));
+      TestSuiteBuilder.(init("skipped") |> withSkippedTests(1) |> build);
 
     let repeatHelper = (el, n, l) =>
       switch (n) {
@@ -408,6 +409,7 @@ describe("Rely AggregateResult", ({describe, test}) => {
               |> withPassingTests(input.numPassingTests)
               |> withFailingTests(input.numFailingTests)
               |> skipSuite
+              |> build
             ),
           ];
 
@@ -459,10 +461,13 @@ describe("Rely AggregateResult", ({describe, test}) => {
           |> withFailingTests(3)
           |> withSkippedTests(1)
           |> skipSuite
-          |> withNestedTestSuite(
-               ~child=
-                 init("child") |> withPassingTests(2) |> withFailingTests(4),
+          |> withNestedTestSuite(~child= c =>
+               c
+               |> withName("child")
+               |> withPassingTests(2)
+               |> withFailingTests(4)
              )
+          |> build
         );
       module Reporter =
         TestReporter.Make({});

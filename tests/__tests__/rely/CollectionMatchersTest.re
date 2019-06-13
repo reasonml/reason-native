@@ -12,7 +12,8 @@ module type TestConfiguration = {
   type t('a);
   type matchersWithNot('a);
   let ofList: list('a) => t('a);
-  let expectPath: (Rely.Test.testUtils('a), t('b)) => matchersWithNot('b);
+  let expectPath:
+    (Rely.Test.testUtils('a, 'env), t('b)) => matchersWithNot('b);
 };
 
 type defaultEqualityTestCase =
@@ -43,7 +44,9 @@ module Make =
            TestConfiguration with
              type t('a) = Collection.t('a) and
              type matchersWithNot('a) =
-               RelyInternal.CollectionMatchers.Make(Collection).matchersWithNot('a),
+               RelyInternal.CollectionMatchers.Make(Collection).matchersWithNot(
+                 'a,
+               ),
        ) => {
   let collectionName = Collection.collectionName;
   describe(

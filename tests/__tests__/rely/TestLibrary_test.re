@@ -53,9 +53,11 @@ describe("Rely Test Library", ({test}) => {
             builder
             |> withTestSuite(
                  TestSuiteBuilder.(
-                   init("test suite")
-                   |> withPassingTests(2)
-                   |> withFailingTests(1)
+                   TestSuite(
+                     init("test suite")
+                     |> withPassingTests(2)
+                     |> withFailingTests(1),
+                   )
                  ),
                );
         });
@@ -81,6 +83,7 @@ describe("Rely Test Library", ({test}) => {
                    init("test suite")
                    |> withPassingTests(2)
                    |> withFailingTests(1)
+                   |> build
                  ),
                );
         });
@@ -94,6 +97,7 @@ describe("Rely Test Library", ({test}) => {
                    init("test suite")
                    |> withPassingTests(5)
                    |> withFailingTests(2)
+                   |> build
                  ),
                );
         });
@@ -107,6 +111,7 @@ describe("Rely Test Library", ({test}) => {
                    init("test suite")
                    |> withPassingTests(2)
                    |> withFailingTests(3)
+                   |> build
                  ),
                );
         });
@@ -133,6 +138,7 @@ describe("Rely Test Library", ({test}) => {
                  init("test suite")
                  |> withPassingTests(2)
                  |> withFailingTests(1)
+                 |> build
                ),
              );
       });
@@ -146,6 +152,7 @@ describe("Rely Test Library", ({test}) => {
                  init("test suite")
                  |> withPassingTests(5)
                  |> withFailingTests(2)
+                 |> build
                ),
              );
       });
@@ -159,6 +166,7 @@ describe("Rely Test Library", ({test}) => {
                  init("test suite")
                  |> withPassingTests(2)
                  |> withFailingTests(3)
+                 |> build
                ),
              );
       });

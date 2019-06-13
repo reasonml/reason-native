@@ -13,12 +13,16 @@ module MakeTestFramework = (()) : Rely.TestFramework =>
       });
   });
 
-let runWithCustomConfig = (testSuites: list(TestSuiteBuilder.t), config: Rely.RunConfig.t) => {
+let runWithCustomConfig =
+    (testSuites: list(TestSuiteBuilder.testSuite), config: Rely.RunConfig.t) => {
   module TestFramework =
     MakeTestFramework({});
+  module TestSuiteRegisterer = TestSuiteBuilder.Make(TestFramework);
 
   testSuites
-  |> List.map(TestSuiteBuilder.toFunction)
+  |> List.map((TestSuiteBuilder.TestSuite(suite)) =>
+       TestSuiteRegisterer.register(suite)
+     )
   |> List.iter(ts =>
        ts(
          ~describe=TestFramework.describe,
@@ -28,14 +32,19 @@ let runWithCustomConfig = (testSuites: list(TestSuiteBuilder.t), config: Rely.Ru
      );
 
   TestFramework.run(config);
-}
+};
 
-let run = (testSuites: list(TestSuiteBuilder.t), reporter: Rely.Reporter.t) => {
+let run =
+    (testSuites: list(TestSuiteBuilder.testSuite), reporter: Rely.Reporter.t) => {
   module TestFramework =
     MakeTestFramework({});
 
+  module TestSuiteRegisterer = TestSuiteBuilder.Make(TestFramework);
+
   testSuites
-  |> List.map(TestSuiteBuilder.toFunction)
+  |> List.map((TestSuiteBuilder.TestSuite(suite)) =>
+       TestSuiteRegisterer.register(suite)
+     )
   |> List.iter(ts =>
        ts(
          ~describe=TestFramework.describe,
@@ -62,8 +71,12 @@ let runWithCustomTime = (getTime, testSuites, reporter) => {
         );
     });
 
+  module TestSuiteRegisterer = TestSuiteBuilder.Make(TestFramework);
+
   testSuites
-  |> List.map(TestSuiteBuilder.toFunction)
+  |> List.map((TestSuiteBuilder.TestSuite(suite)) =>
+       TestSuiteRegisterer.register(suite)
+     )
   |> List.iter(ts =>
        ts(
          ~describe=TestFramework.describe,

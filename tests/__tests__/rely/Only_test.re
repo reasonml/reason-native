@@ -18,7 +18,10 @@ describe("Rely .only", ({test}) => {
     let testResult = ref(None);
     let testSuite =
       TestSuiteBuilder.(
-        init("") |> withPassingTests(~only=true, 1) |> withPassingTests(1)
+        init("")
+        |> withPassingTests(~only=true, 1)
+        |> withPassingTests(1)
+        |> build
       );
     module Reporter =
       TestReporter.Make({});
@@ -34,8 +37,9 @@ describe("Rely .only", ({test}) => {
   test("Only suites with only should be run", ({expect}) => {
     let testResult = ref(None);
     let onlyTestSuite =
-      TestSuiteBuilder.(init("") |> withPassingTests(2) |> only);
-    let normalTestSuite = TestSuiteBuilder.(init("") |> withPassingTests(3));
+      TestSuiteBuilder.(init("") |> withPassingTests(2) |> only |> build);
+    let normalTestSuite =
+      TestSuiteBuilder.(init("") |> withPassingTests(3) |> build);
     module Reporter =
       TestReporter.Make({});
     Reporter.onRunComplete(r => testResult := Some(r));
@@ -51,9 +55,14 @@ describe("Rely .only", ({test}) => {
     let testResult = ref(None);
     let onlyTestSuite =
       TestSuiteBuilder.(
-        init("") |> withSkippedTests(2) |> withPassingTests(1) |> only
+        init("")
+        |> withSkippedTests(2)
+        |> withPassingTests(1)
+        |> only
+        |> build
       );
-    let normalTestSuite = TestSuiteBuilder.(init("") |> withPassingTests(3));
+    let normalTestSuite =
+      TestSuiteBuilder.(init("") |> withPassingTests(3) |> build);
     module Reporter =
       TestReporter.Make({});
     Reporter.onRunComplete(r => testResult := Some(r));
@@ -73,17 +82,22 @@ describe("Rely .only", ({test}) => {
         init("contains nested")
         |> withSkippedTests(2)
         |> withPassingTests(1)
-        |> withNestedTestSuite(
-             ~child=TestSuiteBuilder.init("nested") |> withPassingTests(1) |> only,
+        |> withNestedTestSuite(~child=c =>
+             c |> withName("nested") |> withPassingTests(1) |> only
            )
+        |> build
       );
-    let normalTestSuite = TestSuiteBuilder.(init("normal") |> withPassingTests(3));
+    let normalTestSuite =
+      TestSuiteBuilder.(init("normal") |> withPassingTests(3) |> build);
 
     module Reporter =
       TestReporter.Make({});
     Reporter.onRunComplete(r => testResult := Some(r));
 
-    TestSuiteRunner.run([nestedOnlyTestSuite, normalTestSuite], Reporter.reporter);
+    TestSuiteRunner.run(
+      [nestedOnlyTestSuite, normalTestSuite],
+      Reporter.reporter,
+    );
     let result = valuex(testResult^);
 
     expect.int(result.numSkippedTests).toBe(6);
@@ -97,18 +111,26 @@ describe("Rely .only", ({test}) => {
         init("contains nested")
         |> withSkippedTests(2)
         |> withPassingTests(1)
-        |> withNestedTestSuite(
-             ~child=TestSuiteBuilder.init("nested") |> withPassingTests(1, ~only=true),
+        |> withNestedTestSuite(~child=c =>
+             c |> withName("nested") |> withPassingTests(1, ~only=true)
            )
+        |> build
       );
-    let normalTestSuite = TestSuiteBuilder.(init("normal") |> withPassingTests(3));
+    let normalTestSuite =
+      TestSuiteBuilder.(init("normal") |> withPassingTests(3) |> build);
 
-    expect.fn(() => TestSuiteRunner.runWithCustomConfig([nestedOnlyTestSuite, normalTestSuite], Rely.RunConfig.(
-      initialize()
-      |> withReporters([])
-      |> ciMode(true)
-      |> onTestFrameworkFailure(() => ())
-    ))).toThrow();
+    expect.fn(() =>
+      TestSuiteRunner.runWithCustomConfig(
+        [nestedOnlyTestSuite, normalTestSuite],
+        Rely.RunConfig.(
+          initialize()
+          |> withReporters([])
+          |> ciMode(true)
+          |> onTestFrameworkFailure(() => ())
+        ),
+      )
+    ).
+      toThrow();
   });
 
   test("CI mode should throw an exception with describeOnly", ({expect}) => {
@@ -117,17 +139,25 @@ describe("Rely .only", ({test}) => {
         init("contains nested")
         |> withSkippedTests(2)
         |> withPassingTests(1)
-        |> withNestedTestSuite(
-             ~child=TestSuiteBuilder.init("nested") |> withPassingTests(1) |> only,
+        |> withNestedTestSuite(~child=c =>
+             c |> withName("nested") |> withPassingTests(1) |> only
            )
+        |> build
       );
-    let normalTestSuite = TestSuiteBuilder.(init("normal") |> withPassingTests(3));
+    let normalTestSuite =
+      TestSuiteBuilder.(init("normal") |> withPassingTests(3) |> build);
 
-    expect.fn(() => TestSuiteRunner.runWithCustomConfig([nestedOnlyTestSuite, normalTestSuite], Rely.RunConfig.(
-      initialize()
-      |> withReporters([])
-      |> ciMode(true)
-      |> onTestFrameworkFailure(() => ())
-    ))).toThrow();
+    expect.fn(() =>
+      TestSuiteRunner.runWithCustomConfig(
+        [nestedOnlyTestSuite, normalTestSuite],
+        Rely.RunConfig.(
+          initialize()
+          |> withReporters([])
+          |> ciMode(true)
+          |> onTestFrameworkFailure(() => ())
+        ),
+      )
+    ).
+      toThrow();
   });
 });

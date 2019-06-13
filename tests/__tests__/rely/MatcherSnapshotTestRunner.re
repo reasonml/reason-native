@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-let runInternal = (run, testUtils: Rely.Test.testUtils('ext)) => {
+let runInternal = (run, testUtils: Rely.Test.testUtils('ext, 'env)) => {
   module Reporter =
     TestReporter.Make({});
 
@@ -39,7 +39,7 @@ let runInternal = (run, testUtils: Rely.Test.testUtils('ext)) => {
 let snapshotFailingTestCaseCustomMatchers =
     (
       createCustomMatchers: Rely.MatcherTypes.matchersExtensionFn('ext),
-      testUtils: Rely.Test.testUtils('ext),
+      testUtils: Rely.Test.testUtils('ext, 'env),
       testBody,
     ) => {
   module TestFramework =
@@ -50,7 +50,12 @@ let snapshotFailingTestCaseCustomMatchers =
         );
     });
   open Rely.Describe;
-  let {describe} = TestFramework.extendDescribe(createCustomMatchers);
+  let {describe} =
+    TestFramework.(
+      describeConfig
+      |> withCustomMatchers(createCustomMatchers)
+      |> extendDescribe
+    );
 
   describe("unused, doesn't matter", ({test}) =>
     test("not used", testBody)
@@ -60,7 +65,7 @@ let snapshotFailingTestCaseCustomMatchers =
 };
 
 let snapshotFailingTestCase =
-    (testUtils: Rely.Test.testUtils('ext), testBody) => {
+    (testUtils: Rely.Test.testUtils('ext, 'env), testBody) => {
   module TestFramework =
     Rely.Make({
       let config =

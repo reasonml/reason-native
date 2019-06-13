@@ -17,13 +17,19 @@ describe("Rely timing data", ({describe, test}) => {
     let result = ref(None);
     let testSuites = [
       TestSuiteBuilder.(
-        init("foo") |> withPassingTests(15) |> withFailingTests(10)
+        TestSuite(
+          init("foo") |> withPassingTests(15) |> withFailingTests(10),
+        )
       ),
       TestSuiteBuilder.(
-        init("bar") |> withPassingTests(15) |> withFailingTests(10)
+        TestSuite(
+          init("bar") |> withPassingTests(15) |> withFailingTests(10),
+        )
       ),
       TestSuiteBuilder.(
-        init("baz") |> withPassingTests(15) |> withFailingTests(10)
+        TestSuite(
+          init("baz") |> withPassingTests(15) |> withFailingTests(10),
+        )
       ),
     ];
 
@@ -54,7 +60,9 @@ describe("Rely timing data", ({describe, test}) => {
     let result = ref(None);
     let testSuites = [
       TestSuiteBuilder.(
-        init("foo") |> withPassingTests(15) |> withFailingTests(10)
+        TestSuite(
+          init("foo") |> withPassingTests(15) |> withFailingTests(10),
+        )
       ),
     ];
 
@@ -68,9 +76,7 @@ describe("Rely timing data", ({describe, test}) => {
       | Some(aggregatedResult) =>
         let timingsPopulated =
           aggregatedResult.testSuiteResults
-          |> List.map((r: Rely.Reporter.testSuiteResult) =>
-               r.testResults
-             )
+          |> List.map((r: Rely.Reporter.testSuiteResult) => r.testResults)
           |> List.flatten
           |> List.map((r: Rely.Reporter.testResult) =>
                switch (r.duration) {
@@ -92,9 +98,7 @@ describe("Rely timing data", ({describe, test}) => {
       TestReporter.Make({});
     let result = ref(None);
     let testSuites = [
-      TestSuiteBuilder.(
-        init("foo") |> withSkippedTests(15)
-      ),
+      TestSuiteBuilder.(TestSuite(init("foo") |> withSkippedTests(15))),
     ];
 
     Reporter.onRunComplete(res => result := Some(res));
@@ -107,9 +111,7 @@ describe("Rely timing data", ({describe, test}) => {
       | Some(aggregatedResult) =>
         let timingsNotPopulated =
           aggregatedResult.testSuiteResults
-          |> List.map((r: Rely.Reporter.testSuiteResult) =>
-               r.testResults
-             )
+          |> List.map((r: Rely.Reporter.testSuiteResult) => r.testResults)
           |> List.flatten
           |> List.map((r: Rely.Reporter.testResult) =>
                switch (r.duration) {
@@ -122,20 +124,27 @@ describe("Rely timing data", ({describe, test}) => {
       };
     ();
   });
-  test("startTime should be populated with initial value from clock", ({expect}) => {
+  test(
+    "startTime should be populated with initial value from clock", ({expect}) => {
     module Reporter =
       TestReporter.Make({});
     let result = ref(None);
     let testSuites = [
       TestSuiteBuilder.(
-        init("foo") |> withPassingTests(15) |> withFailingTests(10)
+        TestSuite(
+          init("foo") |> withPassingTests(15) |> withFailingTests(10),
+        )
       ),
     ];
 
     let startTime = 10.;
     Reporter.onRunComplete(res => result := Some(res));
 
-    TestSuiteRunner.runWithCustomTime(() => Seconds(startTime), testSuites, Reporter.reporter);
+    TestSuiteRunner.runWithCustomTime(
+      () => Seconds(startTime),
+      testSuites,
+      Reporter.reporter,
+    );
 
     let _ =
       switch (result^) {

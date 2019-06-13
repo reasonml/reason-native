@@ -6,7 +6,8 @@
  */;
 open TestFramework;
 
-let runTest = (testUtils: Rely.Test.testUtils('ext), expected, testBody) => {
+let runTest =
+    (testUtils: Rely.Test.testUtils('ext, 'env), expected, testBody) => {
   module TestFramework =
     Rely.Make({
       let config =
@@ -15,7 +16,7 @@ let runTest = (testUtils: Rely.Test.testUtils('ext), expected, testBody) => {
         );
     });
 
-  TestFramework.describe("unused, doesn't matter", ({test}) =>{
+  TestFramework.describe("unused, doesn't matter", ({test}) => {
     test("not used", testBody);
     ();
   });
@@ -46,18 +47,12 @@ let runTest = (testUtils: Rely.Test.testUtils('ext), expected, testBody) => {
       |> withReporters([Custom(Reporter.reporter)])
       |> onTestFrameworkFailure(() => ())
     ),
-  )
+  );
 };
 
 describe("Filename should be persisted in test result", ({test}) => {
-  test("captured filename should equal __FILE__", testUtils => {
-    runTest(
-      testUtils,
-      __FILE__,
-      ({expect}) => {
-        expect.bool(true).toBeTrue();
-      },
-    );
-  });
+  test("captured filename should equal __FILE__", testUtils =>
+    runTest(testUtils, __FILE__, ({expect}) => expect.bool(true).toBeTrue())
+  );
   ();
 });
