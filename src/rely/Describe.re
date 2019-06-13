@@ -4,18 +4,19 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-type describeUtils('ext) = {
-  describe: describeFn('ext),
-  describeSkip: describeFn('ext),
-  describeOnly: describeFn('ext),
-  test: Test.testFn('ext),
-  testSkip: Test.testFn('ext),
-  testOnly: Test.testFn('ext),
+type describeUtils('ext, 'env) = {
+  describe: describeFn('ext, 'env),
+  describeSkip: describeFn('ext, 'env),
+  describeOnly: describeFn('ext, 'env),
+  test: Test.testFn('ext, 'env),
+  testSkip: Test.testFn('ext, 'env),
+  testOnly: Test.testFn('ext, 'env),
 }
-and describeFn('ext) = (string, describeUtils('ext) => unit) => unit;
+and describeFn('ext, 'env) =
+  (string, describeUtils('ext, 'env) => unit) => unit;
 
-type extensionResult('ext) = {
-  describe: describeFn('ext),
-  describeSkip: describeFn('ext),
-  describeOnly: describeFn('ext),
+type extensionResult('ext, 'env) = {
+  describe: describeFn('ext, 'env),
+  describeSkip: describeFn('ext, 'env),
+  describeOnly: describeFn('ext, 'env),
 };

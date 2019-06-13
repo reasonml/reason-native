@@ -13,25 +13,26 @@ type mode =
 
 let maxMode = (mode1: mode, mode2: mode) => mode1 > mode2 ? mode1 : mode2;
 
-type test('ext) = {
+type test('ext, 'env) = {
   name: string,
   location: option(Printexc.location),
-  usersTest: Test.testUtils('ext) => unit,
+  usersTest: Test.testUtils('ext, 'env) => unit,
   mode,
 };
 
-type describeRecord('ext) = {
+type describeRecord('ext, 'env) = {
   name: string,
-  tests: list(test('ext)),
-  describes: list(describeRecord('ext)),
+  tests: list(test('ext, 'env)),
+  describes: list(describeRecord('ext, 'env)),
   mode,
 };
 
-type describeInput('ext) = {
+type describeInput('ext, 'env, 'lifecycle) = {
   name: string,
-  usersDescribeFn: Describe.describeUtils('ext) => unit,
+  usersDescribeFn: Describe.describeUtils('ext, 'env) => unit,
   mode,
   extensionFn: MatcherTypes.matchersExtensionFn('ext),
+  testLifecycle: 'lifecycle,
 };
 
 module type TestFrameworkContext = {
@@ -45,8 +46,16 @@ type context = (contextId, module TestFrameworkContext);
 
 type t =
   | TestSuite(
-      describeRecord('ext),
+      describeRecord('ext, 'each),
       MatcherTypes.matchersExtensionFn('ext),
+      TestLifecycle.t(
+        'beforeAll,
+        'afterAll,
+        'beforeEach,
+        'afterEach,
+        'all,
+        'each,
+      ),
       context,
     )
     : t;
@@ -63,10 +72,10 @@ module Factory = (Context: TestFrameworkContext) => {
   let rec makeDescribeRecord:
     (
       ~name: string,
-      ~usersDescribeFn: Describe.describeUtils('ext) => unit,
+      ~usersDescribeFn: Describe.describeUtils('ext, 'env) => unit,
       ~mode: mode
     ) =>
-    describeRecord('ext) =
+    describeRecord('ext, 'env) =
     (~name, ~usersDescribeFn, ~mode) => {
       let tests = ref([]);
       let describes = ref([]);
@@ -102,30 +111,30 @@ module Factory = (Context: TestFrameworkContext) => {
 
       let maxDescribeMode =
         describes^
-        |> List.map((d: describeRecord('ext)) => d.mode)
+        |> List.map((d: describeRecord('ext, 'env)) => d.mode)
         |> List.fold_left(maxMode, Skip);
 
-        let maxTestMode = tests^
-        |> List.map((t: test('ext)) => t.mode)
+      let maxTestMode =
+        tests^
+        |> List.map((t: test('ext, 'env)) => t.mode)
         |> List.fold_left(maxMode, Skip);
 
       let maxChildMode =
-        List.fold_left(
-          maxMode,
-          Skip,
-          [maxDescribeMode, maxTestMode],
-        );
-      let treeMode = switch(mode, maxChildMode) {
-      | (Skip, _) => Skip
-      | (_, _) => maxMode(mode, maxChildMode)
-      };
+        List.fold_left(maxMode, Skip, [maxDescribeMode, maxTestMode]);
+      let treeMode =
+        switch (mode, maxChildMode) {
+        | (Skip, _) => Skip
+        | (_, _) => maxMode(mode, maxChildMode)
+        };
       {name, tests: tests^, describes: describes^, mode: treeMode};
     };
 
-  let makeTestSuite = ({name, usersDescribeFn, mode, extensionFn}) =>
+  let makeTestSuite =
+      ({name, usersDescribeFn, mode, testLifecycle, extensionFn}) =>
     TestSuite(
       makeDescribeRecord(~name, ~usersDescribeFn, ~mode),
       extensionFn,
+      testLifecycle,
       (contextId, (module Context)),
     );
 };
