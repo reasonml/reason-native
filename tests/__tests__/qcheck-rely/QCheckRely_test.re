@@ -10,7 +10,7 @@ open QCheckRely;
 let {describe, _} =
   describeConfig
   |> withCustomMatchers(QCheckRely.Matchers.matchers)
-  |> extendDescribe;
+  |> build;
 
 let seed = Random.State.make([|42|]);
 

@@ -139,7 +139,8 @@ module type TestFramework = {
 
   let describeConfig: describeConfig(unit, unit);
   let extendDescribe:
-    describeConfig('ext, 'env) => extensionResult('ext, 'env);
+  MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext, unit);
+  let build: describeConfig('ext, 'env) => extensionResult('ext, 'env);
 };
 
 module type FrameworkConfig = {let config: TestFrameworkConfig.t;};
@@ -239,8 +240,10 @@ module MakeInternal =
 
   let describeConfig =
     DescribeConfig({extensionFn: _ => (), lifecycle: TestLifecycle.default});
-  let extendDescribe = (DescribeConfig({extensionFn, lifecycle})) =>
+  let build = (DescribeConfig({extensionFn, lifecycle})) =>
     makeDescribeFns(lifecycle, extensionFn);
+  let extendDescribe = makeCustomMatchers =>
+    makeDescribeFns(testLifecycle, makeCustomMatchers);
 
   let run = (config: RunConfig.t) =>
     TestSuiteRunner.run(config, testSuites^);

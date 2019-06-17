@@ -233,7 +233,7 @@ module User = {
 open User;
 
 let {describe} =
-  describeConfig |> withCustomMatchers(User.Test.matchers) |> extendDescribe;
+  describeConfig |> withCustomMatchers(User.Test.matchers) |> build;
 
 /* Alice is a Facebook user with string data. */
 let alice = {
@@ -322,7 +322,7 @@ let {describe} =
   describeConfig
   |> withCustomMatchers(Account.Test.matchers)
   |> withLifecycle(l => l |> beforeAll(() => 42))
-  |> extendDescribe;
+  |> build;
 
 describe("Separate type of Custom Matchers", ({test}) => {
   test("Alice tests", ({expect}) => {
@@ -358,7 +358,7 @@ module Combined = {
 
 /* Use the combined matchers */
 let {describe} =
-  describeConfig |> withCustomMatchers(Combined.matchers) |> extendDescribe;
+  describeConfig |> withCustomMatchers(Combined.matchers) |> build;
 
 describe("Combined Custom Matchers", ({test}) => {
   test("Alice tests", ({expect}) => {

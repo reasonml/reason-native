@@ -201,8 +201,11 @@ module type TestFramework = {
     describeConfig('ext, 'env);
 
   let describeConfig: describeConfig(unit, unit);
+  [@Deprecated]
   let extendDescribe:
-    describeConfig('ext, 'env) => extensionResult('ext, 'env);
+    MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext, unit);
+
+  let build: describeConfig('ext, 'env) => extensionResult('ext, 'env);
 };
 
 type requiredConfiguration = TestFrameworkConfig.requiredConfiguration;

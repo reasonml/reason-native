@@ -29,7 +29,7 @@ describe("test lifecycle methods", ({test}) => {
       TestFrameworkInternal.(
         describeConfig
         |> withLifecycle(l => l |> beforeAll(Mock.fn(beforeAllMock)))
-        |> extendDescribe
+        |> build
       );
 
     describe("beforeAll with no other methods", ({test, describe}) => {
@@ -88,7 +88,7 @@ describe("test lifecycle methods", ({test}) => {
                |> beforeAll(() => uniqueInstance)
                |> afterAll(Mock.fn(afterAllMock))
              )
-          |> extendDescribe
+          |> build
         );
 
       describe(
@@ -122,7 +122,7 @@ describe("test lifecycle methods", ({test}) => {
         TestFrameworkInternal.(
           describeConfig
           |> withLifecycle(l => l |> beforeEach(Mock.fn(beforeEachMock)))
-          |> extendDescribe
+          |> build
         );
 
       describe(
@@ -166,7 +166,7 @@ describe("test lifecycle methods", ({test}) => {
              |> beforeEach(Mock.fn(beforeEachMock))
              |> afterEach(Mock.fn(afterEachMock))
            )
-        |> extendDescribe
+        |> build
       );
 
     describe(
@@ -291,7 +291,7 @@ describe("test lifecycle methods", ({test}) => {
              |> afterEach(Mock.fn(afterEachMock))
              |> afterAll(Mock.fn(afterAllMock))
            )
-        |> extendDescribe
+        |> build
       );
 
     describe("afterEach and afterAll should be called", ({test}) =>

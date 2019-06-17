@@ -393,7 +393,7 @@ module Make = (TestFramework: Rely.TestFramework) => {
             describeConfig
             |> withCustomMatchers(customMatchers)
             |> withLifecycle(testLifecycleFactory)
-            |> extendDescribe
+            |> build
           );
         register(config, describe, describeSkip, describeOnly);
       | WithLifecycle({testLifecycleFactory}) =>
@@ -401,7 +401,7 @@ module Make = (TestFramework: Rely.TestFramework) => {
           TestFramework.(
             describeConfig
             |> withLifecycle(testLifecycleFactory)
-            |> extendDescribe
+            |> build
           );
         register(config, describe, describeSkip, describeOnly);
       | WithCustomMatchers({customMatchers}) =>
@@ -409,7 +409,7 @@ module Make = (TestFramework: Rely.TestFramework) => {
           TestFramework.(
             describeConfig
             |> withCustomMatchers(customMatchers)
-            |> extendDescribe
+            |> build
           );
         register(config, describe, describeSkip, describeOnly);
       };

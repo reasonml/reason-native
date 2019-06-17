@@ -54,7 +54,7 @@ let snapshotFailingTestCaseCustomMatchers =
     TestFramework.(
       describeConfig
       |> withCustomMatchers(createCustomMatchers)
-      |> extendDescribe
+      |> build
     );
 
   describe("unused, doesn't matter", ({test}) =>

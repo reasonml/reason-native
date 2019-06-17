@@ -83,7 +83,7 @@ let customMatchers = extendUtils => {
 };
 
 let describe =
-  (describeConfig |> withCustomMatchers(customMatchers) |> extendDescribe).
+  (describeConfig |> withCustomMatchers(customMatchers) |> build).
     describe;
 
 describe("Path", ({test}) => {
