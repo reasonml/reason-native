@@ -90,6 +90,11 @@ module type TestFramework = {
   let cli: unit => unit;
   let toLibrary: unit => testLibrary;
   let testLifecycle: TestLifecycle.defaultLifecycle;
+  /**
+   * Executes before all tests in a test suite, the return value is passed to
+   * beforeEach if provided and is passed as the "env" field of the "test" record
+   * if beforeEach is not provided
+   */
   let beforeAll:
     (
       unit => 'all,
@@ -111,6 +116,9 @@ module type TestFramework = {
       'all,
     );
 
+  /**
+   * Takes the return of beforeAll (or unit) as input
+   */
   let afterAll:
     (
       'all => unit,
@@ -132,6 +140,10 @@ module type TestFramework = {
       'each,
     );
 
+  /**
+   * Takes the return of beforeAll (or unit) as input, the return value is
+   * passed as the "env" field of the record in the "test" function
+   */
   let beforeEach:
     (
       'all => 'each,
@@ -153,6 +165,9 @@ module type TestFramework = {
       'each,
     );
 
+  /**
+   * Takes the return of beforeEach (or unit) as input
+   */
   let afterEach:
     (
       'each => unit,
