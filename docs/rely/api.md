@@ -63,6 +63,11 @@ describe(
     expect.option(Some(42)).toBeSome();
     expect.option(Some("hello")).toBe(Some("hello"));
 
+    /* result types (as of Rely 2.2.0)*/
+    expect.result(Ok(42)).toBe(Ok(42));
+    expect.result(Error(42)).toBeError();
+    expect.result(Ok(42)).toBeOk();
+
     /* fn type */
     expect.fn(() => {2;}).not.toThrow();
 
@@ -91,9 +96,11 @@ describe(
     expect.mock(mock).toBeCalledTimes(4);
     expect.mock(mock).toBeCalledWith(2);
     expect.mock(mock).lastCalledWith(4);
+    expect.mock(mock).nthCalledWith(3, 3);
     expect.mock(mock).toReturnTimes(4);
     expect.mock(mock).toReturn(6);
     expect.mock(mock).lastReturnedWith(8);
+    expect.mock(mock).nthReturnedWith(3, 6);
   });
 
   /* test skip causes this test to be skipped (not run) */
