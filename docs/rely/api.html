@@ -107,6 +107,11 @@ describe(
     expect.option(<span class="hljs-constructor">Some</span>(<span class="hljs-number">42</span>)).toBeSome();
     expect.option(<span class="hljs-constructor">Some</span>(<span class="hljs-string">"hello"</span>)).toBe(<span class="hljs-constructor">Some</span>(<span class="hljs-string">"hello"</span>));
 
+    <span class="hljs-comment">/* result types (as of Rely 2.2.0)*/</span>
+    expect.result(<span class="hljs-constructor">Ok</span>(<span class="hljs-number">42</span>)).toBe(<span class="hljs-constructor">Ok</span>(<span class="hljs-number">42</span>));
+    expect.result(<span class="hljs-constructor">Error</span>(<span class="hljs-number">42</span>)).toBeError();
+    expect.result(<span class="hljs-constructor">Ok</span>(<span class="hljs-number">42</span>)).toBeOk();
+
     <span class="hljs-comment">/* fn type */</span>
     expect.fn(() =&gt; {<span class="hljs-number">2</span>;}).not.toThrow();
 
@@ -135,9 +140,11 @@ describe(
     expect.mock(mock).toBeCalledTimes(<span class="hljs-number">4</span>);
     expect.mock(mock).toBeCalledWith(<span class="hljs-number">2</span>);
     expect.mock(mock).lastCalledWith(<span class="hljs-number">4</span>);
+    expect.mock(mock).nthCalledWith(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>);
     expect.mock(mock).toReturnTimes(<span class="hljs-number">4</span>);
     expect.mock(mock).toReturn(<span class="hljs-number">6</span>);
     expect.mock(mock).lastReturnedWith(<span class="hljs-number">8</span>);
+    expect.mock(mock).nthReturnedWith(<span class="hljs-number">3</span>, <span class="hljs-number">6</span>);
   });
 
   <span class="hljs-comment">/* test skip causes this test to be skipped (not run) */</span>
