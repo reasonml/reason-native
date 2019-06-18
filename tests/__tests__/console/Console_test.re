@@ -7,6 +7,10 @@
 
 open TestFramework;
 
+type mockedType =
+  | Foo{a: int}
+  | Bar{x: string};
+
 describe("Console", ({test}) => {
   test("Basic output", ({expect}) => {
     let (stdout, stderr, _) =
@@ -110,6 +114,16 @@ describe("Console", ({test}) => {
           ...circularList,
         ];
         Console.error(circularList);
+      });
+    let out = Utils.allOut(stdout, stderr);
+    expect.string(out).toMatchSnapshot();
+  });
+
+  test("Records", ({expect}) => {
+    let (stdout, stderr, _) =
+      IO.captureOutput(() => {
+        Console.log(Foo({a: 0}));
+        Console.log(Bar({x: "some string"}));
       });
     let out = Utils.allOut(stdout, stderr);
     expect.string(out).toMatchSnapshot();
