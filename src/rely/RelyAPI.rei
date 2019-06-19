@@ -201,7 +201,7 @@ module type TestFramework = {
     describeConfig('ext, 'env);
 
   let describeConfig: describeConfig(unit, unit);
-  [@Deprecated]
+  [@Deprecated "use describeConfig |> withCustomMatchers instead"]
   let extendDescribe:
     MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext, unit);
 
