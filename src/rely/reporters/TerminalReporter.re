@@ -117,23 +117,23 @@ let gatherFormattedFailureOutput = (testResults: list(testResult)) =>
 
 let createRunSummary = (result: AggregatedResult.t) => {
   let testSuitePassFormatter =
-    result.numPassedTestSuites > 0 ?
-      s => <Pastel color=Green bold=true> s </Pastel> : (s => s);
+    result.numPassedTestSuites > 0
+      ? s => <Pastel color=Green bold=true> s </Pastel> : (s => s);
   let testSuiteSkipFormatter =
-    result.numPassedTestSuites > 0 ?
-      s => <Pastel color=Yellow bold=true> s </Pastel> : (s => s);
+    result.numPassedTestSuites > 0
+      ? s => <Pastel color=Yellow bold=true> s </Pastel> : (s => s);
   let testSuiteFailFormatter =
-    result.numFailedTestSuites > 0 ?
-      s => <Pastel color=Red bold=true> s </Pastel> : (s => s);
+    result.numFailedTestSuites > 0
+      ? s => <Pastel color=Red bold=true> s </Pastel> : (s => s);
   let testPassFormatter =
-    result.numPassedTests > 0 ?
-      s => <Pastel color=Green bold=true> s </Pastel> : (s => s);
+    result.numPassedTests > 0
+      ? s => <Pastel color=Green bold=true> s </Pastel> : (s => s);
   let testSkipFormatter =
-    result.numPassedTests > 0 ?
-      s => <Pastel color=Yellow bold=true> s </Pastel> : (s => s);
+    result.numPassedTests > 0
+      ? s => <Pastel color=Yellow bold=true> s </Pastel> : (s => s);
   let testFailFormatter =
-    result.numFailedTests > 0 ?
-      s => <Pastel color=Red bold=true> s </Pastel> : (s => s);
+    result.numFailedTests > 0
+      ? s => <Pastel color=Red bold=true> s </Pastel> : (s => s);
   let testSuiteSummaryParts =
     [
       Some(
@@ -141,13 +141,13 @@ let createRunSummary = (result: AggregatedResult.t) => {
           string_of_int(result.numFailedTestSuites) ++ " failed",
         ),
       ),
-      result.numSkippedTestSuites == 0 ?
-        None :
-        Some(
-          testSuiteSkipFormatter(
-            string_of_int(result.numSkippedTestSuites) ++ " skipped",
+      result.numSkippedTestSuites == 0
+        ? None
+        : Some(
+            testSuiteSkipFormatter(
+              string_of_int(result.numSkippedTestSuites) ++ " skipped",
+            ),
           ),
-        ),
       Some(
         testSuitePassFormatter(
           string_of_int(result.numPassedTestSuites) ++ " passed",
@@ -176,13 +176,13 @@ let createRunSummary = (result: AggregatedResult.t) => {
       Some(
         testFailFormatter(string_of_int(result.numFailedTests) ++ " failed"),
       ),
-      result.numSkippedTests == 0 ?
-        None :
-        Some(
-          testSkipFormatter(
-            string_of_int(result.numSkippedTests) ++ " skipped",
+      result.numSkippedTests == 0
+        ? None
+        : Some(
+            testSkipFormatter(
+              string_of_int(result.numSkippedTests) ++ " skipped",
+            ),
           ),
-        ),
       Some(
         testPassFormatter(string_of_int(result.numPassedTests) ++ " passed"),
       ),
@@ -283,7 +283,9 @@ let printSnapshotStatus = testResult =>
     }
   );
 
-let createTerminalReporter = (printer: terminalPrinter): Reporter.t => {
+let createTerminalReporter =
+    (~onlyPrintDetailsForFailedSuites=false, printer: terminalPrinter)
+    : Reporter.t => {
   let runningDisplayLength = ref(0);
   {
     onTestSuiteStart: (testSuite: Reporter.testSuite) =>
@@ -310,12 +312,17 @@ let createTerminalReporter = (printer: terminalPrinter): Reporter.t => {
       switch (testSuiteResult) {
       | {numFailedTests: 0, numPassedTests: 0, numSkippedTests} => ()
       | {numFailedTests: 0, numPassedTests: n, testResults: _, displayName} =>
-        printer.printEndline(
-          String.concat(
-            " ",
-            [passDisplay(), <Pastel color=WhiteBright> displayName </Pastel>],
-          ),
-        )
+        onlyPrintDetailsForFailedSuites
+          ? ()
+          : printer.printEndline(
+              String.concat(
+                " ",
+                [
+                  passDisplay(),
+                  <Pastel color=WhiteBright> displayName </Pastel>,
+                ],
+              ),
+            )
       | {numFailedTests: n, numPassedTests, testResults, displayName}
           when n > 0 =>
         printer.printEndline(

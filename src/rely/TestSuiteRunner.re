@@ -346,16 +346,34 @@ let run = (config: RunConfig.t, testSuites) =>
   });
 
 let cli = testSuites => {
-  let shouldUpdateSnapshots =
-    Array.length(Sys.argv) >= 2 && Array.exists(arg => arg == "-u", Sys.argv);
+  let hasFlag = flag =>
+    Array.length(Sys.argv) >= 2 && Array.exists(arg => arg == flag, Sys.argv);
 
-  let ci =
-    Array.length(Sys.argv) >= 2
-    && Array.exists(arg => arg == "--ci", Sys.argv);
+  let shouldUpdateSnapshots = hasFlag("-u");
+
+  let ci = hasFlag("--ci");
+
+  let onlyPrintDetailsForFailedSuites =
+    hasFlag("--onlyPrintDetailsForFailedSuites");
 
   let config =
     RunConfig.(
-      initialize() |> updateSnapshots(shouldUpdateSnapshots) |> ciMode(ci)
+      initialize()
+      |> updateSnapshots(shouldUpdateSnapshots)
+      |> ciMode(ci)
+      |> withReporters([
+           Custom(
+             TerminalReporter.createTerminalReporter(
+               ~onlyPrintDetailsForFailedSuites,
+               {
+                 printEndline: print_endline,
+                 printNewline: print_newline,
+                 printString: print_string,
+                 flush,
+               },
+             ),
+           ),
+         ])
     );
   run(config, testSuites);
 };
