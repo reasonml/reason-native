@@ -82,7 +82,9 @@ let customMatchers = extendUtils => {
     PathMatchers.makeAbsolutePathMatchers(".ext.path", path, extendUtils),
 };
 
-let describe = extendDescribe(customMatchers).describe;
+let describe =
+  (describeConfig |> withCustomMatchers(customMatchers) |> build).
+    describe;
 
 describe("Path", ({test}) => {
   test("Basic creation", ({expect}) => {
@@ -693,7 +695,8 @@ describe("Path", ({test}) => {
     let res = isDescendent(~ofPath=At.(root), At.(root / "x" / "y"));
     expect.bool(res).toBeTrue();
 
-    let res = isDescendent(~ofPath=At.(Path.drive("C")), At.(root / "x" / "y"));
+    let res =
+      isDescendent(~ofPath=At.(Path.drive("C")), At.(root / "x" / "y"));
     expect.bool(res).toBeFalse();
   });
 

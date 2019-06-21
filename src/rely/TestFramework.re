@@ -8,16 +8,11 @@ open RunConfig;
 open TestFrameworkConfig;
 open SnapshotIO;
 
-type describeConfig = {
-  updateSnapshots: bool,
-  snapshotDir: string,
-  getTime: unit => Time.t,
-};
-
 exception TestAlreadyRan(string);
 exception PendingTestException(string);
 
 type testLibrary = list(TestSuite.t);
+
 type combineResult = {
   run: RunConfig.t => unit,
   cli: unit => unit,
@@ -31,27 +26,130 @@ let combine = libraries => {
 
   {testLibrary, run, cli};
 };
+open TestLifecycle;
 
 module type TestFramework = {
   module Mock: Mock.Sig;
   include (module type of Describe);
   include (module type of Test);
 
-  let describe: Describe.describeFn(unit);
-  let describeSkip: Describe.describeFn(unit);
-  let describeOnly: Describe.describeFn(unit);
+  let describe: Describe.describeFn(unit, unit);
+  let describeSkip: Describe.describeFn(unit, unit);
+  let describeOnly: Describe.describeFn(unit, unit);
   let extendDescribe:
-    MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
+    MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext, unit);
   let run: RunConfig.t => unit;
   let cli: unit => unit;
   let toLibrary: unit => testLibrary;
+  let testLifecycle: TestLifecycle.defaultLifecycle;
+  let beforeAll:
+    (
+      unit => 'all,
+      TestLifecycle.t(
+        beforeAllNotCalled,
+        afterAllNotCalled,
+        beforeEachNotCalled,
+        afterEachNotCalled,
+        'oldAll,
+        'each,
+      )
+    ) =>
+    TestLifecycle.t(
+      beforeAllCalled,
+      afterAllNotCalled,
+      beforeEachNotCalled,
+      afterEachNotCalled,
+      'all,
+      'all,
+    );
+
+  let afterAll:
+    (
+      'all => unit,
+      TestLifecycle.t(
+        'beforeAllCalled,
+        afterAllNotCalled,
+        'beforeEachCalled,
+        'afterEachCalled,
+        'all,
+        'each,
+      )
+    ) =>
+    TestLifecycle.t(
+      'beforeAllCalled,
+      afterAllCalled,
+      'beforeEachCalled,
+      'afterEachCalled,
+      'all,
+      'each,
+    );
+
+  let beforeEach:
+    (
+      'all => 'each,
+      TestLifecycle.t(
+        'beforeAllCalled,
+        'afterAllCalled,
+        beforeEachNotCalled,
+        afterEachNotCalled,
+        'all,
+        'oldEach,
+      )
+    ) =>
+    TestLifecycle.t(
+      'beforeAllCalled,
+      'afterAllCalled,
+      beforeEachCalled,
+      afterEachNotCalled,
+      'all,
+      'each,
+    );
+
+  let afterEach:
+    (
+      'each => unit,
+      TestLifecycle.t(
+        'beforeAllCalled,
+        'afterAllCalled,
+        'beforeEachCalled,
+        afterEachNotCalled,
+        'all,
+        'each,
+      )
+    ) =>
+    TestLifecycle.t(
+      'beforeAllCalled,
+      'afterAllCalled,
+      'beforeEachCalled,
+      afterEachCalled,
+      'all,
+      'each,
+    );
+
+  type describeConfig('ext, 'env);
+  let withLifecycle:
+    (
+      TestLifecycle.defaultLifecycle => TestLifecycle.t(_, _, _, _, _, 'env),
+      describeConfig('ext, unit)
+    ) =>
+    describeConfig('ext, 'env);
+  let withCustomMatchers:
+    (MatcherTypes.matchersExtensionFn('ext), describeConfig(unit, 'env)) =>
+    describeConfig('ext, 'env);
+
+  let describeConfig: describeConfig(unit, unit);
+  let extendDescribe:
+  MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext, unit);
+  let build: describeConfig('ext, 'env) => extensionResult('ext, 'env);
 };
 
 module type FrameworkConfig = {let config: TestFrameworkConfig.t;};
 
-module MakeInternal = (SnapshotIO: SnapshotIO.SnapshotIO, UserConfig: FrameworkConfig) => {
+module MakeInternal =
+       (SnapshotIO: SnapshotIO.SnapshotIO, UserConfig: FrameworkConfig) => {
   include Describe;
   include Test;
+  include TestLifecycle;
   module StackTrace =
     StackTrace.Make({
       let baseDir = UserConfig.config.projectDir;
@@ -85,7 +183,7 @@ module MakeInternal = (SnapshotIO: SnapshotIO.SnapshotIO, UserConfig: FrameworkC
     });
 
   let testSuites: ref(list(TestSuite.t)) = ref([]);
-  let makeDescribeFunction = (extensionFn, mode) => {
+  let makeDescribeFunction = (extensionFn, mode, testLifecycle) => {
     let describe = (name, fn) =>
       testSuites :=
         testSuites^
@@ -95,20 +193,57 @@ module MakeInternal = (SnapshotIO: SnapshotIO.SnapshotIO, UserConfig: FrameworkC
             usersDescribeFn: fn,
             mode,
             extensionFn,
+            testLifecycle,
           }),
         ];
     describe;
   };
 
-  let describe = makeDescribeFunction(_ => (), Normal);
-  let describeSkip = makeDescribeFunction(_ => (), Skip);
-  let describeOnly = makeDescribeFunction(_ => (), Only);
-
-  let extendDescribe = createCustomMatchers => {
-    describe: makeDescribeFunction(createCustomMatchers, Normal),
-    describeSkip: makeDescribeFunction(createCustomMatchers, Skip),
-    describeOnly: makeDescribeFunction(createCustomMatchers, Only),
+  let makeDescribeFns = (testLifecycle, extensionFn) => {
+    describe: makeDescribeFunction(extensionFn, Normal, testLifecycle),
+    describeOnly: makeDescribeFunction(extensionFn, Only, testLifecycle),
+    describeSkip: makeDescribeFunction(extensionFn, Skip, testLifecycle),
   };
+
+  let defaultCreationFunctions =
+    makeDescribeFns(TestLifecycle.default, _ => ());
+
+  let describe = defaultCreationFunctions.describe;
+  let describeSkip = defaultCreationFunctions.describeSkip;
+  let describeOnly = defaultCreationFunctions.describeOnly;
+
+  let testLifecycle = TestLifecycle.default;
+
+  type describeConfig('ext, 'env) =
+    | DescribeConfig{
+        extensionFn: MatcherTypes.matchersExtensionFn('ext),
+        lifecycle: TestLifecycle.t(_, _, _, _, _, 'env),
+      }
+      : describeConfig('ext, 'env);
+
+  let withLifecycle:
+    (
+      TestLifecycle.defaultLifecycle => TestLifecycle.t(_, _, _, _, _, 'env),
+      describeConfig('ext, unit)
+    ) =>
+    describeConfig('ext, 'env) =
+    (lifecycleBuilder, DescribeConfig({extensionFn, lifecycle})) =>
+      DescribeConfig({
+        extensionFn,
+        lifecycle: lifecycleBuilder(TestLifecycle.default),
+      });
+  let withCustomMatchers:
+    (MatcherTypes.matchersExtensionFn('ext), describeConfig(unit, 'env)) =>
+    describeConfig('ext, 'env) =
+    (makeMatchers, DescribeConfig({extensionFn, lifecycle})) =>
+      DescribeConfig({extensionFn: makeMatchers, lifecycle});
+
+  let describeConfig =
+    DescribeConfig({extensionFn: _ => (), lifecycle: TestLifecycle.default});
+  let build = (DescribeConfig({extensionFn, lifecycle})) =>
+    makeDescribeFns(lifecycle, extensionFn);
+  let extendDescribe = makeCustomMatchers =>
+    makeDescribeFns(testLifecycle, makeCustomMatchers);
 
   let run = (config: RunConfig.t) =>
     TestSuiteRunner.run(config, testSuites^);

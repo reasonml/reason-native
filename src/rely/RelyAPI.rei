@@ -14,6 +14,7 @@ include (module type of Test);
 
 /* maintained for backwards compatibility */
 module Describe = Describe;
+
 include (module type of Describe);
 
 module RunConfig: {
@@ -76,19 +77,135 @@ type combineResult = {
 
 let combine: list(testLibrary) => combineResult;
 
+open TestLifecycle;
 module type TestFramework = {
   module Mock: Mock.Sig;
   include (module type of Describe);
   include (module type of Test);
 
-  let describe: Describe.describeFn(unit);
-  let describeSkip: Describe.describeFn(unit);
-  let describeOnly: Describe.describeFn(unit);
-  let extendDescribe:
-    MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext);
+  let describe: Describe.describeFn(unit, unit);
+  let describeSkip: Describe.describeFn(unit, unit);
+  let describeOnly: Describe.describeFn(unit, unit);
   let run: RunConfig.t => unit;
   let cli: unit => unit;
   let toLibrary: unit => testLibrary;
+  let testLifecycle: TestLifecycle.defaultLifecycle;
+  /**
+   * Executes before all tests in a test suite, the return value is passed to
+   * beforeEach if provided and is passed as the "env" field of the "test" record
+   * if beforeEach is not provided
+   */
+  let beforeAll:
+    (
+      unit => 'all,
+      TestLifecycle.t(
+        beforeAllNotCalled,
+        afterAllNotCalled,
+        beforeEachNotCalled,
+        afterEachNotCalled,
+        'oldAll,
+        'each,
+      )
+    ) =>
+    TestLifecycle.t(
+      beforeAllCalled,
+      afterAllNotCalled,
+      beforeEachNotCalled,
+      afterEachNotCalled,
+      'all,
+      'all,
+    );
+
+  /**
+   * Takes the return of beforeAll (or unit) as input
+   */
+  let afterAll:
+    (
+      'all => unit,
+      TestLifecycle.t(
+        'beforeAllCalled,
+        afterAllNotCalled,
+        'beforeEachCalled,
+        'afterEachCalled,
+        'all,
+        'each,
+      )
+    ) =>
+    TestLifecycle.t(
+      'beforeAllCalled,
+      afterAllCalled,
+      'beforeEachCalled,
+      'afterEachCalled,
+      'all,
+      'each,
+    );
+
+  /**
+   * Takes the return of beforeAll (or unit) as input, the return value is
+   * passed as the "env" field of the record in the "test" function
+   */
+  let beforeEach:
+    (
+      'all => 'each,
+      TestLifecycle.t(
+        'beforeAllCalled,
+        'afterAllCalled,
+        beforeEachNotCalled,
+        afterEachNotCalled,
+        'all,
+        'oldEach,
+      )
+    ) =>
+    TestLifecycle.t(
+      'beforeAllCalled,
+      'afterAllCalled,
+      beforeEachCalled,
+      afterEachNotCalled,
+      'all,
+      'each,
+    );
+
+  /**
+   * Takes the return of beforeEach (or unit) as input
+   */
+  let afterEach:
+    (
+      'each => unit,
+      TestLifecycle.t(
+        'beforeAllCalled,
+        'afterAllCalled,
+        'beforeEachCalled,
+        afterEachNotCalled,
+        'all,
+        'each,
+      )
+    ) =>
+    TestLifecycle.t(
+      'beforeAllCalled,
+      'afterAllCalled,
+      'beforeEachCalled,
+      afterEachCalled,
+      'all,
+      'each,
+    );
+
+  type describeConfig('ext, 'env);
+  let withLifecycle:
+    (
+      TestLifecycle.defaultLifecycle => TestLifecycle.t(_, _, _, _, _, 'env),
+      describeConfig('ext, unit)
+    ) =>
+    describeConfig('ext, 'env);
+  let withCustomMatchers:
+    (MatcherTypes.matchersExtensionFn('ext), describeConfig(unit, 'env)) =>
+    describeConfig('ext, 'env);
+
+  let describeConfig: describeConfig(unit, unit);
+  [@Deprecated "use describeConfig |> withCustomMatchers instead"]
+  let extendDescribe:
+    MatcherTypes.matchersExtensionFn('ext) => extensionResult('ext, unit);
+
+  let build: describeConfig('ext, 'env) => extensionResult('ext, 'env);
 };
 
 type requiredConfiguration = TestFrameworkConfig.requiredConfiguration;

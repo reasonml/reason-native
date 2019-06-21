@@ -6,7 +6,7 @@
  */;
 
 type testFrameworkBuilder = {
-  testSuites: list(TestSuiteBuilder.t),
+  testSuites: list(TestSuiteBuilder.testSuite),
   snapshotDir: string,
   projectDir: string,
 };
@@ -33,14 +33,17 @@ module Build =
           projectDir: builder.projectDir,
         });
     });
+  module TestSuiteRegisterer = TestSuiteBuilder.Make(TestFramework);
 
   builder.testSuites
-  |> List.map(TestSuiteBuilder.toFunction)
+  |> List.map((TestSuiteBuilder.TestSuite(suite)) =>
+       TestSuiteRegisterer.register(suite)
+     )
   |> List.iter(ts =>
        ts(
          ~describe=TestFramework.describe,
          ~describeSkip=TestFramework.describeSkip,
-         ~describeOnly=TestFramework.describeOnly
+         ~describeOnly=TestFramework.describeOnly,
        )
      );
   include TestFramework;

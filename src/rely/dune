@@ -10,6 +10,7 @@
     (public_name rely.internal)
     (libraries pastel.lib file-context-printer.lib unix junit re)
     (modules (:standard \ Rely))
+    (flags (:standard -w -30-9))
 )
 (copy_files# ../../shared-src/common/*)
 ; objectPrinter lives separately from Common for now because Common has an

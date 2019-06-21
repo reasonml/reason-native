@@ -58,11 +58,14 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       TestSuite(
         {name, tests, describes, mode},
         extension,
+        lifecycle,
         (_, (module Context)),
       ),
       executionMode,
     ) => {
       module DefaultMatchers = DefaultMatchers.Make(Context.Mock);
+      let all = lifecycle.beforeAll();
+
       let makeMakeSnapshotMatchers = (describeFileName, testPath, testId) => {
         let expectCounter = Counter.create();
         module SnapshotMatchers =
@@ -115,6 +118,8 @@ module Make = (Config: TestSuiteRunnerConfig) => {
         let makeSnapshotMatchers =
           makeMakeSnapshotMatchers(describeFileName, testPath, testId);
 
+        let env = lifecycle.beforeEach(all);
+
         let testUtils = {
           expect:
             DefaultMatchers.makeDefaultMatchers(
@@ -122,6 +127,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
               makeSnapshotMatchers,
               extensionFn,
             ),
+          env,
         };
 
         let {startTime, endTime} =
@@ -130,7 +136,9 @@ module Make = (Config: TestSuiteRunnerConfig) => {
             () => {
               let _ =
                 switch (usersTest(testUtils)) {
-                | () => updateTestStatus(Passed(location))
+                | () =>
+                  lifecycle.afterEach(env);
+                  updateTestStatus(Passed(location));
                 | exception e =>
                   let exceptionTrace =
                     Context.StackTrace.getExceptionStackTrace();
@@ -142,6 +150,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
                       Config.maxNumStackFrames,
                     );
                   Context.Snapshot.markSnapshotsAsCheckedForTest(testId);
+                  lifecycle.afterEach(env);
                   updateTestStatus(Exception(e, location, stackTrace));
                 };
               ();
@@ -215,13 +224,22 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       };
 
       let testSuitePath = TestPath.Terminal(name);
-      runDescribe(testSuitePath, tests, describes, extension, executionMode);
+      switch (
+        runDescribe(testSuitePath, tests, describes, extension, executionMode)
+      ) {
+      | exception e =>
+        lifecycle.afterAll(all);
+        raise(e);
+      | result =>
+        lifecycle.afterAll(all);
+        result;
+      };
     };
 
   let getSnapshotResult = testSuites => {
     let snapshotModules: list((TestSuite.contextId, module Snapshot.Sig)) =
       List.map(
-        (TestSuite(_, _, (id, (module Context)))) => {
+        (TestSuite(_, _, _, (id, (module Context)))) => {
           let snapshotModule: module Snapshot.Sig = (module Context.Snapshot);
           (id, snapshotModule);
         },
@@ -269,7 +287,8 @@ module Make = (Config: TestSuiteRunnerConfig) => {
     let startTime = Config.getTime();
     let notifyReporters = f => List.iter(f, Config.reporters);
     let hasOnly =
-      testSuites |> List.exists((TestSuite({mode}, _, _)) => mode === Only);
+      testSuites
+      |> List.exists((TestSuite({mode}, _, _, _)) => mode === Only);
 
     if (Config.ci && hasOnly) {
       raise(
@@ -283,7 +302,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       testSuites
       |> List.map(s =>
            switch (s) {
-           | TestSuite({name}, _, _) => {name: name}
+           | TestSuite({name}, _, _, _) => {name: name}
            }
          );
     notifyReporters(r => r.onRunStart({testSuites: reporterTestSuites}));
@@ -291,7 +310,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
       testSuites
       |> List.fold_left(
            (prevAggregatedResult, testSuite) => {
-             let TestSuite({name, mode}, _, _) = testSuite;
+             let TestSuite({name, mode}, _, _, _) = testSuite;
              let reporterSuite = {name: name};
              notifyReporters(r => r.onTestSuiteStart(reporterSuite));
              let executionMode =
