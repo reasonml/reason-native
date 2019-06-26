@@ -79,6 +79,10 @@
       "rely/quickstart": {
         "title": "Rely Quickstart",
         "sidebar_label": "Quickstart"
+      },
+      "rely/setup-teardown": {
+        "title": "Setup and Teardown",
+        "sidebar_label": "Setup and Teardown"
       }
     },
     "links": {
