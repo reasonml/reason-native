@@ -85,20 +85,24 @@ Sometimes a single setup step is sufficient for a test suite. This can happen wh
 Suppose for example that we are testing a web scraping utility and need to both start and stop a test server for use in our tests.
 
 ```reason
-let {describe, describeSkip, describeOnly} = describeConfig
-    |> withLifecycle(testLifecycle =>
-        testLifecycle
-        |> beforeAll(() => TestServer.start())
-        |> afterAll(server => TestServer.stop(server))
-    |> build;
+open TestFramework;
+
+let {describe, describeSkip, describeOnly} =
+  describeConfig
+  |> withLifecycle(testLifecycle =>
+       testLifecycle
+       |> beforeAll(() => TestServer.start())
+       |> afterAll(server => TestServer.stop(server))
+     )
+  |> build;
 
 describe("My web scraper", ({test}) => {
-    test("My snapshot test", ({expect, env}) => {
-        let result = MyWebScraper.scrape(server.baseUrl);
+  test("My snapshot test", ({expect, env}) => {
+    let result = MyWebScraper.scrape(server.baseUrl);
 
-        expect.string(result).toMatchSnapshot();
-    });
-    ...
+    expect.string(result).toMatchSnapshot();
+  })
+  ...
 });
 ```
 
@@ -107,29 +111,35 @@ describe("My web scraper", ({test}) => {
 Suppose that we wish to test a calendar application that interacts with a database of important historical events. Each test needs access to a fresh copy of a testing database.
 
 ```reason
-let {describe, describeSkip, describeOnly} = describeConfig
-    |> withLifecycle(testLifecycle =>
-        testLifecycle
-        |> beforeEach(() => EventsDB.initializeTestDatabase())
-        |> afterEach(db => EventsDB.dispose(db))
-    |> build;
+let {describe, describeSkip, describeOnly} =
+  describeConfig
+  |> withLifecycle(testLifecycle =>
+       testLifecycle
+       |> beforeEach(() => EventsDB.initializeTestDatabase())
+       |> afterEach(db => EventsDB.dispose(db))
+     )
+  |> build;
 
 describe("My calendar app", ({test}) => {
-    test("adding a historical event", ({expect, env}) => {
-        let calendar = MyCalendarApp.init(env);
-        let initialEvents = calendar.getHistoricalEvents(2016, 11, 2);
+  test("adding a historical event", ({expect, env})
+    => {
+      let calendar = MyCalendarApp.init(env);
+      let initialEvents = calendar.getHistoricalEvents(2016, 11, 2);
 
-        let testEvent = historicalEventBuilder
-            |> withDate(2016, 11, 2)
-            |> withDescription("Chicago Cubs win the World Series")
-            |> build;
+      let testEvent =
+        historicalEventBuilder
+        |> withDate(2016, 11, 2)
+        |> withDescription("Chicago Cubs win the World Series")
+        |> build;
 
-        calendar.add(testEvent);
+      calendar.add(testEvent);
 
-        let resultingEvents = calendar.getHistoricalEvents(2016, 11, 2);
+      let resultingEvents = calendar.getHistoricalEvents(2016, 11, 2);
 
-        expect.int(List.length(resultingEvents)).toBe(List.length(initialEvents) + 1);
-    });
+      expect.int(List.length(resultingEvents)).toBe(
+        List.length(initialEvents) + 1,
+      );
+    })
     ...
 });
 ```
@@ -143,31 +153,30 @@ Suppose that we have a chatbot application that we want to test. We need to reso
 ```reason
 open TestFramework;
 
-type testData = {
-    session: ChatBot.session
-}
+type testData = {session: ChatBot.session};
 
-let {describe, describeSkip, describeOnly} = describeConfig
-    |> withLifecycle(testLifecycle =>
-        testLifecycle
-        |> beforeAll(() => resolveChatbotCredentials())
-        |> beforeEach(credentials => {
+let {describe, describeSkip, describeOnly} =
+  describeConfig
+  |> withLifecycle(testLifecycle =>
+       testLifecycle
+       |> beforeAll(() => resolveChatbotCredentials())
+       |> beforeEach(credentials => {
             let session = ChatBotAPI.login(credentials);
-            { session };
-        })
-        |> afterEach(session => session.close())
-    |> build;
+            session;
+          })
+     )
+  |> afterEach(session => session.close())
+  |> build;
 
 describe("My chat bot", ({test}) => {
-    test("My test", ({expect, env}) => {
-        let myChatBot = MyChatBot.init(env.session);
+  test("My test", ({expect, env}) => {
+    let myChatBot = MyChatBot.init(env.session);
 
-        myChatBot.message(MyChatBot.user, "hello self!");
-        let receivedMessages = myChatBot.getReceivedMessages();
+    myChatBot.message(MyChatBot.user, "hello self!");
+    let receivedMessages = myChatBot.getReceivedMessages();
 
-        expect.list(receivedMessages).toContain("hello self!");
-    });
-    ...
+    expect.list(receivedMessages).toContain("hello self!");
+  })
 });
 ```
 
