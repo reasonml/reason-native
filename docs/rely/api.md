@@ -132,6 +132,7 @@ describe(
 ```
 
 ## Custom Matchers
+
 Custom matchers can also be created as below, the API is currently identical to the internal one, so additional examples can be found by looking at the [code for the built in matchers](https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers).
 
 ```reason
@@ -182,9 +183,10 @@ let customMatchers = createMatcher => {
   int: i => intExtensions(i, createMatcher)
 }
 
-let { describeOnly } = extendDescribe(customMatchers);
+let { describe, describeOnly, describeSkip } =
+  describeConfig |> withCustomMatchers(customMatchers) |> build;
 
-describeOnly("divides matchers example", ({test}) => {
+describe("divides matchers example", ({test}) => {
   test("should divide", ({expect}) => {
     expect.ext.int(42).toDivide(84);
   });
