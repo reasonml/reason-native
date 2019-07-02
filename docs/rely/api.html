@@ -221,9 +221,10 @@ describe(
   int: i =&gt; intExtensions(i, createMatcher)
 }
 
-<span class="hljs-keyword">let</span> { describeOnly } = extendDescribe(customMatchers);
+<span class="hljs-keyword">let</span> { describe, describeOnly, describeSkip } =
+  describeConfig <span class="hljs-operator">|&gt;</span> withCustomMatchers(customMatchers) <span class="hljs-operator">|&gt;</span> build;
 
-describeOnly(<span class="hljs-string">"divides matchers example"</span>, ({test}) =&gt; {
+describe(<span class="hljs-string">"divides matchers example"</span>, ({test}) =&gt; {
   test(<span class="hljs-string">"should divide"</span>, ({expect}) =&gt; {
     expect.ext.int(<span class="hljs-number">42</span>).toDivide(<span class="hljs-number">84</span>);
   });
