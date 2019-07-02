@@ -3,7 +3,7 @@
 * Added functions for performing setup and teardown operations
   - beforeAll, afterAll, beforeEach, afterEach
   - documentation available [here](https://reason-native.com/docs/rely/setup-teardown)
-* [**Breaking**] as a result of adding test lifecycle functions, an "env" field was added to the record passed as an argument to tests and some types gained an additional parameter.
+* [**Breaking**] as a result of adding test lifecycle functions, an "env" field was added to the record passed as an argument to tests and some types gained an additional parameter. **Most users should be able to upgrade without code changes**, but utilities with manual type annotations on the test, describe, or expect types from Rely will need to be updated.
   - The previous pattern for registering custom matchers has been deprecated, it still works as of this release, but may eventually be removed entirely
 * Add a --onlyPrintDetailsForFailedSuites command line flag for only printing failed output
 
