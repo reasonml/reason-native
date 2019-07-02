@@ -1,3 +1,12 @@
+# July 2, 2019
+### Rely 3.0.0
+* Added functions for performing setup and teardown operations
+  - beforeAll, afterAll, beforeEach, afterEach
+  - documentation available [here](https://reason-native.com/docs/rely/setup-teardown)
+* [**Breaking**] as a result of adding test lifecycle functions, an "env" field was added to the record passed as an argument to tests and some types gained an additional parameter.
+  - The previous pattern for registering custom matchers has been deprecated, it still works as of this release, but may eventually be removed entirely
+* Add a --onlyPrintDetailsForFailedSuites command line flag for only printing failed output
+
 # May 29, 2019
 ### Rely 2.2.0
 * expect.mock.nthCalledWith/nthReturnedWith matchers
