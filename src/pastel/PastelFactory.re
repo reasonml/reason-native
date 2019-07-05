@@ -105,11 +105,25 @@ module Make = (()) => {
     whiteBright: s => bgInternal^.whiteBright(s),
   };
 
-  let length = (s: string): int =>
+  let length = s =>
     switch (mode^) {
     | HumanReadable => HumanReadableImplementation.length(s)
     | Terminal => TerminalImplementation.length(s)
     | Disabled => DisabledImplementation.length(s)
+    };
+
+  let partition = s =>
+    switch (mode^) {
+    | HumanReadable => HumanReadableImplementation.partition(s)
+    | Terminal => TerminalImplementation.partition(s)
+    | Disabled => DisabledImplementation.partition(s)
+    };
+
+  let unformattedText = s =>
+    switch (mode^) {
+    | HumanReadable => HumanReadableImplementation.unformattedText(s)
+    | Terminal => TerminalImplementation.unformattedText(s)
+    | Disabled => DisabledImplementation.unformattedText(s)
     };
 
   let bold = modifier.bold;

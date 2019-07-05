@@ -4,12 +4,25 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open MakeAnsiDecorator;
 open Decorators;
 
 let length = String.length;
 
 let identityDecorator = s => s;
+
+let partition = (index, s) =>
+  if (index < 0) {
+    ("", s);
+  } else if (index > String.length(s)) {
+    (s, "");
+  } else {
+    (
+      String.sub(s, 0, index),
+      String.sub(s, index, String.length(s) - index),
+    );
+  };
+
+let unformattedText = s => s;
 
 let modifier: modifier = {
   bold: identityDecorator,

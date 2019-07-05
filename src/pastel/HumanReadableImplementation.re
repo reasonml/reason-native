@@ -6,16 +6,15 @@
  */;
 open Decorators;
 
-let startRegex = Re.Pcre.regexp("<[a-z|A-Z]+>");
-let stopRegex = Re.Pcre.regexp("</[a-z|A-Z]+>");
+module HumanReadableLexer =
+  PastelLexer.Make({
+    let startRegex = Re.Pcre.regexp("<[a-z|A-Z]+>");
+    let stopRegex = Re.Pcre.regexp("</[a-z|A-Z]+>");
+  });
 
-let length = s => {
-  let noStartParts = Re.split(startRegex, s);
-  let noStarts = String.concat("", noStartParts);
-  let noStopParts = Re.split(stopRegex, noStarts);
-  let noColor = String.concat("", noStopParts);
-  String.length(noColor);
-};
+let length = HumanReadableLexer.length;
+let partition = HumanReadableLexer.partition;
+let unformattedText = HumanReadableLexer.unformattedText;
 
 let makeDecorator = name => {
   let start = String.concat("", ["<", name, ">"]);
