@@ -105,12 +105,12 @@ module Make = (M: {
           switch (token) {
           | Starts(_)
           | Stops(_) =>
-            firstHalfANSI := firstHalfANSI^ @ [token];
-            partition1 := partition1^ @ [token];
+            firstHalfANSI := [token, ...firstHalfANSI^];
+            partition1 := [token, ...partition1^];
           | Text(t) =>
             let textLength = String.length(t);
             if (charsSeen^ + textLength < index) {
-              partition1 := partition1^ @ [token];
+              partition1 := [token, ...partition1^];
             } else {
               let numToTake = index - charsSeen^;
               let firstPart = String.sub(t, 0, numToTake);
@@ -120,8 +120,8 @@ module Make = (M: {
                   index - charsSeen^,
                   String.length(t) - numToTake,
                 );
-              partition1 := partition1^ @ [Text(firstPart)];
-              partition2 := firstHalfANSI^ @ [Text(secondPart)];
+              partition1 := [Text(firstPart), ...partition1^];
+              partition2 := [Text(secondPart), ...firstHalfANSI^];
             };
             charsSeen := charsSeen^ + textLength;
           };
@@ -129,16 +129,19 @@ module Make = (M: {
           switch (token) {
           | Starts(_)
           | Stops(_) =>
-            secondHalfANSI := secondHalfANSI^ @ [token];
-            partition2 := partition2^ @ [token];
-          | Text(_) => partition2 := partition2^ @ [token]
+            secondHalfANSI := [token, ...secondHalfANSI^];
+            partition2 := [token, ...partition2^];
+          | Text(_) => partition2 := [token, ...partition2^]
           };
         },
       tokens,
     );
 
-    partition1 := partition1^ @ secondHalfANSI^;
+    partition1 := secondHalfANSI^ @ partition1^;
 
-    (tokensToStr(partition1^), tokensToStr(partition2^));
+    (
+      tokensToStr(List.rev(partition1^)),
+      tokensToStr(List.rev(partition2^)),
+    );
   };
 };

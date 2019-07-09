@@ -6,7 +6,7 @@
  */;
 open TestFramework;
 
-describeOnly("Pastel", ({describe, test}) => {
+describe("Pastel", ({describe, test}) => {
   test(
     "ANSI escape sequences should be applied inside pastels and persisted outside of them",
     ({expect}) =>
@@ -171,7 +171,7 @@ describeOnly("Pastel", ({describe, test}) => {
               );
             });
           });
-          describeSkip("Pastel.length fuzz testing", ({test}) => {
+          describe("Pastel.length fuzz testing", ({test}) => {
             let allPastels = [|
               PastelWithSpecifiedMode.modifier.bold,
               PastelWithSpecifiedMode.modifier.dim,
