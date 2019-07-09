@@ -1,0 +1,4 @@
+expect.assertions › mismatched assertion count singular expect, zero calls
+<dim>expect.assertions(</dim><green>1</green><dim>)</dim>
+
+Expected <green>one assertion</green> to be called, but received <red>zero assertion calls</red>.

@@ -1,0 +1,4 @@
+expect.assertions › mismatched assertion count plural expect and call
+<dim>expect.assertions(</dim><green>3</green><dim>)</dim>
+
+Expected <green>three assertions</green> to be called, but received <red>two assertion calls</red>.

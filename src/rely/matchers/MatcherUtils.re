@@ -70,9 +70,9 @@ let matcherHint =
       [
         Pastel.dim(String.concat("", ["expect", expectType, "("])),
         receivedColor(received),
-        isNot ?
-          Pastel.dim(").") ++ "not" ++ Pastel.dim(matcherName ++ "(") :
-          Pastel.dim(String.concat("", [")", matcherName, "("])),
+        isNot
+          ? Pastel.dim(").") ++ "not" ++ Pastel.dim(matcherName ++ "(")
+          : Pastel.dim(String.concat("", [")", matcherName, "("])),
         expectedColor(expected),
         Pastel.dim(")"),
       ],
@@ -94,14 +94,27 @@ let singleLevelMatcherHint =
       ~options={comment: None},
       (),
     ) => {
+  let expectedReceived =
+    switch (expected, received) {
+    | ("", "") => ""
+    | ("", received) => receivedColor(received)
+    | (expected, "") => expectedColor(expected)
+    | (expected, received) =>
+      String.concat(
+        "",
+        [
+          expectedColor(expected),
+          Pastel.dim(", "),
+          receivedColor(received),
+        ],
+      )
+    };
   let assertion =
     String.concat(
       "",
       [
         Pastel.dim(String.concat("", ["expect", expectType, "("])),
-        expectedColor(expected),
-        Pastel.dim(", "),
-        receivedColor(received),
+        expectedReceived,
         Pastel.dim(")"),
       ],
     );
@@ -148,6 +161,10 @@ let formatInt = n =>
   } else {
     string_of_int(n);
   };
+
+let pluralize = (word, ~plural=word ++ "s", n) => {
+  String.concat(" ", [formatInt(n), n == 1 ? word : plural]);
+};
 
 let matcherUtils = {
   matcherHint,

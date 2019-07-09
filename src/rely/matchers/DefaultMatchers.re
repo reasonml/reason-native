@@ -4,24 +4,15 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-open StringMatchers;
-open BoolMatchers;
-open SnapshotMatchers;
-open IntMatchers;
-open FloatMatchers;
-open FnMatchers;
-open MatcherTypes;
-open ListMatchers;
-open ArrayMatchers;
 
 type matchers('ext) = {
-  string: string => stringMatchersWithNot,
-  file: string => stringMatchersWithNot,
-  lines: list(string) => stringMatchersWithNot,
-  bool: bool => boolMatchersWithNot,
-  int: int => intMatchersWithNot,
-  float: float => floatMatchersWithNot,
-  fn: 'a. (unit => 'a) => fnMatchersWithNot,
+  string: string => StringMatchers.stringMatchersWithNot,
+  file: string => StringMatchers.stringMatchersWithNot,
+  lines: list(string) => StringMatchers.stringMatchersWithNot,
+  bool: bool => BoolMatchers.boolMatchersWithNot,
+  int: int => IntMatchers.intMatchersWithNot,
+  float: float => FloatMatchers.floatMatchersWithNot,
+  fn: 'a. (unit => 'a) => FnMatchers.fnMatchersWithNot,
   list: 'a. list('a) => ListMatchers.matchersWithNot('a),
   array: 'a. array('a) => ArrayMatchers.matchersWithNot('a),
   equal: 'a. EqualsMatcher.equalsMatcher('a),
