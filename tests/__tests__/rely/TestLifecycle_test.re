@@ -43,6 +43,7 @@ describe("test lifecycle methods", ({test}) => {
       );
     });
     executeTestFramework(TestFrameworkInternal.run);
+    expectExternal.assertions(2);
   });
   test("before all should be called exactly once", ({expect}) => {
     let beforeAllMock = Mock.mock1(() => uniqueInstance);
@@ -107,6 +108,7 @@ describe("test lifecycle methods", ({test}) => {
       executeTestFramework(TestFrameworkInternal.run);
       expectExternal.mock(afterAllMock).toBeCalledWith(uniqueInstance);
       expectExternal.mock(afterAllMock).toBeCalled();
+      expectExternal.assertions(4);
     },
   );
   test(
@@ -146,6 +148,7 @@ describe("test lifecycle methods", ({test}) => {
         );
       });
       executeTestFramework(TestFrameworkInternal.run);
+      expect.assertions(4);
     },
   );
   test(
@@ -206,6 +209,7 @@ describe("test lifecycle methods", ({test}) => {
     );
     executeTestFramework(TestFrameworkInternal.run);
     expect.mock(afterEachMock).toBeCalledTimes(4);
+    expect.assertions(5);
     ();
   });
   test("ret of beforeAll passed as arg to beforeEach", ({expect}) => {
