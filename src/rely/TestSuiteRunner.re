@@ -97,7 +97,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
             switch (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {
             | (messageThunk, true) =>
               assertionState :=
-                AssertionState.addAssertionResult(Passed, assertionState^)
+                AssertionState.addAssertionResult(assertionState^)
             | (messageThunk, false) =>
               Context.Snapshot.markSnapshotsAsCheckedForTest(testId);
               let message = messageThunk();
@@ -110,7 +110,6 @@ module Make = (Config: TestSuiteRunnerConfig) => {
                 );
               assertionState :=
                 AssertionState.addAssertionResult(
-                  Failed(message, location, stack),
                   assertionState^,
                 );
               updateTestStatus(Failed(message, location, stack));

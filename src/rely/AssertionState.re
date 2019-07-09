@@ -9,20 +9,16 @@ type assertionExpectation =
   | NoExpectation
   | HasNAssertions(int, option(Printexc.location), string);
 
-type assertionResult =
-  | Passed
-  | Failed(string, option(Printexc.location), string);
-
 type t = {
   expectation: assertionExpectation,
-  assertions: list(assertionResult),
+  assertions: int,
 };
 
-let initialState = {expectation: NoExpectation, assertions: []};
+let initialState = {expectation: NoExpectation, assertions: 0};
 
-let addAssertionResult = (assertionResult, state) => {
+let addAssertionResult = state => {
   ...state,
-  assertions: state.assertions @ [assertionResult],
+  assertions: state.assertions + 1,
 };
 
 let setExpectation = (expectation, state) => {...state, expectation};
@@ -37,8 +33,9 @@ let validateAssertionState:
     switch (state.expectation) {
     | NoExpectation => Valid
     | HasAssertions(loc, stack) =>
-      switch (state.assertions) {
-      | [] =>
+      if (state.assertions > 0) {
+        Valid;
+      } else {
         let message =
           String.concat(
             "",
@@ -58,10 +55,9 @@ let validateAssertionState:
             ],
           );
         Invalid(message, loc, stack);
-      | [h, ...t] => Valid
       }
     | HasNAssertions(expectedNumAssertions, loc, stack) =>
-      let actualNumAssertions = List.length(state.assertions);
+      let actualNumAssertions = state.assertions;
       let isValid = actualNumAssertions == expectedNumAssertions;
       if (isValid) {
         Valid;

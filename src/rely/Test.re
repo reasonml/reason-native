@@ -29,7 +29,17 @@ type matchers('ext) = {
     result('a, 'b) => ResultMatchers.resultMatchersWithNot('a, 'b),
 
   ext: 'ext,
+  /**
+   * Verifies that a certain number of assertions are called during a test.
+   * This is often useful when testing asynchronous code, in order to
+   * make sure that assertions in a callback actually got called.
+   */
   assertions: int => unit,
+  /**
+   * Verifies that at least one assertion is called during a test.
+   * This is often useful when testing asynchronous code, in order to
+   * make sure that assertions in a callback actually got called.
+   */
   hasAssertions: unit => unit,
 };
 
