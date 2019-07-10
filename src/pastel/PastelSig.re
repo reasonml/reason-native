@@ -13,6 +13,8 @@ module type PastelSig = {
   let setMode: mode => unit;
   let useMode: (mode, unit => 'a) => 'a;
   let length: string => int;
+  let partition: (int, string) => (string, string);
+  let unformattedText: string => string;
 
   let modifier: modifier;
   let color: color;

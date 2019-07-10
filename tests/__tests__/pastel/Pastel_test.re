@@ -46,6 +46,116 @@ describe("Pastel", ({describe, test}) => {
               expect.string(output).toMatchSnapshot();
             })
           );
+          describe("Pastel.unformattedText", ({test}) => {
+            test("basic string should be unchanged", ({expect}) => {
+              let input = "hello world";
+              let result = PastelWithSpecifiedMode.unformattedText(input);
+              expect.string(result).toEqual(input);
+            });
+            test("nested decorators should only care about text", ({expect}) => {
+              let input =
+                <PastelWithSpecifiedMode dim=true>
+                  "oo"
+                  <PastelWithSpecifiedMode color=Green>
+                    "hello world!"
+                  </PastelWithSpecifiedMode>
+                  "unpasteled o_O"
+                </PastelWithSpecifiedMode>;
+
+              let result = PastelWithSpecifiedMode.unformattedText(input);
+              expect.string(result).toEqual("oohello world!unpasteled o_O");
+            });
+          });
+          describe("Pastel.partition", ({test}) => {
+            test("should partition an unformatted string", ({expect}) => {
+              let input = "hello world";
+
+              let (part1, part2) =
+                PastelWithSpecifiedMode.partition(3, input);
+
+              expect.string(part1).toEqual("hel");
+              expect.string(part2).toEqual("lo world");
+            });
+            test(
+              "Should partition a string with multiple decorators",
+              ({expect}) => {
+              let input =
+                <PastelWithSpecifiedMode dim=true>
+                  "Hel"
+                  <PastelWithSpecifiedMode color=Red>
+                    "lo "
+                  </PastelWithSpecifiedMode>
+                  <PastelWithSpecifiedMode underline=true>
+                    "worl"
+                    <PastelWithSpecifiedMode color=Blue>
+                      "d"
+                    </PastelWithSpecifiedMode>
+                  </PastelWithSpecifiedMode>
+                </PastelWithSpecifiedMode>;
+              let (part1, part2) =
+                PastelWithSpecifiedMode.partition(3, input);
+
+              expect.string(PastelWithSpecifiedMode.unformattedText(part1)).
+                toEqual(
+                "Hel",
+              );
+              expect.string(PastelWithSpecifiedMode.unformattedText(part2)).
+                toEqual(
+                "lo world",
+              );
+              expect.lines([part1, part2]).toMatchSnapshot();
+            });
+            test(
+              "index greater than length should return (s, '')", ({expect}) => {
+              let input =
+                <PastelWithSpecifiedMode color=Green>
+                  "Hello world"
+                </PastelWithSpecifiedMode>;
+              ();
+              let (part1, part2) =
+                PastelWithSpecifiedMode.partition(45, input);
+
+              expect.string(part1).toEqual(input);
+              expect.string(PastelWithSpecifiedMode.unformattedText(part2)).toBeEmpty();
+            });
+            test(
+              "index equal to length should return (s, '')", ({expect}) => {
+              let input =
+                <PastelWithSpecifiedMode color=Green>
+                  "Hello world"
+                </PastelWithSpecifiedMode>;
+              ();
+              let (part1, part2) =
+                PastelWithSpecifiedMode.partition(PastelWithSpecifiedMode.length(input), input);
+
+              expect.string(part1).toEqual(input);
+              expect.string(PastelWithSpecifiedMode.unformattedText(part2)).toBeEmpty();
+            });
+            test("negative index should return ('', s)", ({expect}) => {
+              let input =
+                <PastelWithSpecifiedMode color=Green>
+                  "Hello world"
+                </PastelWithSpecifiedMode>;
+              ();
+              let (part1, part2) =
+                PastelWithSpecifiedMode.partition(-1, input);
+
+              expect.string(PastelWithSpecifiedMode.unformattedText(part1)).toBeEmpty();
+              expect.string(part2).toEqual(input);
+            });
+            test("index 0 should return ('', s)", ({expect}) => {
+              let input =
+                <PastelWithSpecifiedMode color=Green>
+                  "Hello world"
+                </PastelWithSpecifiedMode>;
+              ();
+              let (part1, part2) =
+                PastelWithSpecifiedMode.partition(0, input);
+
+              expect.string(PastelWithSpecifiedMode.unformattedText(part1)).toBeEmpty();
+              expect.string(part2).toEqual(input);
+            });
+          });
           describe("Pastel.length", ({test}) => {
             test("Length with no colors", ({expect}) => {
               expect.int(length("")).toBe(0);

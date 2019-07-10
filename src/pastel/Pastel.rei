@@ -68,6 +68,8 @@ type modifier = {
 };
 
 let length: string => int;
+let partition: (int, string) => (string, string);
+let unformattedText: string => string;
 
 let modifier: modifier;
 let color: color;
