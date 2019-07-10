@@ -205,7 +205,7 @@ let base = {
         self.lazy_(self, Obj.magic(o));
       } else if (detectList(~maxLength=maxLength.contents, o)) {
         self.list(self, ~depth, Obj.magic(o));
-      } else if (tag === Obj.first_non_constant_constructor_tag) {
+      } else if (Obj.is_block(oDynamic)) {
         self.block(self, ~depth, Obj.magic(o));
       } else {
         /* Some kind a block. */
