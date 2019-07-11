@@ -81,6 +81,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
 
       let executeTest = (describePath, name, location, usersTest, extensionFn) => {
         let testStatus = ref(None);
+        let assertionState = ref(AssertionState.initialState);
         let testPath = (name, describePath);
         let describeFileName =
           TestPath.(Describe(describePath) |> toString) |> sanitizeName;
@@ -94,10 +95,12 @@ module Make = (Config: TestSuiteRunnerConfig) => {
         let createMatcher = matcherConfig => {
           let matcher = (actualThunk, expectedThunk) => {
             switch (matcherConfig(matcherUtils, actualThunk, expectedThunk)) {
-            | (messageThunk, true) => ()
+            | (messageThunk, true) =>
+              assertionState :=
+                AssertionState.addAssertionResult(assertionState^)
             | (messageThunk, false) =>
               Context.Snapshot.markSnapshotsAsCheckedForTest(testId);
-
+              let message = messageThunk();
               let stackTrace = Context.StackTrace.getStackTrace();
               let location = Context.StackTrace.getTopLocation(stackTrace);
               let stack =
@@ -105,12 +108,17 @@ module Make = (Config: TestSuiteRunnerConfig) => {
                   stackTrace,
                   Config.maxNumStackFrames,
                 );
-              updateTestStatus(Failed(messageThunk(), location, stack));
+              assertionState :=
+                AssertionState.addAssertionResult(
+                  assertionState^,
+                );
+              updateTestStatus(Failed(message, location, stack));
             };
             ();
           };
           matcher;
         };
+
         let extendUtils: MatcherTypes.extendUtils = {
           createMatcher: createMatcher,
         };
@@ -119,14 +127,65 @@ module Make = (Config: TestSuiteRunnerConfig) => {
           makeMakeSnapshotMatchers(describeFileName, testPath, testId);
 
         let env = lifecycle.beforeEach(all);
+        let baseMatchers =
+          DefaultMatchers.makeDefaultMatchers(
+            extendUtils,
+            makeSnapshotMatchers,
+            extensionFn,
+          );
+
+        let assertions = n => {
+          let stackTrace = Context.StackTrace.getStackTrace();
+          let location = Context.StackTrace.getTopLocation(stackTrace);
+          let stack =
+            Context.StackTrace.stackTraceToString(
+              stackTrace,
+              Config.maxNumStackFrames,
+            );
+          assertionState :=
+            AssertionState.setExpectation(
+              HasNAssertions(n, location, stack),
+              assertionState^,
+            );
+        };
+
+        let hasAssertions = () => {
+          let stackTrace = Context.StackTrace.getStackTrace();
+          let location = Context.StackTrace.getTopLocation(stackTrace);
+          let stack =
+            Context.StackTrace.stackTraceToString(
+              stackTrace,
+              Config.maxNumStackFrames,
+            );
+          assertionState :=
+            AssertionState.setExpectation(
+              HasAssertions(location, stack),
+              assertionState^,
+            );
+        };
 
         let testUtils = {
-          expect:
-            DefaultMatchers.makeDefaultMatchers(
-              extendUtils,
-              makeSnapshotMatchers,
-              extensionFn,
-            ),
+          expect: {
+            string: baseMatchers.string,
+            file: baseMatchers.file,
+            lines: baseMatchers.lines,
+            bool: baseMatchers.bool,
+            int: baseMatchers.int,
+            float: baseMatchers.float,
+            fn: baseMatchers.fn,
+            list: baseMatchers.list,
+            array: baseMatchers.array,
+            equal: baseMatchers.equal,
+            notEqual: baseMatchers.notEqual,
+            same: baseMatchers.same,
+            notSame: baseMatchers.notSame,
+            mock: baseMatchers.mock,
+            option: baseMatchers.option,
+            result: baseMatchers.result,
+            ext: baseMatchers.ext,
+            assertions,
+            hasAssertions,
+          },
           env,
         };
 
@@ -138,7 +197,16 @@ module Make = (Config: TestSuiteRunnerConfig) => {
                 switch (usersTest(testUtils)) {
                 | () =>
                   lifecycle.afterEach(env);
-                  updateTestStatus(Passed(location));
+                  switch (
+                    AssertionState.validateAssertionState(
+                      matcherUtils,
+                      assertionState^,
+                    )
+                  ) {
+                  | Valid => updateTestStatus(Passed(location))
+                  | Invalid(message, loc, stack) =>
+                    updateTestStatus(Failed(message, loc, stack))
+                  };
                 | exception e =>
                   let exceptionTrace =
                     Context.StackTrace.getExceptionStackTrace();

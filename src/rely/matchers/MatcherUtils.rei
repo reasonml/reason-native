@@ -37,4 +37,6 @@ let formatInt: int => string;
 
 let nthToString: int => string;
 
+let pluralize: (string, ~plural:string=?, int) => string;
+
 let matcherUtils: t;
