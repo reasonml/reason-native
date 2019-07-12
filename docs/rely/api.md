@@ -128,6 +128,11 @@ describe(
       expect.bool(true).toBeTrue();
     });
   });
+
+  /** verifying assertions have been called (since 3.1.0) */
+  test("", ({expect}) => {
+    expect.assertions(2);
+  });
 });
 ```
 
