@@ -103,6 +103,7 @@ let parseFromStdin =
     };
   try (
     {
+      Stylish.setGlobalTerminalColorsEnabled(true);
       line_stream_of_channel(stdin) |> Stream.iter(forEachLine);
       /* might have accumulated a few more lines */
       if (reverseErrBuffer.contents !== []) {

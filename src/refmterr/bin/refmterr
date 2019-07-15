@@ -12,6 +12,8 @@ SOURCE="$(readlink "$SOURCE")"
 done
 SCRIPTDIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 # exec "$@" 2>&1 |
-#
+
+# To support OCaml 4.08
+export OCAML_ERROR_STYLE="short"
 ("$@") 2>&1 | ${SCRIPTDIR}/berror.exe --path-to-refmttype refmttype
 
