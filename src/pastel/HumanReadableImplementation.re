@@ -14,6 +14,7 @@ module HumanReadableLexer =
 
 let length = HumanReadableLexer.length;
 let partition = HumanReadableLexer.partition;
+let partition2 = HumanReadableLexer.partition2;
 let unformattedText = HumanReadableLexer.unformattedText;
 
 let makeDecorator = name => {

@@ -90,6 +90,112 @@ module Make = (M: {
        )
     |> String.concat("");
 
+  type partitionAcc = {
+    activeIndex: int,
+    remainingIndices: list(int),
+    nonTextTokensSeen: list(token),
+    parsedText: list(list(token)),
+    charsSeen: int,
+    activeSection: list(token),
+    queue: list(token),
+  };
+
+  let partition2 = (indices, s) => {
+    let tokens = tokenize(s);
+
+    switch (indices) {
+    | [] => [s]
+    | [h, ...t] =>
+      let initialState = {
+        activeIndex: h,
+        remainingIndices: t,
+        nonTextTokensSeen: [],
+        parsedText: [],
+        charsSeen: 0,
+        activeSection: [],
+        queue: tokens,
+      };
+
+      let step = state =>
+        switch (state.queue) {
+        | [] => state
+        | [token, ...remainingQueue] =>
+          switch (token) {
+          | Starts(_)
+          | Stops(_) => {
+              ...state,
+              nonTextTokensSeen: [token, ...state.nonTextTokensSeen],
+              parsedText:
+                List.map(tokens => [token, ...tokens], state.parsedText),
+              activeSection: [token, ... state.activeSection],
+              queue: remainingQueue,
+            }
+          | Text(text) =>
+            if (state.charsSeen < state.activeIndex) {
+              let textLength = String.length(text);
+              if (state.charsSeen + textLength < state.activeIndex) {
+                {
+                  ...state,
+                  charsSeen: state.charsSeen + textLength,
+                  activeSection: [token, ...state.activeSection],
+                  queue: remainingQueue,
+                };
+              } else {
+                let numToTake = state.activeIndex - state.charsSeen;
+                let remaining = String.length(text) - numToTake;
+                let remainingText = String.sub(text, numToTake, remaining);
+                let firstPart = Text(String.sub(text, 0, numToTake));
+
+                switch (state.remainingIndices) {
+                | [] => {
+                    ...state,
+                    charsSeen: state.charsSeen + textLength,
+                    activeSection: [
+                      Text(remainingText),
+                      ...state.nonTextTokensSeen,
+                    ],
+                    parsedText: [
+                      [firstPart, ...state.activeSection],
+                      ...state.parsedText,
+                    ],
+                    queue: remainingQueue,
+                  }
+                | [h, ...t] => {
+                    ...state,
+                    charsSeen: state.charsSeen + numToTake,
+                    activeSection: state.nonTextTokensSeen,
+                    parsedText: [
+                      [firstPart, ...state.activeSection],
+                      ...state.parsedText,
+                    ],
+                    queue: [Text(remainingText), ...remainingQueue],
+                    activeIndex: h,
+                    remainingIndices: t,
+                  }
+                };
+              };
+            } else {
+              {
+                ...state,
+                activeSection: [token, ...state.activeSection],
+                queue: remainingQueue,
+              };
+            }
+          }
+        };
+
+      let state = ref(initialState);
+      while (state^.queue !== []) {
+        state := step(state^);
+      };
+      let parsedText = [state^.activeSection, ...state^.parsedText]
+      List.map(
+        tokens => tokensToStr(List.rev(tokens)),
+        List.rev(parsedText),
+      );
+    };
+  };
+
   /** everything before index is one string, everything else is the other */
   let partition = (index, s) => {
     let tokens = tokenize(s);

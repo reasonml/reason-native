@@ -119,6 +119,14 @@ module Make = (()) => {
     | Disabled => DisabledImplementation.partition(s)
     };
 
+  let partition2 = s => {
+    switch (mode^) {
+    | HumanReadable => HumanReadableImplementation.partition2(s)
+    | Terminal => TerminalImplementation.partition2(s)
+    | Disabled => TerminalImplementation.partition2(s)
+    };
+  };
+
   let unformattedText = s =>
     switch (mode^) {
     | HumanReadable => HumanReadableImplementation.unformattedText(s)
