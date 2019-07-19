@@ -162,3 +162,6 @@ module ANSIStylish: StylishSig = {
        )
     ++ stringSlice(~first=last, str);
 };
+
+let setGlobalTerminalColorsEnabled = b =>
+  Pastel.setMode(b ? Pastel.Terminal : Pastel.Disabled);

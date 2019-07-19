@@ -1,6 +1,6 @@
 {
   "name": "refmterr",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Reason Formatting of Errors",
   "dependencies": {
     "@opam/dune": "*",
@@ -12,12 +12,12 @@
     "@reason-native/console": "*"
   },
   "author": {
-    "name": "chenglou"
+    "name": "Reason team at Facebook"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0",
-    "@esy-ocaml/reason": "3.3.3"
+    "@opam/merlin": "*",
+    "ocaml": ">= 4.2.0 < 4.9.0",
+    "@esy-ocaml/reason": "^3.3.0"
   },
   "esy": {
     "build": "dune build -p refmterr",

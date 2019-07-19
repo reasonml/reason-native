@@ -20,9 +20,5 @@
     "ocaml": "^4.2.0",
     "@opam/re": "*",
     "@reason-native/pastel": "*"
-  },
-  "devDependencies": {
-    "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0"
   }
 }

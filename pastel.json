@@ -50,10 +50,5 @@
     "@esy-ocaml/reason": "*",
     "ocaml": "^4.2.0",
     "@opam/re": "*"
-  },
-  "devDependencies": {
-    "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0",
-    "@reason-native/rely": "*"
   }
 }
