@@ -72,6 +72,10 @@
         "title": "Basic API",
         "sidebar_label": "Basic API"
       },
+      "rely/expect": {
+        "title": "Expect",
+        "sidebar_label": "Expect"
+      },
       "rely/index": {
         "title": "Rely Introduction",
         "sidebar_label": "Introduction"

@@ -28,7 +28,7 @@ TestFramework.cli(); /* default config */
 
 ## Testing
 
-> For a full list of available matchers, visit the [Github Repository](https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers)
+> For a full list of available matchers, visit the [expect documentation](expect.md)
 
 ```reason
 /* MyFirstTest.re */
@@ -40,50 +40,7 @@ describe(
 
   /* test suite */
   test("basic matchers", ({expect}) => {
-    /* string type */
-    expect.string("a").not.toEqual("b");
-
-    /* file type */
-    expect.file("hello.txt").toEqual("Hello world!");
-
-    /* line type */
-    expect.lines(["a", "b"]).toEqual("a\nb");
-
-    /* bool type */
-    expect.bool(false).toBe(false);
-
-    /* int type */
     expect.int(1 + 1).toBe(2);
-
-    /* float type */
-    expect.float(0.1 +. 0.2).toBeCloseTo(2.0);
-
-    /* option types (as of Rely 2.1.0)*/
-    expect.option(None).toBeNone();
-    expect.option(Some(42)).toBeSome();
-    expect.option(Some("hello")).toBe(Some("hello"));
-
-    /* result types (as of Rely 2.2.0)*/
-    expect.result(Ok(42)).toBe(Ok(42));
-    expect.result(Error(42)).toBeError();
-    expect.result(Ok(42)).toBeOk();
-
-    /* fn type */
-    expect.fn(() => {2;}).not.toThrow();
-
-    /* list type */
-    expect.list([]).toBeEmpty();
-    expect.list([1,2,3]).not.toEqual([3,2,1]);
-
-    /* array type */
-    expect.array([|1, 2, 3|]).toContain(1);
-    expect.array([|1,2|]).toEqual([|1, 2|]);
-
-    /* polymorphic structural equality */
-    expect.equal(1,1);
-
-    /* polymorphic referential equality */
-    expect.not.same("hello", "hello");
   });
 
   test("mock functions", ({expect}) => {
