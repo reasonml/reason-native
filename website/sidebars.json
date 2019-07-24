@@ -9,9 +9,9 @@
       "rely/index",
       "rely/quickstart",
       "rely/api",
+      "rely/expect",
       "rely/setup-teardown",
-      "rely/advanced",
-      "rely/expect"
+      "rely/advanced"
     ],
     "Console": [
       "console/index",
