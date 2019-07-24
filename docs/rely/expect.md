@@ -65,7 +65,7 @@ describe("Array example", ({test}) => {
 });
 ```
 
-### `expect.array(list('a)).toContainEqual(~equals:('a, 'a) => bool=?, 'a)`
+### `expect.array(array('a)).toContainEqual(~equals:('a, 'a) => bool=?, 'a)`
 
 Use `expect.array(actual).toContainEqual(~equals=?, expected)` when you want to check that an item is in an array. For testing items in the array, this uses `==` a structural equality check.
 
@@ -878,7 +878,7 @@ let expect: {
 };
 ```
 
-### `expect.mock(mock).lastCalledWith(`args)`
+### `expect.mock(mock).lastCalledWith('args)`
 
 Use `expect.mock(mock).lastCalledWith(args)` to test what arguments a mock function was last called with.
 
@@ -898,7 +898,7 @@ describe("Mock matchers", ({test}) => {
 });
 ```
 
-### `expect.mock(mock).lastReturnedWith(`ret)`
+### `expect.mock(mock).lastReturnedWith('ret)`
 
 Use `expect.mock(mock).lastCalledWith(args)` to test what arguments a mock function was last called with.
 
