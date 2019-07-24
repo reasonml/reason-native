@@ -1,3 +1,9 @@
+# July 23, 2019
+### Rely 3.1.0
+* Add matchers for ensuring that a particular number of assertions have run (useful for testing assertions inside of callbacks)
+  - expect.assertions(int) verifies a specific number of (non expect.assertions/hasAssertions) assertions have been called
+  - expect.hasAssertions matchers verifies at least one (non expect.assertions/hasAssertions) assertion has been called
+
 # July 2, 2019
 ### Rely 3.0.0
 * Added functions for performing setup and teardown operations
