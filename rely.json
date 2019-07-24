@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/rely",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "A native Reason test runner that is heavily inspired by Jest",
   "repository": {
     "type": "git",
