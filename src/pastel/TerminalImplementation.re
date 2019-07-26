@@ -23,6 +23,7 @@ module TerminalLexer =
 
 let length = TerminalLexer.length;
 let partition = TerminalLexer.partition;
+let partition2 = TerminalLexer.partition2;
 let unformattedText = TerminalLexer.unformattedText;
 
 let rec reduceTokens = (style: Ansi.style, str, tokens) =>

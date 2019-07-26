@@ -69,6 +69,7 @@ type modifier = {
 
 let length: string => int;
 let partition: (int, string) => (string, string);
+let partition2: (list(int), string) => list(string);
 let unformattedText: string => string;
 
 let modifier: modifier;
