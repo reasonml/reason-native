@@ -11,4 +11,5 @@ include ColorName;
 module ColorName = ColorName;
 
 module Make = PastelFactory.Make;
+module States = States;
 include PastelFactory.Make({});

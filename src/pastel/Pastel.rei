@@ -7,6 +7,7 @@
 
 module Make: () => PastelSig.PastelSig;
 module ColorName = ColorName;
+module States = States;
 
 type mode =
   | Terminal

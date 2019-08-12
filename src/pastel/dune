@@ -2,7 +2,7 @@
 (library
    (name Pastel)
    (public_name pastel.lib)
-   (libraries re unix)
+   (libraries re unix console.lib)
    (c_names winCygPtySupport winConsoleColorsSupport)
    (js_of_ocaml
      (flags (--pretty))
