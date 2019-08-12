@@ -171,6 +171,14 @@ let printState = state => {
     "\n",
     [
       "{",
+      "\tfg: " ++ formatProperty(state.foreground, color => {
+        switch(color) {
+        | Default => "Default"
+        | Red => "Red"
+        | Green => "Green"
+        | _ => "no special formatting yet"
+        }
+      }),
       "\tdim: " ++
       formatProperty(state.dim, v =>
         switch (v) {
@@ -227,6 +235,42 @@ let diffStates: (state, state) => stateDiff =
         StrikethroughOff,
       ),
   };
+
+let resolveApplication = (optProp1, optProp2, removeProp) => {
+  switch (optProp1, optProp2) {
+  | (a, b) when a == b => optProp2
+  | (None, None) => None
+  | (_, Some(b)) => optProp2
+  | (Some(a), None) => optProp1
+  };
+};
+
+let overlayState = (baseState, toApply) => {
+  {
+    foreground:
+      resolveApplication(baseState.foreground, toApply.foreground, Default),
+    background:
+      resolveApplication(baseState.background, toApply.background, Default),
+    bold: resolveApplication(baseState.bold, toApply.bold, BoldOff),
+    dim: resolveApplication(baseState.dim, toApply.dim, DimOff),
+    italic: resolveApplication(baseState.italic, toApply.italic, ItalicOff),
+    underline:
+      resolveApplication(
+        baseState.underline,
+        toApply.underline,
+        UnderlineOff,
+      ),
+    inverse:
+      resolveApplication(baseState.inverse, toApply.inverse, InverseOff),
+    hidden: resolveApplication(baseState.hidden, toApply.hidden, HiddenOff),
+    strikethrough:
+      resolveApplication(
+        baseState.strikethrough,
+        toApply.strikethrough,
+        StrikethroughOff,
+      ),
+  };
+}
 
 let applyCode = (modifier, s) => String.concat("", [modifier, s]);
 
@@ -384,8 +428,6 @@ let startTokenToInstructions = s => {
   List.map(
     token =>
       switch (token) {
-      | token when token == Ansi.color.stop => Foreground(Default)
-      | token when token == Ansi.color.stop => Foreground(Default)
       | token when token == Ansi.color.blue.start => Foreground(Blue)
       | token when token == Ansi.color.black.start => Foreground(Black)
       | token when token == Ansi.color.red.start => Foreground(Red)
@@ -411,7 +453,6 @@ let startTokenToInstructions = s => {
         Foreground(BrightCyan)
       | token when token == Ansi.color.whiteBright.start =>
         Foreground(BrightWhite)
-      | token when token == Ansi.bg.stop => Background(Default)
       | token when token == Ansi.bg.blue.start => Background(Blue)
       | token when token == Ansi.bg.black.start => Background(Black)
       | token when token == Ansi.bg.red.start => Background(Red)
@@ -575,10 +616,10 @@ let createElement =
             );
           (acc, state);
         },
-      ([], init),
+      ([], initialState),
       childTokens,
     );
-  let finalStateRegions =
-    List.rev([(initialState, ""), (finalState, ""), ...stateRegions]);
-  resolveStateRegions(finalStateRegions);
+  let childStateRegions = ([(finalState, ""), ...stateRegions]);
+  let finalStateRegions = List.map(((s, text)) => (overlayState(state, s), text), childStateRegions);
+  resolveStateRegions(List.rev([(initialState, ""), ...finalStateRegions]));
 };
