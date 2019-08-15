@@ -85,7 +85,7 @@ let type_IncompatibleType = (err, _, range) => {
        real-time regex visualization today. */
     {|This (expression has type|pattern matches values of type)([\s\S]*?)|}
     ++ {|but (an expression was expected of type|a pattern was expected which matches values of type)([\s\S]*?)|}
-    ++ {|(Type\b([\s\S]*?))?|}
+    ++ {|(\s*\s\sType\b([\s\S]*?))?|}
     ++ {|(The type constructor([\s\S])*?would escape its scope)?|}
     ++ {|(The type variable[\s\S]*occurs inside([\s\S])*)?$|};
   let extraRaw = get_match_n_maybe(5, allR, err);

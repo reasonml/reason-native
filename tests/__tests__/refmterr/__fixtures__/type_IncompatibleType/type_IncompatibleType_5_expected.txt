@@ -9,7 +9,7 @@
 
 [2m14 ┆ [22m[2mend[22m
 [2m15 ┆ [22m
-[2m16 ┆ [22m[35m[2mlet[22m[39m[2m asd: [22m[34m[2mPettyModule[22m[39m[2m.[22m[34m[2mNested[22m[39m[2m.weAreStrings =[22m
+[2m16 ┆ [22m[35m[2mlet[22m[39m[2m asd: [22m[34m[2mPettyModule[22m[39m[2m.[22m[34m[2mNested[22m[39m[2m.weAreStringsType =[22m
 [31m[2m17 ┆ [22m[39m[2m  ([[[22m[31m[1m[4m{nihao = 1}[24m[22m[39m[2m]]: [22m[34m[2mTopNotchModule[22m[39m[2m.myRecordListList)[22m
 
 
@@ -19,7 +19,7 @@
 [2m# [22m[2mError: This expression has type[22m
 [2m# [22m[2m         TopNotchModule.myRecordListList = TopNotchModule.myRecordList list[22m
 [2m# [22m[2m       but an expression was expected of type[22m
-[2m# [22m[2m         PettyModule.Nested.weAreStrings = PettyModule.youAreAString list[22m
+[2m# [22m[2m         PettyModule.Nested.weAreStringsType = PettyModule.youAreAString list[22m
 [2m# [22m[2m       Type TopNotchModule.myRecordList = TopNotchModule.myRecord list[22m
 [2m# [22m[2m       is not compatible with type PettyModule.youAreAString = string [22m
 
@@ -28,7 +28,7 @@
 
 [2m14 ┆ [22m[2mend[22m
 [2m15 ┆ [22m
-[2m16 ┆ [22m[35m[2mlet[22m[39m[2m asd: [22m[34m[2mPettyModule[22m[39m[2m.[22m[34m[2mNested[22m[39m[2m.weAreStrings =[22m
+[2m16 ┆ [22m[35m[2mlet[22m[39m[2m asd: [22m[34m[2mPettyModule[22m[39m[2m.[22m[34m[2mNested[22m[39m[2m.weAreStringsType =[22m
 [31m[2m17 ┆ [22m[39m[2m  [22m[31m[1m[4m([[{nihao = 1}]]: TopNotchModule.myRecordListList)[24m[22m[39m
 
 [1mThis type doesn't match what is expected.[22m
@@ -39,7 +39,7 @@
     [22m[31mlist([39m[31m[1mTopNotchModule.myRecordList[22m[39m[31m)[39m
 
   Expecting:
-    [32m[1mPettyModule.Nested.weAreStrings[22m[39m[2m
+    [32m[1mPettyModule.Nested.weAreStringsType[22m[39m[2m
     Equals
     [22m[32mlist([39m[32m[1mPettyModule.youAreAString[22m[39m[32m)[39m
 

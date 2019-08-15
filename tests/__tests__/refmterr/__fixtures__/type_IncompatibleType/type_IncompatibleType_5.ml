@@ -2,7 +2,7 @@ module PettyModule = struct
   type youAreAString = string
 
   module Nested = struct
-    type weAreStrings = youAreAString list
+    type weAreStringsType = youAreAString list
   end
 end
 
@@ -13,5 +13,5 @@ module TopNotchModule = struct
   type myRecordListList = myRecordList list
 end
 
-let asd: PettyModule.Nested.weAreStrings =
+let asd: PettyModule.Nested.weAreStringsType =
   ([[{nihao = 1}]]: TopNotchModule.myRecordListList)
