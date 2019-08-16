@@ -1,4 +1,4 @@
-open TestFramework;
+/* open TestFramework;
 open Pastel.States;
 
 describeOnly("pastel states", ({test, testSkip}) => {
@@ -55,7 +55,7 @@ describeOnly("pastel states", ({test, testSkip}) => {
     expect.bool(true).toBeTrue();
   });
   test("play with state regions 2", ({expect}) => {
-    module ToUse = Pastel.States;
+    module ToUse = Pastel;
     Console.log(<ToUse color=Red>"hello"</ToUse>);
     let input =
       <ToUse dim=true color=Red>
@@ -79,7 +79,7 @@ describeOnly("pastel states", ({test, testSkip}) => {
     Console.log(String.escaped(input));
     Console.log(<Pastel bold=true> "some text" <Pastel bold=false> "unbolded?" </Pastel></Pastel>);
 
-    let problem = <Pastel bold = true> "Some text" <Pastel bold=false> "unbolded" </Pastel> "should be bold"</Pastel>;
+    /* let problem = <Pastel bold = true> "Some text" <Pastel bold=false> "unbolded" </Pastel> "should be bold"</Pastel>; */
     expect.bool(true).toBeTrue();
   });
-});
+}); */

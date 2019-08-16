@@ -213,6 +213,31 @@ module Make = (()) => {
     | WhiteBright => color.whiteBright
     };
 
+  let colorNameToColor: option(colorName) => option(Token.color) = (color) => switch (color) {
+    | None => None
+    | Some(c) =>
+      Some(
+        switch (c) {
+        | Black => Black
+        | Red => Red
+        | Green => Green
+        | Yellow => Yellow
+        | Blue => Blue
+        | Magenta => Magenta
+        | Cyan => Cyan
+        | White => White
+        | BlackBright => BrightBlack
+        | RedBright => BrightRed
+        | GreenBright => BrightGreen
+        | YellowBright => BrightYellow
+        | BlueBright => BrightBlue
+        | MagentaBright => BrightMagenta
+        | CyanBright => BrightCyan
+        | WhiteBright => BrightWhite
+        },
+      )
+    };
+
   let createElement =
       (
         ~reset: bool=false,
@@ -228,29 +253,50 @@ module Make = (()) => {
         ~children: list(string),
         (),
       ) => {
-    let pastels =
-      switch (color) {
-      | None => []
-      | Some(colorName) => [colorNameToForeground(colorName)]
-      };
-    let pastels =
-      switch (backgroundColor) {
-      | None => pastels
-      | Some(colorName) => [colorNameToBackground(colorName), ...pastels]
-      };
-    let pastels = bold ? [modifier.bold, ...pastels] : pastels;
-    let pastels = dim ? [modifier.dim, ...pastels] : pastels;
-    let pastels = italic ? [modifier.italic, ...pastels] : pastels;
-    let pastels = underline ? [modifier.underline, ...pastels] : pastels;
-    let pastels = inverse ? [modifier.inverse, ...pastels] : pastels;
-    let pastels = hidden ? [modifier.hidden, ...pastels] : pastels;
-    let pastels =
-      strikethrough ? [modifier.strikethrough, ...pastels] : pastels;
-    let childrenStr = String.concat("", children);
-    List.fold_left(
-      (curText, nextDecorataor) => nextDecorataor(curText),
-      childrenStr,
-      pastels,
-    );
+    switch (mode^) {
+    | Terminal =>
+      let color = colorNameToColor(color);
+      let backgroundColor = colorNameToColor(backgroundColor);
+
+      TerminalImplementation.TerminalStateMachine.fromString(
+        ~reset,
+        ~bold,
+        ~dim,
+        ~italic,
+        ~underline,
+        ~inverse,
+        ~hidden,
+        ~strikethrough,
+        ~color?,
+        ~backgroundColor?,
+        ~children,
+        ()
+      );
+    | _ =>
+      let pastels =
+        switch (color) {
+        | None => []
+        | Some(colorName) => [colorNameToForeground(colorName)]
+        };
+      let pastels =
+        switch (backgroundColor) {
+        | None => pastels
+        | Some(colorName) => [colorNameToBackground(colorName), ...pastels]
+        };
+      let pastels = bold ? [modifier.bold, ...pastels] : pastels;
+      let pastels = dim ? [modifier.dim, ...pastels] : pastels;
+      let pastels = italic ? [modifier.italic, ...pastels] : pastels;
+      let pastels = underline ? [modifier.underline, ...pastels] : pastels;
+      let pastels = inverse ? [modifier.inverse, ...pastels] : pastels;
+      let pastels = hidden ? [modifier.hidden, ...pastels] : pastels;
+      let pastels =
+        strikethrough ? [modifier.strikethrough, ...pastels] : pastels;
+      let childrenStr = String.concat("", children);
+      List.fold_left(
+        (curText, nextDecorataor) => nextDecorataor(curText),
+        childrenStr,
+        pastels,
+      );
+    };
   };
 };

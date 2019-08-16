@@ -70,3 +70,11 @@ let bg: color = {
   cyanBright: makeDecorator("cyanBright"),
   whiteBright: makeDecorator("whiteBright"),
 };
+
+/* module HumanReadableStateMachine = StateMachine.Make({
+  let tokenize = HumanReadableLexer.tokenize;
+  let startTokensToInstructions = starts => [];
+  let stopTokensToInstructions = stops => [];
+  let applyModifier = (modifier, s) => String.concat("", [modifier, s]);
+  let applyStateDiff = (a, s) => s;
+}) */
