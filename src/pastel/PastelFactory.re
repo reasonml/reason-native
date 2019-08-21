@@ -19,24 +19,15 @@ module Make = (()) => {
 
   let defaultMode = inferMode(Unix.stdin);
   let mode = ref(defaultMode);
-  let modifierInternal = ref(TerminalImplementation.modifier);
-  let colorInternal = ref(TerminalImplementation.color);
-  let bgInternal = ref(TerminalImplementation.bg);
-
+  let selectedImplementation = ref(TerminalImplementation.implementation);
   let setMode = m => {
     switch (m) {
     | Terminal =>
-      modifierInternal := TerminalImplementation.modifier;
-      colorInternal := TerminalImplementation.color;
-      bgInternal := TerminalImplementation.bg;
+      selectedImplementation := TerminalImplementation.implementation
     | Disabled =>
-      modifierInternal := DisabledImplementation.modifier;
-      colorInternal := DisabledImplementation.color;
-      bgInternal := DisabledImplementation.bg;
+      selectedImplementation := DisabledImplementation.implementation
     | HumanReadable =>
-      modifierInternal := HumanReadableImplementation.modifier;
-      colorInternal := HumanReadableImplementation.color;
-      bgInternal := HumanReadableImplementation.bg;
+      selectedImplementation := HumanReadableImplementation.implementation
     };
     mode := m;
   };
@@ -59,72 +50,57 @@ module Make = (()) => {
   };
 
   let modifier: modifier = {
-    bold: s => modifierInternal^.bold(s),
-    dim: s => modifierInternal^.dim(s),
-    italic: s => modifierInternal^.italic(s),
-    underline: s => modifierInternal^.underline(s),
-    inverse: s => modifierInternal^.inverse(s),
-    hidden: s => modifierInternal^.hidden(s),
-    strikethrough: s => modifierInternal^.strikethrough(s),
+    bold: s => selectedImplementation^.modifier.bold(s),
+    dim: s => selectedImplementation^.modifier.dim(s),
+    italic: s => selectedImplementation^.modifier.italic(s),
+    underline: s => selectedImplementation^.modifier.underline(s),
+    inverse: s => selectedImplementation^.modifier.inverse(s),
+    hidden: s => selectedImplementation^.modifier.hidden(s),
+    strikethrough: s => selectedImplementation^.modifier.strikethrough(s),
   };
 
   let color = {
-    black: s => colorInternal^.black(s),
-    red: s => colorInternal^.red(s),
-    green: s => colorInternal^.green(s),
-    yellow: s => colorInternal^.yellow(s),
-    blue: s => colorInternal^.blue(s),
-    magenta: s => colorInternal^.magenta(s),
-    cyan: s => colorInternal^.cyan(s),
-    white: s => colorInternal^.white(s),
-    blackBright: s => colorInternal^.blackBright(s),
-    redBright: s => colorInternal^.redBright(s),
-    greenBright: s => colorInternal^.greenBright(s),
-    yellowBright: s => colorInternal^.yellowBright(s),
-    blueBright: s => colorInternal^.blueBright(s),
-    magentaBright: s => colorInternal^.magentaBright(s),
-    cyanBright: s => colorInternal^.cyanBright(s),
-    whiteBright: s => colorInternal^.whiteBright(s),
+    black: s => selectedImplementation^.color.black(s),
+    red: s => selectedImplementation^.color.red(s),
+    green: s => selectedImplementation^.color.green(s),
+    yellow: s => selectedImplementation^.color.yellow(s),
+    blue: s => selectedImplementation^.color.blue(s),
+    magenta: s => selectedImplementation^.color.magenta(s),
+    cyan: s => selectedImplementation^.color.cyan(s),
+    white: s => selectedImplementation^.color.white(s),
+    blackBright: s => selectedImplementation^.color.blackBright(s),
+    redBright: s => selectedImplementation^.color.redBright(s),
+    greenBright: s => selectedImplementation^.color.greenBright(s),
+    yellowBright: s => selectedImplementation^.color.yellowBright(s),
+    blueBright: s => selectedImplementation^.color.blueBright(s),
+    magentaBright: s => selectedImplementation^.color.magentaBright(s),
+    cyanBright: s => selectedImplementation^.color.cyanBright(s),
+    whiteBright: s => selectedImplementation^.color.whiteBright(s),
   };
   let bg = {
-    black: s => bgInternal^.black(s),
-    red: s => bgInternal^.red(s),
-    green: s => bgInternal^.green(s),
-    yellow: s => bgInternal^.yellow(s),
-    blue: s => bgInternal^.blue(s),
-    magenta: s => bgInternal^.magenta(s),
-    cyan: s => bgInternal^.cyan(s),
-    white: s => bgInternal^.white(s),
-    blackBright: s => bgInternal^.blackBright(s),
-    redBright: s => bgInternal^.redBright(s),
-    greenBright: s => bgInternal^.greenBright(s),
-    yellowBright: s => bgInternal^.yellowBright(s),
-    blueBright: s => bgInternal^.blueBright(s),
-    magentaBright: s => bgInternal^.magentaBright(s),
-    cyanBright: s => bgInternal^.cyanBright(s),
-    whiteBright: s => bgInternal^.whiteBright(s),
+    black: s => selectedImplementation^.bg.black(s),
+    red: s => selectedImplementation^.bg.red(s),
+    green: s => selectedImplementation^.bg.green(s),
+    yellow: s => selectedImplementation^.bg.yellow(s),
+    blue: s => selectedImplementation^.bg.blue(s),
+    magenta: s => selectedImplementation^.bg.magenta(s),
+    cyan: s => selectedImplementation^.bg.cyan(s),
+    white: s => selectedImplementation^.bg.white(s),
+    blackBright: s => selectedImplementation^.bg.blackBright(s),
+    redBright: s => selectedImplementation^.bg.redBright(s),
+    greenBright: s => selectedImplementation^.bg.greenBright(s),
+    yellowBright: s => selectedImplementation^.bg.yellowBright(s),
+    blueBright: s => selectedImplementation^.bg.blueBright(s),
+    magentaBright: s => selectedImplementation^.bg.magentaBright(s),
+    cyanBright: s => selectedImplementation^.bg.cyanBright(s),
+    whiteBright: s => selectedImplementation^.bg.whiteBright(s),
   };
 
-  let length = s =>
-    switch (mode^) {
-    | HumanReadable => HumanReadableImplementation.length(s)
-    | Terminal => TerminalImplementation.length(s)
-    | Disabled => DisabledImplementation.length(s)
-    };
+  let length = s => selectedImplementation^.length(s);
 
-  let partition = s =>
-    switch (mode^) {
-    | HumanReadable => HumanReadableImplementation.partition(s)
-    | Terminal => TerminalImplementation.partition(s)
-    | Disabled => DisabledImplementation.partition(s)
-    };
+  let partition = s => selectedImplementation^.partition(s);
 
-  let unformattedText = s =>
-    switch (mode^) {
-    | HumanReadable => HumanReadableImplementation.unformattedText(s)
-    | Terminal => TerminalImplementation.unformattedText(s)
-    | Disabled => DisabledImplementation.unformattedText(s)
-    };
+  let unformattedText = s => selectedImplementation^.unformattedText(s);
 
   let bold = modifier.bold;
 
@@ -172,85 +148,188 @@ module Make = (()) => {
 
   let whiteBright = color.whiteBright;
 
-  let colorNameToBackground = n =>
-    switch (n) {
-    | Black => bg.black
-    | Red => bg.red
-    | Green => bg.green
-    | Yellow => bg.yellow
-    | Blue => bg.blue
-    | Magenta => bg.magenta
-    | Cyan => bg.cyan
-    | White => bg.white
-    | BlackBright => bg.blackBright
-    | RedBright => bg.redBright
-    | GreenBright => bg.greenBright
-    | YellowBright => bg.yellowBright
-    | BlueBright => bg.blueBright
-    | MagentaBright => bg.magentaBright
-    | CyanBright => bg.cyanBright
-    | WhiteBright => bg.whiteBright
-    };
-
-  let colorNameToForeground = n =>
-    switch (n) {
-    | Black => color.black
-    | Red => color.red
-    | Green => color.green
-    | Yellow => color.yellow
-    | Blue => color.blue
-    | Magenta => color.magenta
-    | Cyan => color.cyan
-    | White => color.white
-    /* This color is missing for foreground. */
-    | BlackBright => color.blackBright
-    | RedBright => color.redBright
-    | GreenBright => color.greenBright
-    | YellowBright => color.yellowBright
-    | BlueBright => color.blueBright
-    | MagentaBright => color.magentaBright
-    | CyanBright => color.cyanBright
-    | WhiteBright => color.whiteBright
-    };
-
   let createElement =
       (
-        ~reset: bool=false,
-        ~bold: bool=false,
-        ~dim: bool=false,
-        ~italic: bool=false,
-        ~underline: bool=false,
-        ~inverse: bool=false,
-        ~hidden: bool=false,
-        ~strikethrough: bool=false,
+        ~reset: option(bool)=?,
+        ~bold: option(bool)=?,
+        ~dim: option(bool)=?,
+        ~italic: option(bool)=?,
+        ~underline: option(bool)=?,
+        ~inverse: option(bool)=?,
+        ~hidden: option(bool)=?,
+        ~strikethrough: option(bool)=?,
         ~color: option(colorName)=?,
         ~backgroundColor: option(colorName)=?,
         ~children: list(string),
         (),
       ) => {
-    let pastels =
-      switch (color) {
-      | None => []
-      | Some(colorName) => [colorNameToForeground(colorName)]
-      };
-    let pastels =
-      switch (backgroundColor) {
-      | None => pastels
-      | Some(colorName) => [colorNameToBackground(colorName), ...pastels]
-      };
-    let pastels = bold ? [modifier.bold, ...pastels] : pastels;
-    let pastels = dim ? [modifier.dim, ...pastels] : pastels;
-    let pastels = italic ? [modifier.italic, ...pastels] : pastels;
-    let pastels = underline ? [modifier.underline, ...pastels] : pastels;
-    let pastels = inverse ? [modifier.inverse, ...pastels] : pastels;
-    let pastels = hidden ? [modifier.hidden, ...pastels] : pastels;
-    let pastels =
-      strikethrough ? [modifier.strikethrough, ...pastels] : pastels;
-    let childrenStr = String.concat("", children);
-    List.fold_left(
-      (curText, nextDecorataor) => nextDecorataor(curText),
-      childrenStr,
-      pastels,
+    selectedImplementation^.createElement(
+      ~reset?,
+      ~bold?,
+      ~dim?,
+      ~italic?,
+      ~underline?,
+      ~inverse?,
+      ~hidden?,
+      ~strikethrough?,
+      ~color?,
+      ~backgroundColor?,
+      ~children,
+      (),
     );
   };
+
+  type style = StateMachine.state;
+  let withColor = (color, style: StateMachine.state) => {
+    ...style,
+    foreground: Some(PastelUtils.colorNameToColor(color)),
+  };
+  let resetColor: style => style = style => {...style, foreground: None};
+  let withBackgroundColor = (color, style: StateMachine.state) => {
+    ...style,
+    background: Some(PastelUtils.colorNameToColor(color)),
+  };
+  let resetBackgroundColor: style => style =
+    style => {...style, background: None};
+
+  let setBold: (bool, style) => style =
+    (bold, style) => {...style, bold: Some(bold ? Bold : BoldOff)};
+  let withBold = setBold(true);
+  let setDim: (bool, style) => style =
+    (dim, style) => {...style, dim: Some(dim ? Dim : DimOff)};
+  let withDim = setDim(true);
+  let setItalic: (bool, style) => style =
+    (italic, style) => {
+      ...style,
+      italic: Some(italic ? Italic : ItalicOff),
+    };
+  let withItalic = setItalic(true);
+  let setUnderline: (bool, style) => style =
+    (underline, style) => {
+      ...style,
+      underline: Some(underline ? Underline : UnderlineOff),
+    };
+  let withUnderline = setUnderline(true);
+  let setInverse: (bool, style) => style =
+    (inverse, style) => {
+      ...style,
+      inverse: Some(inverse ? Inverse : InverseOff),
+    };
+  let withInverse = setInverse(true);
+  let setHidden: (bool, style) => style =
+    (hidden, style) => {
+      ...style,
+      hidden: Some(hidden ? Hidden : HiddenOff),
+    };
+  let withHidden = setHidden(true);
+  let setStrikethrough: (bool, style) => style =
+    (strikethrough, style) => {
+      ...style,
+      strikethrough: Some(strikethrough ? Strikethrough : StrikethroughOff),
+    };
+  let withStrikethrough = setStrikethrough(true);
+
+  let getColor: style => option(colorName) =
+    style =>
+      switch (style.foreground) {
+      | None => None
+      | Some(color) =>
+        switch (color) {
+        | Default => None
+        | Black => Some(Black)
+        | Red => Some(Red)
+        | Green => Some(Green)
+        | Yellow => Some(Yellow)
+        | Blue => Some(Blue)
+        | Magenta => Some(Magenta)
+        | Cyan => Some(Cyan)
+        | White => Some(White)
+        | BrightBlack => Some(BlackBright)
+        | BrightRed => Some(RedBright)
+        | BrightGreen => Some(GreenBright)
+        | BrightYellow => Some(YellowBright)
+        | BrightBlue => Some(BlueBright)
+        | BrightMagenta => Some(MagentaBright)
+        | BrightCyan => Some(CyanBright)
+        | BrightWhite => Some(WhiteBright)
+        }
+      };
+  let getBackgroundColor: style => option(colorName) =
+    style =>
+      switch (style.background) {
+      | None => None
+      | Some(color) =>
+        switch (color) {
+        | Default => None
+        | Black => Some(Black)
+        | Red => Some(Red)
+        | Green => Some(Green)
+        | Yellow => Some(Yellow)
+        | Blue => Some(Blue)
+        | Magenta => Some(Magenta)
+        | Cyan => Some(Cyan)
+        | White => Some(White)
+        | BrightBlack => Some(BlackBright)
+        | BrightRed => Some(RedBright)
+        | BrightGreen => Some(GreenBright)
+        | BrightYellow => Some(YellowBright)
+        | BrightBlue => Some(BlueBright)
+        | BrightMagenta => Some(MagentaBright)
+        | BrightCyan => Some(CyanBright)
+        | BrightWhite => Some(WhiteBright)
+        }
+      };
+
+  let isBold: style => bool =
+    style =>
+      switch (style.bold) {
+      | Some(Bold) => true
+      | _ => false
+      };
+
+  let isDim: style => bool =
+    style =>
+      switch (style.dim) {
+      | Some(Dim) => true
+      | _ => false
+      };
+
+  let isItalic: style => bool =
+    style =>
+      switch (style.italic) {
+      | Some(Italic) => true
+      | _ => false
+      };
+
+  let isUnderline: style => bool =
+    style =>
+      switch (style.underline) {
+      | Some(Underline) => true
+      | _ => false
+      };
+
+  let isInverse: style => bool =
+    style =>
+      switch (style.inverse) {
+      | Some(Inverse) => true
+      | _ => false
+      };
+
+  let isHidden: style => bool =
+    style =>
+      switch (style.hidden) {
+      | Some(Hidden) => true
+      | _ => false
+      };
+
+  let isStrikethrough: style => bool =
+    style =>
+      switch (style.strikethrough) {
+      | Some(Strikethrough) => true
+      | _ => false
+      };
+
+  let emptyStyle = StateMachine.initialState;
+  let parse = s => selectedImplementation^.parse(s);
+  let apply = parts => selectedImplementation^.apply(parts);
 };

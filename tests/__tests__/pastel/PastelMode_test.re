@@ -6,7 +6,7 @@ describe("Pastel modes", ({test}) => {
       Pastel.Make({});
     Pastel.setMode(HumanReadable);
     let output = <Pastel color=Red> "Hello" </Pastel>;
-    expect.string(output).toEqual("<red>Hello</red>");
+    expect.string(output).toEqual("<red>Hello</resetColor>");
     Pastel.setMode(Terminal);
     let output = <Pastel color=Red> "Hello" </Pastel>;
     expect.string(output).toEqual("\027[31mHello\027[39m");

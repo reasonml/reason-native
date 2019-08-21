@@ -71,3 +71,32 @@ let bg: color = {
   cyanBright: identityDecorator,
   whiteBright: identityDecorator,
 };
+
+let implementation: PastelImplementation.t = {
+  modifier,
+  color,
+  bg,
+  length,
+  unformattedText: identityDecorator,
+  partition,
+  createElement:
+    (
+      ~reset: option(bool)=?,
+      ~bold: option(bool)=?,
+      ~dim: option(bool)=?,
+      ~italic: option(bool)=?,
+      ~underline: option(bool)=?,
+      ~inverse: option(bool)=?,
+      ~hidden: option(bool)=?,
+      ~strikethrough: option(bool)=?,
+      ~color: option(ColorName.colorName)=?,
+      ~backgroundColor: option(ColorName.colorName)=?,
+      ~children: list(string),
+      (),
+    ) =>
+    String.concat("", children),
+  emptyStyle: StateMachine.initialState,
+  parse: s => [(StateMachine.initialState, s)],
+  apply: s =>
+    s |> List.map(((style, text)) => text) |> String.concat(""),
+};
