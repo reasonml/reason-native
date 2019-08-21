@@ -1,62 +1,62 @@
 Rely list matchers › toEqual › expect.list.not.toEqual failure output
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>expect.list.not.toEqual failure output</whiteBright>
-<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 empty list</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>expect.list.not.toEqual failure output</resetColor>
+<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 empty list</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).</dim>not<dim>.toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected value not to equal:
-      <green>[]</green>
+      <green>[]</resetColor>
     Received:
-      <red>[]</red>
+      <red>[]</resetColor>
 
-<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 int list</red></bold>
+<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 int list</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).</dim>not<dim>.toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected value not to equal:
-      <green>[1, 2]</green>
+      <green>[1, 2]</resetColor>
     Received:
-      <red>[1, 2]</red>
+      <red>[1, 2]</resetColor>
 
-<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 float list</red></bold>
+<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 float list</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).</dim>not<dim>.toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected value not to equal:
-      <green>[1., 2.]</green>
+      <green>[1., 2.]</resetColor>
     Received:
-      <red>[1., 2.]</red>
+      <red>[1., 2.]</resetColor>
 
-<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 string list</red></bold>
+<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 string list</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).</dim>not<dim>.toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected value not to equal:
-      <green>[\"bacon\", \"delicious\"]</green>
+      <green>[\"bacon\", \"delicious\"]</resetColor>
     Received:
-      <red>[\"bacon\", \"delicious\"]</red>
+      <red>[\"bacon\", \"delicious\"]</resetColor>
 
-<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 empty list</red></bold>
+<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 empty list</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).</dim>not<dim>.toEqual(</dim><green>expected</green><dim>)</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
     
     Expected value not to equal:
-      <green>[]</green>
+      <green>[]</resetColor>
     Received:
-      <red>[]</red>
+      <red>[]</resetColor>
 
-<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 within 42</red></bold>
+<bold><red>  \226\128\162 expect.list.not.toEqual failure output \226\128\186 within 42</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).</dim>not<dim>.toEqual(</dim><green>expected</green><dim>)</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
     
     Expected value not to equal:
-      <green>[41]</green>
+      <green>[41]</resetColor>
     Received:
-      <red>[1]</red>
+      <red>[1]</resetColor>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>6 failed</bold></red>, 0 passed, 6 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>6 failed</resetDimAndBold></resetColor>, 0 passed, 6 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

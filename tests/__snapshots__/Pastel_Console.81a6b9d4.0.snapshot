@@ -1,8 +1,8 @@
 Pastel Console › Primitive types
 ===== Standard Out =====
-<magenta>4.6</magenta>
+<magenta>4.6</resetColor>
 This is a string
-<cyan><dim>closure(<id-sanitized>)</dim></cyan>
+<dim><cyan>closure(<id-sanitized>)</resetDimAndBold></resetColor>
 ===== Standard Err =====
 
 ========================

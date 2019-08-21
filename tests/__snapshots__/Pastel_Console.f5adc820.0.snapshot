@@ -1,14 +1,18 @@
 Pastel Console › Lists
 ===== Standard Out =====
 [
-  <green>\"this\"</green>,
-  <green>\"is\"</green>,
-  <green>\"a\"</green>,
-  <green>\"list\"</green>,
-  <green>\"of\"</green>,
-  <red>@max-length</red>
+  <green>\"this\"</resetColor>,
+  <green>\"is\"</resetColor>,
+  <green>\"a\"</resetColor>,
+  <green>\"list\"</resetColor>,
+  <green>\"of\"</resetColor>,
+  <red>@max-length</resetColor>
 ]
-[<magenta>4.9</magenta>, <magenta>5.</magenta>, <magenta>999.99</magenta>]
+[
+  <magenta>4.9</resetColor>,
+  <magenta>5.</resetColor>,
+  <magenta>999.99</resetColor>
+]
 ===== Standard Err =====
 
 ========================

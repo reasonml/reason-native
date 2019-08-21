@@ -1,4 +1,4 @@
 mock matchers › failing output › expect.mock.toBeCalled
-<dim>expect.mock(</dim><red>mock</red><dim>).toBeCalled(</dim><green></green><dim>)</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).toBeCalled(</resetDimAndBold><dim>)</resetDimAndBold>
 
 Expected the mock to be called, but it was not called.

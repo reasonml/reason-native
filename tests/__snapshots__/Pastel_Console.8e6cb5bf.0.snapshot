@@ -3,11 +3,11 @@ Pastel Console › Max length
 
 ===== Standard Err =====
 [
-  <yellow>2</yellow>,
-  <yellow>3</yellow>,
-  <yellow>4</yellow>,
-  <yellow>5</yellow>,
-  <yellow>6</yellow>
+  <yellow>2</resetColor>,
+  <yellow>3</resetColor>,
+  <yellow>4</resetColor>,
+  <yellow>5</resetColor>,
+  <yellow>6</resetColor>
 ]
 ========================
 

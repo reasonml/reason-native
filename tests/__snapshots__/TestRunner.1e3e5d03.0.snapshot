@@ -1,116 +1,116 @@
 TestRunner › failing tests
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>failing tests</whiteBright>
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toBeEmpty</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>failing tests</resetColor>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toBeEmpty</resetDimAndBold></resetColor>
 
-    <dim>expect.string(</dim><red>received</red><dim>).toBeEmpty(</dim><green></green><dim>)</dim>
+    <dim>expect.string(</resetDimAndBold><red>received</resetColor><dim>).toBeEmpty(</resetDimAndBold><dim>)</resetDimAndBold>
     
-    Received: <red>\"foo\"</red>
+    Received: <red>\"foo\"</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.not.toBeEmpty</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.not.toBeEmpty</resetDimAndBold></resetColor>
 
-    <dim>expect.string(</dim><red>received</red><dim>).not.toBeEmpty(</dim><green></green><dim>)</dim>
+    <dim>expect.string(</resetDimAndBold><red>received</resetColor><dim>).not.toBeEmpty(</resetDimAndBold><dim>)</resetDimAndBold>
     
-    Expected value not to be empty, but received: <red>\"\"</red>
+    Expected value not to be empty, but received: <red>\"\"</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toEqual</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toEqual</resetDimAndBold></resetColor>
 
-    <dim>expect.string(</dim><red>received</red><dim>).toEqual(</dim><green>expected</green><dim>)</dim>
+    <dim>expect.string(</resetDimAndBold><red>received</resetColor><dim>).toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
     
     Expected value to equal:
-      <green>\"delicious\"</green>
+      <green>\"delicious\"</resetColor>
     Received:
-      <red>\"bacon\"</red>
+      <red>\"bacon\"</resetColor>
     
     Difference:
-      <red>bacon</red><green>delicious</green>
+      <red>bacon</resetColor><green>delicious</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.not.toEqual</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.not.toEqual</resetDimAndBold></resetColor>
 
-    <dim>expect.string(</dim><red>received</red><dim>).not.toEqual(</dim><green>expected</green><dim>)</dim>
+    <dim>expect.string(</resetDimAndBold><red>received</resetColor><dim>).not.toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
     
     Expected value to not equal:
-      <green>\"bacon\"</green>
+      <green>\"bacon\"</resetColor>
     Received:
-      <red>\"bacon\"</red>
+      <red>\"bacon\"</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toEqualFile</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toEqualFile</resetDimAndBold></resetColor>
 
-    Exception <dim>(Sys_error \"tests/testFiles/foo.txt: No such file or directory\")</dim>
+    Exception <dim>(Sys_error \"tests/testFiles/foo.txt: No such file or directory\")</resetDimAndBold>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.not.toEqualFile</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.not.toEqualFile</resetDimAndBold></resetColor>
 
-    Exception <dim>(Sys_error \"tests/testFiles/simple.txt: No such file or directory\")</dim>
+    Exception <dim>(Sys_error \"tests/testFiles/simple.txt: No such file or directory\")</resetDimAndBold>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.file.not.toEqualFile</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.file.not.toEqualFile</resetDimAndBold></resetColor>
 
-    Exception <dim>(Sys_error \"tests/testFiles/simple.txt: No such file or directory\")</dim>
+    Exception <dim>(Sys_error \"tests/testFiles/simple.txt: No such file or directory\")</resetDimAndBold>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.toBe(true)</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.toBe(true)</resetDimAndBold></resetColor>
 
-    <dim>expect.bool(</dim><red>received</red><dim>).toBe(</dim><green>expected</green><dim>)</dim>
+    <dim>expect.bool(</resetDimAndBold><red>received</resetColor><dim>).toBe(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
     
-    Expected: <green>true</green>
-    Received: <red>false</red>
+    Expected: <green>true</resetColor>
+    Received: <red>false</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.not.toBe(false)</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.not.toBe(false)</resetDimAndBold></resetColor>
 
-    <dim>expect.bool(</dim><red>received</red><dim>).</dim>not<dim>.toBe(</dim><green>expected</green><dim>)</dim>
+    <dim>expect.bool(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBe(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
     
-    Expected: <green>false</green>
-    Received: <red>false</red>
+    Expected: <green>false</resetColor>
+    Received: <red>false</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.toBeTrue</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.toBeTrue</resetDimAndBold></resetColor>
 
-    <dim>expect.bool(</dim><red>received</red><dim>).toBeTrue(</dim><green></green><dim>)</dim>
+    <dim>expect.bool(</resetDimAndBold><red>received</resetColor><dim>).toBeTrue(</resetDimAndBold><dim>)</resetDimAndBold>
     
-    Received: <red>false</red>
+    Received: <red>false</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.not.toBeTrue</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.not.toBeTrue</resetDimAndBold></resetColor>
 
-    <dim>expect.bool(</dim><red>received</red><dim>).</dim>not<dim>.toBeTrue(</dim><green></green><dim>)</dim>
+    <dim>expect.bool(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeTrue(</resetDimAndBold><dim>)</resetDimAndBold>
     
-    Received: <red>true</red>
+    Received: <red>true</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.toBeFalse</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.toBeFalse</resetDimAndBold></resetColor>
 
-    <dim>expect.bool(</dim><red>received</red><dim>).toBeFalse(</dim><green></green><dim>)</dim>
+    <dim>expect.bool(</resetDimAndBold><red>received</resetColor><dim>).toBeFalse(</resetDimAndBold><dim>)</resetDimAndBold>
     
-    Received: <red>true</red>
+    Received: <red>true</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.not.toBeFalse</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.bool.not.toBeFalse</resetDimAndBold></resetColor>
 
-    <dim>expect.bool(</dim><red>received</red><dim>).</dim>not<dim>.toBeFalse(</dim><green></green><dim>)</dim>
+    <dim>expect.bool(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeFalse(</resetDimAndBold><dim>)</resetDimAndBold>
     
-    Received: <red>false</red>
+    Received: <red>false</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.int.toBe</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.int.toBe</resetDimAndBold></resetColor>
 
-    <dim>expect.int(</dim><red>received</red><dim>).toBe(</dim><green>expected</green><dim>)</dim>
+    <dim>expect.int(</resetDimAndBold><red>received</resetColor><dim>).toBe(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
     
-    Expected: <green>43</green>
-    Received: <red>42</red>
+    Expected: <green>43</resetColor>
+    Received: <red>42</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot mismatch</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot mismatch</resetDimAndBold></resetColor>
 
-    <dim>expect.string(</dim><red>received</red><dim>).toMatchSnapshot(</dim><green>expected</green><dim>)</dim><dim>
+    <dim>expect.string(</resetDimAndBold><red>received</resetColor><dim>).toMatchSnapshot(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold><dim>
     
-    Inspect your code changes or run Rely with the -u flag to update snapshots.</dim>
+    Inspect your code changes or run Rely with the -u flag to update snapshots.</resetDimAndBold>
     
-    <green>- anything else</green>
-    <red>+ bacon3</red>
+    <green>- anything else</resetColor>
+    <red>+ bacon3</resetColor>
     
     Difference:
-      <red>bacon3</red><green>anything else</green>
+      <red>bacon3</resetColor><green>anything else</resetColor>
 
-<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot no snapshot exists</red></bold>
+<bold><red>  \226\128\162 failing tests \226\128\186 expect.string.toMatchSnapshot no snapshot exists</resetDimAndBold></resetColor>
 
-    New snapshot was <red>not written</red>. The update flag (-u) must be explicitly passed to write a new snapshot.
+    New snapshot was <red>not written</resetColor>. The update flag (-u) must be explicitly passed to write a new snapshot.
     
-    Received: <red>more bacon!</red>
+    Received: <red>more bacon!</resetColor>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>16 failed</bold></red>, 0 passed, 16 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>16 failed</resetDimAndBold></resetColor>, 0 passed, 16 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

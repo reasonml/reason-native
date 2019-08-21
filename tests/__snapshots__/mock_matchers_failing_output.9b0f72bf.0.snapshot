@@ -1,2 +1,2 @@
 mock matchers › failing output › expect.mock.nthCalledWith n = 0 should warn
-nth value <red>0</red> must be greater than zero
+nth value <red>0</resetColor> must be greater than zero

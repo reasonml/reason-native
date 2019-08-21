@@ -1,4 +1,4 @@
 result matchers › failing output › expect.result.toBeOk Error is Ok
-<dim>expect.result(</dim><red>received</red><dim>).toBeOk(</dim><green></green><dim>)</dim>
+<dim>expect.result(</resetDimAndBold><red>received</resetColor><dim>).toBeOk(</resetDimAndBold><dim>)</resetDimAndBold>
 
-Expected value to be Ok, but received: <red>Error(42)</red>
+Expected value to be Ok, but received: <red>Error(42)</resetColor>

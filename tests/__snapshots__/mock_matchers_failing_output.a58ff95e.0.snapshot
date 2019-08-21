@@ -1,6 +1,6 @@
 mock matchers › failing output › expect.mock.toThrowException no exception
-<dim>expect.mock(</dim><red>function</red><dim>).toThrowException(</dim><green>exception</green><dim>)</dim>
+<dim>expect.mock(</resetDimAndBold><red>function</resetColor><dim>).toThrowException(</resetDimAndBold><green>exception</resetColor><dim>)</resetDimAndBold>
 
 Expected the function to throw an error matching:
-  <green>Not_found</green>
+  <green>Not_found</resetColor>
 But it didn't throw anything.

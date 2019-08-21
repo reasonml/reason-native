@@ -1,9 +1,9 @@
 Pastel Console › List of closures
 ===== Standard Out =====
 [
-  <cyan><dim>closure(<id-sanitized>)</dim></cyan>,
-  <cyan><dim>closure(<id-sanitized>)</dim></cyan>,
-  <cyan><dim>closure(<id-sanitized>)</dim></cyan>
+  <dim><cyan>closure(<id-sanitized>)</resetDimAndBold></resetColor>,
+  <dim><cyan>closure(<id-sanitized>)</resetDimAndBold></resetColor>,
+  <dim><cyan>closure(<id-sanitized>)</resetDimAndBold></resetColor>
 ]
 ===== Standard Err =====
 

@@ -1,15 +1,15 @@
-[1m[2m# Unformatted Warning Output:[22m[22m
+[27m[24m[2m[1m# Unformatted Warning Output:[27m[24m[22m
 [2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/warning_PatternNotExhaustive/warning_PatternNotExhaustive_2.ml", line 8, characters 12-38:[22m
 [2m# [22m[2mWarning 8: this pattern-matching is not exhaustive.[22m
 
 
-[33m[1m[7m WARNING [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/warning_PatternNotExhaustive/warning_PatternNotExhaustive_2.ml[24m[39m[2m[4m:8:12-9:13[24m[22m [33m[1m [Warning Code 8] [22m[39m
+[7m[24m[22m[1m[33m WARNING [27m[24m[22m[39m [27m[4m[22m[36mtests/__tests__/refmterr/__fixtures__/warning_PatternNotExhaustive/warning_PatternNotExhaustive_2.ml[27m[24m[22m[39m[27m[4m[22m[2m:8:12-9:13[27m[24m[22m [27m[24m[22m[1m[33m [Warning Code 8] [27m[24m[22m[39m
 
-[2m5 ┆ [22m[2m  | [22m[34m[2mNihao[22m[39m[2m of [22m[33m[2mint[22m[39m
-[2m6 ┆ [22m[2m  | [22m[34m[2mLongAssGreetingInSomeSuperObscureLanguageIWannaHaveALineBreakHere[22m[39m
+[2m5 ┆ [22m[27m[24m[22m[2m  | [27m[24m[22m[27m[24m[22m[2m[34mNihao[27m[24m[22m[39m[27m[24m[22m[2m of [27m[24m[22m[27m[24m[22m[2m[33mint[27m[24m[22m[39m
+[2m6 ┆ [22m[27m[24m[22m[2m  | [27m[24m[22m[27m[24m[22m[2m[34mLongAssGreetingInSomeSuperObscureLanguageIWannaHaveALineBreakHere[27m[24m[22m[39m
 [2m7 ┆ [22m
-[31m[2m8 ┆ [22m[39m[35m[2mlet[22m[39m[2m say a = [22m[31m[1m[4mmatch a with[24m[22m[39m
-[31m[2m9 ┆ [22m[39m[31m[1m[4m| Hello -> ()[24m[22m[39m
+[27m[24m[22m[2m[31m8 ┆ [27m[24m[22m[39m[27m[24m[22m[2m[35mlet[27m[24m[22m[39m[27m[24m[22m[2m say a = [27m[24m[22m[27m[4m[22m[1m[31mmatch a with[27m[24m[22m[39m
+[27m[24m[22m[2m[31m9 ┆ [27m[24m[22m[39m[27m[4m[22m[1m[31m| Hello -> ()[27m[24m[22m[39m
 
 
 

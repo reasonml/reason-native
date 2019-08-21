@@ -1,4 +1,4 @@
-[1m[2m# Unformatted Error Output:[22m[22m
+[27m[24m[2m[1m# Unformatted Error Output:[27m[24m[22m
 [2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_2.ml", line 8, characters 24-62:[22m
 [2m# [22m[2mError: Signature mismatch:[22m
 [2m# [22m[2m       Modules do not match:[22m
@@ -13,27 +13,27 @@
 [2m# [22m[2m         Expected declaration[22m
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_2.ml[24m[39m[2m[4m:8:24-10:3[24m[22m 
+[7m[24m[22m[1m[31m ERROR [27m[24m[22m[39m [27m[4m[22m[36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_2.ml[27m[24m[22m[39m[27m[4m[22m[2m:8:24-10:3[27m[24m[22m 
 
-[2m 5 ┆ [22m[2m  val createElement2: [22m[33m[2mstring[22m[39m[2m -> unit[22m
-[2m 6 ┆ [22m[2mend[22m
+[2m 5 ┆ [22m[27m[24m[22m[2m  val createElement2: [27m[24m[22m[27m[24m[22m[2m[33mstring[27m[24m[22m[39m[27m[24m[22m[2m -> unit[27m[24m[22m
+[2m 6 ┆ [22m[27m[24m[22m[2mend[27m[24m[22m
 [2m 7 ┆ [22m
-[31m[2m 8 ┆ [22m[39m[35m[2mmodule[22m[39m[2m [22m[34m[2mMyModule[22m[39m[2m : [22m[34m[2mSig[22m[39m[2m = [22m[31m[1m[4mstruct[24m[22m[39m
-[31m[2m 9 ┆ [22m[39m  [31m[1m[4mlet createElement3 s = ()[24m[22m[39m
-[31m[2m10 ┆ [22m[39m[31m[1m[4mend[24m[22m[39m
+[27m[24m[22m[2m[31m 8 ┆ [27m[24m[22m[39m[27m[24m[22m[2m[35mmodule[27m[24m[22m[39m[27m[24m[22m[2m [27m[24m[22m[27m[24m[22m[2m[34mMyModule[27m[24m[22m[39m[27m[24m[22m[2m : [27m[24m[22m[27m[24m[22m[2m[34mSig[27m[24m[22m[39m[27m[24m[22m[2m = [27m[24m[22m[27m[4m[22m[1m[31mstruct[27m[24m[22m[39m
+[27m[24m[22m[2m[31m 9 ┆ [27m[24m[22m[39m  [27m[4m[22m[1m[31mlet createElement3 s = ()[27m[24m[22m[39m
+[27m[24m[22m[2m[31m10 ┆ [27m[24m[22m[39m[27m[4m[22m[1m[31mend[27m[24m[22m[39m
 
-[1mThis module is missing the value named[22m [31m[1mcreateElement[22m[39m
+[1mThis module is missing the value named[22m [27m[24m[22m[1m[31mcreateElement[27m[24m[22m[39m
 
   The following signature requires that [1mcreateElement[22m be defined:
-  [36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_2.ml[39m[2m:4[22m
+  [27m[24m[22m[36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_2.ml[27m[24m[22m[39m[2m:4[22m
 
-[1mThis module is missing the value named[22m [31m[1mcreateElement2[22m[39m
+[1mThis module is missing the value named[22m [27m[24m[22m[1m[31mcreateElement2[27m[24m[22m[39m
 
   The following signature requires that [1mcreateElement2[22m be defined:
-  [36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_2.ml[39m[2m:5[22m
+  [27m[24m[22m[36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_2.ml[27m[24m[22m[39m[2m:5[22m
 
 
-[35m[1mLearn:[22m[39m "Signatures" are interfaces that modules may implement.
+[27m[24m[22m[1m[35mLearn:[27m[24m[22m[39m "Signatures" are interfaces that modules may implement.
   You can indicate that a Reason file (.re) implements a signature by
   creating an "interface file" (.rei) of the same name.
   Modules nested inside of a Reason file may also opt into being checked

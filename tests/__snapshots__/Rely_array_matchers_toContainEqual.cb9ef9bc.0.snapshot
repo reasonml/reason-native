@@ -1,44 +1,44 @@
 Rely array matchers › toContainEqual › expect.array.not.toContainEqual failure output
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>expect.array.not.toContainEqual failure output</whiteBright>
-<bold><red>  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 integer contains</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>expect.array.not.toContainEqual failure output</resetColor>
+<bold><red>  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 integer contains</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).</dim>not<dim>.toContainEqual(</dim><green>value</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).</resetDimAndBold>not<dim>.toContainEqual(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected array:
-      <red>{1, 2, 3}</red>
+      <red>{1, 2, 3}</resetColor>
     Not to contain value: 
-      <green>1</green>
+      <green>1</resetColor>
 
-<bold><red>  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 string contains</red></bold>
+<bold><red>  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 string contains</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).</dim>not<dim>.toContainEqual(</dim><green>value</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).</resetDimAndBold>not<dim>.toContainEqual(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected array:
-      <red>{\"foo\", \"bar\"}</red>
+      <red>{\"foo\", \"bar\"}</resetColor>
     Not to contain value: 
-      <green>foo</green>
+      <green>foo</resetColor>
 
-<bold><red>  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 float comparsion</red></bold>
+<bold><red>  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 float comparsion</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).</dim>not<dim>.toContainEqual(</dim><green>value</green><dim>)</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).</resetDimAndBold>not<dim>.toContainEqual(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold>
     
     Expected array:
-      <red>[|1., 2.|]</red>
+      <red>[|1., 2.|]</resetColor>
     Not to contain value: 
-      <green>1.2</green>
+      <green>1.2</resetColor>
 
-<bold><red>  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 record comparison</red></bold>
+<bold><red>  \226\128\162 expect.array.not.toContainEqual failure output \226\128\186 record comparison</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).</dim>not<dim>.toContainEqual(</dim><green>value</green><dim>)</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).</resetDimAndBold>not<dim>.toContainEqual(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold>
     
     Expected array:
-      <red>{{\"Sally\", 42}, {\"Steve\", 37}}</red>
+      <red>{{\"Sally\", 42}, {\"Steve\", 37}}</resetColor>
     Not to contain value: 
-      <green>{\"Steve\", 37}</green>
+      <green>{\"Steve\", 37}</resetColor>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>4 failed</bold></red>, 0 passed, 4 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>4 failed</resetDimAndBold></resetColor>, 0 passed, 4 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

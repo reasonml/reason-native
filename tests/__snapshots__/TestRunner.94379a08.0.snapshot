@@ -1,8 +1,8 @@
 TestRunner › nested describes
 Running 1 test suite
-<green><bold><inverse> PASS </inverse></bold></green> <whiteBright>nested describes</whiteBright>
+<inverse><bold><green> PASS </inverse></resetDimAndBold></resetColor> <whiteBright>nested describes</resetColor>
 
-<whiteBright><bold>Test Suites: </bold></whiteBright>0 failed, <green><bold>1 passed</bold></green>, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright>0 failed, <green><bold>7 passed</bold></green>, 7 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor>0 failed, <bold><green>1 passed</resetDimAndBold></resetColor>, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor>0 failed, <bold><green>7 passed</resetDimAndBold></resetColor>, 7 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

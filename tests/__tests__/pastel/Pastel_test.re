@@ -7,24 +7,6 @@
 open TestFramework;
 
 describe("Pastel", ({describe, test}) => {
-  test(
-    "ANSI escape sequences should be applied inside pastels and persisted outside of them",
-    ({expect}) =>
-    Pastel.useMode(
-      Terminal,
-      () => {
-        let testCase =
-          <Pastel dim=true>
-            "oo"
-            <Pastel color=Green> "hello \027[4mworld!" </Pastel>
-            "unpasteled o_O"
-          </Pastel>
-          ++ " reset to prevent underlines on the rest of stdout \027[0m";
-        expect.string(testCase).toMatchSnapshot();
-      },
-    )
-  );
-
   let testMode = (mode, name) => {
     module PastelWithSpecifiedMode =
       Pastel.Make({});
@@ -116,20 +98,24 @@ describe("Pastel", ({describe, test}) => {
                 PastelWithSpecifiedMode.partition(45, input);
 
               expect.string(part1).toEqual(input);
-              expect.string(PastelWithSpecifiedMode.unformattedText(part2)).toBeEmpty();
+              expect.string(PastelWithSpecifiedMode.unformattedText(part2)).
+                toBeEmpty();
             });
-            test(
-              "index equal to length should return (s, '')", ({expect}) => {
+            test("index equal to length should return (s, '')", ({expect}) => {
               let input =
                 <PastelWithSpecifiedMode color=Green>
                   "Hello world"
                 </PastelWithSpecifiedMode>;
               ();
               let (part1, part2) =
-                PastelWithSpecifiedMode.partition(PastelWithSpecifiedMode.length(input), input);
+                PastelWithSpecifiedMode.partition(
+                  PastelWithSpecifiedMode.length(input),
+                  input,
+                );
 
               expect.string(part1).toEqual(input);
-              expect.string(PastelWithSpecifiedMode.unformattedText(part2)).toBeEmpty();
+              expect.string(PastelWithSpecifiedMode.unformattedText(part2)).
+                toBeEmpty();
             });
             test("negative index should return ('', s)", ({expect}) => {
               let input =
@@ -140,7 +126,8 @@ describe("Pastel", ({describe, test}) => {
               let (part1, part2) =
                 PastelWithSpecifiedMode.partition(-1, input);
 
-              expect.string(PastelWithSpecifiedMode.unformattedText(part1)).toBeEmpty();
+              expect.string(PastelWithSpecifiedMode.unformattedText(part1)).
+                toBeEmpty();
               expect.string(part2).toEqual(input);
             });
             test("index 0 should return ('', s)", ({expect}) => {
@@ -152,7 +139,8 @@ describe("Pastel", ({describe, test}) => {
               let (part1, part2) =
                 PastelWithSpecifiedMode.partition(0, input);
 
-              expect.string(PastelWithSpecifiedMode.unformattedText(part1)).toBeEmpty();
+              expect.string(PastelWithSpecifiedMode.unformattedText(part1)).
+                toBeEmpty();
               expect.string(part2).toEqual(input);
             });
           });

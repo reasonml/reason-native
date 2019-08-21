@@ -1,72 +1,72 @@
 FloatMatchers › failure output .not.toBeCloseTo
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>failure output .not.toBeCloseTo</whiteBright>
-<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0. with precision 0</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>failure output .not.toBeCloseTo</resetColor>
+<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0. with precision 0</resetDimAndBold></resetColor>
 
-    <dim>expect.float(</dim><red>received</red><dim>).</dim>not<dim>.toBeCloseTo(</dim><green>expected, precision</green><dim>)</dim>
+    <dim>expect.float(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCloseTo(</resetDimAndBold><green>expected, precision</resetColor><dim>)</resetDimAndBold>
     
-    Precision: <green>0</green>-digit
-    Expected: <green>0.</green>
-    Received: <red>0.</red>
+    Precision: <green>0</resetColor>-digit
+    Expected: <green>0.</resetColor>
+    Received: <red>0.</resetColor>
 
-<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.96 with precision 1</red></bold>
+<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.96 with precision 1</resetDimAndBold></resetColor>
 
-    <dim>expect.float(</dim><red>received</red><dim>).</dim>not<dim>.toBeCloseTo(</dim><green>expected, precision</green><dim>)</dim>
+    <dim>expect.float(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCloseTo(</resetDimAndBold><green>expected, precision</resetColor><dim>)</resetDimAndBold>
     
-    Precision: <green>1</green>-digit
-    Expected: <green>0.96</green>
-    Received: <red>1.</red>
+    Precision: <green>1</resetColor>-digit
+    Expected: <green>0.96</resetColor>
+    Received: <red>1.</resetColor>
 
-<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.996 with precision 2</red></bold>
+<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.996 with precision 2</resetDimAndBold></resetColor>
 
-    <dim>expect.float(</dim><red>received</red><dim>).</dim>not<dim>.toBeCloseTo(</dim><green>expected, precision</green><dim>)</dim>
+    <dim>expect.float(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCloseTo(</resetDimAndBold><green>expected, precision</resetColor><dim>)</resetDimAndBold>
     
-    Precision: <green>2</green>-digit
-    Expected: <green>0.996</green>
-    Received: <red>1.</red>
+    Precision: <green>2</resetColor>-digit
+    Expected: <green>0.996</resetColor>
+    Received: <red>1.</resetColor>
 
-<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.9996 with precision 3</red></bold>
+<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.9996 with precision 3</resetDimAndBold></resetColor>
 
-    <dim>expect.float(</dim><red>received</red><dim>).</dim>not<dim>.toBeCloseTo(</dim><green>expected, precision</green><dim>)</dim>
+    <dim>expect.float(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCloseTo(</resetDimAndBold><green>expected, precision</resetColor><dim>)</resetDimAndBold>
     
-    Precision: <green>3</green>-digit
-    Expected: <green>0.9996</green>
-    Received: <red>1.</red>
+    Precision: <green>3</resetColor>-digit
+    Expected: <green>0.9996</resetColor>
+    Received: <red>1.</resetColor>
 
-<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.9995 with precision 3</red></bold>
+<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 1. should not be close to 0.9995 with precision 3</resetDimAndBold></resetColor>
 
-    <dim>expect.float(</dim><red>received</red><dim>).</dim>not<dim>.toBeCloseTo(</dim><green>expected, precision</green><dim>)</dim>
+    <dim>expect.float(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCloseTo(</resetDimAndBold><green>expected, precision</resetColor><dim>)</resetDimAndBold>
     
-    Precision: <green>3</green>-digit
-    Expected: <green>0.9995</green>
-    Received: <red>1.</red>
+    Precision: <green>3</resetColor>-digit
+    Expected: <green>0.9995</resetColor>
+    Received: <red>1.</resetColor>
 
-<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0.1 with precision 0</red></bold>
+<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0.1 with precision 0</resetDimAndBold></resetColor>
 
-    <dim>expect.float(</dim><red>received</red><dim>).</dim>not<dim>.toBeCloseTo(</dim><green>expected, precision</green><dim>)</dim>
+    <dim>expect.float(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCloseTo(</resetDimAndBold><green>expected, precision</resetColor><dim>)</resetDimAndBold>
     
-    Precision: <green>0</green>-digit
-    Expected: <green>0.1</green>
-    Received: <red>0.</red>
+    Precision: <green>0</resetColor>-digit
+    Expected: <green>0.1</resetColor>
+    Received: <red>0.</resetColor>
 
-<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0.0001 with precision 3</red></bold>
+<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 0.0001 with precision 3</resetDimAndBold></resetColor>
 
-    <dim>expect.float(</dim><red>received</red><dim>).</dim>not<dim>.toBeCloseTo(</dim><green>expected, precision</green><dim>)</dim>
+    <dim>expect.float(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCloseTo(</resetDimAndBold><green>expected, precision</resetColor><dim>)</resetDimAndBold>
     
-    Precision: <green>3</green>-digit
-    Expected: <green>0.0001</green>
-    Received: <red>0.</red>
+    Precision: <green>3</resetColor>-digit
+    Expected: <green>0.0001</resetColor>
+    Received: <red>0.</resetColor>
 
-<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 4e-06 with precision 5</red></bold>
+<bold><red>  \226\128\162 failure output .not.toBeCloseTo \226\128\186 0. should not be close to 4e-06 with precision 5</resetDimAndBold></resetColor>
 
-    <dim>expect.float(</dim><red>received</red><dim>).</dim>not<dim>.toBeCloseTo(</dim><green>expected, precision</green><dim>)</dim>
+    <dim>expect.float(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCloseTo(</resetDimAndBold><green>expected, precision</resetColor><dim>)</resetDimAndBold>
     
-    Precision: <green>5</green>-digit
-    Expected: <green>4e-06</green>
-    Received: <red>0.</red>
+    Precision: <green>5</resetColor>-digit
+    Expected: <green>4e-06</resetColor>
+    Received: <red>0.</resetColor>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>8 failed</bold></red>, 0 passed, 8 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>8 failed</resetDimAndBold></resetColor>, 0 passed, 8 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

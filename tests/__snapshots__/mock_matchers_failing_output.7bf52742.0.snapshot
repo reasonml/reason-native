@@ -1,7 +1,7 @@
 mock matchers › failing output › expect.mock.toBeCalledWith multiple other calls
-<dim>expect.mock(</dim><red>mock</red><dim>).toBeCalledWith(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).toBeCalledWith(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
 
 Expected the mock to have been called with:
-  <green>4</green>
+  <green>4</resetColor>
 But it was called with:
-  <red>3</red>, <red>1</red>, <red>2</red>
+  <red>3</resetColor>, <red>1</resetColor>, <red>2</resetColor>

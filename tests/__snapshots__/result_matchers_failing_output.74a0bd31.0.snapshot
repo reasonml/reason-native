@@ -1,4 +1,4 @@
 result matchers › failing output › expect.result.not.toBeOk Ok(42) is not Ok
-<dim>expect.result(</dim><red>received</red><dim>).</dim>not<dim>.toBeOk(</dim><green></green><dim>)</dim>
+<dim>expect.result(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeOk(</resetDimAndBold><dim>)</resetDimAndBold>
 
-Expected value to not be Ok, but received: <red>Ok(42)</red>
+Expected value to not be Ok, but received: <red>Ok(42)</resetColor>

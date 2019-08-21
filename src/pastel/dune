@@ -9,3 +9,4 @@
      (javascript_files winCygPtySupport.js winConsoleColorsSupport.js)
    )
 )
+(include_subdirs unqualified)

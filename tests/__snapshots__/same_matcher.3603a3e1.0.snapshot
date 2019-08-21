@@ -1,37 +1,37 @@
 same matcher › not same failure output
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>not same failure output</whiteBright>
-<bold><red>  \226\128\162 not same failure output \226\128\186 ints</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>not same failure output</resetColor>
+<bold><red>  \226\128\162 not same failure output \226\128\186 ints</resetDimAndBold></resetColor>
 
-    <dim>expect.notSame(</dim><green>expected</green><dim>, </dim><red>received</red><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.notSame(</resetDimAndBold><green>expected</resetColor><dim>, </resetDimAndBold><red>received</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected value to not be:
-      <green>1</green>
+      <green>1</resetColor>
     Received:
-      <red>1</red>
+      <red>1</resetColor>
 
-<bold><red>  \226\128\162 not same failure output \226\128\186 strings</red></bold>
+<bold><red>  \226\128\162 not same failure output \226\128\186 strings</resetDimAndBold></resetColor>
 
-    <dim>expect.notSame(</dim><green>expected</green><dim>, </dim><red>received</red><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.notSame(</resetDimAndBold><green>expected</resetColor><dim>, </resetDimAndBold><red>received</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected value to not be:
-      <green>hello</green>
+      <green>hello</resetColor>
     Received:
-      <red>hello</red>
+      <red>hello</resetColor>
     
-    <dim>Note that you are testing for referential equality between strings. You probably need to use `expect.equal` instead.</dim>
+    <dim>Note that you are testing for referential equality between strings. You probably need to use `expect.equal` instead.</resetDimAndBold>
 
-<bold><red>  \226\128\162 not same failure output \226\128\186 records</red></bold>
+<bold><red>  \226\128\162 not same failure output \226\128\186 records</resetDimAndBold></resetColor>
 
-    <dim>expect.notSame(</dim><green>expected</green><dim>, </dim><red>received</red><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.notSame(</resetDimAndBold><green>expected</resetColor><dim>, </resetDimAndBold><red>received</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected value to not be:
-      <green>{7, \"7\"}</green>
+      <green>{7, \"7\"}</resetColor>
     Received:
-      <red>{7, \"7\"}</red>
+      <red>{7, \"7\"}</resetColor>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>3 failed</bold></red>, 0 passed, 3 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>3 failed</resetDimAndBold></resetColor>, 0 passed, 3 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

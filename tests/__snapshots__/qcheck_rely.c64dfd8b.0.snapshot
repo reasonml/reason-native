@@ -1,4 +1,4 @@
 qcheck-rely › error test
 QCheck test \"error_raise_exn\" failed with exception Error
 
-generated input: <red>0 (after 60 shrink steps)</red>
+generated input: <red>0 (after 60 shrink steps)</resetColor>

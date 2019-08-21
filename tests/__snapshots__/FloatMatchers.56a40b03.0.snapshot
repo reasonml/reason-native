@@ -1,8 +1,8 @@
 FloatMatchers › failure output .toBeCloseTo
 Running 1 test suite
-<green><bold><inverse> PASS </inverse></bold></green> <whiteBright>failure output .toBeCloseTo</whiteBright>
+<inverse><bold><green> PASS </inverse></resetDimAndBold></resetColor> <whiteBright>failure output .toBeCloseTo</resetColor>
 
-<whiteBright><bold>Test Suites: </bold></whiteBright>0 failed, <green><bold>1 passed</bold></green>, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright>0 failed, <green><bold>2 passed</bold></green>, 2 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor>0 failed, <bold><green>1 passed</resetDimAndBold></resetColor>, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor>0 failed, <bold><green>2 passed</resetDimAndBold></resetColor>, 2 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

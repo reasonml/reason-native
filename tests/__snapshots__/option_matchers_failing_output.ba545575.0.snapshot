@@ -1,5 +1,5 @@
 option matchers › failing output › expect.option.toBe Some(42) is Some(41)
-<dim>expect.option(</dim><red>received</red><dim>).toBe(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+<dim>expect.option(</resetDimAndBold><red>received</resetColor><dim>).toBe(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
 
-Expected: <green>Some(41)</green>
-Received: <red>Some(42)</red>
+Expected: <green>Some(41)</resetColor>
+Received: <red>Some(42)</resetColor>

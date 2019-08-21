@@ -1,48 +1,48 @@
 Rely array matchers › toContain › expect.array.toContain failure output
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>expect.array.toContain failure output</whiteBright>
-<bold><red>  \226\128\162 expect.array.toContain failure output \226\128\186 empty array</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>expect.array.toContain failure output</resetColor>
+<bold><red>  \226\128\162 expect.array.toContain failure output \226\128\186 empty array</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).toContain(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected array:
-      <red>[||]</red>
+      <red>[||]</resetColor>
     To contain value: 
-      <green>7</green>
+      <green>7</resetColor>
 
-<bold><red>  \226\128\162 expect.array.toContain failure output \226\128\186 missing element</red></bold>
+<bold><red>  \226\128\162 expect.array.toContain failure output \226\128\186 missing element</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).toContain(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected array:
-      <red>{1, 2}</red>
+      <red>{1, 2}</resetColor>
     To contain value: 
-      <green>7</green>
+      <green>7</resetColor>
 
-<bold><red>  \226\128\162 expect.array.toContain failure output \226\128\186 separate string references</red></bold>
+<bold><red>  \226\128\162 expect.array.toContain failure output \226\128\186 separate string references</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).toContain(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected array:
-      <red>{\"foo\", \"bar\"}</red>
+      <red>{\"foo\", \"bar\"}</resetColor>
     To contain value: 
-      <green>foo</green>
+      <green>foo</resetColor>
     
-    <dim>Note that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.</dim>
+    <dim>Note that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.</resetDimAndBold>
 
-<bold><red>  \226\128\162 expect.array.toContain failure output \226\128\186 separate record references</red></bold>
+<bold><red>  \226\128\162 expect.array.toContain failure output \226\128\186 separate record references</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).toContain(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected array:
-      <red>{{\"Amy\", 19}}</red>
+      <red>{{\"Amy\", 19}}</resetColor>
     To contain value: 
-      <green>{\"Amy\", 19}</green>
+      <green>{\"Amy\", 19}</resetColor>
     
-    <dim>Note that you are testing for referential equality with the stricter `toContain` matcher. You probably need to use `toContainEqual` instead.</dim>
+    <dim>Note that you are testing for referential equality with the stricter `toContain` matcher. You probably need to use `toContainEqual` instead.</resetDimAndBold>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>4 failed</bold></red>, 0 passed, 4 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>4 failed</resetDimAndBold></resetColor>, 0 passed, 4 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

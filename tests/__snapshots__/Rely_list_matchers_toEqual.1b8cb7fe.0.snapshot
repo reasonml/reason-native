@@ -1,35 +1,35 @@
 Rely list matchers › toEqual › expect.list.toEqual failure output
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>expect.list.toEqual failure output</whiteBright>
-<bold><red>  \226\128\162 expect.list.toEqual failure output \226\128\186 actual shorter than expected</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>expect.list.toEqual failure output</resetColor>
+<bold><red>  \226\128\162 expect.list.toEqual failure output \226\128\186 actual shorter than expected</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected value to equal:
-      <green>[1, 2, 3]</green>
+      <green>[1, 2, 3]</resetColor>
     Received:
-      <red>[1, 2]</red>
+      <red>[1, 2]</resetColor>
 
-<bold><red>  \226\128\162 expect.list.toEqual failure output \226\128\186 actual longer than expected</red></bold>
+<bold><red>  \226\128\162 expect.list.toEqual failure output \226\128\186 actual longer than expected</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected value to equal:
-      <green>[1, 2]</green>
+      <green>[1, 2]</resetColor>
     Received:
-      <red>[1, 2, 3]</red>
+      <red>[1, 2, 3]</resetColor>
 
-<bold><red>  \226\128\162 expect.list.toEqual failure output \226\128\186 mismatched values</red></bold>
+<bold><red>  \226\128\162 expect.list.toEqual failure output \226\128\186 mismatched values</resetDimAndBold></resetColor>
 
-    <dim>expect.list(</dim><red>received</red><dim>).toEqual(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+    <dim>expect.list(</resetDimAndBold><red>received</resetColor><dim>).toEqual(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
     
     Expected value to equal:
-      <green>[\"values\"]</green>
+      <green>[\"values\"]</resetColor>
     Received:
-      <red>[\"mismatched\"]</red>
+      <red>[\"mismatched\"]</resetColor>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>3 failed</bold></red>, 0 passed, 3 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>3 failed</resetDimAndBold></resetColor>, 0 passed, 3 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 
