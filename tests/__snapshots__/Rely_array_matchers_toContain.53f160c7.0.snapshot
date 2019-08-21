@@ -1,37 +1,37 @@
 Rely array matchers › toContain › expect.array.not.toContain failure output
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>expect.array.not.toContain failure output</whiteBright>
-<bold><red>  \226\128\162 expect.array.not.toContain failure output \226\128\186 integer contains</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>expect.array.not.toContain failure output</resetColor>
+<bold><red>  \226\128\162 expect.array.not.toContain failure output \226\128\186 integer contains</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).</dim>not<dim>.toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).</resetDimAndBold>not<dim>.toContain(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected array:
-      <red>{1, 2, 3}</red>
+      <red>{1, 2, 3}</resetColor>
     Not to contain value: 
-      <green>1</green>
+      <green>1</resetColor>
 
-<bold><red>  \226\128\162 expect.array.not.toContain failure output \226\128\186 string reference equality</red></bold>
+<bold><red>  \226\128\162 expect.array.not.toContain failure output \226\128\186 string reference equality</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).</dim>not<dim>.toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).</resetDimAndBold>not<dim>.toContain(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected array:
-      <red>{\"string\", \"bacon\"}</red>
+      <red>{\"string\", \"bacon\"}</resetColor>
     Not to contain value: 
-      <green>string</green>
+      <green>string</resetColor>
     
-    <dim>Note that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.</dim>
+    <dim>Note that you are testing for referential equality between strings. You probably need to use `toContainEqual` instead.</resetDimAndBold>
 
-<bold><red>  \226\128\162 expect.array.not.toContain failure output \226\128\186 record reference equality</red></bold>
+<bold><red>  \226\128\162 expect.array.not.toContain failure output \226\128\186 record reference equality</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>array</red><dim>).</dim>not<dim>.toContain(</dim><green>value</green><dim>)</dim> <dim>/* using === */</dim>
+    <dim>expect.array(</resetDimAndBold><red>array</resetColor><dim>).</resetDimAndBold>not<dim>.toContain(</resetDimAndBold><green>value</resetColor><dim>)</resetDimAndBold> <dim>/* using === */</resetDimAndBold>
     
     Expected array:
-      <red>{{\"Tom\", 42}, {\"Jerry\", 100}}</red>
+      <red>{{\"Tom\", 42}, {\"Jerry\", 100}}</resetColor>
     Not to contain value: 
-      <green>{\"Tom\", 42}</green>
+      <green>{\"Tom\", 42}</resetColor>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>3 failed</bold></red>, 0 passed, 3 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>3 failed</resetDimAndBold></resetColor>, 0 passed, 3 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

@@ -1,3 +1,3 @@
 Pastel › Pastel terminal mode › Pastel.partition › Should partition a string with multiple decorators
-\027[2mHel\027[22m\027[2m\027[31m\027[39m\027[22m\027[2m\027[4m\027[24m\027[22m\027[2m\027[4m\027[34m\027[39m\027[24m\027[22m
-\027[2m\027[22m\027[2m\027[31mlo \027[39m\027[22m\027[2m\027[4mworl\027[24m\027[22m\027[2m\027[4m\027[34md\027[39m\027[24m\027[22m
+\027[2mHel\027[22m
+\027[2m\027[31mlo \027[4m\027[39mworl\027[34md\027[24m\027[22m\027[39m

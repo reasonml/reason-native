@@ -1,4 +1,4 @@
 option matchers › failing output › expect.option.toBeSome None is Some
-<dim>expect.option(</dim><red>received</red><dim>).toBeSome(</dim><green></green><dim>)</dim>
+<dim>expect.option(</resetDimAndBold><red>received</resetColor><dim>).toBeSome(</resetDimAndBold><dim>)</resetDimAndBold>
 
-Expected value to be Some, but received: <red>None</red>
+Expected value to be Some, but received: <red>None</resetColor>

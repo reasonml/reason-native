@@ -1,14 +1,14 @@
 Rely array matchers › toBeEmpty › expect.array.not.toBeEmpty output
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>expect.array.not.toBeEmpty output</whiteBright>
-<bold><red>  \226\128\162 expect.array.not.toBeEmpty output \226\128\186 empty should not be empty failure output</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>expect.array.not.toBeEmpty output</resetColor>
+<bold><red>  \226\128\162 expect.array.not.toBeEmpty output \226\128\186 empty should not be empty failure output</resetDimAndBold></resetColor>
 
-    <dim>expect.array(</dim><red>received</red><dim>).not.toBeEmpty(</dim><green></green><dim>)</dim>
+    <dim>expect.array(</resetDimAndBold><red>received</resetColor><dim>).not.toBeEmpty(</resetDimAndBold><dim>)</resetDimAndBold>
     
-    Expected value not to be empty, but received: <red>[||]</red>
+    Expected value not to be empty, but received: <red>[||]</resetColor>
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

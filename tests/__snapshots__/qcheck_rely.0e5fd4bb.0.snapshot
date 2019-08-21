@@ -2,4 +2,4 @@ qcheck-rely › failing test
 QCheck test \"fail_sort_id\" failed
 
 generated input: 
-  <red>[1; 0] (after 12 shrink steps)</red>
+  <red>[1; 0] (after 12 shrink steps)</resetColor>

@@ -1,5 +1,5 @@
 mock matchers › failing output › expect.mock.toThrow
-<dim>expect.mock(</dim><red>mock</red><dim>).toThrow(</dim><green></green><dim>)</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).toThrow(</resetDimAndBold><dim>)</resetDimAndBold>
 
 Expected the function to throw an error.
 But it didn't throw anything.

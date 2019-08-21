@@ -1,6 +1,6 @@
 mock matchers › failing output › expect.mock.lastReturnedWith wasn't called
-<dim>expect.mock(</dim><red>mock</red><dim>).lastReturnedWith(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).lastReturnedWith(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
 
 Expected the mock to have last returned:
-  <green>2</green>
-But it did <red>not return</red>.
+  <green>2</resetColor>
+But it did <red>not return</resetColor>.

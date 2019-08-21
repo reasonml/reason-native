@@ -1,6 +1,10 @@
 Pastel Console › Array of floats
 ===== Standard Out =====
-[|<magenta>2.3</magenta>, <magenta>8.9</magenta>, <magenta>9.</magenta>|]
+[|
+  <magenta>2.3</resetColor>,
+  <magenta>8.9</resetColor>,
+  <magenta>9.</resetColor>
+|]
 ===== Standard Err =====
 
 ========================

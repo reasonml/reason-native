@@ -1,5 +1,5 @@
 result matchers › failing output › expect.result.toBe Ok(42) is Ok(41)
-<dim>expect.result(</dim><red>received</red><dim>).toBe(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+<dim>expect.result(</resetDimAndBold><red>received</resetColor><dim>).toBe(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
 
-Expected: <green>Ok(41)</green>
-Received: <red>Ok(42)</red>
+Expected: <green>Ok(41)</resetColor>
+Received: <red>Ok(42)</resetColor>

@@ -2,6 +2,10 @@ Pastel Console › Max depth
 ===== Standard Out =====
 
 ===== Standard Err =====
-[[[[<red>@max-depth</red>]]], [[<yellow>0</yellow>]], [<yellow>0</yellow>]]
+[
+  [[[<red>@max-depth</resetColor>]]],
+  [[<yellow>0</resetColor>]],
+  [<yellow>0</resetColor>]
+]
 ========================
 

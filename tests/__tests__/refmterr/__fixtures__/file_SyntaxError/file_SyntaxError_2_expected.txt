@@ -1,11 +1,11 @@
-[1m[2m# Unformatted Error Output:[22m[22m
+[27m[24m[2m[1m# Unformatted Error Output:[27m[24m[22m
 [2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_2.ml", line 1, characters 20-21:[22m
 [2m# [22m[2mError: Syntax error: operator expected.[22m
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_2.ml[24m[39m[2m[4m:1 20-21[24m[22m 
+[7m[24m[22m[1m[31m ERROR [27m[24m[22m[39m [27m[4m[22m[36mtests/__tests__/refmterr/__fixtures__/file_SyntaxError/file_SyntaxError_2.ml[27m[24m[22m[39m[27m[4m[22m[2m:1 20-21[27m[24m[22m 
 
-[31m[2m1 ┆ [22m[39m[35m[2mlet[22m[39m[2m a = (print_char [22m[31m[1m[4m'[24m[22m[39m[2ma)[22m
+[27m[24m[22m[2m[31m1 ┆ [27m[24m[22m[39m[27m[24m[22m[2m[35mlet[27m[24m[22m[39m[27m[24m[22m[2m a = (print_char [27m[24m[22m[27m[4m[22m[1m[31m'[27m[24m[22m[39m[27m[24m[22m[2ma)[27m[24m[22m
 
 This is a syntax error: operator expected.
 

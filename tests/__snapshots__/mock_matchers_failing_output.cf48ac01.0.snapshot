@@ -1,7 +1,7 @@
 mock matchers › failing output › expect.mock.not.toReturnWith other call
-<dim>expect.mock(</dim><red>mock</red><dim>).</dim>not<dim>.toReturnWith(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).</resetDimAndBold>not<dim>.toReturnWith(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
 
 Expected the mock not to have returned:
-  <green>1</green>
+  <green>1</resetColor>
 But it returned a value equal to:
-  <red>1</red>
+  <red>1</resetColor>

@@ -1,6 +1,6 @@
 mock matchers › failing output › expect.mock.not.toThrow multiple exceptions
-<dim>expect.mock(</dim><red>mock</red><dim>).</dim>not<dim>toThrow(</dim><green></green><dim>)</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).</resetDimAndBold>not<dim>toThrow(</resetDimAndBold><dim>)</resetDimAndBold>
 
 Expected the function not to throw an error.
 Instead, it threw: 
-  <red>Not_found</red>, <red>Not_found</red>
+  <red>Not_found</resetColor>, <red>Not_found</resetColor>

@@ -1,7 +1,7 @@
 mock matchers › failing output › expect.mock.lastReturnedWith threw exception
-<dim>expect.mock(</dim><red>mock</red><dim>).lastReturnedWith(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).lastReturnedWith(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
 
 Expected the mock to have last returned:
-  <green>7</green>
+  <green>7</resetColor>
 But the last call raised:
-  <red>Not_found</red>
+  <red>Not_found</resetColor>

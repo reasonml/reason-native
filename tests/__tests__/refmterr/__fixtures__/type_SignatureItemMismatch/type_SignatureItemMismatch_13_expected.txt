@@ -1,4 +1,4 @@
-[1m[2m# Unformatted Error Output:[22m[22m
+[27m[24m[2m[1m# Unformatted Error Output:[27m[24m[22m
 [2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_13.ml", line 14, characters 24-166:[22m
 [2m# [22m[2mError: Signature mismatch:[22m
 [2m# [22m[2m       ...[22m
@@ -31,31 +31,31 @@
 [2m# [22m[2m       The types for field c are not equal.[22m
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_13.ml[24m[39m[2m[4m:14:24-25:3[24m[22m 
+[7m[24m[22m[1m[31m ERROR [27m[24m[22m[39m [27m[4m[22m[36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_13.ml[27m[24m[22m[39m[27m[4m[22m[2m:14:24-25:3[27m[24m[22m 
 
-[2m11 ┆ [22m[2m  }[22m
-[2m12 ┆ [22m[2mend[22m
+[2m11 ┆ [22m[27m[24m[22m[2m  }[27m[24m[22m
+[2m12 ┆ [22m[27m[24m[22m[2mend[27m[24m[22m
 [2m13 ┆ [22m
-[31m[2m14 ┆ [22m[39m[35m[2mmodule[22m[39m[2m [22m[34m[2mMyModule[22m[39m[2m : [22m[34m[2mSig[22m[39m[2m = [22m[31m[1m[4mstruct[24m[22m[39m
-[31m[2m15 ┆ [22m[39m  [31m[1m[4mtype t = {[24m[22m[39m
-[31m[2m16 ┆ [22m[39m    [31m[1m[4ma: string ;[24m[22m[39m
-[31m[2m17 ┆ [22m[39m    [31m[1m[4mb: string ;[24m[22m[39m
+[27m[24m[22m[2m[31m14 ┆ [27m[24m[22m[39m[27m[24m[22m[2m[35mmodule[27m[24m[22m[39m[27m[24m[22m[2m [27m[24m[22m[27m[24m[22m[2m[34mMyModule[27m[24m[22m[39m[27m[24m[22m[2m : [27m[24m[22m[27m[24m[22m[2m[34mSig[27m[24m[22m[39m[27m[24m[22m[2m = [27m[24m[22m[27m[4m[22m[1m[31mstruct[27m[24m[22m[39m
+[27m[24m[22m[2m[31m15 ┆ [27m[24m[22m[39m  [27m[4m[22m[1m[31mtype t = {[27m[24m[22m[39m
+[27m[24m[22m[2m[31m16 ┆ [27m[24m[22m[39m    [27m[4m[22m[1m[31ma: string ;[27m[24m[22m[39m
+[27m[24m[22m[2m[31m17 ┆ [27m[24m[22m[39m    [27m[4m[22m[1m[31mb: string ;[27m[24m[22m[39m
 
 [1mThis module contains a type definition that contradicts its signature[22m
 
-  At [36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_13.ml[39m[2m:2[22m
-  the [32m[1mexpected signature[22m[39m differs from [31m[1mprovided signature[22m[39m:
+  At [27m[24m[22m[36mtests/__tests__/refmterr/__fixtures__/type_SignatureItemMismatch/type_SignatureItemMismatch_13.ml[27m[24m[22m[39m[2m:2[22m
+  the [27m[24m[22m[1m[32mexpected signature[27m[24m[22m[39m differs from [27m[24m[22m[1m[31mprovided signature[27m[24m[22m[39m:
 
   type t = {
     a: string,
     b: string,
-  [32m[1m  c: int,
-    d: string,[22m[39m
-  [31m[1m  c: string,
-    d: int,[22m[39m
+  [27m[24m[22m[1m[32m  c: int,
+    d: string,[27m[24m[22m[39m
+  [27m[24m[22m[1m[31m  c: string,
+    d: int,[27m[24m[22m[39m
     e: bool,
-  [32m[1m  f: string,[22m[39m
-  [31m[1m  f: int,[22m[39m
+  [27m[24m[22m[1m[32m  f: string,[27m[24m[22m[39m
+  [27m[24m[22m[1m[31m  f: int,[27m[24m[22m[39m
     g: int,
     h: string,
   };

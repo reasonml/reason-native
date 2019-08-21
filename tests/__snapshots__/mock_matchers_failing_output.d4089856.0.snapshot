@@ -1,4 +1,4 @@
 mock matchers › failing output › expect.mock.toReturnTimes threw exception
-<dim>expect.mock(</dim><red>mock</red><dim>).toReturnTimes(</dim><green>expected</green><dim>)</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).toReturnTimes(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
 
-Expected the mock to return <green>one time</green>, but it didn't return.
+Expected the mock to return <green>one time</resetColor>, but it didn't return.

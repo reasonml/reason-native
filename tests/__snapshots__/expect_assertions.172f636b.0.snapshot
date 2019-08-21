@@ -1,4 +1,4 @@
 expect.assertions › mismatched assertion count plural expect, singular call
-<dim>expect.assertions(</dim><green>2</green><dim>)</dim>
+<dim>expect.assertions(</resetDimAndBold><green>2</resetColor><dim>)</resetDimAndBold>
 
-Expected <green>two assertions</green> to be called, but received <red>one assertion call</red>.
+Expected <green>two assertions</resetColor> to be called, but received <red>one assertion call</resetColor>.

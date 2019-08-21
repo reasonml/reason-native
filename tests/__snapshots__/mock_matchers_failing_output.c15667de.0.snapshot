@@ -1,4 +1,4 @@
 mock matchers › failing output › expect.mock.not.toBeCalledTimes
-<dim>expect.mock(</dim><red>mock</red><dim>).</dim>not<dim>.toBeCalledTimes(</dim><green>expected</green><dim>)</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).</resetDimAndBold>not<dim>.toBeCalledTimes(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold>
 
-Expected the mock not be called <green>two times</green>, but it was called exactly <red>two times</red>.
+Expected the mock not be called <green>two times</resetColor>, but it was called exactly <red>two times</resetColor>.

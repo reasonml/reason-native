@@ -1,4 +1,4 @@
 option matchers › failing output › expect.option.not.toBeSome Some(42) is not some
-<dim>expect.option(</dim><red>received</red><dim>).</dim>not<dim>.toBeSome(</dim><green></green><dim>)</dim>
+<dim>expect.option(</resetDimAndBold><red>received</resetColor><dim>).</resetDimAndBold>not<dim>.toBeSome(</resetDimAndBold><dim>)</resetDimAndBold>
 
-Expected value to not be Some, but received: <red>Some(42)</red>
+Expected value to not be Some, but received: <red>Some(42)</resetColor>

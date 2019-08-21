@@ -1,40 +1,40 @@
 FnMatchers › FnMatchers failure output
 Running 1 test suite
-<red><bold><inverse> FAIL </inverse></bold></red> <whiteBright>FnMatchers failure output</whiteBright>
-<bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect to throw, but doesn't</red></bold>
+<inverse><bold><red> FAIL </inverse></resetDimAndBold></resetColor> <whiteBright>FnMatchers failure output</resetColor>
+<bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect to throw, but doesn't</resetDimAndBold></resetColor>
 
-    <dim>expect.fn(</dim><red>function</red><dim>).toThrow(</dim><green></green><dim>)</dim>
+    <dim>expect.fn(</resetDimAndBold><red>function</resetColor><dim>).toThrow(</resetDimAndBold><dim>)</resetDimAndBold>
     
     Expected the function to throw an error.
     But it didn't throw anything.
 
-<bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect not to throw and does</red></bold>
+<bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect not to throw and does</resetDimAndBold></resetColor>
 
-    <dim>expect.fn(</dim><red>function</red><dim>)toThrow(</dim><green></green><dim>)</dim>
+    <dim>expect.fn(</resetDimAndBold><red>function</resetColor><dim>)toThrow(</resetDimAndBold><dim>)</resetDimAndBold>
     
     Expected the function not to throw an error.
     Instead, it threw: 
-      <red>(Invalid_argument \"the earth is flat\")</red>
+      <red>(Invalid_argument \"the earth is flat\")</resetColor>
 
-<bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect the wrong exception</red></bold>
+<bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect the wrong exception</resetDimAndBold></resetColor>
 
-    <dim>expect.fn(</dim><red>function</red><dim>).toThrowException(</dim><green>exception</green><dim>)</dim>
+    <dim>expect.fn(</resetDimAndBold><red>function</resetColor><dim>).toThrowException(</resetDimAndBold><green>exception</resetColor><dim>)</resetDimAndBold>
     
     Expected the function to throw an error matching:
-      <green>(Invalid_argument \"with some other message\")</green>
+      <green>(Invalid_argument \"with some other message\")</resetColor>
     Instead, it threw:
-      <red>(Invalid_argument \"with some message\")</red>
+      <red>(Invalid_argument \"with some message\")</resetColor>
 
-<bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect an exception that doesn't throw</red></bold>
+<bold><red>  \226\128\162 FnMatchers failure output \226\128\186 Expect an exception that doesn't throw</resetDimAndBold></resetColor>
 
-    <dim>expect.fn(</dim><red>function</red><dim>).toThrowException(</dim><green>exception</green><dim>)</dim>
+    <dim>expect.fn(</resetDimAndBold><red>function</resetColor><dim>).toThrowException(</resetDimAndBold><green>exception</resetColor><dim>)</resetDimAndBold>
     
     Expected the function to throw an error matching:
-      <green>Not_found</green>
+      <green>Not_found</resetColor>
     But it didn't throw anything.
 
 
-<whiteBright><bold>Test Suites: </bold></whiteBright><red><bold>1 failed</bold></red>, 0 passed, 1 total
-<whiteBright><bold>Tests:       </bold></whiteBright><red><bold>4 failed</bold></red>, 0 passed, 4 total
-<whiteBright><bold>Time:        </bold></whiteBright>< 1ms
+<bold><whiteBright>Test Suites: </resetDimAndBold></resetColor><bold><red>1 failed</resetDimAndBold></resetColor>, 0 passed, 1 total
+<bold><whiteBright>Tests:       </resetDimAndBold></resetColor><bold><red>4 failed</resetDimAndBold></resetColor>, 0 passed, 4 total
+<bold><whiteBright>Time:        </resetDimAndBold></resetColor>< 1ms
 

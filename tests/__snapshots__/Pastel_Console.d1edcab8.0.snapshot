@@ -1,6 +1,6 @@
 Pastel Console › Array of strings
 ===== Standard Out =====
-{<green>\"a\"</green>, <green>\"b\"</green>, <green>\"c\"</green>}
+{<green>\"a\"</resetColor>, <green>\"b\"</resetColor>, <green>\"c\"</resetColor>}
 ===== Standard Err =====
 
 ========================

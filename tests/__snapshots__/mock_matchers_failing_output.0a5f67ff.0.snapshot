@@ -1,7 +1,7 @@
 mock matchers › failing output › expect.mock.toReturnWith multiple other calls
-<dim>expect.mock(</dim><red>mock</red><dim>).toReturnWith(</dim><green>expected</green><dim>)</dim> <dim>/* using == */</dim>
+<dim>expect.mock(</resetDimAndBold><red>mock</resetColor><dim>).toReturnWith(</resetDimAndBold><green>expected</resetColor><dim>)</resetDimAndBold> <dim>/* using == */</resetDimAndBold>
 
 Expected the mock to have returned:
-  <green>4</green>
+  <green>4</resetColor>
 But it returned:
-  <red>3</red>, <red>3</red>, <red>2</red><red> and two more values.</red>
+  <red>3</resetColor>, <red>3</resetColor>, <red>2</resetColor><red> and two more values.</resetColor>

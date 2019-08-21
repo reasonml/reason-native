@@ -1,4 +1,4 @@
-[1m[2m# Unformatted Error Output:[22m[22m
+[27m[24m[2m[1m# Unformatted Error Output:[27m[24m[22m
 [2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_AppliedTooMany/type_AppliedTooMany_3.ml", line 11, characters 5-30:[22m
 [2m# [22m[2mError: The function applied to this argument has type[22m
 [2m# [22m[2m         customLogOutputProcessors:(string -> string) list ->[22m
@@ -6,14 +6,14 @@
 [2m# [22m[2mThis argument cannot be applied with label ~raiseExceptionDuringParse[22m
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/type_AppliedTooMany/type_AppliedTooMany_3.ml[24m[39m[2m[4m:11 5-30[24m[22m 
+[7m[24m[22m[1m[31m ERROR [27m[24m[22m[39m [27m[4m[22m[36mtests/__tests__/refmterr/__fixtures__/type_AppliedTooMany/type_AppliedTooMany_3.ml[27m[24m[22m[39m[27m[4m[22m[2m:11 5-30[27m[24m[22m 
 
-[2m 8 ┆ [22m[35m[2mlet[22m[39m[2m _ =[22m
-[2m 9 ┆ [22m[2m  parseFromStdin[22m
-[2m10 ┆ [22m[2m    [22m[33m[2m~refmttypePath[22m[39m
-[31m[2m11 ┆ [22m[39m[2m    ~[22m[31m[1m[4mraiseExceptionDuringParse[24m[22m[39m[2m=true[22m
-[2m12 ┆ [22m[2m    [22m[33m[2m~customLogOutputProcessors[22m[39m[2m=[][22m
-[2m13 ┆ [22m[2m    [22m[33m[2m~customErrorParsers[22m[39m[2m:[][22m
+[2m 8 ┆ [22m[27m[24m[22m[2m[35mlet[27m[24m[22m[39m[27m[24m[22m[2m _ =[27m[24m[22m
+[2m 9 ┆ [22m[27m[24m[22m[2m  parseFromStdin[27m[24m[22m
+[2m10 ┆ [22m[27m[24m[22m[2m    [27m[24m[22m[27m[24m[22m[2m[33m~refmttypePath[27m[24m[22m[39m
+[27m[24m[22m[2m[31m11 ┆ [27m[24m[22m[39m[27m[24m[22m[2m    ~[27m[24m[22m[27m[4m[22m[1m[31mraiseExceptionDuringParse[27m[24m[22m[39m[27m[24m[22m[2m=true[27m[24m[22m
+[2m12 ┆ [22m[27m[24m[22m[2m    [27m[24m[22m[27m[24m[22m[2m[33m~customLogOutputProcessors[27m[24m[22m[39m[27m[24m[22m[2m=[][27m[24m[22m
+[2m13 ┆ [22m[27m[24m[22m[2m    [27m[24m[22m[27m[24m[22m[2m[33m~customErrorParsers[27m[24m[22m[39m[27m[24m[22m[2m:[][27m[24m[22m
 
 The function has type (
   ~customLogOutputProcessors: list(string => string),

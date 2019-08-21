@@ -1,15 +1,15 @@
-[1m[2m# Unformatted Error Output:[22m[22m
+[27m[24m[2m[1m# Unformatted Error Output:[27m[24m[22m
 [2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/file_IllegalCharacter/file_IllegalCharacter_1.ml", line 2, characters 2-3:[22m
 [2m# [22m[2mError: Illegal character (\\)[22m
 
 
-[31m[1m[7m ERROR [27m[22m[39m [36m[4mtests/__tests__/refmterr/__fixtures__/file_IllegalCharacter/file_IllegalCharacter_1.ml[24m[39m[2m[4m:2 2-3[24m[22m 
+[7m[24m[22m[1m[31m ERROR [27m[24m[22m[39m [27m[4m[22m[36mtests/__tests__/refmterr/__fixtures__/file_IllegalCharacter/file_IllegalCharacter_1.ml[27m[24m[22m[39m[27m[4m[22m[2m:2 2-3[27m[24m[22m 
 
-[2m1 ┆ [22m[35m[2mlet[22m[39m[2m () =[22m
-[31m[2m2 ┆ [22m[39m[2m  [22m[31m[1m[4m\[24m[22m[39m[2mhahaha look at me[22m
-[2m3 ┆ [22m[2m  roaming free[22m
-[2m4 ┆ [22m[2m  this is a haiku[22m
-[2m5 ┆ [22m[2m  kidding it's not[22m
+[2m1 ┆ [22m[27m[24m[22m[2m[35mlet[27m[24m[22m[39m[27m[24m[22m[2m () =[27m[24m[22m
+[27m[24m[22m[2m[31m2 ┆ [27m[24m[22m[39m[27m[24m[22m[2m  [27m[24m[22m[27m[4m[22m[1m[31m\[27m[24m[22m[39m[27m[24m[22m[2mhahaha look at me[27m[24m[22m
+[2m3 ┆ [22m[27m[24m[22m[2m  roaming free[27m[24m[22m
+[2m4 ┆ [22m[27m[24m[22m[2m  this is a haiku[27m[24m[22m
+[2m5 ┆ [22m[27m[24m[22m[2m  kidding it's not[27m[24m[22m
 
 The character `\\` is illegal.
 

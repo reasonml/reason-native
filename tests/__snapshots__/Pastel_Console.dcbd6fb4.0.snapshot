@@ -3,12 +3,12 @@ Pastel Console › Circular list
 
 ===== Standard Err =====
 [
-  <green>\"circular\"</green>,
-  <green>\"list\"</green>,
-  <green>\"should\"</green>,
-  <green>\"not\"</green>,
-  <green>\"error\"</green>,
-  <red>@max-length</red>
+  <green>\"circular\"</resetColor>,
+  <green>\"list\"</resetColor>,
+  <green>\"should\"</resetColor>,
+  <green>\"not\"</resetColor>,
+  <green>\"error\"</resetColor>,
+  <red>@max-length</resetColor>
 ]
 ========================
 

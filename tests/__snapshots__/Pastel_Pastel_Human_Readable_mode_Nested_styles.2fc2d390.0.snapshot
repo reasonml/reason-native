@@ -1,2 +1,2 @@
 Pastel › Pastel Human Readable mode › Nested styles › Single nesting
-<dim>oo<green>hello world!</green>unpasteled o_O</dim>
+<dim>oo<green>hello world!</resetColor>unpasteled o_O</resetDimAndBold>
