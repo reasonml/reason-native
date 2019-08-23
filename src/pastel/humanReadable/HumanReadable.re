@@ -11,7 +11,7 @@ type style = {
 };
 
 type modifier = {
-  reset: string,
+  reset: style,
   bold: style,
   dim: style,
   italic: style,
@@ -67,7 +67,10 @@ let modifier: modifier = {
   inverse: makeStyle("inverse"),
   hidden: makeStyle("hidden"),
   strikethrough: makeStyle("strikethrough"),
-  reset: "<reset />"
+  reset: {
+    start: "<reset>",
+    stop: "</reset>"
+  }
 };
 
 let color: color = {

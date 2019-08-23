@@ -35,6 +35,7 @@ let createStyle = (start: int, stop: int): style => {
 
 type modifier = {
   reset: string,
+  resetOff: string,
   bold: style,
   dim: style,
   italic: style,
@@ -72,6 +73,7 @@ type color = {
 
 let modifier: modifier = {
   reset: "\027[0m",
+  resetOff: "\027[0m\027[0m",
   /* 21 isn't widely supported and 22 does the same thing */
   bold: createStyle(1, 22),
   dim: createStyle(2, 22),

@@ -16,10 +16,17 @@ let makeCodesRegex = codes => {
   let stop = "m";
   let regexString =
     String.concat("", ["(", start, "(", codesExpr, ")", stop, ")"]);
+  /** prepend with resetOff to ensure that is matched over just reset, this should
+   * be handled better if/when we support things like "bold=false" forcing bold off on a region and 
+   * we need to use a "boldOffOff" token, which will likely be similar to this
+   */
+  let regexString = "(\027\\[0m\027\\[0m)|" ++ regexString;
   Re.Pcre.regexp(regexString);
 };
 
-let escapeSequences = Ansi.IntSet.union(Ansi.starts, Ansi.stops);
+/* all starts, stops, and reset (0)*/
+let escapeSequences =
+  Ansi.IntSet.union(Ansi.starts, Ansi.stops) |> Ansi.IntSet.add(0);
 let escapeSequenceRegex =
   makeCodesRegex(Ansi.IntSet.elements(escapeSequences));
 
@@ -102,6 +109,7 @@ let terminalTokenToToken = terminalToken => {
       | token when token == Ansi.modifier.inverse.stop => InverseOff
       | token when token == Ansi.modifier.hidden.stop => HiddenOff
       | token when token == Ansi.modifier.reset => Reset
+      | token when token == "\027[0m\027[0m" => ResetOff
       | token when token == Ansi.modifier.strikethrough.stop =>
         StrikethroughOff
       | _ =>

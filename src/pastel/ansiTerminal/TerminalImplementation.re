@@ -129,6 +129,13 @@ module TerminalStateMachine =
         | Some(StrikethroughOff) =>
           applyCode(Ansi.modifier.strikethrough.stop, s)
         };
+      let s =
+        switch (stateDiff.reset) {
+        | None => s
+        | Some(Reset) => applyCode(Ansi.modifier.reset, s)
+        | Some(ResetOff) =>
+          applyCode(Ansi.modifier.resetOff, s)
+        };
       s;
     };
   });
@@ -159,7 +166,7 @@ let createElement =
   let color = PastelUtils.(optionMap(color, colorNameToColor));
   let backgroundColor =
     PastelUtils.(optionMap(backgroundColor, colorNameToColor));
-    
+
   fromString(
     ~reset?,
     ~bold?,

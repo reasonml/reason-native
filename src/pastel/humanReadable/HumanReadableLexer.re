@@ -10,7 +10,7 @@
   | RawEscapeSequence(string)
   | RawText(string);
 
-let humanReadableEscapeSequenceRegex = Re.Pcre.regexp("</?[a-z|A-Z]+>")
+let humanReadableEscapeSequenceRegex = Re.Pcre.regexp("(</?[a-z|A-Z]+>)")
 
 let tokenize = (s: string): list(humanReadableToken) => {
     s
@@ -90,7 +90,8 @@ let humanReadableTokenToToken = terminalToken => {
         | token when token == HumanReadable.modifier.underline.stop => UnderlineOff
         | token when token == HumanReadable.modifier.inverse.stop => InverseOff
         | token when token == HumanReadable.modifier.hidden.stop => HiddenOff
-        | token when token == HumanReadable.modifier.reset => Reset
+        | token when token == HumanReadable.modifier.reset.start => Reset
+        | token when token == HumanReadable.modifier.reset.stop => ResetOff
         | token when token == HumanReadable.modifier.strikethrough.stop =>
           StrikethroughOff
         | _ => raise(Invalid_argument("unrecognized escape sequence '" ++ String.escaped(token) ++ "'."))

@@ -35,7 +35,12 @@ type strikeThrough =
   | Strikethrough
   | StrikethroughOff;
 
+type reset =
+  | Reset
+  | ResetOff;
+
 type state = {
+  reset: option(reset),
   foreground: option(color),
   background: option(color),
   bold: option(bold),
@@ -51,6 +56,7 @@ type stateRegion = (state, string);
 type stateDiff = state;
 
 let initialState = {
+  reset: None,
   foreground: None,
   background: None,
   bold: None,
@@ -74,12 +80,20 @@ let printState = state => {
     "\n",
     [
       "{",
+      "\treset: "
+      ++ formatProperty(state.reset, r =>
+           switch (r) {
+           | Reset => "Reset"
+           | ResetOff => "ResetOff"
+           }
+         ),
       "\tfg: "
       ++ formatProperty(state.foreground, color =>
            switch (color) {
            | Default => "Default"
            | Red => "Red"
            | Green => "Green"
+           | Magenta => "Magenta"
            | _ => "no special formatting yet"
            }
          ),
@@ -134,7 +148,8 @@ let resolveEscapeSequence = (token, state) => {
   | HiddenOff => {...state, hidden: None}
   | Strikethrough => {...state, strikethrough: Some(Strikethrough)}
   | StrikethroughOff => {...state, strikethrough: None}
-  | Reset => initialState
+  | Reset => {...initialState, reset: Some(Reset)}
+  | ResetOff => {...initialState, reset: Some(ResetOff)}
   };
 };
 
@@ -148,76 +163,93 @@ let resolvePropertyForDiff = (optProp1, optProp2, removeProp) => {
 };
 
 let diffStates: (state, state) => stateDiff =
-  (startState, targetState) => {
-    foreground:
-      resolvePropertyForDiff(
-        startState.foreground,
-        targetState.foreground,
-        Default,
-      ),
-    background:
-      resolvePropertyForDiff(
-        startState.background,
-        targetState.background,
-        Default,
-      ),
-    bold: resolvePropertyForDiff(startState.bold, targetState.bold, BoldOff),
-    dim: resolvePropertyForDiff(startState.dim, targetState.dim, DimOff),
-    italic:
-      resolvePropertyForDiff(
-        startState.italic,
-        targetState.italic,
-        ItalicOff,
-      ),
-    underline:
-      resolvePropertyForDiff(
-        startState.underline,
-        targetState.underline,
-        UnderlineOff,
-      ),
-    inverse:
-      resolvePropertyForDiff(
-        startState.inverse,
-        targetState.inverse,
-        InverseOff,
-      ),
-    hidden:
-      resolvePropertyForDiff(
-        startState.hidden,
-        targetState.hidden,
-        HiddenOff,
-      ),
-    strikethrough:
-      resolvePropertyForDiff(
-        startState.strikethrough,
-        targetState.strikethrough,
-        StrikethroughOff,
-      ),
-  };
+  (startState, targetState) =>
+    switch (startState.reset, targetState.reset) {
+    | (_, Some(Reset)) => targetState
+    | (_, Some(ResetOff)) => targetState
+    | (_, _) => {
+        reset:
+          resolvePropertyForDiff(
+            startState.reset,
+            targetState.reset,
+            ResetOff,
+          ),
+        foreground:
+          resolvePropertyForDiff(
+            startState.foreground,
+            targetState.foreground,
+            Default,
+          ),
+        background:
+          resolvePropertyForDiff(
+            startState.background,
+            targetState.background,
+            Default,
+          ),
+        bold:
+          resolvePropertyForDiff(startState.bold, targetState.bold, BoldOff),
+        dim: resolvePropertyForDiff(startState.dim, targetState.dim, DimOff),
+        italic:
+          resolvePropertyForDiff(
+            startState.italic,
+            targetState.italic,
+            ItalicOff,
+          ),
+        underline:
+          resolvePropertyForDiff(
+            startState.underline,
+            targetState.underline,
+            UnderlineOff,
+          ),
+        inverse:
+          resolvePropertyForDiff(
+            startState.inverse,
+            targetState.inverse,
+            InverseOff,
+          ),
+        hidden:
+          resolvePropertyForDiff(
+            startState.hidden,
+            targetState.hidden,
+            HiddenOff,
+          ),
+        strikethrough:
+          resolvePropertyForDiff(
+            startState.strikethrough,
+            targetState.strikethrough,
+            StrikethroughOff,
+          ),
+      }
+    };
 
 let resolveApplication = (optProp1, optProp2) => {
   switch (optProp1, optProp2) {
   | (a, b) when a == b => optProp2
   | (None, None) => None
-  | (_, Some(b)) => optProp2
-  | (Some(a), None) => optProp1
+  | (Some(a), _) => optProp1
+  | (None, Some(a)) => optProp2
   };
 };
 
-let overlayState = (baseState, toApply) => {
-  {
-    foreground: resolveApplication(baseState.foreground, toApply.foreground),
-    background: resolveApplication(baseState.background, toApply.background),
-    bold: resolveApplication(baseState.bold, toApply.bold),
-    dim: resolveApplication(baseState.dim, toApply.dim),
-    italic: resolveApplication(baseState.italic, toApply.italic),
-    underline: resolveApplication(baseState.underline, toApply.underline),
-    inverse: resolveApplication(baseState.inverse, toApply.inverse),
-    hidden: resolveApplication(baseState.hidden, toApply.hidden),
-    strikethrough:
-      resolveApplication(baseState.strikethrough, toApply.strikethrough),
+let overlayState = (baseState, toApply) =>
+  switch (baseState.reset) {
+  | Some(Reset) => baseState
+  | _ => {
+      reset: toApply.reset,
+      foreground:
+        resolveApplication(baseState.foreground, toApply.foreground),
+      background:
+        resolveApplication(baseState.background, toApply.background),
+      bold: resolveApplication(baseState.bold, toApply.bold),
+      dim: resolveApplication(baseState.dim, toApply.dim),
+      italic: resolveApplication(baseState.italic, toApply.italic),
+      underline: resolveApplication(baseState.underline, toApply.underline),
+      inverse: resolveApplication(baseState.inverse, toApply.inverse),
+      hidden: resolveApplication(baseState.hidden, toApply.hidden),
+      strikethrough:
+        resolveApplication(baseState.strikethrough, toApply.strikethrough),
+    }
   };
-};
 
 module Option = {
   let map = (o, f) => {
@@ -246,19 +278,16 @@ module Make =
               String.concat("", [s, Config.applyState(diff, text)]),
             );
           },
-          (initialState, ""),
+        (initialState, ""),
           regions @ [(initialState, "")],
         );
       s;
     };
-  
-  let applyState = (state, childStateRegions) => {
-    let finalStateRegions =
-      List.map(
-        ((s, text)) => (overlayState(state, s), text),
-        childStateRegions,
-      );
-    resolveStateRegions(finalStateRegions);
+
+  let applyState = (stateDiff, stateRegions) => {
+    stateRegions
+    |> List.map(((baseState, text)) => (overlayState(baseState, stateDiff), text))
+    |> resolveStateRegions;
   };
 
   let parseStateRegions = s => {
@@ -266,7 +295,9 @@ module Make =
       List.fold_left(
         ((acc, prevState), token) =>
           switch (token) {
-          | Text(t) => t != "" ? ([(prevState, t), ...acc], prevState) : (acc, prevState)
+          | Text(t) =>
+            t != ""
+              ? ([(prevState, t), ...acc], prevState) : (acc, prevState)
           | EscapeSequence(escapeSequence) => (
               acc,
               resolveEscapeSequence(escapeSequence, prevState),
@@ -295,6 +326,11 @@ module Make =
         (),
       ) => {
     let state = {
+      reset:
+        switch (reset) {
+        | Some(true) => Some(Reset)
+        | _ => None
+        },
       bold: Option.map(bold, bold => bold ? Bold : BoldOff),
       dim: Option.map(dim, dim => dim ? Dim : DimOff),
       italic: Option.map(italic, italic => italic ? Italic : ItalicOff),
@@ -385,10 +421,12 @@ module Make =
     bold: (s: string) => fromString(~bold=true, ~children=[s], ()),
     dim: (s: string) => fromString(~dim=true, ~children=[s], ()),
     italic: (s: string) => fromString(~italic=true, ~children=[s], ()),
-    underline: (s: string) => fromString(~underline=true, ~children=[s], ()),
+    underline: (s: string) =>
+      fromString(~underline=true, ~children=[s], ()),
     inverse: (s: string) => fromString(~inverse=true, ~children=[s], ()),
     hidden: (s: string) => fromString(~hidden=true, ~children=[s], ()),
-    strikethrough: (s: string) => fromString(~strikethrough=true, ~children=[s], ()),
+    strikethrough: (s: string) =>
+      fromString(~strikethrough=true, ~children=[s], ()),
   };
 
   let color: Decorators.color = {

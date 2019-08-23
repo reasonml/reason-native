@@ -139,7 +139,9 @@ let createElement:
   let withHidden: style => style;
   let setStrikethrough: (bool, style) => style;
   let withStrikethrough: style => style;
-  
+  let withReset: style => style;
+  let setReset: (bool, style) => style;
+
   let getColor: style => option(ColorName.colorName);
   let getBackgroundColor: style => option(ColorName.colorName);
   let isBold: style => bool;
@@ -149,6 +151,7 @@ let createElement:
   let isInverse: style => bool;
   let isHidden: style => bool;
   let isStrikethrough: style => bool;
+  let isReset: style => bool;
 
   let parse: string => list((style, string));
   let apply: list((style, string)) => string;

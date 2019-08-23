@@ -123,6 +123,12 @@ module HumanReadableStateMachine =
         | Some(StrikethroughOff) =>
           applyCode(HumanReadable.modifier.strikethrough.stop, s)
         };
+      let s =
+        switch (stateDiff.reset) {
+        | None => s
+        | Some(Reset) => applyCode(HumanReadable.modifier.reset.start, s)
+        | Some(ResetOff) => applyCode(HumanReadable.modifier.reset.stop, s)
+        };
       s;
     };
   });
