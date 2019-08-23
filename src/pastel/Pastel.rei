@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */;
 
-module Make: () => PastelSig.PastelSig;
-module ColorName = ColorName;
+module Make: () => PastelInternal.PastelSig.PastelSig;
+module ColorName = PastelInternal.ColorName;
 
 type mode =
   | Terminal

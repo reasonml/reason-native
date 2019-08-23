@@ -9,6 +9,7 @@
     dir.lib
     rely.lib
     rely.internal
+    pastel.internal
     pastel.lib
     console.lib
     pastel-console.lib
