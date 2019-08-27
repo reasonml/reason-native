@@ -228,6 +228,9 @@ module Make = (()) => {
       strikethrough: Some(strikethrough ? Strikethrough : StrikethroughOff),
     };
   let withStrikethrough = setStrikethrough(true);
+  let setReset: (bool, style) => style =
+    (reset, style) => {...style, reset: Some(reset ? Reset : ResetOff)};
+  let withReset = setReset(true);
 
   let getColor: style => option(colorName) =
     style =>
@@ -326,6 +329,12 @@ module Make = (()) => {
     style =>
       switch (style.strikethrough) {
       | Some(Strikethrough) => true
+      | _ => false
+      };
+  let isReset: style => bool =
+    s =>
+      switch (s.reset) {
+      | Some(Reset) => true
       | _ => false
       };
 

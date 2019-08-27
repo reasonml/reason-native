@@ -40,7 +40,8 @@ type escapeSequence =
   | HiddenOff
   | Strikethrough
   | StrikethroughOff
-  | Reset;
+  | Reset
+  | ResetOff;
 
 type t =
   | Text(string)

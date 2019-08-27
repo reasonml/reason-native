@@ -21,7 +21,6 @@ let runTestSuite = (mode, name) => {
                 <Pastel color=Red> "world" </Pastel>
               </Pastel>;
             let parts = Pastel.parse(input);
-
             expect.int(List.length(parts)).toBe(2);
             let (firstStyle, firstText, secondStyle, secondText) =
               switch (parts) {

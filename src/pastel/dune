@@ -2,11 +2,18 @@
 (library
    (name Pastel)
    (public_name pastel.lib)
-   (libraries re unix)
-   (c_names winCygPtySupport winConsoleColorsSupport)
-   (js_of_ocaml
-     (flags (--pretty))
-     (javascript_files winCygPtySupport.js winConsoleColorsSupport.js)
-   )
+   (libraries pastel.internal)
+   (modules pastel)
+)
+(library
+  (name PastelInternal)
+  (public_name pastel.internal)
+  (libraries re unix)
+  (c_names winCygPtySupport winConsoleColorsSupport)
+  (js_of_ocaml
+    (flags (--pretty))
+    (javascript_files winCygPtySupport.js winConsoleColorsSupport.js)
+  )
+  (modules (:standard \ Pastel))
 )
 (include_subdirs unqualified)
