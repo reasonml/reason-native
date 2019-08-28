@@ -31,6 +31,7 @@ let setMaxLength = l => {
  * ~maxLength: Length to examine before making a decision. Must correspond to
  * the printing max length.
  */
+external _out: string => unit = "native_out";
 let rec detectList: type o. (~maxLength: int, o) => bool =
   (~maxLength, o) =>
     if (maxLength === 0) {
@@ -38,14 +39,15 @@ let rec detectList: type o. (~maxLength: int, o) => bool =
     } else {
       let magicO = Obj.magic(o);
       let tag = Obj.tag(magicO);
-      tag === Obj.int_tag ?
-        magicO == Obj.repr([]) :
-        {
-          let size = Obj.size(magicO);
-          tag === Obj.first_non_constant_constructor_tag
-          && size === 2
-          && detectList(~maxLength=maxLength - 1, Obj.field(magicO, 1));
-        };
+      tag === Obj.string_tag ? false
+        : tag === Obj.int_tag
+            ? magicO == Obj.repr([])
+            : {
+              let size = Obj.size(magicO);
+              tag === Obj.first_non_constant_constructor_tag
+              && size === 2
+              && detectList(~maxLength=maxLength - 1, Obj.field(magicO, 1));
+            };
     };
 
 /**
