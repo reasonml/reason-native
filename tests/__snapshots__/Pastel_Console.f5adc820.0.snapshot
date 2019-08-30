@@ -6,7 +6,7 @@ Pastel Console › Lists
   <green>\"a\"</resetColor>,
   <green>\"list\"</resetColor>,
   <green>\"of\"</resetColor>,
-  <red>@max-length</resetColor>
+  <green>\"strings\"</resetColor>
 ]
 [
   <magenta>4.9</resetColor>,

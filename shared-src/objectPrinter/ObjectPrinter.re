@@ -8,7 +8,7 @@ let colWidth = {contents: 70};
 
 let maxDepth = {contents: 70};
 
-let maxLength = {contents: 5};
+let maxLength = {contents: 20};
 
 include ObjectPrinterTypes.ObjectPrinter;
 

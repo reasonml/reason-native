@@ -8,6 +8,21 @@ Pastel Console › Circular list
   <green>\"should\"</resetColor>,
   <green>\"not\"</resetColor>,
   <green>\"error\"</resetColor>,
+  <green>\"but\"</resetColor>,
+  <green>\"detect\"</resetColor>,
+  <green>\"length-exceeded\"</resetColor>,
+  <green>\"circular\"</resetColor>,
+  <green>\"list\"</resetColor>,
+  <green>\"should\"</resetColor>,
+  <green>\"not\"</resetColor>,
+  <green>\"error\"</resetColor>,
+  <green>\"but\"</resetColor>,
+  <green>\"detect\"</resetColor>,
+  <green>\"length-exceeded\"</resetColor>,
+  <green>\"circular\"</resetColor>,
+  <green>\"list\"</resetColor>,
+  <green>\"should\"</resetColor>,
+  <green>\"not\"</resetColor>,
   <red>@max-length</resetColor>
 ]
 ========================
