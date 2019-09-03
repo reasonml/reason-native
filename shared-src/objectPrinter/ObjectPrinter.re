@@ -41,7 +41,7 @@ let rec detectList: type o. (~maxLength: int, o) => bool =
       let tag = Obj.tag(magicO);
       tag === Obj.string_tag ? false
         : tag === Obj.int_tag
-            ? magicO == Obj.repr([])
+            ? magicO === Obj.repr([])
             : {
               let size = Obj.size(magicO);
               tag === Obj.first_non_constant_constructor_tag
