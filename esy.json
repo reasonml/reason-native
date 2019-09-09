@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "*",
+    "@opam/reason": "*",
     "refmterr": "*",
     "ocaml": "^4.2.0",
     "@opam/re": "*",
@@ -45,9 +45,14 @@
     "@opam/qcheck-core": ">= 0.9 < 0.10"
   },
   "devDependencies": {
+    "@opam/qcheck-core": "0.9",
     "@opam/merlin": "*",
     "ocaml": "~4.6.4",
-    "@esy-ocaml/reason": "3.4.0",
+    "@opam/dune": "1.10.0",
+    "@opam/reason": "3.5.0",
     "@opam/sexplib0": "*"
+  },
+  "resolutions": {
+    "@opam/reason": "let-def/reason:reason.opam#474900e6d9d5ecef788fbe78e8a23cb20d151a72"
   }
 }
