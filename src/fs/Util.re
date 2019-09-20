@@ -71,6 +71,6 @@ let withDirHandle = (resource, doThis) => {
  */
 let rec resolvePath = (from, toTarget) =>
   switch (toTarget) {
-  | Path.Absolute(a) => a
-  | Relative(r) => Path.join(Path.dirName(from), r)
+  | Fp.Absolute(a) => a
+  | Relative(r) => Fp.join(Fp.dirName(from), r)
   };

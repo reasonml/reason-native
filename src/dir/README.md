@@ -3,7 +3,7 @@
 `Dir` provides a consistent API for common system, user and application
 directories consistently on all platforms.
 
-All directories are returned as `Path.t`.
+All directories are returned as `Fp.t`.
 
 Dir uses the directory conventions borrowed from
 [directories-rs](https://github.com/soc/directories-rs/blob/master/README.md).

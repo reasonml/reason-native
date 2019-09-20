@@ -13,7 +13,7 @@ open Types;
  * https://discuss.ocaml.org/t/how-to-create-a-temporary-directory-in-ocaml/1815/3
  */
 let readText = path => {
-  let stringPath = Path.toString(path);
+  let stringPath = Fp.toString(path);
   let impl = inChan => {
     let lines = {contents: []};
     let continue = {contents: true};
@@ -52,7 +52,7 @@ let readText = path => {
 let readTextExn = path => Util.throwErrorResult(readText(path));
 
 let writeText = (~lineEnds=PlatformDefault, path, lines) => {
-  let stringPath = Path.toString(path);
+  let stringPath = Fp.toString(path);
   let impl = outChan => {
     List.iter(
       line => {

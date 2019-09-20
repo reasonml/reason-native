@@ -1,14 +1,15 @@
 {
-  "name": "@reason-native/path",
+  "name": "@reason-native/fp",
   "version": "0.0.1",
-  "description": "Reason Native file paths",
+  "description": "Reason Native file paths library.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/path"
+    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/fp"
   },
   "license": "MIT",
   "keywords": [
     "path",
+    "fp",
     "filesystem",
     "directories",
     "reasonml",
@@ -17,10 +18,10 @@
     "esy"
   ],
   "esy": {
-    "build": "dune build -p path"
+    "build": "dune build -p fp"
   },
   "scripts": {
-    "release": "node ./scripts/esy-prepublish.js path.json"
+    "release": "node ./scripts/esy-prepublish.js fp.json"
   },
   "dependencies": {
     "@opam/dune": "*",

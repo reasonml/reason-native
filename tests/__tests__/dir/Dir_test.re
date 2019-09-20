@@ -17,17 +17,17 @@ describe("Dir", ({test}) => {
     let appData = Dir.App.data(~appIdentifier="the.best.app");
     module FreshDir =
       Dir.Snapshot({});
-    expect.string(Path.toString(FreshDir.home)).toEqual(
-      Path.toString(home),
+    expect.string(Fp.toString(FreshDir.home)).toEqual(
+      Fp.toString(home),
     );
-    expect.string(Path.toString(FreshDir.cache)).toEqual(
-      Path.toString(cache),
+    expect.string(Fp.toString(FreshDir.cache)).toEqual(
+      Fp.toString(cache),
     );
     expect.string(
-      Path.toString(FreshDir.App.data(~appIdentifier="the.best.app")),
+      Fp.toString(FreshDir.App.data(~appIdentifier="the.best.app")),
     ).
       toEqual(
-      Path.toString(appData),
+      Fp.toString(appData),
     );
   });
 });

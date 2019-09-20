@@ -4,7 +4,7 @@
 open Types;
 
 let compareBaseName = (p1, p2) =>
-  switch (Path.baseName(p1), Path.baseName(p2)) {
+  switch (Fp.baseName(p1), Fp.baseName(p2)) {
   | (None, None) => 0
   | (Some(x), None) => 1
   | (None, Some(x)) => (-1)

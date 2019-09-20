@@ -1,7 +1,7 @@
 (library
   (public_name dir.lib)
   (name Dir)
-  (libraries path.lib unix)
+  (libraries fp unix)
   (c_names  dir )
   (js_of_ocaml (javascript_files dir.js ))
 )

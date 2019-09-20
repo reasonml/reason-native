@@ -4,7 +4,7 @@
   ; IMPORTANT: -linkall flag is required to include all tests.
   (ocamlopt_flags -linkall -g)
   (libraries
-    path.lib
+    fp
     fs.lib
     dir.lib
     rely.lib

@@ -12,7 +12,7 @@ open Types;
  * overhead of path conversion - uses string).
  */
 let rec readLink__ = str =>
-  try (Path.testForPathExn(Unix.readlink(str))) {
+  try (Fp.testForPathExn(Unix.readlink(str))) {
   /* Invalid argument - not a symlink */
   | Unix.Unix_error(Unix.EINVAL, _, _) =>
     raise(Invalid_argument("Path is not a symlink " ++ str))
@@ -26,7 +26,7 @@ let rec readLink__ = str =>
  * to handle that in various circumstances.
  */
 let rec stat = path =>
-  try (Some(Unix.lstat(Path.toString(path)))) {
+  try (Some(Unix.lstat(Fp.toString(path)))) {
   | Unix.Unix_error(Unix.ENOTDIR, _, _) => None
   | Unix.Unix_error(Unix.ENOENT, _, _) => None
   | Unix.Unix_error(Unix.EINTR, _, _) => stat(path)
@@ -40,7 +40,7 @@ let rec statExn = path => {
   | None =>
     raise(
       Invalid_argument(
-        "Path passed to statExn that does not exist " ++ Path.toString(path),
+        "Path passed to statExn that does not exist " ++ Fp.toString(path),
       ),
     )
   };
@@ -50,7 +50,7 @@ let makeResult = (path, fileStat: Unix.stats) =>
   switch (fileStat.st_kind) {
   | Unix.S_REG => File(path, fileStat)
   | Unix.S_DIR => Dir(path, fileStat)
-  | Unix.S_LNK => Link(path, readLink__(Path.toString(path)), fileStat)
+  | Unix.S_LNK => Link(path, readLink__(Fp.toString(path)), fileStat)
   | Unix.S_CHR => Other(path, fileStat, CharacterDevice)
   | Unix.S_BLK => Other(path, fileStat, BlockDevice)
   | Unix.S_FIFO => Other(path, fileStat, NamedPipe)
@@ -71,7 +71,7 @@ let readDirByHandle = handle =>
 
 let rec readDir = path => {
   let impl = () => {
-    let dirHandle = Unix.opendir(Path.toString(path));
+    let dirHandle = Unix.opendir(Fp.toString(path));
     /* Making this tail recursive so that if an exception is raised, it's
      * readable. */
     let rec scan = (acc, dirHandle) => {
@@ -81,7 +81,7 @@ let rec readDir = path => {
       | Some("..")
       | Some(".") => scan(acc, dirHandle)
       | Some(fileName) =>
-        let filePath = Path.append(path, fileName);
+        let filePath = Fp.append(path, fileName);
         scan([filePath, ...acc], dirHandle);
       };
     };
@@ -90,7 +90,7 @@ let rec readDir = path => {
   try (Ok(impl())) {
   | Unix.Unix_error(Unix.ENOENT, _, _) =>
     Error(
-      Invalid_argument("Dir " ++ Path.toString(path) ++ " does not exist"),
+      Invalid_argument("Dir " ++ Fp.toString(path) ++ " does not exist"),
     )
   | Unix.Unix_error(Unix.EINTR, _, _) => readDir(path)
   | Unix.Unix_error(_, _, _) as e => Error(e)

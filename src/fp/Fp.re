@@ -281,7 +281,7 @@ let rec repeat = (soFar, i, s) =>
  *  relativize(a/rest1..., ../b/rest2...) == [...len(1)]../b/rest2
  *
  *  "upDirs" is the number of ../ the path is assumed to have. The segments
- *  `s1`/`s2`, are in the path order from left to right, unlike `Path.t` which
+ *  `s1`/`s2`, are in the path order from left to right, unlike `Fp.t` which
  *  usually stores them in reverse order. Relativizing paths is one place where
  *  it's more convenient to have them in the left to right segment order.
  */
@@ -456,17 +456,17 @@ let sub: type k1. (string, t(k1)) => t(k1) =
  *
  * The following pairs are equivalent but note that `append` is always safe.
  *
- *     Path.append(Path.root, "foo");
- *     Option.getUnsafe(Path.absolute("/foo"));
+ *     Fp.append(Fp.root, "foo");
+ *     Option.getUnsafe(Fp.absolute("/foo"));
  *
- *     Path.append(Path.root, "foo/bar");
- *     Option.getUnsafe(Path.absolute("/foo/bar"));
+ *     Fp.append(Fp.root, "foo/bar");
+ *     Option.getUnsafe(Fp.absolute("/foo/bar"));
  *
- *     Path.append(Path.drive("C"), "foo/bar");
- *     Option.getUnsafe(Path.absolute("C:/foo/bar"));
+ *     Fp.append(Fp.drive("C"), "foo/bar");
+ *     Option.getUnsafe(Fp.absolute("C:/foo/bar"));
  *
- *     Path.append(Path.dot, "foo");
- *     Option.getUnsafe(Path.relative("./foo"));
+ *     Fp.append(Fp.dot, "foo");
+ *     Option.getUnsafe(Fp.relative("./foo"));
  */
 let append: type k1. (t(k1), string) => t(k1) =
   (path, name) => continue(name, path);

@@ -9,11 +9,11 @@ open TestFramework;
 
 external reraise: exn => _ = "%reraise";
 
-let unresolvedExePath = Path.absoluteExn(Sys.executable_name);
+let unresolvedExePath = Fp.absoluteExn(Sys.executable_name);
 let resolvedExePath = Fs.resolveLinkExn(unresolvedExePath);
-let exeDir = Path.dirName(resolvedExePath);
-let testDir = Path.At.(exeDir / "testDir");
-let testDataDir = Path.At.(exeDir / "testDir" / "data");
+let exeDir = Fp.dirName(resolvedExePath);
+let testDir = Fp.At.(exeDir / "testDir");
+let testDataDir = Fp.At.(exeDir / "testDir" / "data");
 
 let ensureTestDir = () => {
   switch (Fs.query(testDir)) {
@@ -31,7 +31,7 @@ let otherPlatform = Sys.win32 ? Fs.Unix : Fs.Windows;
 describe("Fs", ({test}) => {
   test("Removing directories", ({expect}) => {
     ensureTestDir();
-    let simpleTextFilePath = Path.append(testDataDir, "simple-text-file.txt");
+    let simpleTextFilePath = Fp.append(testDataDir, "simple-text-file.txt");
     let simpleLines = ["hello", "these", "are", "some", "lines"];
     Fs.writeTextExn(simpleTextFilePath, simpleLines);
     expect.fn(() => Fs.rmEmptyDirExn(testDataDir)).toThrow();
@@ -42,7 +42,7 @@ describe("Fs", ({test}) => {
   });
   test("Writing lines", ({expect}) => {
     ensureTestDir();
-    let simpleTextFilePath = Path.append(testDataDir, "simple-text-file.txt");
+    let simpleTextFilePath = Fp.append(testDataDir, "simple-text-file.txt");
     expect.fn(() => Fs.readTextExn(simpleTextFilePath)).toThrow();
     let simpleLines = ["hello", "these", "are", "some", "lines"];
     Fs.writeTextExn(simpleTextFilePath, simpleLines);
@@ -60,8 +60,8 @@ describe("Fs", ({test}) => {
   });
   test("Links", ({expect}) => {
     ensureTestDir();
-    let dir = Path.append(testDataDir, "dir");
-    let dirFoo = Path.append(dir, "foo");
+    let dir = Fp.append(testDataDir, "dir");
+    let dirFoo = Fp.append(dir, "foo");
     expect.fn(() => Fs.readDirExn(dir)).toThrow();
     Fs.mkDirPExn(dir);
     expect.fn(() => Fs.readDirExn(dir)).not.toThrow();
@@ -69,8 +69,8 @@ describe("Fs", ({test}) => {
     expect.fn(() => Fs.readDirExn(dirFoo)).toThrow();
     let subdirs = Fs.readDirExn(dir);
     expect.int(List.length(subdirs)).toBe(0);
-    let linkToDir = Path.append(testDataDir, "toDir");
-    let linkToDirFoo = Path.append(testDataDir, "toDirFoo");
+    let linkToDir = Fp.append(testDataDir, "toDir");
+    let linkToDirFoo = Fp.append(testDataDir, "toDirFoo");
     /* Create links to files that don't yet exist */
     Fs.linkDirExn(linkToDir, dir);
     Fs.linkDirExn(linkToDirFoo, dirFoo);
@@ -84,74 +84,74 @@ describe("Fs", ({test}) => {
     Fs.linkExn(linkToDirFoo, dirFoo);
 
     /* Test that the links point to the right places */
-    expect.string(Fs.resolveLinkExn(linkToDir) |> Path.toString).toEqual(
-      dir |> Path.toString,
+    expect.string(Fs.resolveLinkExn(linkToDir) |> Fp.toString).toEqual(
+      dir |> Fp.toString,
     );
-    expect.string(Fs.resolveLinkExn(linkToDirFoo) |> Path.toString).toEqual(
-      dirFoo |> Path.toString,
+    expect.string(Fs.resolveLinkExn(linkToDirFoo) |> Fp.toString).toEqual(
+      dirFoo |> Fp.toString,
     );
-    expect.lines(List.map(Path.toString, Fs.linksExn(linkToDir))).
+    expect.lines(List.map(Fp.toString, Fs.linksExn(linkToDir))).
       toEqualLines([
-      Path.toString(dir),
+      Fp.toString(dir),
     ]);
-    expect.lines(List.map(Path.toString, Fs.linksExn(linkToDirFoo))).
+    expect.lines(List.map(Fp.toString, Fs.linksExn(linkToDirFoo))).
       toEqualLines([
-      Path.toString(dirFoo),
+      Fp.toString(dirFoo),
     ]);
 
     /* Two levels of links */
-    let linkToToDirFoo = Path.append(testDataDir, "toToDirFoo");
+    let linkToToDirFoo = Fp.append(testDataDir, "toToDirFoo");
     /* Create links to files that don't yet exist */
     Fs.linkDirExn(linkToToDirFoo, linkToDirFoo);
     /* Test that the "hops" for multiple links are correct */
-    expect.string(Fs.resolveLinkExn(linkToToDirFoo) |> Path.toString).toEqual(
-      dirFoo |> Path.toString,
+    expect.string(Fs.resolveLinkExn(linkToToDirFoo) |> Fp.toString).toEqual(
+      dirFoo |> Fp.toString,
     );
-    expect.lines(List.map(Path.toString, Fs.linksExn(linkToToDirFoo))).
+    expect.lines(List.map(Fp.toString, Fs.linksExn(linkToToDirFoo))).
       toEqualLines([
-      Path.toString(linkToDirFoo),
-      Path.toString(dirFoo),
+      Fp.toString(linkToDirFoo),
+      Fp.toString(dirFoo),
     ]);
 
     /* Now test relative links */
-    let relLinkToDirFoo = Path.append(testDataDir, "relToDirFoo");
-    let relLinkToToDirFoo = Path.append(testDataDir, "relToToDirFoo");
+    let relLinkToDirFoo = Fp.append(testDataDir, "relToDirFoo");
+    let relLinkToToDirFoo = Fp.append(testDataDir, "relToToDirFoo");
     /* Create links to files that don't yet exist */
-    Fs.linkExn(relLinkToDirFoo, Path.At.(Path.dot / "dir" / "foo"));
-    Fs.linkExn(relLinkToToDirFoo, Path.At.(Path.dot / "toDirFoo"));
+    Fs.linkExn(relLinkToDirFoo, Fp.At.(Fp.dot / "dir" / "foo"));
+    Fs.linkExn(relLinkToToDirFoo, Fp.At.(Fp.dot / "toDirFoo"));
     /* Test that the "hops" for multiple links are correct */
-    expect.string(Fs.resolveLinkExn(relLinkToDirFoo) |> Path.toString).
+    expect.string(Fs.resolveLinkExn(relLinkToDirFoo) |> Fp.toString).
       toEqual(
-      dirFoo |> Path.toString,
+      dirFoo |> Fp.toString,
     );
-    expect.string(Fs.resolveLinkExn(relLinkToToDirFoo) |> Path.toString).
+    expect.string(Fs.resolveLinkExn(relLinkToToDirFoo) |> Fp.toString).
       toEqual(
-      dirFoo |> Path.toString,
+      dirFoo |> Fp.toString,
     );
-    expect.lines(List.map(Path.toString, Fs.linksExn(relLinkToDirFoo))).
+    expect.lines(List.map(Fp.toString, Fs.linksExn(relLinkToDirFoo))).
       toEqualLines([
-      Path.toString(dirFoo),
+      Fp.toString(dirFoo),
     ]);
-    expect.lines(List.map(Path.toString, Fs.linksExn(relLinkToToDirFoo))).
+    expect.lines(List.map(Fp.toString, Fs.linksExn(relLinkToToDirFoo))).
       toEqualLines([
-      Path.toString(linkToDirFoo),
-      Path.toString(dirFoo),
+      Fp.toString(linkToDirFoo),
+      Fp.toString(dirFoo),
     ]);
 
     /* Now test sideways links */
-    let deepDir = Path.append(testDataDir, "deepDir");
+    let deepDir = Fp.append(testDataDir, "deepDir");
     Fs.mkDirExn(deepDir);
-    let sidewaysLinkToDirFoo = Path.append(deepDir, "sidewaysToDirFoo");
+    let sidewaysLinkToDirFoo = Fp.append(deepDir, "sidewaysToDirFoo");
     /* Create links to files that don't yet exist */
-    Fs.linkExn(sidewaysLinkToDirFoo, Path.At.(Path.dot /../ "dir" / "foo"));
+    Fs.linkExn(sidewaysLinkToDirFoo, Fp.At.(Fp.dot /../ "dir" / "foo"));
     /* Test that the "hops" for multiple links are correct */
-    expect.string(Fs.resolveLinkExn(sidewaysLinkToDirFoo) |> Path.toString).
+    expect.string(Fs.resolveLinkExn(sidewaysLinkToDirFoo) |> Fp.toString).
       toEqual(
-      dirFoo |> Path.toString,
+      dirFoo |> Fp.toString,
     );
-    expect.lines(List.map(Path.toString, Fs.linksExn(relLinkToDirFoo))).
+    expect.lines(List.map(Fp.toString, Fs.linksExn(relLinkToDirFoo))).
       toEqualLines([
-      Path.toString(dirFoo),
+      Fp.toString(dirFoo),
     ]);
 
     let lines = ["bye", "hello"];

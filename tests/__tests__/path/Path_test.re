@@ -7,12 +7,12 @@
 
 open TestFramework;
 
-module PathMatchers = {
+module FpMatchers = {
   open Rely.MatcherTypes;
-  type absolutePathMatchers = {toEqualPath: 'kind. Path.t('kind) => unit};
+  type absolutePathMatchers = {toEqualPath: 'kind. Fp.t('kind) => unit};
 
   type absolutePathMatchersWithNot = {
-    toEqualPath: 'kind. Path.t('kind) => unit,
+    toEqualPath: 'kind. Fp.t('kind) => unit,
     not: absolutePathMatchers,
   };
 
@@ -29,7 +29,7 @@ module PathMatchers = {
         let actualAbsolutePath = actualThunk();
         let expectedAbsolutePath = expectedThunk();
         let pass =
-          Path.eq(actualAbsolutePath, expectedAbsolutePath) == !isNot;
+          Fp.eq(actualAbsolutePath, expectedAbsolutePath) == !isNot;
         if (!pass) {
           let failureMessage =
             String.concat(
@@ -45,11 +45,11 @@ module PathMatchers = {
                 ),
                 "\n\n",
                 "Expected path ",
-                Path.toDebugString(actualAbsolutePath),
+                Fp.toDebugString(actualAbsolutePath),
                 " to ",
                 isNot ? "not " : "",
                 "equal path ",
-                Path.toDebugString(expectedAbsolutePath),
+                Fp.toDebugString(expectedAbsolutePath),
               ],
             );
           (() => failureMessage, false);
@@ -71,15 +71,15 @@ module PathMatchers = {
     };
   };
 };
-open PathMatchers;
+open FpMatchers;
 
 type customMatchers = {
-  path: 'kind. Path.t('kind) => PathMatchers.absolutePathMatchersWithNot,
+  path: 'kind. Fp.t('kind) => FpMatchers.absolutePathMatchersWithNot,
 };
 
 let customMatchers = extendUtils => {
   path: path =>
-    PathMatchers.makeAbsolutePathMatchers(".ext.path", path, extendUtils),
+    FpMatchers.makeAbsolutePathMatchers(".ext.path", path, extendUtils),
 };
 
 let describe =
@@ -88,49 +88,49 @@ let describe =
 
 describe("Path", ({test}) => {
   test("Basic creation", ({expect}) => {
-    let path = Path.absoluteExn("/foo/bar/baz");
-    expect.string(path |> Path.toString).toEqual("/foo/bar/baz");
+    let path = Fp.absoluteExn("/foo/bar/baz");
+    expect.string(path |> Fp.toString).toEqual("/foo/bar/baz");
 
-    let path = Path.absoluteExn("C:/foo/bar/baz");
-    expect.string(path |> Path.toString).toEqual("C:/foo/bar/baz");
+    let path = Fp.absoluteExn("C:/foo/bar/baz");
+    expect.string(path |> Fp.toString).toEqual("C:/foo/bar/baz");
 
-    let path = Path.absoluteExn("/foo");
-    expect.string(path |> Path.toString).toEqual("/foo");
+    let path = Fp.absoluteExn("/foo");
+    expect.string(path |> Fp.toString).toEqual("/foo");
 
-    let path = Path.absoluteExn("C:/foo");
-    expect.string(path |> Path.toString).toEqual("C:/foo");
+    let path = Fp.absoluteExn("C:/foo");
+    expect.string(path |> Fp.toString).toEqual("C:/foo");
 
-    let path = Path.absoluteExn("/");
-    expect.string(path |> Path.toString).toEqual("/");
+    let path = Fp.absoluteExn("/");
+    expect.string(path |> Fp.toString).toEqual("/");
 
-    let path = Path.absoluteExn("C:/");
-    expect.string(path |> Path.toString).toEqual("C:/");
+    let path = Fp.absoluteExn("C:/");
+    expect.string(path |> Fp.toString).toEqual("C:/");
   });
 
   test("Parent directory", ({expect}) => {
-    let cDrive = Path.absoluteExn("C:/");
-    let cFoo = Path.absoluteExn("C:/foo");
-    let cFooBar = Path.absoluteExn("C:/foo/bar/");
-    let root = Path.absoluteExn("/");
-    let foo = Path.absoluteExn("/foo");
-    let fooBar = Path.absoluteExn("/foo/bar/");
-    expect.bool(cDrive |> Path.hasParentDir).toBeFalse();
-    expect.bool(cFoo |> Path.hasParentDir).toBeTrue();
-    expect.bool(cFooBar |> Path.hasParentDir).toBeTrue();
-    expect.ext.path(Path.dirName(cFooBar)).toEqualPath(cFoo);
-    expect.ext.path(Path.dirName(cFoo)).toEqualPath(cDrive);
-    expect.equal(Path.baseName(cFooBar), Some("bar"));
-    expect.equal(Path.baseName(cFoo), Some("foo"));
-    expect.equal(Path.baseName(cDrive), None);
+    let cDrive = Fp.absoluteExn("C:/");
+    let cFoo = Fp.absoluteExn("C:/foo");
+    let cFooBar = Fp.absoluteExn("C:/foo/bar/");
+    let root = Fp.absoluteExn("/");
+    let foo = Fp.absoluteExn("/foo");
+    let fooBar = Fp.absoluteExn("/foo/bar/");
+    expect.bool(cDrive |> Fp.hasParentDir).toBeFalse();
+    expect.bool(cFoo |> Fp.hasParentDir).toBeTrue();
+    expect.bool(cFooBar |> Fp.hasParentDir).toBeTrue();
+    expect.ext.path(Fp.dirName(cFooBar)).toEqualPath(cFoo);
+    expect.ext.path(Fp.dirName(cFoo)).toEqualPath(cDrive);
+    expect.equal(Fp.baseName(cFooBar), Some("bar"));
+    expect.equal(Fp.baseName(cFoo), Some("foo"));
+    expect.equal(Fp.baseName(cDrive), None);
 
-    expect.bool(root |> Path.hasParentDir).toBeFalse();
-    expect.bool(foo |> Path.hasParentDir).toBeTrue();
-    expect.bool(fooBar |> Path.hasParentDir).toBeTrue();
-    expect.ext.path(Path.dirName(fooBar)).toEqualPath(foo);
-    expect.ext.path(Path.dirName(foo)).toEqualPath(root);
-    expect.equal(Path.baseName(cFooBar), Some("bar"));
-    expect.equal(Path.baseName(cFoo), Some("foo"));
-    expect.equal(Path.baseName(cDrive), None);
+    expect.bool(root |> Fp.hasParentDir).toBeFalse();
+    expect.bool(foo |> Fp.hasParentDir).toBeTrue();
+    expect.bool(fooBar |> Fp.hasParentDir).toBeTrue();
+    expect.ext.path(Fp.dirName(fooBar)).toEqualPath(foo);
+    expect.ext.path(Fp.dirName(foo)).toEqualPath(root);
+    expect.equal(Fp.baseName(cFooBar), Some("bar"));
+    expect.equal(Fp.baseName(cFoo), Some("foo"));
+    expect.equal(Fp.baseName(cDrive), None);
   });
 
   test("Weird characters", ({expect}) => {
@@ -139,121 +139,121 @@ describe("Path", ({test}) => {
      * Currently, spaces don't need to be escaped in the convention and some
      * files might start with a space! Who would do that to their computer?
      */
-    let path = Path.absoluteExn(" / ");
-    expect.string(path |> Path.toString).toEqual("/");
+    let path = Fp.absoluteExn(" / ");
+    expect.string(path |> Fp.toString).toEqual("/");
 
-    let path = Path.absoluteExn(" C:/ ");
-    expect.string(path |> Path.toString).toEqual("C:/");
+    let path = Fp.absoluteExn(" C:/ ");
+    expect.string(path |> Fp.toString).toEqual("C:/");
 
-    let path = Path.absoluteExn("/C:/");
-    expect.string(path |> Path.toString).toEqual("/C:");
+    let path = Fp.absoluteExn("/C:/");
+    expect.string(path |> Fp.toString).toEqual("/C:");
 
-    let path = Path.relativeExn(".../a");
-    expect.string(path |> Path.toDebugString).toEqual("./.../a");
+    let path = Fp.relativeExn(".../a");
+    expect.string(path |> Fp.toDebugString).toEqual("./.../a");
 
-    let path = Path.relativeExn("../C:/");
-    expect.string(path |> Path.toDebugString).toEqual("./../C:");
+    let path = Fp.relativeExn("../C:/");
+    expect.string(path |> Fp.toDebugString).toEqual("./../C:");
 
-    let path = Path.absoluteExn("/a/C:/");
-    expect.string(path |> Path.toString).toEqual("/a/C:");
+    let path = Fp.absoluteExn("/a/C:/");
+    expect.string(path |> Fp.toString).toEqual("/a/C:");
 
-    let path = Path.relativeExn("./a/C:/");
-    expect.string(path |> Path.toDebugString).toEqual("./a/C:");
+    let path = Fp.relativeExn("./a/C:/");
+    expect.string(path |> Fp.toDebugString).toEqual("./a/C:");
 
-    let path = Path.relativeExn("./a/C:/../");
-    expect.string(path |> Path.toDebugString).toEqual("./a");
+    let path = Fp.relativeExn("./a/C:/../");
+    expect.string(path |> Fp.toDebugString).toEqual("./a");
 
-    let path = Path.absoluteExn("/foo\\/");
-    expect.string(path |> Path.toString).toEqual("/foo\\/");
+    let path = Fp.absoluteExn("/foo\\/");
+    expect.string(path |> Fp.toString).toEqual("/foo\\/");
 
-    let path = Path.absoluteExn(" C:/\\/");
-    expect.string(path |> Path.toString).toEqual("C:/\\/");
+    let path = Fp.absoluteExn(" C:/\\/");
+    expect.string(path |> Fp.toString).toEqual("C:/\\/");
   });
 
   test("Relative/absolute inference", ({expect}) => {
-    expect.fn(() => Path.absoluteExn("/../../")).not.toThrow();
+    expect.fn(() => Fp.absoluteExn("/../../")).not.toThrow();
 
-    expect.fn(() => Path.relativeExn("./../../")).not.toThrow();
+    expect.fn(() => Fp.relativeExn("./../../")).not.toThrow();
 
-    expect.fn(() => Path.relativeExn("../../")).not.toThrow();
+    expect.fn(() => Fp.relativeExn("../../")).not.toThrow();
 
-    expect.fn(() => Path.relativeExn("a/../../")).not.toThrow();
+    expect.fn(() => Fp.relativeExn("a/../../")).not.toThrow();
 
-    expect.fn(() => Path.relativeExn("~/../../")).not.toThrow();
+    expect.fn(() => Fp.relativeExn("~/../../")).not.toThrow();
 
-    expect.fn(() => Path.relativeExn("~/../../")).not.toThrow();
+    expect.fn(() => Fp.relativeExn("~/../../")).not.toThrow();
 
-    expect.fn(() => Path.relativeExn("~/a/../../")).not.toThrow();
+    expect.fn(() => Fp.relativeExn("~/a/../../")).not.toThrow();
 
-    expect.fn(() => Path.absoluteExn("C:/../")).not.toThrow();
+    expect.fn(() => Fp.absoluteExn("C:/../")).not.toThrow();
 
-    expect.fn(() => Path.absoluteExn("")).toThrow();
+    expect.fn(() => Fp.absoluteExn("")).toThrow();
 
-    expect.fn(() => Path.relativeExn("/foo")).toThrow();
+    expect.fn(() => Fp.relativeExn("/foo")).toThrow();
 
-    expect.fn(() => Path.relativeExn("C:/foo")).toThrow();
+    expect.fn(() => Fp.relativeExn("C:/foo")).toThrow();
 
-    expect.fn(() => Path.absoluteExn("a/b")).toThrow();
+    expect.fn(() => Fp.absoluteExn("a/b")).toThrow();
   });
 
   test("Path compression", ({expect}) => {
-    let path = Path.relativeExn("a/../..//");
-    expect.string(path |> Path.toDebugString).toEqual("./..");
+    let path = Fp.relativeExn("a/../..//");
+    expect.string(path |> Fp.toDebugString).toEqual("./..");
 
-    let path = Path.absoluteExn("C:/../..//");
-    expect.string(path |> Path.toDebugString).toEqual("C:/");
+    let path = Fp.absoluteExn("C:/../..//");
+    expect.string(path |> Fp.toDebugString).toEqual("C:/");
 
-    let path = Path.absoluteExn("C://");
-    expect.string(path |> Path.toDebugString).toEqual("C:/");
+    let path = Fp.absoluteExn("C://");
+    expect.string(path |> Fp.toDebugString).toEqual("C:/");
 
-    let path = Path.absoluteExn("//");
-    expect.string(path |> Path.toDebugString).toEqual("/");
+    let path = Fp.absoluteExn("//");
+    expect.string(path |> Fp.toDebugString).toEqual("/");
 
-    let path = Path.absoluteExn("/../..//");
-    expect.string(path |> Path.toDebugString).toEqual("/");
+    let path = Fp.absoluteExn("/../..//");
+    expect.string(path |> Fp.toDebugString).toEqual("/");
 
-    let path = Path.relativeExn("a/../../");
-    expect.string(path |> Path.toDebugString).toEqual("./..");
+    let path = Fp.relativeExn("a/../../");
+    expect.string(path |> Fp.toDebugString).toEqual("./..");
 
-    let path = Path.relativeExn("~/a/../../");
-    expect.string(path |> Path.toDebugString).toEqual("~/..");
+    let path = Fp.relativeExn("~/a/../../");
+    expect.string(path |> Fp.toDebugString).toEqual("~/..");
 
-    let path = Path.relativeExn("~/a/../");
-    expect.string(path |> Path.toDebugString).toEqual("~/");
+    let path = Fp.relativeExn("~/a/../");
+    expect.string(path |> Fp.toDebugString).toEqual("~/");
 
-    let path = Path.relativeExn("~/../../");
-    expect.string(path |> Path.toDebugString).toEqual("~/../..");
+    let path = Fp.relativeExn("~/../../");
+    expect.string(path |> Fp.toDebugString).toEqual("~/../..");
 
-    let path = Path.absoluteExn("/../../");
-    expect.string(path |> Path.toString).toEqual("/");
+    let path = Fp.absoluteExn("/../../");
+    expect.string(path |> Fp.toString).toEqual("/");
 
     /* Should not compress ../ for relatives beyond what is possible */
-    let path = Path.relativeExn("./../../");
-    expect.string(path |> Path.toDebugString).toEqual("./../..");
+    let path = Fp.relativeExn("./../../");
+    expect.string(path |> Fp.toDebugString).toEqual("./../..");
 
-    let path = Path.relativeExn("../../");
-    expect.string(path |> Path.toDebugString).toEqual("./../..");
+    let path = Fp.relativeExn("../../");
+    expect.string(path |> Fp.toDebugString).toEqual("./../..");
 
-    let path = Path.relativeExn("../../a/../");
-    expect.string(path |> Path.toDebugString).toEqual("./../..");
+    let path = Fp.relativeExn("../../a/../");
+    expect.string(path |> Fp.toDebugString).toEqual("./../..");
 
-    let path = Path.relativeExn("./~");
-    expect.string(path |> Path.toDebugString).toEqual("./~");
+    let path = Fp.relativeExn("./~");
+    expect.string(path |> Fp.toDebugString).toEqual("./~");
 
-    let path = Path.absoluteExn("/~");
-    expect.string(path |> Path.toDebugString).toEqual("/~");
+    let path = Fp.absoluteExn("/~");
+    expect.string(path |> Fp.toDebugString).toEqual("/~");
 
-    let relativePath = Path.relativeExn("");
-    expect.string(relativePath |> Path.toDebugString).toEqual("./");
+    let relativePath = Fp.relativeExn("");
+    expect.string(relativePath |> Fp.toDebugString).toEqual("./");
 
-    let relativePath = Path.relativeExn(".");
-    expect.string(relativePath |> Path.toDebugString).toEqual("./");
+    let relativePath = Fp.relativeExn(".");
+    expect.string(relativePath |> Fp.toDebugString).toEqual("./");
 
-    let relativePath = Path.relativeExn("./");
-    expect.string(relativePath |> Path.toDebugString).toEqual("./");
+    let relativePath = Fp.relativeExn("./");
+    expect.string(relativePath |> Fp.toDebugString).toEqual("./");
 
-    let relativePath = Path.relativeExn(".//");
-    expect.string(relativePath |> Path.toDebugString).toEqual("./");
+    let relativePath = Fp.relativeExn(".//");
+    expect.string(relativePath |> Fp.toDebugString).toEqual("./");
   });
 
   test("Path escaping", ({expect}) => {
@@ -262,8 +262,8 @@ describe("Path", ({test}) => {
      * Currently, spaces don't need to be escaped in the convention and some
      * files might start with a space! Who would do that to their computer?
      */
-    let path = Path.absoluteExn(" C:/ ");
-    expect.string(path |> Path.toString).toEqual("C:/");
+    let path = Fp.absoluteExn(" C:/ ");
+    expect.string(path |> Fp.toString).toEqual("C:/");
 
     /**
      * To make a truly universal usable path format, we should accept both
@@ -272,57 +272,57 @@ describe("Path", ({test}) => {
      * mean an escaped forward slash. Similarly, a backslash followed
      * immediately by a backslash should also be considered a path separator.
      */
-    let path = Path.absoluteExn("/foo\\/");
-    expect.string(path |> Path.toString).toEqual("/foo\\/");
+    let path = Fp.absoluteExn("/foo\\/");
+    expect.string(path |> Fp.toString).toEqual("/foo\\/");
 
-    let path = Path.absoluteExn(" C:/\\/");
-    expect.string(path |> Path.toString).toEqual("C:/\\/");
+    let path = Fp.absoluteExn(" C:/\\/");
+    expect.string(path |> Fp.toString).toEqual("C:/\\/");
 
-    let path = Path.relativeExn("./\\./foo");
-    expect.string(path |> Path.toDebugString).toEqual("./\\./foo");
+    let path = Fp.relativeExn("./\\./foo");
+    expect.string(path |> Fp.toDebugString).toEqual("./\\./foo");
 
-    let path = Path.relativeExn(".\\./foo");
-    expect.string(path |> Path.toDebugString).toEqual("./.\\./foo");
+    let path = Fp.relativeExn(".\\./foo");
+    expect.string(path |> Fp.toDebugString).toEqual("./.\\./foo");
 
-    let path = Path.relativeExn("./.\\./foo");
-    expect.string(path |> Path.toDebugString).toEqual("./.\\./foo");
+    let path = Fp.relativeExn("./.\\./foo");
+    expect.string(path |> Fp.toDebugString).toEqual("./.\\./foo");
 
-    let path = Path.absoluteExn("C:/./\\./foo");
-    expect.string(path |> Path.toString).toEqual("C:/\\./foo");
+    let path = Fp.absoluteExn("C:/./\\./foo");
+    expect.string(path |> Fp.toString).toEqual("C:/\\./foo");
 
-    let path = Path.absoluteExn("C:/\\/foo");
-    expect.string(path |> Path.toString).toEqual("C:/\\/foo");
+    let path = Fp.absoluteExn("C:/\\/foo");
+    expect.string(path |> Fp.toString).toEqual("C:/\\/foo");
 
-    let path = Path.absoluteExn("/\\/foo");
-    expect.string(path |> Path.toString).toEqual("/\\/foo");
+    let path = Fp.absoluteExn("/\\/foo");
+    expect.string(path |> Fp.toString).toEqual("/\\/foo");
   });
 
   test("Syntax", ({expect}) => {
-    let root = Path.root;
-    let drive = Path.drive("C:");
-    let relRoot = Path.relativeExn("a");
-    let path = Path.At.(relRoot / "b" /../ "");
-    expect.string(path |> Path.toDebugString).toEqual("./a");
+    let root = Fp.root;
+    let drive = Fp.drive("C:");
+    let relRoot = Fp.relativeExn("a");
+    let path = Fp.At.(relRoot / "b" /../ "");
+    expect.string(path |> Fp.toDebugString).toEqual("./a");
 
-    let path = Path.At.(relRoot / "b" /../../ "");
-    expect.string(path |> Path.toDebugString).toEqual("./");
+    let path = Fp.At.(relRoot / "b" /../../ "");
+    expect.string(path |> Fp.toDebugString).toEqual("./");
 
-    let path = Path.At.(drive / "a" / "b" /../ "");
-    expect.string(path |> Path.toDebugString).toEqual("C:/a");
+    let path = Fp.At.(drive / "a" / "b" /../ "");
+    expect.string(path |> Fp.toDebugString).toEqual("C:/a");
 
-    let path = Path.At.(drive / "a" / "b" /../../ "");
-    expect.string(path |> Path.toDebugString).toEqual("C:/");
+    let path = Fp.At.(drive / "a" / "b" /../../ "");
+    expect.string(path |> Fp.toDebugString).toEqual("C:/");
 
-    let path = Path.At.(root / "a" / "b" /../ "");
-    expect.string(path |> Path.toDebugString).toEqual("/a");
+    let path = Fp.At.(root / "a" / "b" /../ "");
+    expect.string(path |> Fp.toDebugString).toEqual("/a");
 
-    let path = Path.At.(root / "a" / "b" /../../ "");
-    expect.string(path |> Path.toDebugString).toEqual("/");
+    let path = Fp.At.(root / "a" / "b" /../../ "");
+    expect.string(path |> Fp.toDebugString).toEqual("/");
   });
 
   test("Relativization throws for mismatched drives", ({expect}) => {
-    open Path;
-    let driveC = Path.drive("C:");
+    open Fp;
+    let driveC = Fp.drive("C:");
     expect.fn(() =>
       relativizeExn(
         ~source=At.(driveC / "a" / "b" / "qqq"),
@@ -351,7 +351,7 @@ describe("Path", ({test}) => {
   });
 
   test("Relativization throws for impossible relativization", ({expect}) => {
-    open Path;
+    open Fp;
     expect.fn(() =>
       relativizeExn(~source=At.(dot / ".." / ""), ~dest=At.(dot / "a"))
     ).
@@ -368,12 +368,12 @@ describe("Path", ({test}) => {
   });
 
   test("Relativization correctly for absolute paths", ({expect}) => {
-    open Path;
-    let root = Path.root;
+    open Fp;
+    let root = Fp.root;
 
     /* let rel = */
-    /*   Path.(relativizeExn(~source=At.(root / "a"), ~dest=At.(root / "a"))); */
-    /* expect.bool(Path.eq(Path.dot, rel)).toBeTrue(); */
+    /*   Fp.(relativizeExn(~source=At.(root / "a"), ~dest=At.(root / "a"))); */
+    /* expect.bool(Fp.eq(Fp.dot, rel)).toBeTrue(); */
 
     let rel =
       relativizeExn(
@@ -430,8 +430,8 @@ describe("Path", ({test}) => {
   });
 
   test("Relativization correctly for absolute drives", ({expect}) => {
-    open Path;
-    let driveC = Path.drive("C:");
+    open Fp;
+    let driveC = Fp.drive("C:");
 
     let rel =
       relativizeExn(
@@ -485,7 +485,7 @@ describe("Path", ({test}) => {
   });
 
   test("Relativization correctly for relative paths", ({expect}) => {
-    open Path;
+    open Fp;
 
     let rel =
       relativizeExn(~source=At.(dot / "a" / "b"), ~dest=At.(dot / "a"));
@@ -579,7 +579,7 @@ describe("Path", ({test}) => {
   });
 
   test("Relativization correctly for home relative paths", ({expect}) => {
-    open Path;
+    open Fp;
 
     let rel =
       relativizeExn(~source=At.(home / "a" / "b"), ~dest=At.(home / "a"));
@@ -646,8 +646,8 @@ describe("Path", ({test}) => {
   });
 
   test("Containment for absolute paths", ({expect}) => {
-    open Path;
-    let root = Path.root;
+    open Fp;
+    let root = Fp.root;
 
     let res =
       isDescendent(
@@ -696,13 +696,13 @@ describe("Path", ({test}) => {
     expect.bool(res).toBeTrue();
 
     let res =
-      isDescendent(~ofPath=At.(Path.drive("C")), At.(root / "x" / "y"));
+      isDescendent(~ofPath=At.(Fp.drive("C")), At.(root / "x" / "y"));
     expect.bool(res).toBeFalse();
   });
 
   test("Containment for absolute drives", ({expect}) => {
-    open Path;
-    let drive = Path.drive("C:");
+    open Fp;
+    let drive = Fp.drive("C:");
 
     let res =
       isDescendent(
@@ -750,13 +750,13 @@ describe("Path", ({test}) => {
     let res = isDescendent(~ofPath=At.(drive), At.(drive / "x" / "y"));
     expect.bool(res).toBeTrue();
 
-    let res = isDescendent(~ofPath=At.(Path.root), At.(drive / "x" / "y"));
+    let res = isDescendent(~ofPath=At.(Fp.root), At.(drive / "x" / "y"));
     expect.bool(res).toBeFalse();
   });
 
   test("Containment for relative paths", ({expect}) => {
-    open Path;
-    let dot = Path.dot;
+    open Fp;
+    let dot = Fp.dot;
 
     let res =
       isDescendent(
@@ -804,13 +804,13 @@ describe("Path", ({test}) => {
     let res = isDescendent(~ofPath=At.(dot), At.(dot / "x" / "y"));
     expect.bool(res).toBeTrue();
 
-    let res = isDescendent(~ofPath=At.(Path.home), At.(dot / "x" / "y"));
+    let res = isDescendent(~ofPath=At.(Fp.home), At.(dot / "x" / "y"));
     expect.bool(res).toBeFalse();
   });
 
   test("Containment for home relative paths", ({expect}) => {
-    open Path;
-    let home = Path.home;
+    open Fp;
+    let home = Fp.home;
 
     let res =
       isDescendent(
@@ -858,7 +858,7 @@ describe("Path", ({test}) => {
     let res = isDescendent(~ofPath=At.(home), At.(home / "x" / "y"));
     expect.bool(res).toBeTrue();
 
-    let res = isDescendent(~ofPath=At.(Path.dot), At.(home / "x" / "y"));
+    let res = isDescendent(~ofPath=At.(Fp.dot), At.(home / "x" / "y"));
     expect.bool(res).toBeFalse();
   });
 });

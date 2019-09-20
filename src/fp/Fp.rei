@@ -1,12 +1,12 @@
 /**
 
-`Path` is a library for creating and operating on file paths consistently on
-all platforms.
+`Fp` is a library for creating and operating on file paths consistently on all
+platforms.
 
-`Path` works exactly the same on Windows, Linux, and OSX, instead of adjusting
+`Fp` works exactly the same on Windows, Linux, and OSX, instead of adjusting
 behavior based on your current OS
 
-The `Path` API uses the following conventions:
+The `Fp` API uses the following conventions:
 
 - Accepts/returns only `t(absolute))` for values that must be absolute paths.
 - Accepts/returns only `t(relative))` for values that must be absolute paths.
@@ -42,7 +42,7 @@ type relative;
 type absolute;
 /**
 A file system path, parameterized on the kind of file system path,
-`Path.t(relative)` or `Path.t(absolute)`.
+`Fp.t(relative)` or `Fp.t(absolute)`.
 */
 type t('kind);
 
@@ -87,36 +87,36 @@ pattern match on the result `Absolute(p) => .. | Relative(p) => ...`.
 let firstClass: t('any) => firstClass;
 
 /**
- Prints absolute `Path.t` as strings, always removes the final `/` separator.
+ Prints absolute `Fp.t` as strings, always removes the final `/` separator.
  */
 let toString: t(absolute) => string;
 
 /**
- Prints any `Path.t` for debugging, always removes the final `/` separator
+ Prints any `Fp.t` for debugging, always removes the final `/` separator
  except in the case of the empty relative paths `./`, `~/`.
  */
 let toDebugString: t('kind) => string;
 
 /**
-Parses an absolute path into a `Path.t(absolute)` or returns `None` if the path
+Parses an absolute path into a `Fp.t(absolute)` or returns `None` if the path
 is not a absolute, yet still valid. Raises Invalid_argument if the path is
 invalid.
  */
 let absolute: string => option(t(absolute));
 /**
- Parses a relative path into a `Path.t(relative)` or returns `None` if the path
+ Parses a relative path into a `Fp.t(relative)` or returns `None` if the path
  is not a valid.
  */
 let relative: string => option(t(relative));
 
 /**
- Same as `Path.absolute` but raises a Invalid_argument if argument is not a
+ Same as `Fp.absolute` but raises a Invalid_argument if argument is not a
  valid absolute path.
  */
 let absoluteExn: string => t(absolute);
 
 /**
- Same as `Path.relative` but raises a Invalid_argument if argument is not a
+ Same as `Fp.relative` but raises a Invalid_argument if argument is not a
  valid relative path.
  */
 let relativeExn: string => t(relative);
@@ -163,33 +163,33 @@ relativize(~source=../x/y/z, ~dest=../foo/../a/b/c)  == raise(Invalid_argument)
 */
 let relativizeExn: (~source: t('kind), ~dest: t('kind)) => t(relative);
 /**
-Same as `relativizeExn` but returns `result(Path.t(Path.absolute), exn)`
-instead of throwing an exception.
+Same as `relativizeExn` but returns `result(Fp.t(Fp.absolute), exn)` instead
+of throwing an exception.
 */
 let relativize:
   (~source: t('kind), ~dest: t('kind)) => result(t(relative), exn);
 
 /**
-Accepts any `Path.t` and returns a `Path.t` of the same kind.  Relative path
+Accepts any `Fp.t` and returns a `Fp.t` of the same kind.  Relative path
 inputs return relative path outputs, and absolute path inputs return absolute
 path outputs.
 */
 let dirName: t('kind) => t('kind);
 
 /**
-Accepts any `Path.t` and returns the final segment in its path string, or
-`None` if there are no segments in its path string.
+Accepts any `Fp.t` and returns the final segment in its path string, or `None`
+if there are no segments in its path string.
 
-   Path.baseName(Path.At(Path.dot /../ ""))
+   Fp.baseName(Fp.At(Fp.dot /../ ""))
    None
 
-   Path.baseName(Path.At(Path.dot /../ "foo"))
+   Fp.baseName(Fp.At(Fp.dot /../ "foo"))
    Some("foo")
 
-   Path.baseName(Path.At(Path.dot /../ "foo" /../ ""))
+   Fp.baseName(Fp.At(Fp.dot /../ "foo" /../ ""))
    None
 
-   Path.baseName(Path.At(Path.dot /../ "foo" / "bar" /../ ""))
+   Fp.baseName(Fp.At(Fp.dot /../ "foo" / "bar" /../ ""))
    Some("foo")
 */
 let baseName: t('kind) => option(string);
@@ -239,8 +239,8 @@ identifiers in scope such as "root"/"home".
 
 Use like this:
 
-    Path.At(Path.root / "foo" / "bar");
-    Path.At(Path.dot /../ "bar");
+    Fp.At(Fp.root / "foo" / "bar");
+    Fp.At(Fp.dot /../ "bar");
 */
 module At: {
   /**

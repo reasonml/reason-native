@@ -3,7 +3,7 @@
  */;
 
 /**
-FileSystem: Basic file system operations using Path.t as inputs. TODO:
+FileSystem: Basic file system operations using Fp.t as inputs. TODO:
 Migrate most of this to the Unix module instead of Pervasives so that
 handling of interupt signals is more robust.
 */
@@ -22,29 +22,29 @@ type queryResultOther =
 
 type queryResult =
   | /** Regular file */
-    File(Path.t(Path.absolute), fileStat)
+    File(Fp.t(Fp.absolute), fileStat)
   | /** Directory */
-    Dir(Path.t(Path.absolute), fileStat)
+    Dir(Fp.t(Fp.absolute), fileStat)
   | /** Symbolic link */
     Link(
-      Path.t(Path.absolute),
-      Path.firstClass,
+      Fp.t(Fp.absolute),
+      Fp.firstClass,
       fileStat,
     )
   | /** Other Operating System devices */
     Other(
-      Path.t(Path.absolute),
+      Fp.t(Fp.absolute),
       fileStat,
       queryResultOther,
     );
 
 let traverseFileSystemFromPath:
-  (~onNode: (queryResult, unit => unit) => unit, Path.t(Path.absolute)) =>
+  (~onNode: (queryResult, unit => unit) => unit, Fp.t(Fp.absolute)) =>
   unit;
 
-let query: Path.t(Path.absolute) => option(queryResult);
+let query: Fp.t(Fp.absolute) => option(queryResult);
 
-let queryExn: Path.t(Path.absolute) => queryResult;
+let queryExn: Fp.t(Fp.absolute) => queryResult;
 
 /**
 Types of line endings for human viewable/editable files. Windows has a
@@ -79,12 +79,12 @@ the file by Windows will be normalized regardless of the current platform.
 Returns `Some(lines)` if the file exists and can be read, else returns
 `None`.
 */
-let readText: Path.t(Path.absolute) => result(list(string), exn);
+let readText: Fp.t(Fp.absolute) => result(list(string), exn);
 /**
 Same as `readText` but raises exception if file cannot be found or is not
 readable.
 */
-let readTextExn: Path.t(Path.absolute) => list(string);
+let readTextExn: Fp.t(Fp.absolute) => list(string);
 
 /**
 Writes text lines to a file intended for human consumption at `path`,
@@ -96,14 +96,14 @@ TODO: Specify and implement behavior when file is an existing symlink
 (verify it does/does not traverse it).
 */
 let writeText:
-  (~lineEnds: lineEnds=?, Path.t(Path.absolute), list(string)) =>
+  (~lineEnds: lineEnds=?, Fp.t(Fp.absolute), list(string)) =>
   result(unit, exn);
 
 /**
 Like `writeText` but raises exception instead of returning `result`.
 */
 let writeTextExn:
-  (~lineEnds: lineEnds=?, Path.t(Path.absolute), list(string)) => unit;
+  (~lineEnds: lineEnds=?, Fp.t(Fp.absolute), list(string)) => unit;
 
 /**
 Reads raw bytes from a file from disk. Newlines are not modified from their
@@ -122,12 +122,12 @@ Unlike `rm -r`, it will not remove a symlink at the supplied `path`, it will
 return an `Error(exn)` if supplied `path` is a symlink.
 Returns `Error(exn)` if the directory does not exist.
 */
-let rmDirExn: Path.t(Path.absolute) => unit;
+let rmDirExn: Fp.t(Fp.absolute) => unit;
 
 /**
 Same as `rmDirExn` but returns `result` type.
 */
-let rmDir: Path.t(Path.absolute) => result(unit, exn);
+let rmDir: Fp.t(Fp.absolute) => result(unit, exn);
 
 /**
 Same as `rmDirExn` but throws if directory not empty.  Note how there
@@ -137,13 +137,13 @@ return an `Error(exn)` if supplied `path` is a symlink.
 Returns `Error(exn)` if the directory does not exist.
 Returns `Error(exn)` if the directory is not empty.
 */
-let rmEmptyDirExn: Path.t(Path.absolute) => unit;
+let rmEmptyDirExn: Fp.t(Fp.absolute) => unit;
 
 /**
 Same as `rmEmptyDirExn` but returns `Error(exn)` if directory not
 empty.
 */
-let rmEmptyDir: Path.t(Path.absolute) => result(unit, exn);
+let rmEmptyDir: Fp.t(Fp.absolute) => result(unit, exn);
 
 /**
  * TODO: Every file operation should have a binary file mode too.
@@ -153,24 +153,24 @@ let rmEmptyDir: Path.t(Path.absolute) => result(unit, exn);
 Delete the file at the path. Returns `Ok()` if file was able to be deleted.
 Throws exception if the path points to a directory. Will remove a symlink.
 */
-let rm: Path.t(Path.absolute) => result(unit, exn);
+let rm: Fp.t(Fp.absolute) => result(unit, exn);
 
 /**
 Same as `rm` but raises if the file doesn't exist.
 */
-let rmExn: Path.t(Path.absolute) => unit;
+let rmExn: Fp.t(Fp.absolute) => unit;
 
 /**
 Ensures a file is deleted if it exists. Returns `Ok()` if file was able to be
 deleted, or if it already did not exist at the supplied path. Throws exception
 if the path points to a directory. Will remove a symlink.
 */
-let rmIfExists: Path.t(Path.absolute) => result(unit, exn);
+let rmIfExists: Fp.t(Fp.absolute) => result(unit, exn);
 
 /**
 Same as `rmIfExists` but raises instead of returning `Error`.
 */
-let rmIfExistsExn: Path.t(Path.absolute) => unit;
+let rmIfExistsExn: Fp.t(Fp.absolute) => unit;
 
 /**
 Makes a directory at the path and returns Ok(). Returns Error(_) if a directory
@@ -179,14 +179,14 @@ exists at the `path`, or if the path is occupied by a symlink. `~perm` should
 be supplied in the form `{owner: action, group: action, other: action}` where
 `action` is `FileSystem.perm = No|Read|ReadExecute|ReadWrite|ReadWriteExecute`.
 */
-let mkDir: (~perm: perm=?, Path.t(Path.absolute)) => result(unit, exn);
+let mkDir: (~perm: perm=?, Fp.t(Fp.absolute)) => result(unit, exn);
 
 /**
 Same as `mkDir`, but throws instead of returning `Error`. `~perm` should be
 supplied in the form `{owner: action, group: action, other: action}` where
 `action` is `FileSystem.perm = No|Read|ReadExecute|ReadWrite|ReadWriteExecute`.
 */
-let mkDirExn: (~perm: perm=?, Path.t(Path.absolute)) => unit;
+let mkDirExn: (~perm: perm=?, Fp.t(Fp.absolute)) => unit;
 
 /**
 Similar to `mkdirp` unix command. Makes all required directories.  Each path
@@ -200,7 +200,7 @@ Otherwise, will return Error()
 `~perm` should be of form `{owner:action, group:action, other:action}` where
 `action` is `FileSystem.perm = No|Read|ReadExecute|ReadWrite|ReadWriteExecute`.
 */
-let mkDirP: (~perm: perm=?, Path.t(Path.absolute)) => result(unit, exn);
+let mkDirP: (~perm: perm=?, Fp.t(Fp.absolute)) => result(unit, exn);
 
 /**
 The same as `mkDirP` but throws exception instead of returning `Error`.
@@ -208,7 +208,7 @@ The same as `mkDirP` but throws exception instead of returning `Error`.
 `~perm` should be of form `{owner:action, group:action, other:action}` where
 `action` is `FileSystem.perm = No|Read|ReadExecute|ReadWrite|ReadWriteExecute`.
 */
-let mkDirPExn: (~perm: perm=?, Path.t(Path.absolute)) => unit;
+let mkDirPExn: (~perm: perm=?, Fp.t(Fp.absolute)) => unit;
 
 /**
 Creates symlink from `~from` to `~toTarget` which must be a file. Will unlink
@@ -216,13 +216,13 @@ existing symlink at `~from` if necessary, but won't remove files/directories
 and returns `Error(e)` in that case.
 */
 let link:
-  (~from: Path.t(Path.absolute), ~toTarget: Path.t('any)) =>
+  (~from: Fp.t(Fp.absolute), ~toTarget: Fp.t('any)) =>
   result(unit, exn);
 
 /**
 Same as `link` but throws exception instead of returning `Error`.
 */
-let linkExn: (~from: Path.t(Path.absolute), ~toTarget: Path.t('any)) => unit;
+let linkExn: (~from: Fp.t(Fp.absolute), ~toTarget: Fp.t('any)) => unit;
 
 /**
 Creates symlink from `~from` to `~toTarget` which must be a directory. Will
@@ -230,24 +230,24 @@ unlink existing symlink at `~from` if necessary, but won't remove
 files/directories and returns `Error()` in that case.
 */
 let linkDir:
-  (~from: Path.t(Path.absolute), ~toTarget: Path.t('any)) =>
+  (~from: Fp.t(Fp.absolute), ~toTarget: Fp.t('any)) =>
   result(unit, exn);
 
 /**
 Same as `linkDir` but throws exception instead of returning `Error`.
 */
 let linkDirExn:
-  (~from: Path.t(Path.absolute), ~toTarget: Path.t('any)) => unit;
+  (~from: Fp.t(Fp.absolute), ~toTarget: Fp.t('any)) => unit;
 
 /**
 Reads a symlink, and returns `Error` if no symlink exists at the path.
 */
-let readLink: Path.t(Path.absolute) => result(Path.firstClass, exn);
+let readLink: Fp.t(Fp.absolute) => result(Fp.firstClass, exn);
 
 /**
 Same as `readLink` but raises exception instead of returning `Error`.
 */
-let readLinkExn: Path.t(Path.absolute) => Path.firstClass;
+let readLinkExn: Fp.t(Fp.absolute) => Fp.firstClass;
 
 /**
 Reads a symlink "transitively" by following links until it reaches a non link.
@@ -259,14 +259,14 @@ Returns `Error` if supplied path is not a symlink or doesn't exist on disk.
 Not exposing this in the interface. Use `resolve`/`followList` instead.
 
 let followLink:
-  Path.t(Path.absolute) => result(Path.t(Path.absolute), exn);
+  Fp.t(Fp.absolute) => result(Fp.t(Fp.absolute), exn);
 */
 
 /**
 Same as `readLink` but raises exception instead of returning `Error`. Not
 exposing this in the interface. Use `resolve`/`followList` instead.
 
-let followLinkExn: Path.t(Path.absolute) => Path.t(Path.absolute);
+let followLinkExn: Fp.t(Fp.absolute) => Fp.t(Fp.absolute);
 */
 
 /**
@@ -284,13 +284,13 @@ the paths may be returned after being processed by `realPath`.
 
 */
 let resolveLink:
-  Path.t(Path.absolute) => result(Path.t(Path.absolute), exn);
+  Fp.t(Fp.absolute) => result(Fp.t(Fp.absolute), exn);
 
 
 /**
 Same as `resolveLink` but raises exception instead of returning `Error`.
 */
-let resolveLinkExn: Path.t(Path.absolute) => Path.t(Path.absolute);
+let resolveLinkExn: Fp.t(Fp.absolute) => Fp.t(Fp.absolute);
 
 /**
 Same as `resolveLink` but returns the path of file/symlink traversal. It does
@@ -319,12 +319,12 @@ item in the list being the final destination.
 
 */
 let links:
-  Path.t(Path.absolute) => result(list(Path.t(Path.absolute)), exn);
+  Fp.t(Fp.absolute) => result(list(Fp.t(Fp.absolute)), exn);
 
 /**
 Same as `links` but raises exception instead of returning `Error`.
 */
-let linksExn: Path.t(Path.absolute) => list(Path.t(Path.absolute));
+let linksExn: Fp.t(Fp.absolute) => list(Fp.t(Fp.absolute));
 
 /**
 Returns the set of paths inside a directory (excluding .. and .) Returns
@@ -332,7 +332,7 @@ Returns the set of paths inside a directory (excluding .. and .) Returns
 Does not return directories in any guaranteed ordering.
 */
 let readDir:
-  Path.t(Path.absolute) => result(list(Path.t(Path.absolute)), exn);
+  Fp.t(Fp.absolute) => result(list(Fp.t(Fp.absolute)), exn);
 
 /**
 Returns the set of paths inside a directory (excluding .. and .) Returns
@@ -341,4 +341,4 @@ Does not return directories in any guaranteed ordering.
 
 Same as `readDir` but raises exception instead of returning `Error`.
 */
-let readDirExn: Path.t(Path.absolute) => list(Path.t(Path.absolute));
+let readDirExn: Fp.t(Fp.absolute) => list(Fp.t(Fp.absolute));

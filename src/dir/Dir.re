@@ -9,7 +9,7 @@
  * Dir provides a directory convention borrowed from
  * [directories-rs](https://github.com/soc/directories-rs/blob/master/README.md).
  *
- * All directories are returned as `Path.t`.
+ * All directories are returned as `Fp.t`.
  *
  */
 external sh_get_folder_path: (int, 'flags) => string = "sh_get_folder_path";
@@ -114,7 +114,7 @@ module WinConst = {
 let getOptionalEnvAbsoluteExn = s =>
   switch (Sys.getenv(s)) {
   | exception Not_found => None
-  | txt => Some(Path.absoluteExn(txt))
+  | txt => Some(Fp.absoluteExn(txt))
   };
 let getEnvAbsoluteExn = s =>
   switch (Sys.getenv(s)) {
@@ -122,7 +122,7 @@ let getEnvAbsoluteExn = s =>
     raise(
       Invalid_argument("Environment variable " ++ s ++ " does not exist."),
     )
-  | txt => Path.absoluteExn(txt)
+  | txt => Fp.absoluteExn(txt)
   };
 
 /**
@@ -135,7 +135,7 @@ let shGetFolderPath = code => {
     /*
      * TODO: This should call a special form for parsing windows paths.
      */
-    Path.absoluteExn(sh_get_folder_path(csidl, shGetFolderPathCurrent)) :
+    Fp.absoluteExn(sh_get_folder_path(csidl, shGetFolderPathCurrent)) :
     {
       let opt = getOptionalEnvAbsoluteExn(envVarMock);
       switch (opt) {
@@ -146,33 +146,33 @@ let shGetFolderPath = code => {
 };
 
 module type User = {
-  let audio: option(Path.t(Path.absolute));
-  let desktop: option(Path.t(Path.absolute));
-  let document: option(Path.t(Path.absolute));
-  /* let download: option(Path.t(Path.absolute)); */
-  let font: option(Path.t(Path.absolute));
-  /* let picture: option(Path.t(Path.absolute)); */
-  /* let public: option(Path.t(Path.absolute)); */
-  let template: option(Path.t(Path.absolute));
-  let video: option(Path.t(Path.absolute));
+  let audio: option(Fp.t(Fp.absolute));
+  let desktop: option(Fp.t(Fp.absolute));
+  let document: option(Fp.t(Fp.absolute));
+  /* let download: option(Fp.t(Fp.absolute)); */
+  let font: option(Fp.t(Fp.absolute));
+  /* let picture: option(Fp.t(Fp.absolute)); */
+  /* let public: option(Fp.t(Fp.absolute)); */
+  let template: option(Fp.t(Fp.absolute));
+  let video: option(Fp.t(Fp.absolute));
 };
 
 module type App = {
-  let cache: (~appIdentifier: string) => Path.t(Path.absolute);
-  let config: (~appIdentifier: string) => Path.t(Path.absolute);
-  let data: (~appIdentifier: string) => Path.t(Path.absolute);
-  let dataLocal: (~appIdentifier: string) => Path.t(Path.absolute);
-  let runtime: (~appIdentifier: string) => option(Path.t(Path.absolute));
+  let cache: (~appIdentifier: string) => Fp.t(Fp.absolute);
+  let config: (~appIdentifier: string) => Fp.t(Fp.absolute);
+  let data: (~appIdentifier: string) => Fp.t(Fp.absolute);
+  let dataLocal: (~appIdentifier: string) => Fp.t(Fp.absolute);
+  let runtime: (~appIdentifier: string) => option(Fp.t(Fp.absolute));
 };
 
 module type Base = {
-  let home: Path.t(Path.absolute);
-  let cache: Path.t(Path.absolute);
-  let config: Path.t(Path.absolute);
-  let data: Path.t(Path.absolute);
-  let dataLocal: Path.t(Path.absolute);
-  let executable: option(Path.t(Path.absolute));
-  let runtime: option(Path.t(Path.absolute));
+  let home: Fp.t(Fp.absolute);
+  let cache: Fp.t(Fp.absolute);
+  let config: Fp.t(Fp.absolute);
+  let data: Fp.t(Fp.absolute);
+  let dataLocal: Fp.t(Fp.absolute);
+  let executable: option(Fp.t(Fp.absolute));
+  let runtime: option(Fp.t(Fp.absolute));
   module User: User;
   module App: App;
 };
@@ -207,19 +207,19 @@ module Snapshot = (()) => {
     module App = {
       let cache = (~appIdentifier) => {
         let base = shGetFolderPath(FOLDERID_LocalAppData);
-        Path.At.(base / appIdentifier / "cache");
+        Fp.At.(base / appIdentifier / "cache");
       };
       let config = (~appIdentifier) => {
         let base = shGetFolderPath(FOLDERID_RoamingAppData);
-        Path.At.(base / appIdentifier / "config");
+        Fp.At.(base / appIdentifier / "config");
       };
       let data = (~appIdentifier) => {
         let base = shGetFolderPath(FOLDERID_RoamingAppData);
-        Path.At.(base / appIdentifier / "data");
+        Fp.At.(base / appIdentifier / "data");
       };
       let dataLocal = (~appIdentifier) => {
         let base = shGetFolderPath(FOLDERID_LocalAppData);
-        Path.At.(base / appIdentifier / "dataLocal");
+        Fp.At.(base / appIdentifier / "dataLocal");
       };
       let runtime = (~appIdentifier) => None;
     };
@@ -231,32 +231,32 @@ module Snapshot = (()) => {
     let home = isWin ? Windows.home : getEnvAbsoluteExn("HOME");
     let cache =
       switch (getOptionalEnvAbsoluteExn("XDG_CACHE_HOME")) {
-      | None => Path.At.(home / ".cache")
+      | None => Fp.At.(home / ".cache")
       | Some(abs) => abs
       };
     let config =
       switch (getOptionalEnvAbsoluteExn("XDG_CONFIG_HOME")) {
-      | None => Path.At.(home / ".config")
+      | None => Fp.At.(home / ".config")
       | Some(abs) => abs
       };
     let data =
       switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-      | None => Path.At.(home / ".local" / "share")
+      | None => Fp.At.(home / ".local" / "share")
       | Some(abs) => abs
       };
     let dataLocal =
       switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-      | None => Path.At.(home / ".local" / "share")
+      | None => Fp.At.(home / ".local" / "share")
       | Some(abs) => abs
       };
     let executable =
       switch (getOptionalEnvAbsoluteExn("XDG_BIN_HOME")) {
       | None =>
         switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-        | None => Some(Path.At.(home /../ "bin"))
-        | Some(abs) => Some(Path.At.(abs /../ "bin"))
+        | None => Some(Fp.At.(home /../ "bin"))
+        | Some(abs) => Some(Fp.At.(abs /../ "bin"))
         }
-      | Some(abs) => Some(Path.At.(abs / ".local" / "bin"))
+      | Some(abs) => Some(Fp.At.(abs / ".local" / "bin"))
       };
 
     let runtime = getOptionalEnvAbsoluteExn("XDG_RUNTIME_DIR");
@@ -267,8 +267,8 @@ module Snapshot = (()) => {
       let document = getOptionalEnvAbsoluteExn("XDG_DOCUMENTS_DIR");
       let font =
         switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-        | None => Some(Path.At.(home / ".local" / "share" / "fonts"))
-        | Some(datHome) => Some(Path.At.(datHome / "fonts"))
+        | None => Some(Fp.At.(home / ".local" / "share" / "fonts"))
+        | Some(datHome) => Some(Fp.At.(datHome / "fonts"))
         };
       let template = getOptionalEnvAbsoluteExn("XDG_TEMPLATES_DIR");
       let video = getOptionalEnvAbsoluteExn("XDG_VIDEOS_DIR");
@@ -277,53 +277,53 @@ module Snapshot = (()) => {
     module App = {
       let cache = (~appIdentifier) =>
         switch (getOptionalEnvAbsoluteExn("XDG_CACHE_HOME")) {
-        | None => Path.At.(home / ".cache" / appIdentifier)
-        | Some(abs) => Path.At.(abs / appIdentifier)
+        | None => Fp.At.(home / ".cache" / appIdentifier)
+        | Some(abs) => Fp.At.(abs / appIdentifier)
         };
       let config = (~appIdentifier) =>
         switch (getOptionalEnvAbsoluteExn("XDG_CONFIG_HOME")) {
-        | None => Path.At.(home / ".config" / appIdentifier)
-        | Some(abs) => Path.At.(abs / appIdentifier)
+        | None => Fp.At.(home / ".config" / appIdentifier)
+        | Some(abs) => Fp.At.(abs / appIdentifier)
         };
       let data = (~appIdentifier) =>
         switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-        | None => Path.At.(home / ".local" / "share" / appIdentifier)
-        | Some(abs) => Path.At.(abs / appIdentifier)
+        | None => Fp.At.(home / ".local" / "share" / appIdentifier)
+        | Some(abs) => Fp.At.(abs / appIdentifier)
         };
       let dataLocal = data;
       let runtime = (~appIdentifier) =>
         switch (getOptionalEnvAbsoluteExn("XDG_RUNTIME_DIR")) {
         | None => None
-        | Some(abs) => Some(Path.At.(abs / appIdentifier))
+        | Some(abs) => Some(Fp.At.(abs / appIdentifier))
         };
     };
   };
   module Darwin: Base = {
     let home = getEnvAbsoluteExn("HOME");
-    let cache = Path.At.(home / "Library" / "Caches");
-    let config = Path.At.(home / "Library" / "Preferences");
-    let data = Path.At.(home / " Library" / "Application Support");
+    let cache = Fp.At.(home / "Library" / "Caches");
+    let config = Fp.At.(home / "Library" / "Preferences");
+    let data = Fp.At.(home / " Library" / "Application Support");
     let dataLocal = data;
     let executable = None;
     let runtime = None;
 
     module User = {
-      let audio = Some(Path.At.(home / "Music"));
-      let desktop = Some(Path.At.(home / "Desktop"));
-      let document = Some(Path.At.(home / "Documents"));
-      let downloads = Some(Path.At.(home / "Downloads"));
-      let font = Some(Path.At.(home / "Library" / "Fonts"));
+      let audio = Some(Fp.At.(home / "Music"));
+      let desktop = Some(Fp.At.(home / "Desktop"));
+      let document = Some(Fp.At.(home / "Documents"));
+      let downloads = Some(Fp.At.(home / "Downloads"));
+      let font = Some(Fp.At.(home / "Library" / "Fonts"));
       let template = None;
-      let video = Some(Path.At.(home / "Movies"));
+      let video = Some(Fp.At.(home / "Movies"));
     };
 
     module App = {
       let cache = (~appIdentifier) =>
-        Path.At.(home / "Library" / "Caches" / appIdentifier);
+        Fp.At.(home / "Library" / "Caches" / appIdentifier);
       let config = (~appIdentifier) =>
-        Path.At.(home / "Library" / "Preferences" / appIdentifier);
+        Fp.At.(home / "Library" / "Preferences" / appIdentifier);
       let data = (~appIdentifier) =>
-        Path.At.(home / "Library" / "Application Support" / appIdentifier);
+        Fp.At.(home / "Library" / "Application Support" / appIdentifier);
       let dataLocal = data;
       let runtime = (~appIdentifier) => None;
     };

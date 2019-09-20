@@ -24,18 +24,18 @@ type queryResultOther =
 
 type queryResult =
   | /** Regular file */
-    File(Path.t(Path.absolute), fileStat)
+    File(Fp.t(Fp.absolute), fileStat)
   | /** Directory */
-    Dir(Path.t(Path.absolute), fileStat)
+    Dir(Fp.t(Fp.absolute), fileStat)
   | /** Symbolic link */
     Link(
-      Path.t(Path.absolute),
-      Path.firstClass,
+      Fp.t(Fp.absolute),
+      Fp.firstClass,
       fileStat,
     )
   | /** Other Operating System devices */
     Other(
-      Path.t(Path.absolute),
+      Fp.t(Fp.absolute),
       fileStat,
       queryResultOther,
     );

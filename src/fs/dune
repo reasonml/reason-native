@@ -1,5 +1,5 @@
 (library
    (public_name fs.lib)
-   (libraries path.lib unix)
+   (libraries fp unix)
    (name Fs)
 )
