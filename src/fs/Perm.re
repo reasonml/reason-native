@@ -21,8 +21,36 @@ let actionToInt = a =>
   | ReadWriteExecute => 7
   };
 
+let actionFromInt = i =>
+  switch (i) {
+  | 0 => No
+  | 4 => Read
+  | 5 => ReadExecute
+  | 6 => ReadWrite
+  | 7 => ReadWriteExecute
+  | _ =>
+    raise(
+      Invalid_argument(
+        "Invalid integer supplied for permissions. This is likely a bug in Fs.",
+      ),
+    )
+  };
+
 let toInt = ({owner, group, other}) => {
   actionToInt(other) + 8 * actionToInt(group) + 64 * actionToInt(owner);
+};
+
+let fromInt = i => {
+  let owner = i / 64;
+  let rest = i mod 64;
+  let group = rest / 8;
+  let rest = rest mod 8;
+  let other = rest;
+  {
+    owner: actionFromInt(owner),
+    group: actionFromInt(group),
+    other: actionFromInt(other),
+  };
 };
 
 let defaultPerm = {

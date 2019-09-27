@@ -98,7 +98,6 @@ TODO: Specify and implement behavior when file is an existing symlink
 let writeText:
   (~lineEnds: lineEnds=?, Fp.t(Fp.absolute), list(string)) =>
   result(unit, exn);
-
 /**
 Like `writeText` but raises exception instead of returning `result`.
 */
@@ -106,12 +105,35 @@ let writeTextExn:
   (~lineEnds: lineEnds=?, Fp.t(Fp.absolute), list(string)) => unit;
 
 /**
+Reads the file at the path argument into a string, in binary mode, which means
+that line endings are not converted or even considered. If you wish to normalize
+line endings, use the `readText` function which returns the lines themselves.
+*/
+let readBinary: Fp.t(Fp.absolute) => result(string, exn);
+/**
+Same as `readBinary` but raises exception if file cannot be found or is not
+readable.
+*/
+let readBinaryExn: Fp.t(Fp.absolute) => string;
+
+/**
+Writes a binary string to a file, creating it if necessary or replacing the
+existing file with the string contents.
+TODO: Specify and implement behavior when file is an existing symlink
+(verify it does/does not traverse it).
+*/
+let writeBinary: (Fp.t(Fp.absolute), string) => result(unit, exn);
+
+/**
+Like `writeBinary` but raises exception instead of returning `result`.
+*/
+let writeBinaryExn: (Fp.t(Fp.absolute), string) => unit;
+
+
+/**
 Reads raw bytes from a file from disk. Newlines are not modified from their
 exact form on disk.
 */
-/* let readBytes: file => option(bytes); */
-/* let readBytesExn: file => bytes; */
-/* let writeBytes: bytes => unit; */
 
 /**
 Forces removal of directory content recursively that does exists - like "rm
@@ -144,10 +166,6 @@ Same as `rmEmptyDirExn` but returns `Error(exn)` if directory not
 empty.
 */
 let rmEmptyDir: Fp.t(Fp.absolute) => result(unit, exn);
-
-/**
- * TODO: Every file operation should have a binary file mode too.
- */;
 
 /**
 Delete the file at the path. Returns `Ok()` if file was able to be deleted.
@@ -342,3 +360,24 @@ Does not return directories in any guaranteed ordering.
 Same as `readDir` but raises exception instead of returning `Error`.
 */
 let readDirExn: Fp.t(Fp.absolute) => list(Fp.t(Fp.absolute));
+
+
+/**
+Returns the `perm` for the file at the `Fp` path.
+*/
+let mode: Fp.t(Fp.absolute) => result(perm, exn);
+
+/**
+Changes the permission for file at `path`.
+*/
+let changeMode: (perm, Fp.t(Fp.absolute)) => result(unit, exn);
+
+/**
+Same as `mode` but raises exception upon Error.
+*/
+let modeExn: Fp.t(Fp.absolute) => perm;
+
+/**
+Same as `changeMode` but raises exception upon Error.
+*/
+let changeModeExn: (perm, Fp.t(Fp.absolute)) => unit;

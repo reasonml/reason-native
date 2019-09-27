@@ -50,12 +50,33 @@ describe("Fs", ({test}) => {
     expect.string(String.concat("", lines)).toEqual(
       String.concat("", simpleLines),
     );
+    /* Ensure it doesn't append */
     Fs.writeTextExn(simpleTextFilePath, simpleLines);
     let lines = Fs.readTextExn(simpleTextFilePath);
     expect.lines(lines).toEqualLines(simpleLines);
     Fs.writeTextExn(~lineEnds=otherPlatform, simpleTextFilePath, simpleLines);
     let lines = Fs.readTextExn(simpleTextFilePath);
     expect.lines(lines).toEqualLines(simpleLines);
+    removeTestDir();
+  });
+  test("Writing binary", ({expect}) => {
+    ensureTestDir();
+    let simpleTextFilePath = Fp.append(testDataDir, "simple-text-file.txt");
+    expect.fn(() => Fs.readBinaryExn(simpleTextFilePath)).toThrow();
+    let simpleLines = ["hello", "these", "are", "some", "lines"];
+    let simpleText = String.concat("\n", simpleLines);
+    Fs.writeBinaryExn(simpleTextFilePath, simpleText);
+    let lines = Fs.readTextExn(simpleTextFilePath);
+    expect.string(String.concat("\n", lines)).toEqual(simpleText);
+    let binary = Fs.readBinaryExn(simpleTextFilePath);
+    expect.string(binary).toEqual(simpleText);
+    /* Ensure it doesn't append */
+    Fs.writeBinaryExn(simpleTextFilePath, simpleText);
+    let binary = Fs.readBinaryExn(simpleTextFilePath);
+    expect.string(binary).toEqual(simpleText);
+    Fs.writeTextExn(~lineEnds=otherPlatform, simpleTextFilePath, simpleLines);
+    let binary = Fs.readBinaryExn(simpleTextFilePath);
+    expect.string(binary).not.toEqual(simpleText);
     removeTestDir();
   });
   test("Links", ({expect}) => {

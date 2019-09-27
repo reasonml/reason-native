@@ -51,6 +51,9 @@ let readText = path => {
 };
 let readTextExn = path => Util.throwErrorResult(readText(path));
 
+/*
+ * TODO: add appendText.
+ */
 let writeText = (~lineEnds=PlatformDefault, path, lines) => {
   let stringPath = Fp.toString(path);
   let impl = outChan => {
@@ -81,3 +84,44 @@ let writeText = (~lineEnds=PlatformDefault, path, lines) => {
 
 let writeTextExn = (~lineEnds=?, path, lines) =>
   Util.throwErrorResult(writeText(~lineEnds?, path, lines));
+
+let readBinary = path => {
+  let stringPath = Fp.toString(path);
+  let impl = inChan => {
+    let n = in_channel_length(inChan);
+    Ok(really_input_string(inChan, n));
+  };
+  try (
+    {
+      let inChan = open_in_bin(stringPath);
+      Util.withInChannel(inChan, impl);
+    }
+  ) {
+  /* TODO: Add End_of_file handling here like Bos */
+  | Sys_error(msg) as e => Error(e)
+  };
+};
+let readBinaryExn = path => Util.throwErrorResult(readBinary(path));
+
+/*
+ * TODO: add appendBinary.
+ */
+let writeBinary = (path, str) => {
+  let stringPath = Fp.toString(path);
+  let impl = outChan => {
+    output_string(outChan, str);
+    Ok();
+  };
+  try (
+    {
+      let outChan = open_out_bin(stringPath);
+      Util.withOutChannel(outChan, impl);
+    }
+  ) {
+  /* Containing directory likely doesn't exist */
+  | Sys_error(_) as e => Error(e)
+  };
+};
+
+let writeBinaryExn = (path, lines) =>
+  Util.throwErrorResult(writeBinary(path, lines));

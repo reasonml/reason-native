@@ -4,6 +4,26 @@
 
 open Types;
 
+let mode = path => {
+  switch (Query.query(path)) {
+  | None => Error(Invalid_argument("No file for path"))
+  | Some(File(_, st) | Dir(_, st) | Link(_, _, st) | Other(_, st, _)) =>
+    Ok(Perm.fromInt(st.st_perm))
+  };
+};
+
+let modeExn = path => Util.throwErrorResult(mode(path));
+
+let rec changeMode = (perm, path) =>
+  try(Ok(Unix.chmod(Fp.toString(path), Perm.toInt(perm)))) {
+  | Unix.Unix_error(Unix.EINTR, _, _) => changeMode(perm, path)
+  | Unix.Unix_error(e, _, _) =>
+    Error(Invalid_argument("Cannot changeMode for " ++ Fp.toString(path)))
+  };
+
+let rec changeModeExn =
+  (perm, path) => Util.throwErrorResult(changeMode(perm, path));
+
 let rec readLink = path => {
   let stringPath = Fp.toString(path);
   try (Ok(Fp.testForPathExn(Unix.readlink(stringPath)))) {

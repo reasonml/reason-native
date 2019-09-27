@@ -30,6 +30,11 @@ let withInChannel = (resource, doThis) => {
   res;
 };
 
+/*
+ * TODO: Investigate the same behavior that Bos has - which uses a temporary
+ * output channel - likely to fix the issues with windows files handle locking.
+ * https://github.com/dbuenzli/bos/blob/master/src/bos_os_file.ml#L242
+ */
 let withOutChannel = (resource, doThis) => {
   let res =
     try (doThis(resource)) {
