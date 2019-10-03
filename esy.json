@@ -16,10 +16,10 @@
     "install": [
       "esy-installer console.install",
       "esy-installer file-context-printer.install",
+      "esy-installer fp.install",
       "esy-installer fs.install",
       "esy-installer pastel.install",
       "esy-installer pastel-console.install",
-      "esy-installer pth.install",
       "esy-installer qcheck-rely.install",
       "esy-installer refmterr.install",
       "esy-installer rely.install",
