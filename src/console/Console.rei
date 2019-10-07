@@ -129,6 +129,8 @@ let error: 'a => unit;
  */
 let warn: 'a => unit;
 
+let table: (~columns: list(int), ~rows: list(list(string))) => string;
+
 /*
  * Useful for printing in the middle of a pipe chain:
  *
