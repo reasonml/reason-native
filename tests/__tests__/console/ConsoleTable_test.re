@@ -149,4 +149,39 @@ describe("Console.table", ({test}) => {
       ++ "------------------------------------------";
     expect.string(actual).toEqual(expected);
   });
+
+  test("Formatted Table", ({expect}) => {
+    let bold_cell = Pastel.(<Pastel bold=true> "b1" </Pastel>);
+    let wrapped_blue_cell =
+      Pastel.(<Pastel color=Blue> "b2 is a cell that needs to wrap" </Pastel>);
+    let actual =
+      <Table columns=[8, 16, 8]>
+        <Row> "a1" bold_cell "c1" </Row>
+        <Row> "a2" wrapped_blue_cell "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    /*
+       Can't use Terminal mode in the printer but HumanReadable mode in the
+       tests so this result is copied from the string output. It was visually
+       tested to produce the correct results.
+     */
+    let expected =
+      ""
+      ++ "------------------------------------------\n"
+      ++ "| a1       | \027[1mb1              \027[22m | c1       |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a2       | \027[34mb2 is a cell    \027[39m | c2       |\n"
+      ++ "|          | \027[34mthat needs to   \027[39m |          |\n"
+      ++ "|          | \027[34mwrap            \027[39m |          |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a3       | b3               | c3       |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a4       | b4               |          |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a5       | b5               | c5       |\n"
+      ++ "------------------------------------------";
+    expect.string(actual).toEqual(expected);
+  });
 });

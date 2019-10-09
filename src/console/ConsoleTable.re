@@ -31,7 +31,8 @@ let pad_list = (value, length, lst) =>
       | 0 => List.rev(initial)
       | _ =>
         switch (lst) {
-        | [] => failwith("Tried to take more elements than in lst")
+        | [] =>
+          raise(Invalid_argument("Tried to take more elements than in lst"))
         | [hd, ...tl] => take(len - 1, [hd, ...initial], tl)
         }
       };
@@ -45,22 +46,35 @@ let pad_list = (value, length, lst) =>
     lst @ list_of_len(length - List.length(lst), "", []);
   };
 
-let wrap_cell = (width: int, cell: string) =>
-  /* TODO: hyphenate if single word is too long */
-  /* TODO: add styling information */
-  Str.split(Str.regexp(" "), cell)
-  |> List.fold_left(
-       (lines, word) =>
-         switch (lines) {
-         | [] => [word]
-         | [curr, ...rest] =>
-           String.length(curr) + String.length(word) + 1 > width ?
-             [word, ...lines] : [curr ++ " " ++ word, ...rest]
-         },
-       [],
-     )
-  |> List.rev
-  |> List.map(right_pad(width));
+let wrap_cell = (width: int, cell: string): list(string) => {
+  let split_to_lines = (s: string): list(string) =>
+    Str.split(Str.regexp(" "), s)
+    |> List.fold_left(
+         (lines, word) =>
+           switch (lines) {
+           | [] => [word]
+           | [curr, ...rest] =>
+             String.length(curr) + String.length(word) + 1 > width ?
+               [word, ...lines] : [curr ++ " " ++ word, ...rest]
+           },
+         [],
+       )
+    |> List.rev
+    |> List.map(right_pad(width));
+
+  /* TODO: hyphenate if single word is too long? */
+  switch (Pastel.parse(cell)) {
+  | [] => split_to_lines(cell)
+  | [(style, text)] =>
+    split_to_lines(text) |> List.map(line => Pastel.apply([(style, line)]))
+  | [fst, ...rest] =>
+    raise(
+      Invalid_argument(
+        "Cannot use more than one Pastel style in a table cell",
+      ),
+    )
+  };
+};
 
 /**
  * Takes a list of cells with a list of lines in each cell and converts

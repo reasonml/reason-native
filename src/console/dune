@@ -9,6 +9,7 @@
      (flags ( --pretty ))  ; From package.json jsooFlags field
      (javascript_files  nativeChannels.js )  ; From package.json jsooFiles field
    )
+   (libraries Pastel) ; Had to temporarily edit this since esy pesy wasn't working
   )
 ; objectPrinter lives separately from Common for now because Common has an
 ; implicit dependency on Pastel which Console does not want. Common should
