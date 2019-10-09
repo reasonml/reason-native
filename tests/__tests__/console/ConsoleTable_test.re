@@ -6,33 +6,50 @@
  */;
 
 open TestFramework;
+open Console.ConsoleTable;
 
 describe("Console.table", ({test}) => {
-  test("Basic cell", ({expect}) =>
-    expect.string(Console.table(~columns=[4], ~rows=[["Cell"]])).toEqual(
-      "" ++ "--------\n" ++ "| Cell |\n" ++ "--------",
-    )
-  );
-  test("Basic table", ({expect}) =>
-    expect.string(
-      Console.table(
+  test("Basic cell", ({expect}) => {
+    let actual =
+      Table.createElement(
+        ~columns=[4],
+        ~children=[Row.createElement(~children=["Cell"], ())],
+        (),
+      );
+    let expected = "--------\n" ++ "| Cell |\n" ++ "--------";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("Basic table", ({expect}) => {
+    let actual =
+      Table.createElement(
         ~columns=[7, 4],
-        ~rows=[["testing", "1234"], ["a", "b"]],
-      ),
-    ).
-      toEqual(
+        ~children=[
+          Row.createElement(~children=["testing", "1234"], ()),
+          Row.createElement(~children=["a", "b"], ()),
+        ],
+        (),
+      );
+    let expected =
       ""
       ++ "------------------\n"
       ++ "| testing | 1234 |\n"
       ++ "|---------+------|\n"
       ++ "| a       | b    |\n"
-      ++ "------------------",
-    )
-  );
+      ++ "------------------";
+    expect.string(actual).toEqual(expected);
+  });
 
   test("mismatched row", ({expect}) => {
     expect.string(
-      Console.table(~columns=[7, 3], ~rows=[["testing"], ["a", "b"]]),
+      Table.createElement(
+        ~columns=[7, 3],
+        ~children=[
+          Row.createElement(~children=["testing"], ()),
+          Row.createElement(~children=["a", "b"], ()),
+        ],
+        (),
+      ),
     ).
       toEqual(
       ""
@@ -43,7 +60,14 @@ describe("Console.table", ({test}) => {
       ++ "-----------------",
     );
     expect.string(
-      Console.table(~columns=[7, 4], ~rows=[["testing", "1234"], ["a"]]),
+      Table.createElement(
+        ~columns=[7, 4],
+        ~children=[
+          Row.createElement(~children=["testing", "1234"], ()),
+          Row.createElement(~children=["a"], ()),
+        ],
+        (),
+      ),
     ).
       toEqual(
       ""
@@ -55,14 +79,17 @@ describe("Console.table", ({test}) => {
     );
   });
 
-  test("Text wrapping", ({expect}) =>
-    expect.string(
-      Console.table(
+  test("Text wrapping", ({expect}) => {
+    let actual =
+      Table.createElement(
         ~columns=[7, 4],
-        ~rows=[["test a long column", "this"], ["a", "b"]],
-      ),
-    ).
-      toEqual(
+        ~children=[
+          Row.createElement(~children=["test a long column", "this"], ()),
+          Row.createElement(~children=["a", "b"], ()),
+        ],
+        (),
+      );
+    let expected =
       ""
       ++ "------------------\n"
       ++ "| test a  | this |\n"
@@ -70,7 +97,56 @@ describe("Console.table", ({test}) => {
       ++ "| column  |      |\n"
       ++ "|---------+------|\n"
       ++ "| a       | b    |\n"
-      ++ "------------------",
-    )
-  );
+      ++ "------------------";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("Basic cell JSX", ({expect}) => {
+    let actual = <Table columns=[4]> <Row> "Cell" </Row> </Table>;
+    let expected = "--------\n" ++ "| Cell |\n" ++ "--------";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("Basic table JSX", ({expect}) => {
+    let actual =
+      <Table columns=[7, 4]>
+        <Row> "testing" "1234" </Row>
+        <Row> "a" "b" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "------------------\n"
+      ++ "| testing | 1234 |\n"
+      ++ "|---------+------|\n"
+      ++ "| a       | b    |\n"
+      ++ "------------------";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("Basic Table 2", ({expect}) => {
+    let actual =
+      <Table columns=[8, 16, 8]>
+        <Row> "a1" "b1" "c1" </Row>
+        <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "------------------------------------------\n"
+      ++ "| a1       | b1               | c1       |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a2       | b2 is a cell     | c2       |\n"
+      ++ "|          | that needs to    |          |\n"
+      ++ "|          | wrap             |          |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a3       | b3               | c3       |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a4       | b4               |          |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a5       | b5               | c5       |\n"
+      ++ "------------------------------------------";
+    expect.string(actual).toEqual(expected);
+  });
 });

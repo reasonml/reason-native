@@ -19,11 +19,23 @@ let right_pad = (width, s) =>
   };
 
 /**
- * Adds elements with the given value so the list matches the given length.
+ * Adds elements with the given value or removes elements
+ * so the list matches the given length.
  */
 let pad_list = (value, length, lst) =>
-  if (List.length(lst) >= length) {
+  if (List.length(lst) === length) {
     lst;
+  } else if (List.length(lst) > length) {
+    let rec take = (len, initial, lst) =>
+      switch (len) {
+      | 0 => List.rev(initial)
+      | _ =>
+        switch (lst) {
+        | [] => failwith("Tried to take more elements than in lst")
+        | [hd, ...tl] => take(len - 1, [hd, ...initial], tl)
+        }
+      };
+    take(length, [], lst);
   } else {
     let rec list_of_len = (len, value, initial) =>
       switch (len) {
@@ -148,27 +160,35 @@ let add_table_bottom = (tp, columns, rows) => {
   rows @ [[table_bottom]];
 };
 
-let table = (~columns: list(int), ~rows: list(list(string))) => {
-  let tp = {
-    table_left: '|',
-    table_right: '|',
-    table_top: '-',
-    table_bottom: '-',
-    cell_wall: '|',
-    cell_bottom: '-',
-    cell_divider_wall: '+',
-  };
-  let width = List.length(columns);
+module Row = {
+  type t = list(string);
+  let createElement = (~children: list(string), unit): t => children;
+};
 
-  List.map(pad_list("", width), rows)
-  |> List.map(row =>
-       List.map2((col, cell) => wrap_cell(col, cell), columns, row)
-     )
-  |> List.map(lines_to_row(columns))
-  |> List.map(row => List.map(line => sprint_row(tp, line), row))
-  |> add_row_dividers(tp, columns)
-  |> add_table_top(tp, columns)
-  |> add_table_bottom(tp, columns)
-  |> List.flatten
-  |> String.concat("\n");
+module Table = {
+  type t = string;
+  let createElement =
+      (~columns: list(int), ~children as rows: list(Row.t), unit): t => {
+    let tp = {
+      table_left: '|',
+      table_right: '|',
+      table_top: '-',
+      table_bottom: '-',
+      cell_wall: '|',
+      cell_bottom: '-',
+      cell_divider_wall: '+',
+    };
+
+    List.map(pad_list("", List.length(columns)), rows)
+    |> List.map(row =>
+         List.map2((col, cell) => wrap_cell(col, cell), columns, row)
+       )
+    |> List.map(lines_to_row(columns))
+    |> List.map(row => List.map(line => sprint_row(tp, line), row))
+    |> add_row_dividers(tp, columns)
+    |> add_table_top(tp, columns)
+    |> add_table_bottom(tp, columns)
+    |> List.flatten
+    |> String.concat("\n");
+  };
 };
