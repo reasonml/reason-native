@@ -1,12 +1,4 @@
-type table_printer = {
-  table_left: char,
-  table_right: char,
-  table_top: char,
-  table_bottom: char,
-  cell_wall: char,
-  cell_bottom: char,
-  cell_divider_wall: char,
-};
+module BorderStyle = ConsoleTableBorderStyle;
 
 /**
  * Adds spaces to the right of string `s` to match the given width.
@@ -38,15 +30,19 @@ let pad_list = (value, length, lst) =>
       };
     take(length, [], lst);
   } else {
-    let rec list_of_len = (len, value, initial) =>
+    let rec make_list = (len, value, initial) =>
       switch (len) {
       | 0 => initial
-      | _ => list_of_len(len - 1, value, [value, ...initial])
+      | _ => make_list(len - 1, value, [value, ...initial])
       };
-    lst @ list_of_len(length - List.length(lst), "", []);
+    lst @ make_list(length - List.length(lst), value, []);
   };
 
+/**
+ * Breaks a string into multiple lines, each less than the given width.
+ */
 let wrap_cell = (width: int, cell: string): list(string) => {
+  /* TODO: hyphenate if single word is too long? */
   let split_to_lines = (s: string): list(string) =>
     Str.split(Str.regexp(" "), s)
     |> List.fold_left(
@@ -62,7 +58,6 @@ let wrap_cell = (width: int, cell: string): list(string) => {
     |> List.rev
     |> List.map(right_pad(width));
 
-  /* TODO: hyphenate if single word is too long? */
   switch (Pastel.parse(cell)) {
   | [] => split_to_lines(cell)
   | [(style, text)] =>
@@ -114,29 +109,25 @@ let lines_to_row = (columns, cells) => {
 /**
  * Creates a single table row from a list of the cell contents.
  */
-let sprint_row = (tp: table_printer, cells: list(string)): string => {
-  let row_string =
-    String.concat(" " ++ String.make(1, tp.cell_wall) ++ " ", cells);
-  String.make(1, tp.table_left)
-  ++ " "
-  ++ row_string
-  ++ " "
-  ++ String.make(1, tp.table_right);
+let sprint_row = (dividers: BorderStyle.t, cells: list(string)): string => {
+  let row_string = String.concat(" " ++ dividers.cell_wall ++ " ", cells);
+  dividers.table_left ++ " " ++ row_string ++ " " ++ dividers.table_right;
 };
 
 /**
  * Adds a divider in between each table row
  */
-let add_row_dividers = (tp, columns, rows) => {
-  let cell_divider_wall = String.make(1, tp.cell_divider_wall);
+let add_row_dividers = (dividers: BorderStyle.t, columns, rows) => {
   /* Add 2 to divider width to account for spaces on either side of cell */
   let row_divider =
-    List.map(width => String.init(width + 2, _ => tp.cell_bottom), columns)
-    |> String.concat(cell_divider_wall);
+    List.map(
+      width =>
+        String.concat("", pad_list(dividers.cell_bottom, width + 2, [])),
+      columns,
+    )
+    |> String.concat(dividers.cell_wall_divider);
   let row_divider =
-    String.make(1, tp.table_left)
-    ++ row_divider
-    ++ String.make(1, tp.table_right);
+    dividers.table_left_divider ++ row_divider ++ dividers.table_right_divider;
 
   /* Add a divider before every row then remove first divider. */
   let table = List.map(row => [[row_divider], row], rows) |> List.flatten;
@@ -146,62 +137,89 @@ let add_row_dividers = (tp, columns, rows) => {
   };
 };
 
-let add_table_top = (tp, columns, rows) => {
-  let num_column_dividers = List.length(columns) - 1;
-  let num_table_walls = 2;
+/**
+ * Adds the top of the table to the given set of rows
+ */
+let add_table_top = (dividers: BorderStyle.t, columns, rows) => {
+  /* Add 2 to divider width to account for spaces on either side of cell */
   let table_top =
-    String.init(
-      List.fold_left((acc, width) => acc + width + 2, 0, columns)
-      + num_column_dividers
-      + num_table_walls,
-      _ =>
-      tp.table_top
-    );
-  [[table_top], ...rows];
+    List.map(
+      width =>
+        String.concat("", pad_list(dividers.table_top, width + 2, [])),
+      columns,
+    )
+    |> String.concat(dividers.table_top_divider);
+  [
+    [dividers.top_left_corner ++ table_top ++ dividers.top_right_corner],
+    ...rows,
+  ];
 };
 
-let add_table_bottom = (tp, columns, rows) => {
-  let num_column_dividers = List.length(columns) - 1;
-  let num_table_walls = 2;
+/**
+ * Adds the bottom of the table to the given set of rows
+ */
+let add_table_bottom = (dividers: BorderStyle.t, columns, rows) => {
+  /* Add 2 to divider width to account for spaces on either side of cell */
   let table_bottom =
-    String.init(
-      List.fold_left((acc, width) => acc + width + 2, 0, columns)
-      + num_column_dividers
-      + num_table_walls,
-      _ =>
-      tp.table_bottom
-    );
-  rows @ [[table_bottom]];
+    List.map(
+      width =>
+        String.concat("", pad_list(dividers.table_bottom, width + 2, [])),
+      columns,
+    )
+    |> String.concat(dividers.table_bottom_divider);
+
+  rows
+  @ [
+    [
+      dividers.bottom_left_corner
+      ++ table_bottom
+      ++ dividers.bottom_right_corner,
+    ],
+  ];
+};
+
+module ColumnConfig = {
+  type t = {width: int};
+  let createElement = (~children: list(unit), ~width: int, ()): t => {
+    width: width,
+  };
 };
 
 module Row = {
   type t = list(string);
-  let createElement = (~children: list(string), unit): t => children;
+  let createElement = (~children: list(string), ()): t => children;
 };
 
 module Table = {
   type t = string;
   let createElement =
-      (~columns: list(int), ~children as rows: list(Row.t), unit): t => {
-    let tp = {
-      table_left: '|',
-      table_right: '|',
-      table_top: '-',
-      table_bottom: '-',
-      cell_wall: '|',
-      cell_bottom: '-',
-      cell_divider_wall: '+',
-    };
+      (
+        ~columns: list(ColumnConfig.t),
+        ~children as rows: list(Row.t),
+        ~border: BorderStyle.border=BorderStyle.Normal,
+        ~borderStyle: BorderStyle.style=BorderStyle.SimpleLines,
+        (),
+      )
+      : t => {
+    let dividers = BorderStyle.get_dividers(border, borderStyle);
+    let column_widths =
+      List.map((c: ColumnConfig.t) => (c.width: int), columns);
 
-    List.map(pad_list("", List.length(columns)), rows)
+    List.map(pad_list("", List.length(column_widths)), rows)
     |> List.map(row =>
-         List.map2((col, cell) => wrap_cell(col, cell), columns, row)
+         List.map2((col, cell) => wrap_cell(col, cell), column_widths, row)
        )
-    |> List.map(lines_to_row(columns))
-    |> List.map(row => List.map(line => sprint_row(tp, line), row))
-    |> add_row_dividers(tp, columns)
-    |> add_table_top(tp, columns)
-    |> add_table_bottom(tp, columns)
+    /* At this point, the data is a list of rows, with a list of cells,
+       with a list of lines in that cell */
+    |> List.map(lines_to_row(column_widths))
+    /* The data is now a list of rows, with a list of lines,
+       with a list cells in that line */
+    |> List.map(row => List.map(line => sprint_row(dividers, line), row))
+    /* The data has been flattened to a list of rows, with a list of lines
+       in that row. The cells have been flattened into a single string */
+    |> add_row_dividers(dividers, column_widths)
+    |> add_table_top(dividers, column_widths)
+    |> add_table_bottom(dividers, column_widths)
     |> List.flatten
     |> String.concat("\n");
   };

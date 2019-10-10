@@ -12,7 +12,7 @@ describe("Console.table", ({test}) => {
   test("Basic cell", ({expect}) => {
     let actual =
       Table.createElement(
-        ~columns=[4],
+        ~columns=[{width: 4}],
         ~children=[Row.createElement(~children=["Cell"], ())],
         (),
       );
@@ -23,7 +23,7 @@ describe("Console.table", ({test}) => {
   test("Basic table", ({expect}) => {
     let actual =
       Table.createElement(
-        ~columns=[7, 4],
+        ~columns=[{width: 7}, {width: 4}],
         ~children=[
           Row.createElement(~children=["testing", "1234"], ()),
           Row.createElement(~children=["a", "b"], ()),
@@ -43,7 +43,7 @@ describe("Console.table", ({test}) => {
   test("mismatched row", ({expect}) => {
     expect.string(
       Table.createElement(
-        ~columns=[7, 3],
+        ~columns=[{width: 7}, {width: 3}],
         ~children=[
           Row.createElement(~children=["testing"], ()),
           Row.createElement(~children=["a", "b"], ()),
@@ -61,7 +61,7 @@ describe("Console.table", ({test}) => {
     );
     expect.string(
       Table.createElement(
-        ~columns=[7, 4],
+        ~columns=[{width: 7}, {width: 4}],
         ~children=[
           Row.createElement(~children=["testing", "1234"], ()),
           Row.createElement(~children=["a"], ()),
@@ -82,7 +82,7 @@ describe("Console.table", ({test}) => {
   test("Text wrapping", ({expect}) => {
     let actual =
       Table.createElement(
-        ~columns=[7, 4],
+        ~columns=[{width: 7}, {width: 4}],
         ~children=[
           Row.createElement(~children=["test a long column", "this"], ()),
           Row.createElement(~children=["a", "b"], ()),
@@ -101,15 +101,9 @@ describe("Console.table", ({test}) => {
     expect.string(actual).toEqual(expected);
   });
 
-  test("Basic cell JSX", ({expect}) => {
-    let actual = <Table columns=[4]> <Row> "Cell" </Row> </Table>;
-    let expected = "--------\n" ++ "| Cell |\n" ++ "--------";
-    expect.string(actual).toEqual(expected);
-  });
-
   test("Basic table JSX", ({expect}) => {
     let actual =
-      <Table columns=[7, 4]>
+      <Table columns=[<ColumnConfig width=7 />, <ColumnConfig width=4 />]>
         <Row> "testing" "1234" </Row>
         <Row> "a" "b" </Row>
       </Table>;
@@ -123,9 +117,14 @@ describe("Console.table", ({test}) => {
     expect.string(actual).toEqual(expected);
   });
 
-  test("Basic Table 2", ({expect}) => {
+  test("Large table", ({expect}) => {
     let actual =
-      <Table columns=[8, 16, 8]>
+      <Table
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
         <Row> "a1" "b1" "c1" </Row>
         <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
         <Row> "a3" "b3" "c3" "d3" </Row>
@@ -155,7 +154,12 @@ describe("Console.table", ({test}) => {
     let wrapped_blue_cell =
       Pastel.(<Pastel color=Blue> "b2 is a cell that needs to wrap" </Pastel>);
     let actual =
-      <Table columns=[8, 16, 8]>
+      <Table
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
         <Row> "a1" bold_cell "c1" </Row>
         <Row> "a2" wrapped_blue_cell "c2" </Row>
         <Row> "a3" "b3" "c3" "d3" </Row>
@@ -182,6 +186,243 @@ describe("Console.table", ({test}) => {
       ++ "|----------+------------------+----------|\n"
       ++ "| a5       | b5               | c5       |\n"
       ++ "------------------------------------------";
+    expect.string(actual).toEqual(expected);
+  });
+});
+
+describe("Table styles", ({test}) => {
+  test("SimpleLines", ({expect}) => {
+    let actual =
+      <Table
+        borderStyle=SimpleLines
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
+        <Row> "a1" "b1" "c1" </Row>
+        <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "------------------------------------------\n"
+      ++ "| a1       | b1               | c1       |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a2       | b2 is a cell     | c2       |\n"
+      ++ "|          | that needs to    |          |\n"
+      ++ "|          | wrap             |          |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a3       | b3               | c3       |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a4       | b4               |          |\n"
+      ++ "|----------+------------------+----------|\n"
+      ++ "| a5       | b5               | c5       |\n"
+      ++ "------------------------------------------";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("BoxLight", ({expect}) => {
+    let actual =
+      <Table
+        borderStyle=BoxLight
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
+        <Row> "a1" "b1" "c1" </Row>
+        <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "┌──────────┬──────────────────┬──────────┐\n"
+      ++ "│ a1       │ b1               │ c1       │\n"
+      ++ "├──────────┼──────────────────┼──────────┤\n"
+      ++ "│ a2       │ b2 is a cell     │ c2       │\n"
+      ++ "│          │ that needs to    │          │\n"
+      ++ "│          │ wrap             │          │\n"
+      ++ "├──────────┼──────────────────┼──────────┤\n"
+      ++ "│ a3       │ b3               │ c3       │\n"
+      ++ "├──────────┼──────────────────┼──────────┤\n"
+      ++ "│ a4       │ b4               │          │\n"
+      ++ "├──────────┼──────────────────┼──────────┤\n"
+      ++ "│ a5       │ b5               │ c5       │\n"
+      ++ "└──────────┴──────────────────┴──────────┘";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("None", ({expect}) => {
+    let actual =
+      <Table
+        border=None
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
+        <Row> "a1" "b1" "c1" </Row>
+        <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "                                          \n"
+      ++ "  a1         b1                 c1        \n"
+      ++ "                                          \n"
+      ++ "  a2         b2 is a cell       c2        \n"
+      ++ "             that needs to                \n"
+      ++ "             wrap                         \n"
+      ++ "                                          \n"
+      ++ "  a3         b3                 c3        \n"
+      ++ "                                          \n"
+      ++ "  a4         b4                           \n"
+      ++ "                                          \n"
+      ++ "  a5         b5                 c5        \n"
+      ++ "                                          ";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("BoxLight with outer borders", ({expect}) => {
+    let actual =
+      <Table
+        border=Outer
+        borderStyle=BoxLight
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
+        <Row> "a1" "b1" "c1" </Row>
+        <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "┌────────────────────────────────────────┐\n"
+      ++ "│ a1         b1                 c1       │\n"
+      ++ "│                                        │\n"
+      ++ "│ a2         b2 is a cell       c2       │\n"
+      ++ "│            that needs to               │\n"
+      ++ "│            wrap                        │\n"
+      ++ "│                                        │\n"
+      ++ "│ a3         b3                 c3       │\n"
+      ++ "│                                        │\n"
+      ++ "│ a4         b4                          │\n"
+      ++ "│                                        │\n"
+      ++ "│ a5         b5                 c5       │\n"
+      ++ "└────────────────────────────────────────┘";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("BoxLight with inner borders", ({expect}) => {
+    let actual =
+      <Table
+        border=Inner
+        borderStyle=BoxLight
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
+        <Row> "a1" "b1" "c1" </Row>
+        <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "                                          \n"
+      ++ "  a1       │ b1               │ c1        \n"
+      ++ " ──────────┼──────────────────┼────────── \n"
+      ++ "  a2       │ b2 is a cell     │ c2        \n"
+      ++ "           │ that needs to    │           \n"
+      ++ "           │ wrap             │           \n"
+      ++ " ──────────┼──────────────────┼────────── \n"
+      ++ "  a3       │ b3               │ c3        \n"
+      ++ " ──────────┼──────────────────┼────────── \n"
+      ++ "  a4       │ b4               │           \n"
+      ++ " ──────────┼──────────────────┼────────── \n"
+      ++ "  a5       │ b5               │ c5        \n"
+      ++ "                                          ";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("SimpleLines with outer borders", ({expect}) => {
+    let actual =
+      <Table
+        border=Outer
+        borderStyle=SimpleLines
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
+        <Row> "a1" "b1" "c1" </Row>
+        <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "------------------------------------------\n"
+      ++ "| a1         b1                 c1       |\n"
+      ++ "|                                        |\n"
+      ++ "| a2         b2 is a cell       c2       |\n"
+      ++ "|            that needs to               |\n"
+      ++ "|            wrap                        |\n"
+      ++ "|                                        |\n"
+      ++ "| a3         b3                 c3       |\n"
+      ++ "|                                        |\n"
+      ++ "| a4         b4                          |\n"
+      ++ "|                                        |\n"
+      ++ "| a5         b5                 c5       |\n"
+      ++ "------------------------------------------";
+    expect.string(actual).toEqual(expected);
+  });
+
+  test("SimpleLines with inner borders", ({expect}) => {
+    let actual =
+      <Table
+        border=Inner
+        borderStyle=SimpleLines
+        columns=[
+          <ColumnConfig width=8 />,
+          <ColumnConfig width=16 />,
+          <ColumnConfig width=8 />,
+        ]>
+        <Row> "a1" "b1" "c1" </Row>
+        <Row> "a2" "b2 is a cell that needs to wrap" "c2" </Row>
+        <Row> "a3" "b3" "c3" "d3" </Row>
+        <Row> "a4" "b4" </Row>
+        <Row> "a5" "b5" "c5" </Row>
+      </Table>;
+    let expected =
+      ""
+      ++ "                                          \n"
+      ++ "  a1       | b1               | c1        \n"
+      ++ " ----------+------------------+---------- \n"
+      ++ "  a2       | b2 is a cell     | c2        \n"
+      ++ "           | that needs to    |           \n"
+      ++ "           | wrap             |           \n"
+      ++ " ----------+------------------+---------- \n"
+      ++ "  a3       | b3               | c3        \n"
+      ++ " ----------+------------------+---------- \n"
+      ++ "  a4       | b4               |           \n"
+      ++ " ----------+------------------+---------- \n"
+      ++ "  a5       | b5               | c5        \n"
+      ++ "                                          ";
     expect.string(actual).toEqual(expected);
   });
 });
