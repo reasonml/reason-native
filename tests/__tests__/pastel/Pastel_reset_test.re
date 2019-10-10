@@ -1,8 +1,9 @@
 open TestFramework;
-open Pastel;
 module HumanReadablePastel =
   Pastel.Make({});
 HumanReadablePastel.setMode(HumanReadable);
+module TerminalPastel = Pastel.Make({});
+TerminalPastel.setMode(Terminal);
 
 describe("Pastel.reset", ({test}) => {
   test("apply reset state to single child human readable", ({expect}) => {
@@ -16,8 +17,8 @@ describe("Pastel.reset", ({test}) => {
     ();
   });
   test("apply reset state terminal", ({expect}) => {
-    let stateRegion = (emptyStyle |> withReset, "hello");
-    let result = Pastel.apply([stateRegion]);
+    let stateRegion = TerminalPastel.(emptyStyle |> withReset, "hello");
+    let result = TerminalPastel.apply([stateRegion]);
 
     expect.string(String.escaped(result)).toEqual("\\027[0mhello\\027[0m\\027[0m");
     ();
@@ -37,27 +38,27 @@ describe("Pastel.reset", ({test}) => {
     ();
   });
   test("Terminal E2E single child", ({expect}) => {
-    let input = <Pastel reset=true> "hello" </Pastel>;
+    let input = <TerminalPastel reset=true> "hello" </TerminalPastel>;
     expect.string(input).toEqual("\027[0mhello\027[0m\027[0m");
   });
   test("styles inside reset", ({expect}) => {
-    let input = <Pastel reset=true color=Green> "should be green" </Pastel>;
+    let input = <TerminalPastel reset=true color=Green> "should be green" </TerminalPastel>;
     expect.string(input).toEqual("\027[0m\027[32mshould be green\027[0m\027[0m\027[39m");
     ();
   });
   test("Terminal E2E nested", ({expect}) => {
     let result =
-      <Pastel color=Green>
+      <TerminalPastel color=Green>
         "Hello"
-        <Pastel dim=true>
+        <TerminalPastel dim=true>
           "world"
-          <Pastel reset=true>
+          <TerminalPastel reset=true>
             "unstyled"
-            <Pastel color=Magenta> "and magenta" </Pastel>
-          </Pastel>
+            <TerminalPastel color=Magenta> "and magenta" </TerminalPastel>
+          </TerminalPastel>
           "dim and green?"
-        </Pastel>
-      </Pastel>;
+        </TerminalPastel>
+      </TerminalPastel>;
     expect.string(result).toEqual(
       "\027[32mHello\027[2mworld\027[0munstyled\027[0m\027[35mand magenta\027[0m\027[0m\027[2m\027[32mdim and green?\027[22m\027[39m",
     );
