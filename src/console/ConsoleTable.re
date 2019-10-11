@@ -42,7 +42,6 @@ let pad_list = (value, length, lst) =>
  * Breaks a string into multiple lines, each less than the given width.
  */
 let wrap_cell = (width: int, cell: string): list(string) => {
-  /* TODO: hyphenate if single word is too long? */
   let split_to_lines = (s: string): list(string) =>
     Str.split(Str.regexp(" "), s)
     |> List.fold_left(
@@ -109,7 +108,7 @@ let lines_to_row = (columns, cells) => {
 /**
  * Creates a single table row from a list of the cell contents.
  */
-let sprint_row = (dividers: BorderStyle.t, cells: list(string)): string => {
+let sprint_row = (dividers: BorderStyle.t, cells) => {
   let row_string = String.concat(" " ++ dividers.cell_wall ++ " ", cells);
   dividers.table_left ++ " " ++ row_string ++ " " ++ dividers.table_right;
 };
