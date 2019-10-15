@@ -12,7 +12,6 @@ depends: [
   dune
   qcheck-core   {>= "0.9" & < "0.10"}
   reason
-  refmterr
   ocaml   {>= "4.2.0" & < "5.0.0"}
   rely
   console

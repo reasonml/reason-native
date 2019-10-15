@@ -7,13 +7,12 @@ doc: "https://reason-native.com"
 
 
 tags: []
-build: [ ["refmterr" "dune" "build" "-p" "pastel-console" ] ]
+build: [ ["dune" "build" "-p" "pastel-console" ] ]
 depends: [
   console
   pastel
   dune
   reason   {< "4.0.0"}
-  refmterr
   ocaml   {>= "4.2.0" & < "5.0.0"}
 ]
 synopsis: "My Project"
