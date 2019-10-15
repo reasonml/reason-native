@@ -9,9 +9,9 @@ doc: "https://reason-native.com"
 tags: []
 build: [ ["dune" "build" "-p" "console" ] ]
 depends: [
-  dune
-  reason   {< "4.0.0"}
-  ocaml   {>= "4.2.0" & < "5.0.0"}
+  "dune"
+  "reason"   {< "4.0.0"}
+  "ocaml"   {>= "4.2.0" & < "5.0.0"}
 ]
 synopsis: "No effort, universal logger"
 description: "No effort, universal logger"

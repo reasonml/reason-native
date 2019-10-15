@@ -9,10 +9,10 @@ dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src
 tags: ["file-system" "fs" "filesystem" "directories" "reasonml" "reason" "ocaml" "esy"]
 build: [ ["dune" "build" "-p" "fs" ] ]
 depends: [
-  fp   {>= "0.0.0" & < "1.0.0"}
-  dune
-  reason   {< "4.0.0"}
-  ocaml   {>= "4.2.0" & < "5.0.0"}
+  "fp"   {>= "0.0.0" & < "1.0.0"}
+  "dune"
+  "reason"   {< "4.0.0"}
+  "ocaml"   {>= "4.2.0" & < "5.0.0"}
 ]
 synopsis: "Reason Native file system API"
 description: "Reason Native file system API"

@@ -9,9 +9,9 @@ dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src
 tags: ["path" "fp" "filesystem" "directories" "reasonml" "reason" "ocaml" "esy"]
 build: [ ["dune" "build" "-p" "fp" ] ]
 depends: [
-  dune
-  reason   {< "4.0.0"}
-  ocaml   {>= "4.2.0" & < "5.0.0"}
+  "dune"
+  "reason"   {< "4.0.0"}
+  "ocaml"   {>= "4.2.0" & < "5.0.0"}
 ]
 synopsis: "Reason Native file paths library."
 description: "Reason Native file paths library."

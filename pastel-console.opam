@@ -9,11 +9,11 @@ doc: "https://reason-native.com"
 tags: []
 build: [ ["dune" "build" "-p" "pastel-console" ] ]
 depends: [
-  console
-  pastel
-  dune
-  reason   {< "4.0.0"}
-  ocaml   {>= "4.2.0" & < "5.0.0"}
+  "console"
+  "pastel"
+  "dune"
+  "reason"   {< "4.0.0"}
+  "ocaml"   {>= "4.2.0" & < "5.0.0"}
 ]
 synopsis: "My Project"
 description: "My Project"
