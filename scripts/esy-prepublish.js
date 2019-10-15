@@ -38,29 +38,28 @@ const opamifyName = name => {
   }
 };
 const opamifyVersion = v => {
+  var v = v.trim();
   if(v.charAt(0) === '^') {
     var postCaret = v.substr(1);
     var nextDotIndex = postCaret.indexOf('.');
     if(nextDotIndex !== -1) {
       var major = postCaret.substr(0, nextDotIndex);
       var rest = postCaret.substr(nextDotIndex + 1);
-      console.log(postCaret, nextDotIndex, major, rest)
-      console.log('>= "' + postCaret + '" & < "' + (parseInt(major) + 1) + '.0.0"');
       return '>= "' + postCaret + '" & < "' + (parseInt(major) + 1) + '.0.0"';
     } else {
       var major = postCaret.substr(0, nextDotIndex);
       return '>= "' + postCaret + '" & < "' + (parseInt(postCaret) + 1) + '"';
     }
   } else {
-    return v.replace(/\s+<[^=]/g, s => '" & < "')
-        .replace(/\s+<=/g, s => '" & <= "')
-        .replace(/<[^=]/g, s => '< "')
-        .replace(/<=/g, s => '<= "')
+    return v.replace(/\s+<\s+/g, s => '" & < "')
+        .replace(/\s+<=\s*/g, s => '" & <= "')
+        .replace(/^<\s+/g, s => '< "')
+        .replace(/^<=\s*/g, s => '<= "')
 
-        .replace(/\s+>[^=]/g, s => '" & > "')
+        .replace(/\s+>\s+/g, s => '" & > "')
         .replace(/\s+>=/g, s => '" & >= "')
-        .replace(/>[^=]/g, s => '> "')
-        .replace(/>=/g, s => '>= "')
+        .replace(/^>\s+/g, s => '> "')
+        .replace(/^>=\s*/g, s => '>= "')
         + '"';
   }
 };
