@@ -42,26 +42,20 @@ const opamifyVersion = v => {
     if(nextDotIndex !== -1) {
       var major = postCaret.substr(0, nextDotIndex);
       var rest = postCaret.substr(nextDotIndex + 1);
-      return '>= ' + postCaret + ' & < ' + (parseInt(major) + 1) + '.0.0';
+      return '>= "' + postCaret + '" & < "' + (parseInt(major) + 1) + '.0.0"';
     } else {
       var major = postCaret.substr(0, nextDotIndex);
-      return '>= ' + postCaret + ' & < ' + (parseInt(postCaret) + 1);
+      return '>= "' + postCaret + '" & < "' + (parseInt(postCaret) + 1) + '"';
     }
   } else {
-    v.replace(/ </g, (s) => ' & <');
+    return v.replace(/ </g, (s) => ' & <');
   }
 };
-const depMap = (o, f) => {
-  var packages = [];
-  for(var name in o) {
-    var vers = o[name];
-    if(vers == '*') {
-      packages.push(opamifyName(name));
-    } else {
-      packages.push(opamifyName(name) + "   {" + opamifyVersion(vers) + "}");
-    }
-  }
-  return packages;
+const depMap = (o) => {
+  return Object.entries(o).map(([name, vers]) =>
+    opamifyName(name) +
+      (vers === '*' ? '' : '   {' + opamifyVersion(vers) + '}')
+  )
 };
 const createOpamText = package => {
   const opamTemplate = [
@@ -71,8 +65,12 @@ const createOpamText = package => {
     'license: ' + quote(package.license),
     'homepage: ' + quote(package.homepage),
     'doc: ' + quote(package.homepage),
-    'bug-reports: ' + quote(package.repository.url),
-    'dev-repo: ' + quote(package.repository.url),
+    package.repository && package.repository.url ?
+      ('bug-reports: ' + quote(package.repository.url)) :
+      '',
+    package.repository && package.repository.url ?
+      ('dev-repo: ' + quote(package.repository.url)) :
+      '',
     'tags: [' + (package.keywords ? package.keywords.map(quote).join(',') : '') + ']',
     'build: [ [' + package.esy.build.split(' ').map(quote).join(' ') + ' ] ]',
     'depends: [',
