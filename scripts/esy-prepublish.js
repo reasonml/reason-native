@@ -29,7 +29,9 @@ const opamifyName = name => {
   } else {
     if(name.indexOf('@') === 0) {
       var scopeAndPackage = name.substr(1).split('/');
-      return scopeAndPackage[0] + '--' + scopeAndPackage[1];
+      // return 'npm--' + scopeAndPackage[0] + '--' + scopeAndPackage[1];
+      // Assumes the packages have name.opam files, without the scope.
+      return scopeAndPackage[1];
     } else {
       return name;
     }
@@ -42,13 +44,24 @@ const opamifyVersion = v => {
     if(nextDotIndex !== -1) {
       var major = postCaret.substr(0, nextDotIndex);
       var rest = postCaret.substr(nextDotIndex + 1);
+      console.log(postCaret, nextDotIndex, major, rest)
+      console.log('>= "' + postCaret + '" & < "' + (parseInt(major) + 1) + '.0.0"');
       return '>= "' + postCaret + '" & < "' + (parseInt(major) + 1) + '.0.0"';
     } else {
       var major = postCaret.substr(0, nextDotIndex);
       return '>= "' + postCaret + '" & < "' + (parseInt(postCaret) + 1) + '"';
     }
   } else {
-    return v.replace(/ </g, (s) => ' & <');
+    return v.replace(/\s+<[^=]/g, s => '" & < "')
+        .replace(/\s+<=/g, s => '" & <= "')
+        .replace(/<[^=]/g, s => '< "')
+        .replace(/<=/g, s => '<= "')
+
+        .replace(/\s+>[^=]/g, s => '" & > "')
+        .replace(/\s+>=/g, s => '" & >= "')
+        .replace(/>[^=]/g, s => '> "')
+        .replace(/>=/g, s => '>= "')
+        + '"';
   }
 };
 const depMap = (o) => {
@@ -75,10 +88,11 @@ const createOpamText = package => {
     'build: [ [' + package.esy.build.split(' ').map(quote).join(' ') + ' ] ]',
     'depends: [',
   ].concat(depMap(package.dependencies).map(s=>'  ' + s)).concat([
+    ']',
     'synopsis: ' + quote(package.description),
     'description: ' + quote(package.description)
   ]);
-  return opamTemplate.join('\n');
+  return opamTemplate.join('\n') + '\n';
 };
 
 
@@ -92,6 +106,7 @@ let projectRoot = process.cwd();
 let relativeJsonPaths = [];
 for (var i = 2; i < process.argv.length; i++) {
   let jsonRelativePath = process.argv[i];
+  console.log(jsonRelativePath);
   relativeJsonPaths.push(jsonRelativePath);
 }
 
@@ -130,11 +145,26 @@ let uncommitted =
 
 if (uncommitted !== "") {
   console.log('ERROR: You have uncommitted changes. Please try on a clean master branch');
-  // process.exit(1);
+  process.exit(1);
 }
 
 process.chdir(projectRoot);
-let tarResult = cp.spawnSync('tar', ['--exclude', 'node_modules', '--exclude', '_build', '--exclude', '.git', '-cf', 'template.tar', '.']);
+let tarResult = cp.spawnSync(
+  'tar',
+  [
+    '--exclude',
+    '_esy',
+    '--exclude',
+    'node_modules',
+    '--exclude',
+    '_build',
+    '--exclude',
+    '.git',
+    '-cf',
+    'template.tar',
+    '.'
+  ]
+);
 let tarErr = tarResult.stderr.toString();
 // if (tarErr !== '') {
 // console.log('ERROR: Could not create template npm pack for prepublish');
@@ -147,10 +177,17 @@ try {
   // For each subpackage, we release the entire source code for all packages, but
   // with the root package.json swapped out with the esy.json file in the
   // subpackage.
+  console.log(relativeJsonPaths);
   for (var i = 0; i < relativeJsonPaths.length; i++) {
     process.chdir(projectRoot);
     let jsonRelativePath = relativeJsonPaths[i];
     let jsonResolvedPath = path.resolve(projectRoot, jsonRelativePath);
+    const packageJson = require(jsonResolvedPath);
+    const packageName = packageJson.name;
+    const packageVersion = packageJson.version;
+    console.log('');
+    console.log('Preparing: ' + jsonRelativePath + ' ' + packageName + '@' + packageVersion);
+    console.log('-----------------------------------------------------------------------------');
 
     let subpackageReleaseDir = path.resolve(_releaseDir, jsonRelativePath);
     if (fs.existsSync(subpackageReleaseDir)) {
@@ -170,12 +207,6 @@ try {
     process.chdir(subpackageReleasePrepDir);
     cp.spawnSync('tar', ['-xvf', 'template.tar']);
     fs.unlinkSync(path.join(subpackageReleasePrepDir, 'template.tar'));
-    const packageJson = require(jsonResolvedPath);
-    const packageName = packageJson.name;
-    const packageVersion = packageJson.version;
-    const opamText = createOpamText(packageJson);
-    const opamFilePath = path.basename(jsonRelativePath, '.json') + '.opam';
-    fs.writeFileSync(opamFilePath, opamText);
 
     let readmePath = path.resolve(subpackageReleasePrepDir, 'README.md');
     let readmePkgPath =
@@ -198,9 +229,9 @@ try {
         destPath: path.resolve(subpackageReleasePrepDir, 'README.md')
       }
     ];
-    for (var i = 0; i < toCopy.length; i++) {
-      let originPath = toCopy[i].originPath;
-      let destPath = toCopy[i].destPath;
+    for (var j = 0; j < toCopy.length; j++) {
+      let originPath = toCopy[j].originPath;
+      let destPath = toCopy[j].destPath;
       if (originPath !== null && fs.existsSync(originPath) && destPath !== originPath) {
         fs.renameSync(originPath, destPath);
       }
@@ -236,11 +267,20 @@ try {
       console.log('ERROR: Could not untar in ' + mvTo);
       throw new Error('Error:' + tarResult.stderr.toString());
     }
-    console.log('');
-    console.log(packageName + '@' + packageVersion + ' prepared for publishing at ' + subpackageReleaseDir);
-    console.log('');
+    console.log('Prepared for publishing at: ');
+    console.log('    ' + subpackageReleaseDir);
+    try {
+      const opamText = createOpamText(packageJson);
+      const opamFileName = path.basename(jsonRelativePath, '.json') + '.opam';
+      let opamResolvedPath = path.resolve(projectRoot, opamFileName);
+      fs.writeFileSync(opamResolvedPath, opamText);
+      console.log("Opam file generated. Commit it. Or don't:");
+      console.log('    ' + opamResolvedPath);
+    } catch(e) {
+      console.log("Could not generate opam file.");
+      console.log('    ' + e.toString());
+    }
     console.log('To publish the package to npm do:');
-    console.log('');
     console.log('    cd ' + path.resolve(subpackageReleaseDir, 'package'));
     console.log('    npm publish --access=public');
     console.log('');

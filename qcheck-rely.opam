@@ -1,0 +1,21 @@
+opam-version: "1.0.2"
+maintainer: "undefined"
+authors: ["undefined"]
+license: "MIT"
+homepage: "undefined"
+doc: "undefined"
+bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/qcheck-rely"
+dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/qcheck-rely"
+tags: ["qcheck","rely","unittest","test","property test"]
+build: [ ["dune" "build" "-p" "qcheck-rely" ] ]
+depends: [
+  dune
+  qcheck-core   {>= " 0.9" & < ""0.10"}
+  reason
+  refmterr
+  ocaml   {>= "4.2.0" & < "5.0.0"}
+  rely
+  console
+]
+synopsis: "Rely matchers for qcheck"
+description: "Rely matchers for qcheck"

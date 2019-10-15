@@ -1,0 +1,20 @@
+opam-version: "0.0.0"
+maintainer: "Facebook Engineering"
+authors: ["Facebook Engineering"]
+license: "undefined"
+homepage: "https://reason-native.com"
+doc: "https://reason-native.com"
+
+
+tags: []
+build: [ ["refmterr" "dune" "build" "-p" "pastel-console" ] ]
+depends: [
+  console
+  pastel
+  dune
+  reason   {< "4.0.0"}
+  refmterr
+  ocaml   {>= "4.2.0" & < "5.0.0"}
+]
+synopsis: "My Project"
+description: "My Project"

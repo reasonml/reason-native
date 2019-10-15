@@ -25,7 +25,7 @@
     "release": "node ./scripts/esy-prepublish.js dir.json"
   },
   "dependencies": {
-    "@reason-native/path": ">= 0.0.0 <= 1.0.0",
+    "@reason-native/fp": ">= 0.0.0 <= 1.0.0",
     "@opam/dune": "*",
     "@esy-ocaml/reason": "< 4.0.0",
     "ocaml": "^4.2.0"

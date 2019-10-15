@@ -1,0 +1,18 @@
+opam-version: "0.0.1"
+maintainer: "Facebook Engineering"
+authors: ["Facebook Engineering"]
+license: "MIT"
+homepage: "https://reason-native.com"
+doc: "https://reason-native.com"
+bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/dir"
+dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/dir"
+tags: ["dir","filesystem","directories","reasonml","reason","ocaml","esy"]
+build: [ ["dune" "build" "-p" "dir" ] ]
+depends: [
+  fp   {>= " 0.0.0" & <= " " 1.0.0"}
+  dune
+  reason   {< "4.0.0"}
+  ocaml   {>= "4.2.0" & < "5.0.0"}
+]
+synopsis: "Reason native system directories"
+description: "Reason native system directories"
