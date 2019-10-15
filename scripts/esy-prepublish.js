@@ -105,7 +105,6 @@ let projectRoot = process.cwd();
 let relativeJsonPaths = [];
 for (var i = 2; i < process.argv.length; i++) {
   let jsonRelativePath = process.argv[i];
-  console.log(jsonRelativePath);
   relativeJsonPaths.push(jsonRelativePath);
 }
 
@@ -176,7 +175,6 @@ try {
   // For each subpackage, we release the entire source code for all packages, but
   // with the root package.json swapped out with the esy.json file in the
   // subpackage.
-  console.log(relativeJsonPaths);
   for (var i = 0; i < relativeJsonPaths.length; i++) {
     process.chdir(projectRoot);
     let jsonRelativePath = relativeJsonPaths[i];
@@ -267,21 +265,29 @@ try {
       throw new Error('Error:' + tarResult.stderr.toString());
     }
     console.log('Prepared for publishing at: ');
-    console.log('    ' + subpackageReleaseDir);
-    try {
-      const opamText = createOpamText(packageJson);
-      const opamFileName = path.basename(jsonRelativePath, '.json') + '.opam';
-      let opamResolvedPath = path.resolve(projectRoot, opamFileName);
-      fs.writeFileSync(opamResolvedPath, opamText);
-      console.log("Opam file generated. Commit it. Or don't:");
-      console.log('    ' + opamResolvedPath);
-    } catch(e) {
-      console.log("Could not generate opam file.");
-      console.log('    ' + e.toString());
+    console.log('  ' + subpackageReleaseDir);
+    if(packageJson['esy-prepublish-generate-opam']) {
+      try {
+        const opamText = createOpamText(packageJson);
+        const opamFileName = path.basename(jsonRelativePath, '.json') + '.opam';
+        let opamResolvedPath = path.resolve(projectRoot, opamFileName);
+        fs.writeFileSync(opamResolvedPath, opamText);
+        console.log("Opam file generated. Commit it. Or don't:");
+        console.log('  ' + opamResolvedPath);
+      } catch(e) {
+        console.log("Could not generate opam file. See error below.");
+        console.log(
+          "To disable opam file generation, remove `\"esy-prepublish-generate-opam\": true` from " +
+          jsonRelativePath
+        );
+        console.log('  ' + e.toString());
+      }
+    } else {
+      console.log("To generate opam file, add `\"esy-prepublish-generate-opam\": true` to " + jsonRelativePath);
     }
     console.log('To publish the package to npm do:');
-    console.log('    cd ' + path.resolve(subpackageReleaseDir, 'package'));
-    console.log('    npm publish --access=public');
+    console.log('  cd ' + path.resolve(subpackageReleaseDir, 'package'));
+    console.log('  npm publish --access=public');
     console.log('');
   }
 } finally {

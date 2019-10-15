@@ -4,6 +4,7 @@
   "description": "My Project",
   "author": "Facebook Engineering",
   "homepage": "https://reason-native.com",
+  "esy-prepublish-generate-opam": true,
   "esy": {
     "build": "refmterr dune build -p pastel-console",
     "install": "esy-installer pastel-console.install"

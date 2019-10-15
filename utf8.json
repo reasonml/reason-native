@@ -4,6 +4,7 @@
   "description": "Utf8 logic with minimal dependencies.",
   "author": "Facebook Engineering",
   "homepage": "https://reason-native.com",
+  "esy-prepublish-generate-opam": true,
   "license": "MIT",
   "esy": {
     "build": "dune build -p utf8",
