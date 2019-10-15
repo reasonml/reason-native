@@ -4,8 +4,8 @@ authors: ["Facebook Engineering"]
 license: "MIT"
 homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
-bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/file-context-printer"
-dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/file-context-printer"
+bug-reports: "https://github.com/facebookexperimental/reason-native"
+dev-repo: "git://github.com/facebookexperimental/reason-native"
 tags: []
 build: [ ["dune" "build" "-p" "file-context-printer" ] ]
 depends: [

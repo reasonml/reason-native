@@ -5,7 +5,7 @@ license: "MIT"
 homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
 bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/unicode"
-dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/unicode"
+dev-repo: "git://github.com/facebookexperimental/reason-native/tree/master/src/unicode"
 tags: []
 build: [ ["dune" "build" "-p" "unicode" ] ]
 depends: [

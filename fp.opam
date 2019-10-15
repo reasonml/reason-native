@@ -4,8 +4,8 @@ authors: ["Facebook Engineering"]
 license: "MIT"
 homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
-bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/fp"
-dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/fp"
+bug-reports: "https://github.com/facebookexperimental/reason-native"
+dev-repo: "git://github.com/facebookexperimental/reason-native"
 tags: ["path" "fp" "filesystem" "directories" "reasonml" "reason" "ocaml" "esy"]
 build: [ ["dune" "build" "-p" "fp" ] ]
 depends: [

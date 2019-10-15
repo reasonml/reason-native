@@ -4,8 +4,8 @@ authors: ["Facebook Engineering"]
 license: "MIT"
 homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
-bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/qcheck-rely"
-dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/qcheck-rely"
+bug-reports: "https://github.com/facebookexperimental/reason-native"
+dev-repo: "git://github.com/facebookexperimental/reason-native"
 tags: ["qcheck" "rely" "unittest" "test" "property test"]
 build: [ ["dune" "build" "-p" "qcheck-rely" ] ]
 depends: [

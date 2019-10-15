@@ -4,8 +4,8 @@ authors: ["Facebook Engineering"]
 license: "MIT"
 homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
-bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/rely"
-dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/rely"
+bug-reports: "https://github.com/facebookexperimental/reason-native"
+dev-repo: "git://github.com/facebookexperimental/reason-native"
 tags: ["reason" "facebook" "jest" "runner" "test" "testing" "snapshot" "rely" "reason-native" "native"]
 build: [ ["dune" "build" "-p" "rely" ] ]
 depends: [
