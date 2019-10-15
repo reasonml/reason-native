@@ -2,6 +2,8 @@
   "name": "@reason-native/pastel",
   "version": "0.2.1",
   "description": "Native Reason ANSI terminal styling with an awesome API",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/pastel"
@@ -38,8 +40,7 @@
     "native"
   ],
   "esy": {
-    "build": "dune build -p pastel",
-    "install": "esy-installer pastel.install"
+    "build": "dune build -p pastel"
   },
   "scripts": {
     "test": "esy x TestPastel.exe",
@@ -47,7 +48,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "*",
+    "@esy-ocaml/reason": "< 4.0.0",
     "ocaml": "^4.2.0",
     "@opam/re": "*"
   }

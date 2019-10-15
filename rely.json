@@ -2,6 +2,8 @@
   "name": "@reason-native/rely",
   "version": "3.1.0",
   "description": "A native Reason test runner that is heavily inspired by Jest",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/rely"
@@ -28,7 +30,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "*",
+    "@esy-ocaml/reason": "< 4.0.0",
     "@opam/re": "*",
     "refmterr": "*",
     "ocaml": "^4.4.0",

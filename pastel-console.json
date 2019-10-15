@@ -2,6 +2,8 @@
   "name": "@reason-native/pastel-console",
   "version": "0.0.0",
   "description": "My Project",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
   "esy": {
     "build": "refmterr dune build -p pastel-console",
     "install": "esy-installer pastel-console.install"
@@ -14,7 +16,7 @@
     "@reason-native/console": "*",
     "@reason-native/pastel": "*",
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "*",
+    "@esy-ocaml/reason": "< 4.0.0",
     "refmterr": "*",
     "ocaml": "^4.2.0"
   },

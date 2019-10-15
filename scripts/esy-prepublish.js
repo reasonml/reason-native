@@ -20,6 +20,70 @@ const fs = require('fs');
 const cp = require('child_process');
 const path = require('path');
 
+const quote = s => '"' + s + '"';
+const opamifyName = name => {
+  if(name.indexOf("@opam/") === 0) {
+    return name.substr(6);
+  } else if(name === '@esy-ocaml/reason') {
+    return "reason";
+  } else {
+    if(name.indexOf('@') === 0) {
+      var scopeAndPackage = name.substr(1).split('/');
+      return scopeAndPackage[0] + '--' + scopeAndPackage[1];
+    } else {
+      return name;
+    }
+  }
+};
+const opamifyVersion = v => {
+  if(v.charAt(0) === '^') {
+    var postCaret = v.substr(1);
+    var nextDotIndex = postCaret.indexOf('.');
+    if(nextDotIndex !== -1) {
+      var major = postCaret.substr(0, nextDotIndex);
+      var rest = postCaret.substr(nextDotIndex + 1);
+      return '>= ' + postCaret + ' & < ' + (parseInt(major) + 1) + '.0.0';
+    } else {
+      var major = postCaret.substr(0, nextDotIndex);
+      return '>= ' + postCaret + ' & < ' + (parseInt(postCaret) + 1);
+    }
+  } else {
+    v.replace(/ </g, (s) => ' & <');
+  }
+};
+const depMap = (o, f) => {
+  var packages = [];
+  for(var name in o) {
+    var vers = o[name];
+    if(vers == '*') {
+      packages.push(opamifyName(name));
+    } else {
+      packages.push(opamifyName(name) + "   {" + opamifyVersion(vers) + "}");
+    }
+  }
+  return packages;
+};
+const createOpamText = package => {
+  const opamTemplate = [
+    'opam-version: ' + quote(package.version),
+    'maintainer: ' + quote(package.author),
+    'authors: [' + quote(package.author) + ']',
+    'license: ' + quote(package.license),
+    'homepage: ' + quote(package.homepage),
+    'doc: ' + quote(package.homepage),
+    'bug-reports: ' + quote(package.repository.url),
+    'dev-repo: ' + quote(package.repository.url),
+    'tags: [' + (package.keywords ? package.keywords.map(quote).join(',') : '') + ']',
+    'build: [ [' + package.esy.build.split(' ').map(quote).join(' ') + ' ] ]',
+    'depends: [',
+  ].concat(depMap(package.dependencies).map(s=>'  ' + s)).concat([
+    'synopsis: ' + quote(package.description),
+    'description: ' + quote(package.description)
+  ]);
+  return opamTemplate.join('\n');
+};
+
+
 if (process.cwd() !== path.resolve(__dirname, '..')) {
   console.log("ERROR: Must run `make esy-prepublish` from project root.");
   process.exit(1);
@@ -68,7 +132,7 @@ let uncommitted =
 
 if (uncommitted !== "") {
   console.log('ERROR: You have uncommitted changes. Please try on a clean master branch');
-  process.exit(1);
+  // process.exit(1);
 }
 
 process.chdir(projectRoot);
@@ -111,6 +175,9 @@ try {
     const packageJson = require(jsonResolvedPath);
     const packageName = packageJson.name;
     const packageVersion = packageJson.version;
+    const opamText = createOpamText(packageJson);
+    const opamFilePath = path.basename(jsonRelativePath, '.json') + '.opam';
+    fs.writeFileSync(opamFilePath, opamText);
 
     let readmePath = path.resolve(subpackageReleasePrepDir, 'README.md');
     let readmePkgPath =

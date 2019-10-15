@@ -2,6 +2,8 @@
   "name": "reason-native-dev",
   "version": "0.0.0",
   "description": "My Project",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
   "license": "MIT",
   "esy": {
     "build": "refmterr dune build --profile=release",
@@ -36,7 +38,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@opam/reason": "*",
+    "@esy-ocaml/reason": "< 4.0.0",
     "refmterr": "*",
     "ocaml": "^4.2.0",
     "@opam/re": "*",

@@ -2,10 +2,11 @@
   "name": "refmterr",
   "version": "3.2.2",
   "description": "Reason Formatting of Errors",
+  "author": "Facebook Engineering",
   "dependencies": {
     "@opam/dune": "*",
     "@opam/re": "*",
-    "@esy-ocaml/reason": "^3.0.0",
+    "@esy-ocaml/reason": "< 4.0.0",
     "ocaml": " >= 4.2.0  < 4.9.0",
     "@reason-native/pastel": "*",
     "@opam/atdgen": "*",

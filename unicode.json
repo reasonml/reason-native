@@ -2,6 +2,8 @@
   "name": "@reason-native/unicode",
   "version": "0.0.0",
   "description": "Easy to use and well documented Unicode symbols",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/unicode"
@@ -16,7 +18,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "*",
+    "@esy-ocaml/reason": "< 4.0.0",
     "ocaml": "^4.2.0"
   },
   "devDependencies": {

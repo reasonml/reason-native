@@ -2,6 +2,8 @@
   "name": "@reason-native/utf8",
   "version": "0.1.0",
   "description": "Utf8 logic with minimal dependencies.",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
   "license": "MIT",
   "esy": {
     "build": "dune build -p utf8",
@@ -12,6 +14,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
+    "@esy-ocaml/reason": "< 4.0.0",
     "ocaml": "^4.2.0"
   },
   "devDependencies": {

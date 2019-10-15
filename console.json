@@ -2,6 +2,8 @@
   "name": "@reason-native/console",
   "version": "0.1.0",
   "description": "No effort, universal logger",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
   "license": "MIT",
   "esy": {
     "build": "dune build -p console",
@@ -15,7 +17,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "^3.3.0",
+    "@esy-ocaml/reason": "< 4.0.0",
     "ocaml": "^4.2.0"
   },
   "devDependencies": {
