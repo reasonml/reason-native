@@ -83,7 +83,7 @@ const createOpamText = package => {
     package.repository && package.repository.url ?
       ('dev-repo: ' + quote(package.repository.url)) :
       '',
-    'tags: [' + (package.keywords ? package.keywords.map(quote).join(',') : '') + ']',
+    'tags: [' + (package.keywords ? package.keywords.map(quote).join(' ') : '') + ']',
     'build: [ [' + package.esy.build.split(' ').map(quote).join(' ') + ' ] ]',
     'depends: [',
   ].concat(depMap(package.dependencies).map(s=>'  ' + s)).concat([

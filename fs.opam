@@ -6,7 +6,7 @@ homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
 bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/fs"
 dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/fs"
-tags: ["file-system","fs","filesystem","directories","reasonml","reason","ocaml","esy"]
+tags: ["file-system" "fs" "filesystem" "directories" "reasonml" "reason" "ocaml" "esy"]
 build: [ ["dune" "build" "-p" "fs" ] ]
 depends: [
   fp   {>= "0.0.0" & < "1.0.0"}

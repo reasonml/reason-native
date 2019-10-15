@@ -6,7 +6,7 @@ homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
 bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/dir"
 dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/dir"
-tags: ["dir","filesystem","directories","reasonml","reason","ocaml","esy"]
+tags: ["dir" "filesystem" "directories" "reasonml" "reason" "ocaml" "esy"]
 build: [ ["dune" "build" "-p" "dir" ] ]
 depends: [
   fp   {>= "0.0.0" & <= "1.0.0"}

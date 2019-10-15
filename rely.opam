@@ -6,7 +6,7 @@ homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
 bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/rely"
 dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/rely"
-tags: ["reason","facebook","jest","runner","test","testing","snapshot","rely","reason-native","native"]
+tags: ["reason" "facebook" "jest" "runner" "test" "testing" "snapshot" "rely" "reason-native" "native"]
 build: [ ["refmterr" "dune" "build" "-p" "rely" ] ]
 depends: [
   dune

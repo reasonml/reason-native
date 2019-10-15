@@ -6,7 +6,7 @@ homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
 bug-reports: "https://github.com/facebookexperimental/reason-native/tree/master/src/pastel"
 dev-repo: "https://github.com/facebookexperimental/reason-native/tree/master/src/pastel"
-tags: ["color","colour","colors","terminal","console","cli","string","str","ansi","style","styles","tty","formatting","rgb","256","shell","xterm","log","logging","command-line","text","reason","facebook","chalk","highlight","pastel","reason-native","native"]
+tags: ["color" "colour" "colors" "terminal" "console" "cli" "string" "str" "ansi" "style" "styles" "tty" "formatting" "rgb" "256" "shell" "xterm" "log" "logging" "command-line" "text" "reason" "facebook" "chalk" "highlight" "pastel" "reason-native" "native"]
 build: [ ["dune" "build" "-p" "pastel" ] ]
 depends: [
   dune
