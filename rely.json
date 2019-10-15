@@ -23,7 +23,7 @@
     "native"
   ],
   "esy": {
-    "build": "refmterr dune build -p rely",
+    "build": "dune build -p rely",
     "install": "esy-installer rely.install"
   },
   "scripts": {
@@ -33,7 +33,6 @@
     "@opam/dune": "*",
     "@esy-ocaml/reason": "< 4.0.0",
     "@opam/re": "*",
-    "refmterr": "*",
     "ocaml": "^4.4.0",
     "@reason-native/pastel": "*",
     "@reason-native/file-context-printer": "*",
