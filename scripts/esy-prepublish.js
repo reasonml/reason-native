@@ -138,13 +138,14 @@ const head =
 const master =
   cp.spawnSync('git', ['rev-parse', '--verify', 'master']).stdout.toString();
 
-let uncommitted =
-  cp.spawnSync('git', ['diff-index', 'HEAD', '--']).stdout.toString();
+// Since we generate opam files, don't check for uncommitted.
+// let uncommitted =
+//   cp.spawnSync('git', ['diff-index', 'HEAD', '--']).stdout.toString();
 
-if (uncommitted !== "") {
-  console.log('ERROR: You have uncommitted changes. Please try on a clean master branch');
-  process.exit(1);
-}
+// if (uncommitted !== "") {
+//   console.log('ERROR: You have uncommitted changes. Please try on a clean master branch');
+//   process.exit(1);
+// }
 
 process.chdir(projectRoot);
 let tarResult = cp.spawnSync(
