@@ -1,5 +1,6 @@
 (library
    (public_name fs.lib)
+   (preprocess (pps bisect_ppx --conditional))
    (libraries fp unix)
    (name Fs)
 )

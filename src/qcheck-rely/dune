@@ -1,5 +1,6 @@
 (library
   (name QCheckRely)
+  (preprocess (pps bisect_ppx --conditional))
   (public_name qcheck-rely)
   (libraries qcheck-core rely.lib console.lib)
 )

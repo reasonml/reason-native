@@ -32,7 +32,8 @@
     "bootstrap": "esy x bash -cx ./bootstrap.cmd",
     "all": "./scripts/run-all.sh",
     "test": "esy x bash -cx ./scripts/test-dev.cmd",
-    "test-ci": "esy x bash -cx ./scripts/test-ci.cmd"
+    "test-ci": "esy x bash -cx ./scripts/test-ci.cmd",
+    "coverage": "esy @coverage x bash -cx ./scripts/test-coverage.cmd"
   },
   "dependencies": {
     "@opam/dune": "*",
@@ -50,9 +51,11 @@
     "ocaml": "~4.6.4",
     "@opam/dune": "1.10.0",
     "@opam/reason": "3.5.0",
-    "@opam/sexplib0": "*"
+    "@opam/sexplib0": "*",
+    "@opam/bisect_ppx": "*"
   },
   "resolutions": {
-    "@opam/reason": "let-def/reason:reason.opam#474900e6d9d5ecef788fbe78e8a23cb20d151a72"
+    "@opam/reason": "let-def/reason:reason.opam#474900e6d9d5ecef788fbe78e8a23cb20d151a72",
+    "@opam/bisect_ppx": "aantron/bisect_ppx:bisect_ppx.opam#02dfb10188033a26d07d23480c2bc44a3a670357"
   }
 }

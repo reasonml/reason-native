@@ -1,5 +1,6 @@
 (library
   (public_name dir.lib)
+  (preprocess (pps bisect_ppx --conditional))
   (name Dir)
   (libraries fp unix)
   (c_names  dir )

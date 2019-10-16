@@ -1,4 +1,5 @@
 (library
    (public_name fp)
+   (preprocess (pps bisect_ppx --conditional))
    (name Fp)
 )
