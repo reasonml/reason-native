@@ -2,9 +2,12 @@
   "name": "@reason-native/rely",
   "version": "3.1.0",
   "description": "A native Reason test runner that is heavily inspired by Jest",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
+  "esy-prepublish-generate-opam": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/rely"
+    "url": "https://github.com/facebookexperimental/reason-native"
   },
   "license": "MIT",
   "keywords": [
@@ -20,7 +23,7 @@
     "native"
   ],
   "esy": {
-    "build": "refmterr dune build -p rely",
+    "build": "dune build -p rely",
     "install": "esy-installer rely.install"
   },
   "scripts": {
@@ -28,9 +31,8 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "*",
+    "@esy-ocaml/reason": "< 4.0.0",
     "@opam/re": "*",
-    "refmterr": "*",
     "ocaml": "^4.4.0",
     "@reason-native/pastel": "*",
     "@reason-native/file-context-printer": "*",

@@ -2,9 +2,12 @@
   "name": "@reason-native/qcheck-rely",
   "version": "1.0.2",
   "description": "Rely matchers for qcheck",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
+  "esy-prepublish-generate-opam": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/qcheck-rely"
+    "url": "https://github.com/facebookexperimental/reason-native"
   },
   "license": "MIT",
   "keywords": ["qcheck", "rely", "unittest", "test", "property test"],
@@ -19,7 +22,6 @@
     "@opam/dune": "*",
     "@opam/qcheck-core": ">= 0.9 < 0.10",
     "@esy-ocaml/reason": "*",
-    "refmterr": "*",
     "ocaml": "^4.2.0",
     "@reason-native/rely": "*",
     "@reason-native/console": "*"

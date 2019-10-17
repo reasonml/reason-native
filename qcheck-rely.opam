@@ -1,0 +1,20 @@
+opam-version: "2.0"
+maintainer: "Facebook Engineering"
+authors: ["Facebook Engineering"]
+license: "MIT"
+homepage: "https://reason-native.com"
+doc: "https://reason-native.com"
+bug-reports: "https://github.com/facebookexperimental/reason-native"
+dev-repo: "git://github.com/facebookexperimental/reason-native"
+tags: ["qcheck" "rely" "unittest" "test" "property test"]
+build: [ ["dune" "build" "-p" "qcheck-rely" ] ]
+depends: [
+  "dune"
+  "qcheck-core"   {>= "0.9" & < "0.10"}
+  "reason"
+  "ocaml"   {>= "4.2.0" & < "5.0.0"}
+  "rely"
+  "console"
+]
+synopsis: "Rely matchers for qcheck"
+description: "Rely matchers for qcheck"

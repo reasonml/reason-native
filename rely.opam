@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: "Facebook Engineering"
+authors: ["Facebook Engineering"]
+license: "MIT"
+homepage: "https://reason-native.com"
+doc: "https://reason-native.com"
+bug-reports: "https://github.com/facebookexperimental/reason-native"
+dev-repo: "git://github.com/facebookexperimental/reason-native"
+tags: ["reason" "facebook" "jest" "runner" "test" "testing" "snapshot" "rely" "reason-native" "native"]
+build: [ ["dune" "build" "-p" "rely" ] ]
+depends: [
+  "dune"
+  "reason"   {< "4.0.0"}
+  "re"
+  "ocaml"   {>= "4.4.0" & < "5.0.0"}
+  "pastel"
+  "file-context-printer"
+  "junit"
+]
+synopsis: "A native Reason test runner that is heavily inspired by Jest"
+description: "A native Reason test runner that is heavily inspired by Jest"

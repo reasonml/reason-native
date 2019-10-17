@@ -1,10 +1,13 @@
 {
   "name": "@reason-native/fs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Reason Native file system API",
+  "author": "Facebook Engineering",
+  "homepage": "https://reason-native.com",
+  "esy-prepublish-generate-opam": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/facebookexperimental/reason-native/tree/master/src/fs"
+    "url": "https://github.com/facebookexperimental/reason-native"
   },
   "license": "MIT",
   "keywords": [
@@ -24,9 +27,9 @@
     "release": "node ./scripts/esy-prepublish.js fs.json"
   },
   "dependencies": {
-    "@reason-native/path": ">= 0.0.0 <= 1.0.0",
+    "@reason-native/fp": ">= 0.0.0 < 1.0.0",
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "*",
+    "@esy-ocaml/reason": "< 4.0.0",
     "ocaml": "^4.2.0"
   },
   "devDependencies": {

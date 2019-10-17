@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: "[object Object]"
+authors: ["[object Object]"]
+license: "undefined"
+homepage: "https://reason-native.com"
+doc: "https://reason-native.com"
+
+
+tags: []
+build: [ ["dune" "build" "-p" "refmterr" ] ]
+depends: [
+  "dune"
+  "re"
+  "reason"   {< "4.0.0"}
+  "ocaml"   {>= "4.2.0" & < "4.9.0"}
+  "pastel"
+  "atdgen"
+  "console"
+]
+synopsis: "Reason Formatting of Errors"
+description: "Reason Formatting of Errors"

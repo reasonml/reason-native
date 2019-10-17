@@ -1,0 +1,18 @@
+opam-version: "2.0"
+maintainer: "Facebook Engineering"
+authors: ["Facebook Engineering"]
+license: "MIT"
+homepage: "https://reason-native.com"
+doc: "https://reason-native.com"
+bug-reports: "https://github.com/facebookexperimental/reason-native"
+dev-repo: "git://github.com/facebookexperimental/reason-native"
+tags: ["color" "colour" "colors" "terminal" "console" "cli" "string" "str" "ansi" "style" "styles" "tty" "formatting" "rgb" "256" "shell" "xterm" "log" "logging" "command-line" "text" "reason" "facebook" "chalk" "highlight" "pastel" "reason-native" "native"]
+build: [ ["dune" "build" "-p" "pastel" ] ]
+depends: [
+  "dune"
+  "reason"   {< "4.0.0"}
+  "ocaml"   {>= "4.2.0" & < "5.0.0"}
+  "re"
+]
+synopsis: "Native Reason ANSI terminal styling with an awesome API"
+description: "Native Reason ANSI terminal styling with an awesome API"
