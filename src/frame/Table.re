@@ -1,9 +1,9 @@
-module BorderStyle = ConsoleTableBorderStyle;
+module BorderStyle = TableBorderStyle;
 
 /**
  * Adds spaces to the right of string `s` to match the given width.
  */
-let right_pad = (width, s) =>
+let rightPad = (width, s) =>
   if (String.length(s) >= width) {
     s;
   } else {
@@ -14,7 +14,7 @@ let right_pad = (width, s) =>
  * Adds elements with the given value or removes elements
  * so the list matches the given length.
  */
-let pad_list = (value, length, lst) =>
+let padList = (value, length, lst) =>
   if (List.length(lst) === length) {
     lst;
   } else if (List.length(lst) > length) {
@@ -30,19 +30,20 @@ let pad_list = (value, length, lst) =>
       };
     take(length, [], lst);
   } else {
-    let rec make_list = (len, value, initial) =>
+    let rec makeList = (len, value, initial) =>
       switch (len) {
       | 0 => initial
-      | _ => make_list(len - 1, value, [value, ...initial])
+      | _ => makeList(len - 1, value, [value, ...initial])
       };
-    lst @ make_list(length - List.length(lst), value, []);
+    lst @ makeList(length - List.length(lst), value, []);
   };
 
 /**
  * Breaks a string into multiple lines, each less than the given width.
  */
-let wrap_cell = (width: int, cell: string): list(string) => {
-  let split_to_lines = (s: string): list(string) =>
+let wrapCell =
+    (pastelMode: Pastel.mode, width: int, cell: string): list(string) => {
+  let splitToLines = (s: string): list(string) =>
     Str.split(Str.regexp(" "), s)
     |> List.fold_left(
          (lines, word) =>
@@ -55,12 +56,15 @@ let wrap_cell = (width: int, cell: string): list(string) => {
          [],
        )
     |> List.rev
-    |> List.map(right_pad(width));
+    |> List.map(rightPad(width));
 
-  switch (Pastel.parse(cell)) {
-  | [] => split_to_lines(cell)
+  switch (Pastel.useMode(pastelMode, () => Pastel.parse(cell))) {
+  | [] => splitToLines(cell)
   | [(style, text)] =>
-    split_to_lines(text) |> List.map(line => Pastel.apply([(style, line)]))
+    splitToLines(text)
+    |> List.map(line =>
+         Pastel.useMode(pastelMode, () => Pastel.apply([(style, line)]))
+       )
   | [fst, ...rest] =>
     raise(
       Invalid_argument(
@@ -75,24 +79,24 @@ let wrap_cell = (width: int, cell: string): list(string) => {
  * it to a list of lines with a list of cells in that line.
  * e.g. [[a, b, c], [d, e, f]] -> [[a, d], [b, e], [c, f]]
  */
-let lines_to_row = (columns, cells) => {
+let linesToRow = (columns, cells) => {
   /* The number of lines in tallest cell */
   let height =
     List.fold_left(
-      (curr_max, lines) => max(curr_max, List.length(lines)),
+      (currMax, lines) => max(currMax, List.length(lines)),
       0,
       cells,
     );
 
   /* Make all cells in the row have the same number of lines. */
-  let padded_cells =
-    List.map(pad_list("", height), cells)
+  let paddedCells =
+    List.map(padList("", height), cells)
     |> List.map2(
-         (width, lines) => List.map(right_pad(width), lines),
+         (width, lines) => List.map(rightPad(width), lines),
          columns,
        );
 
-  switch (padded_cells) {
+  switch (paddedCells) {
   | [] => []
   | [hd, ...tl] =>
     List.fold_left(
@@ -108,28 +112,28 @@ let lines_to_row = (columns, cells) => {
 /**
  * Creates a single table row from a list of the cell contents.
  */
-let sprint_row = (dividers: BorderStyle.t, cells) => {
-  let row_string = String.concat(" " ++ dividers.cell_wall ++ " ", cells);
-  dividers.table_left ++ " " ++ row_string ++ " " ++ dividers.table_right;
+let sprintRow = (dividers: BorderStyle.t, cells) => {
+  let rowString = String.concat(" " ++ dividers.cellWall ++ " ", cells);
+  dividers.tableLeft ++ " " ++ rowString ++ " " ++ dividers.tableRight;
 };
 
 /**
  * Adds a divider in between each table row
  */
-let add_row_dividers = (dividers: BorderStyle.t, columns, rows) => {
+let addRowDividers = (dividers: BorderStyle.t, columns, rows) => {
   /* Add 2 to divider width to account for spaces on either side of cell */
-  let row_divider =
+  let rowDivider =
     List.map(
       width =>
-        String.concat("", pad_list(dividers.cell_bottom, width + 2, [])),
+        String.concat("", padList(dividers.cellBottom, width + 2, [])),
       columns,
     )
-    |> String.concat(dividers.cell_wall_divider);
-  let row_divider =
-    dividers.table_left_divider ++ row_divider ++ dividers.table_right_divider;
+    |> String.concat(dividers.cellWallDivider);
+  let rowDivider =
+    dividers.tableLeftDivider ++ rowDivider ++ dividers.tableRightDivider;
 
   /* Add a divider before every row then remove first divider. */
-  let table = List.map(row => [[row_divider], row], rows) |> List.flatten;
+  let table = List.map(row => [[rowDivider], row], rows) |> List.flatten;
   switch (table) {
   | [] => []
   | [hd, ...tl] => tl
@@ -139,41 +143,33 @@ let add_row_dividers = (dividers: BorderStyle.t, columns, rows) => {
 /**
  * Adds the top of the table to the given set of rows
  */
-let add_table_top = (dividers: BorderStyle.t, columns, rows) => {
+let addTableTop = (dividers: BorderStyle.t, columns, rows) => {
   /* Add 2 to divider width to account for spaces on either side of cell */
-  let table_top =
+  let tableTop =
     List.map(
-      width =>
-        String.concat("", pad_list(dividers.table_top, width + 2, [])),
+      width => String.concat("", padList(dividers.tableTop, width + 2, [])),
       columns,
     )
-    |> String.concat(dividers.table_top_divider);
-  [
-    [dividers.top_left_corner ++ table_top ++ dividers.top_right_corner],
-    ...rows,
-  ];
+    |> String.concat(dividers.tableTopDivider);
+  [[dividers.topLeftCorner ++ tableTop ++ dividers.topRightCorner], ...rows];
 };
 
 /**
  * Adds the bottom of the table to the given set of rows
  */
-let add_table_bottom = (dividers: BorderStyle.t, columns, rows) => {
+let addTableBottom = (dividers: BorderStyle.t, columns, rows) => {
   /* Add 2 to divider width to account for spaces on either side of cell */
-  let table_bottom =
+  let tableBottom =
     List.map(
       width =>
-        String.concat("", pad_list(dividers.table_bottom, width + 2, [])),
+        String.concat("", padList(dividers.tableBottom, width + 2, [])),
       columns,
     )
-    |> String.concat(dividers.table_bottom_divider);
+    |> String.concat(dividers.tableBottomDivider);
 
   rows
   @ [
-    [
-      dividers.bottom_left_corner
-      ++ table_bottom
-      ++ dividers.bottom_right_corner,
-    ],
+    [dividers.bottomLeftCorner ++ tableBottom ++ dividers.bottomRightCorner],
   ];
 };
 
@@ -197,28 +193,33 @@ module Table = {
         ~children as rows: list(Row.t),
         ~border: BorderStyle.border=BorderStyle.Normal,
         ~borderStyle: BorderStyle.style=BorderStyle.SimpleLines,
+        ~pastelMode: Pastel.mode=Pastel.getMode(),
         (),
       )
       : t => {
     let dividers = BorderStyle.get_dividers(border, borderStyle);
-    let column_widths =
+    let columnWidths =
       List.map((c: ColumnConfig.t) => (c.width: int), columns);
 
-    List.map(pad_list("", List.length(column_widths)), rows)
+    List.map(padList("", List.length(columnWidths)), rows)
     |> List.map(row =>
-         List.map2((col, cell) => wrap_cell(col, cell), column_widths, row)
+         List.map2(
+           (col, cell) => wrapCell(pastelMode, col, cell),
+           columnWidths,
+           row,
+         )
        )
     /* At this point, the data is a list of rows, with a list of cells,
        with a list of lines in that cell */
-    |> List.map(lines_to_row(column_widths))
+    |> List.map(linesToRow(columnWidths))
     /* The data is now a list of rows, with a list of lines,
        with a list cells in that line */
-    |> List.map(row => List.map(line => sprint_row(dividers, line), row))
+    |> List.map(row => List.map(line => sprintRow(dividers, line), row))
     /* The data has been flattened to a list of rows, with a list of lines
        in that row. The cells have been flattened into a single string */
-    |> add_row_dividers(dividers, column_widths)
-    |> add_table_top(dividers, column_widths)
-    |> add_table_bottom(dividers, column_widths)
+    |> addRowDividers(dividers, columnWidths)
+    |> addTableTop(dividers, columnWidths)
+    |> addTableBottom(dividers, columnWidths)
     |> List.flatten
     |> String.concat("\n");
   };

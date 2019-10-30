@@ -28,6 +28,7 @@ module Table: {
       ~children: list(Row.t),
       ~border: BorderStyle.border=?,
       ~borderStyle: BorderStyle.style=?,
+      ~pastelMode: Pastel.mode=?,
       unit
     ) =>
     t;

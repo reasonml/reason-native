@@ -40,8 +40,6 @@ let debug = a => currentGlobalConsole.contents.debug(a);
 let warn = a => currentGlobalConsole.contents.warn(a);
 let error = a => currentGlobalConsole.contents.error(a);
 
-module ConsoleTable = ConsoleTable;
-
 module Pipe = {
   let log = a => {
     let () = currentGlobalConsole.contents.log(a);

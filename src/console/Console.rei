@@ -129,8 +129,6 @@ let error: 'a => unit;
  */
 let warn: 'a => unit;
 
-module ConsoleTable: (module type of ConsoleTable);
-
 /*
  * Useful for printing in the middle of a pipe chain:
  *

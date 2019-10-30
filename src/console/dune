@@ -6,7 +6,6 @@
      (flags ( --pretty ))
      (javascript_files  nativeChannels.js )
    )
-   (libraries Pastel)
   )
 ; objectPrinter lives separately from Common for now because Common has an
 ; implicit dependency on Pastel which Console does not want. Common should
