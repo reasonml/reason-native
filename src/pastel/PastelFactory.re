@@ -339,6 +339,6 @@ module Make = (()) => {
       };
 
   let emptyStyle = StateMachine.initialState;
-  let parse = s => selectedImplementation^.parse(s);
-  let apply = parts => selectedImplementation^.apply(parts);
+  let unstable_parse = s => selectedImplementation^.parse(s);
+  let unstable_apply = parts => selectedImplementation^.apply(parts);
 };

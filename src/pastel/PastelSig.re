@@ -82,8 +82,8 @@ module type PastelSig = {
   let isStrikethrough: style => bool;
   let isReset: style => bool;
 
-  let parse: string => list((style, string));
-  let apply: list((style, string)) => string;
+  let unstable_parse: string => list((style, string));
+  let unstable_apply: list((style, string)) => string;
 
   let createElement:
     (

@@ -117,6 +117,10 @@ let createElement:
   ) =>
   string;
 
+  /** Pastel.style exposes a way to examine and manipulate the styles of existing text in 
+   * order to perform additional formatting operations. This feature is intended to be used primarily
+   * by libraries (such as Frame). The style API itself is still subject to change until the parse/apply
+   * API is finalized, however it is extremely unlikely to change */
   type style;
   let emptyStyle: style;
   
@@ -152,6 +156,9 @@ let createElement:
   let isHidden: style => bool;
   let isStrikethrough: style => bool;
   let isReset: style => bool;
-
-  let parse: string => list((style, string));
-  let apply: list((style, string)) => string;
+  /** These functions are considered unstable and are subject to change
+   * unstable_parse takes a (potentially stylized by Pastel) string, and breaks it into segments that share the same styles
+   * unstable_apply takes a list of stylized segments and constructs a string that correctly displays those styles 
+  */
+  let unstable_parse: string => list((style, string));
+  let unstable_apply: list((style, string)) => string;

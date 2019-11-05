@@ -20,7 +20,7 @@ let runTestSuite = (mode, name) => {
                 "hello"
                 <Pastel color=Red> "world" </Pastel>
               </Pastel>;
-            let parts = Pastel.parse(input);
+            let parts = Pastel.unstable_parse(input);
             expect.int(List.length(parts)).toBe(2);
             let (firstStyle, firstText, secondStyle, secondText) =
               switch (parts) {
@@ -50,7 +50,7 @@ let runTestSuite = (mode, name) => {
                 <Pastel color=Red> "world" </Pastel>
                 <Pastel color=Blue> "and goodbye" </Pastel>
               </Pastel>;
-            let parts = Pastel.parse(input);
+            let parts = Pastel.unstable_parse(input);
 
             expect.int(List.length(parts)).toBe(3);
             let (
@@ -96,7 +96,7 @@ let runTestSuite = (mode, name) => {
                 "hello"
                 <Pastel color=Red> "world" </Pastel>
               </Pastel>;
-            let parts = Pastel.parse(input);
+            let parts = Pastel.unstable_parse(input);
 
             expect.int(List.length(parts)).toBe(2);
             let (firstRegion, secondRegion) =
@@ -108,11 +108,11 @@ let runTestSuite = (mode, name) => {
               | _ => raise(Invalid_argument("already verified length"))
               };
             let reconstructed =
-              Pastel.apply([
+              Pastel.unstable_apply([
                 (firstRegion, "goodbye"),
                 (secondRegion, "everybody"),
               ]);
-            let reconstructedParts = Pastel.parse(reconstructed);
+            let reconstructedParts = Pastel.unstable_parse(reconstructed);
 
             expect.int(List.length(reconstructedParts)).toBe(2);
             let (firstText, secondText) =
@@ -139,7 +139,7 @@ let runTestSuite = (mode, name) => {
                 "hello"
                 <Pastel color=Red> "world" </Pastel>
               </Pastel>;
-            let parts = Pastel.parse(input);
+            let parts = Pastel.unstable_parse(input);
 
             expect.int(List.length(parts)).toBe(2);
             let (firstRegion, secondRegion) =
@@ -151,12 +151,12 @@ let runTestSuite = (mode, name) => {
               | _ => raise(Invalid_argument("already verified length"))
               };
             let reconstructed =
-              Pastel.apply([
+              Pastel.unstable_apply([
                 (firstRegion, "goodbye"),
                 (Pastel.emptyStyle, "unstyled text!"),
                 (secondRegion, "everybody"),
               ]);
-            let reconstructedParts = Pastel.parse(reconstructed);
+            let reconstructedParts = Pastel.unstable_parse(reconstructed);
 
             expect.int(List.length(reconstructedParts)).toBe(3);
             let (firstText, secondText, thirdText, secondStyle) =
@@ -187,7 +187,7 @@ let runTestSuite = (mode, name) => {
                 "hello"
                 <Pastel color=Red> "world" </Pastel>
               </Pastel>;
-            let parts = Pastel.parse(input);
+            let parts = Pastel.unstable_parse(input);
             expect.int(List.length(parts)).toBe(2);
             let (firstStyle, firstText, secondStyle, secondText) =
               switch (parts) {
@@ -200,14 +200,14 @@ let runTestSuite = (mode, name) => {
               | _ => raise(Invalid_argument("already verified length"))
               };
             let result =
-              Pastel.apply([
+              Pastel.unstable_apply([
                 (firstStyle |> Pastel.withUnderline, firstText),
                 (
                   secondStyle |> Pastel.withDim |> Pastel.withColor(Magenta),
                   secondText,
                 ),
               ]);
-            let resultParts = Pastel.parse(result);
+            let resultParts = Pastel.unstable_parse(result);
             expect.int(List.length(resultParts)).toBe(2);
             let (firstStyle, firstText, secondStyle, secondText) =
               switch (resultParts) {
@@ -245,7 +245,7 @@ describe("disabled deconstruction", ({test}) => {
             "hello "
             <Pastel color=Red> "world" </Pastel>
           </Pastel>;
-        let parts = Pastel.parse(input);
+        let parts = Pastel.unstable_parse(input);
 
         expect.int(List.length(parts)).toBe(1);
         let (style, text) = List.hd(parts);
@@ -260,7 +260,7 @@ describe("disabled deconstruction", ({test}) => {
       Disabled,
       () => {
         let result =
-          Pastel.apply([
+          Pastel.unstable_apply([
             (Pastel.emptyStyle |> Pastel.withColor(Black), "hello "),
             (Pastel.emptyStyle |> Pastel.withHidden, "world"),
           ]);
