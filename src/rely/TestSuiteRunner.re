@@ -109,9 +109,7 @@ module Make = (Config: TestSuiteRunnerConfig) => {
                   Config.maxNumStackFrames,
                 );
               assertionState :=
-                AssertionState.addAssertionResult(
-                  assertionState^,
-                );
+                AssertionState.addAssertionResult(assertionState^);
               updateTestStatus(Failed(message, location, stack));
             };
             ();
@@ -425,7 +423,24 @@ let run = (config: RunConfig.t, testSuites) =>
       let maxNumStackFrames = 3;
       let updateSnapshots = config.updateSnapshots;
       let ci = config.ci;
-      let reporters = config.reporters;
+      let reporters =
+        config.reporters
+        |> List.map(reporter =>
+             switch (reporter) {
+             | RunConfig.Default =>
+               TerminalReporter.createTerminalReporter(
+                 ~getTime=config.getTime,
+                 {
+                   printEndline: print_endline,
+                   printNewline: print_newline,
+                   printString: print_string,
+                   flush,
+                 },
+               )
+             | JUnit(path) => JunitReporter.createJUnitReporter(path)
+             | Custom(reporter) => reporter
+             }
+           );
       let onTestFrameworkFailure = config.onTestFrameworkFailure;
     };
     module Runner = Make(RunnerConfig);

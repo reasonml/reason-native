@@ -165,7 +165,7 @@ describe("Rely Snapshot", ({test}) => {
     );
 
     TestFramework.run(
-      RelyInternal.RunConfig.RunConfig.(
+      RelyInternal.RunConfig.(
         initialize()
         |> withReporters([Custom(Reporter.reporter)])
         |> updateSnapshots(false)
@@ -231,7 +231,7 @@ describe("Rely Snapshot", ({test}) => {
     );
 
     TestFramework.run(
-      RelyInternal.RunConfig.RunConfig.(
+      RelyInternal.RunConfig.(
         initialize()
         |> withReporters([Custom(Reporter.reporter)])
         |> updateSnapshots(true)
@@ -302,7 +302,7 @@ describe("Rely Snapshot", ({test}) => {
     );
 
     TestFramework.run(
-      RelyInternal.RunConfig.RunConfig.(
+      RelyInternal.RunConfig.(
         initialize()
         |> withReporters([Custom(Reporter.reporter)])
         |> onTestFrameworkFailure(() => ())
@@ -377,7 +377,7 @@ describe("Rely Snapshot", ({test}) => {
     );
 
     TestFramework.run(
-      RelyInternal.RunConfig.RunConfig.(
+      RelyInternal.RunConfig.(
         initialize()
         |> withReporters([Custom(Reporter.reporter)])
         |> onTestFrameworkFailure(() => ())
@@ -450,7 +450,7 @@ describe("Rely Snapshot", ({test}) => {
     );
 
     TestFramework.run(
-      RelyInternal.RunConfig.RunConfig.(
+      RelyInternal.RunConfig.(
         initialize()
         |> withReporters([Custom(Reporter.reporter)])
         |> onTestFrameworkFailure(() => ())
