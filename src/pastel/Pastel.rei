@@ -117,48 +117,48 @@ let createElement:
   ) =>
   string;
 
-  /** Pastel.style exposes a way to examine and manipulate the styles of existing text in 
+/** Pastel.style exposes a way to examine and manipulate the styles of existing text in
    * order to perform additional formatting operations. This feature is intended to be used primarily
    * by libraries (such as Frame). The style API itself is still subject to change until the parse/apply
    * API is finalized, however it is extremely unlikely to change */
-  type style;
-  let emptyStyle: style;
-  
-  let withColor: (ColorName.colorName, style) => style;
-  let resetColor: style => style;
-  let withBackgroundColor: (ColorName.colorName, style) => style;
-  let resetBackgroundColor: style => style;
+type style;
+let emptyStyle: style;
 
-  let setBold: (bool, style) => style;
-  let withBold: style => style;
-  let setDim: (bool, style) => style;
-  let withDim: style => style;
-  let setItalic: (bool, style) => style;
-  let withItalic: style => style;
-  let setUnderline: (bool, style) => style;
-  let withUnderline: style => style;
-  let setInverse: (bool, style) => style;
-  let withInverse: style => style;
-  let setHidden: (bool, style) => style;
-  let withHidden: style => style;
-  let setStrikethrough: (bool, style) => style;
-  let withStrikethrough: style => style;
-  let withReset: style => style;
-  let setReset: (bool, style) => style;
+let withColor: (ColorName.colorName, style) => style;
+let resetColor: style => style;
+let withBackgroundColor: (ColorName.colorName, style) => style;
+let resetBackgroundColor: style => style;
 
-  let getColor: style => option(ColorName.colorName);
-  let getBackgroundColor: style => option(ColorName.colorName);
-  let isBold: style => bool;
-  let isDim: style => bool;
-  let isItalic: style => bool;
-  let isUnderline: style => bool;
-  let isInverse: style => bool;
-  let isHidden: style => bool;
-  let isStrikethrough: style => bool;
-  let isReset: style => bool;
-  /** These functions are considered unstable and are subject to change
+let setBold: (bool, style) => style;
+let withBold: style => style;
+let setDim: (bool, style) => style;
+let withDim: style => style;
+let setItalic: (bool, style) => style;
+let withItalic: style => style;
+let setUnderline: (bool, style) => style;
+let withUnderline: style => style;
+let setInverse: (bool, style) => style;
+let withInverse: style => style;
+let setHidden: (bool, style) => style;
+let withHidden: style => style;
+let setStrikethrough: (bool, style) => style;
+let withStrikethrough: style => style;
+let withReset: style => style;
+let setReset: (bool, style) => style;
+
+let getColor: style => option(ColorName.colorName);
+let getBackgroundColor: style => option(ColorName.colorName);
+let isBold: style => bool;
+let isDim: style => bool;
+let isItalic: style => bool;
+let isUnderline: style => bool;
+let isInverse: style => bool;
+let isHidden: style => bool;
+let isStrikethrough: style => bool;
+let isReset: style => bool;
+/** These functions are considered unstable and are subject to change
    * unstable_parse takes a (potentially stylized by Pastel) string, and breaks it into segments that share the same styles
-   * unstable_apply takes a list of stylized segments and constructs a string that correctly displays those styles 
+   * unstable_apply takes a list of stylized segments and constructs a string that correctly displays those styles
   */
-  let unstable_parse: string => list((style, string));
-  let unstable_apply: list((style, string)) => string;
+let unstable_parse: string => list((style, string));
+let unstable_apply: list((style, string)) => string;
