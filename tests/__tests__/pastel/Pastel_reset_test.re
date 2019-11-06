@@ -11,14 +11,14 @@ describe("Pastel.reset", ({test}) => {
       HumanReadablePastel.(emptyStyle |> withReset),
       "hello",
     );
-    let result = HumanReadablePastel.apply([stateRegion]);
+    let result = HumanReadablePastel.unstable_apply([stateRegion]);
 
     expect.string(String.escaped(result)).toEqual("<reset>hello</reset>");
     ();
   });
   test("apply reset state terminal", ({expect}) => {
     let stateRegion = TerminalPastel.(emptyStyle |> withReset, "hello");
-    let result = TerminalPastel.apply([stateRegion]);
+    let result = TerminalPastel.unstable_apply([stateRegion]);
 
     expect.string(String.escaped(result)).toEqual("\\027[0mhello\\027[0m\\027[0m");
     ();
@@ -26,7 +26,7 @@ describe("Pastel.reset", ({test}) => {
   test("apply reset state with other state human readable", ({expect}) => {
     let result =
       HumanReadablePastel.(
-        apply([
+        unstable_apply([
           (emptyStyle |> withReset, "hello"),
           (emptyStyle |> withColor(Green), "world"),
         ])
