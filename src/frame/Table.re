@@ -41,10 +41,9 @@ let padList = (value, length, lst) =>
 /**
  * Breaks a string into multiple lines, each less than the given width.
  */
-let wrapCell =
-    (pastelMode: Pastel.mode, width: int, cell: string): list(string) => {
+let wrapCell = (width: int, cell: string): list(string) => {
   let splitToLines = (s: string): list(string) =>
-    Str.split(Str.regexp(" "), s)
+    Re.split(Re.Pcre.regexp(" "), s)
     |> List.fold_left(
          (lines, word) =>
            switch (lines) {
@@ -58,13 +57,10 @@ let wrapCell =
     |> List.rev
     |> List.map(rightPad(width));
 
-  switch (Pastel.useMode(pastelMode, () => Pastel.parse(cell))) {
+  switch (Pastel.parse(cell)) {
   | [] => splitToLines(cell)
   | [(style, text)] =>
-    splitToLines(text)
-    |> List.map(line =>
-         Pastel.useMode(pastelMode, () => Pastel.apply([(style, line)]))
-       )
+    splitToLines(text) |> List.map(line => Pastel.apply([(style, line)]))
   | [fst, ...rest] =>
     raise(
       Invalid_argument(
@@ -193,7 +189,6 @@ module Table = {
         ~children as rows: list(Row.t),
         ~border: BorderStyle.border=BorderStyle.Normal,
         ~borderStyle: BorderStyle.style=BorderStyle.SimpleLines,
-        ~pastelMode: Pastel.mode=Pastel.getMode(),
         (),
       )
       : t => {
@@ -203,11 +198,7 @@ module Table = {
 
     List.map(padList("", List.length(columnWidths)), rows)
     |> List.map(row =>
-         List.map2(
-           (col, cell) => wrapCell(pastelMode, col, cell),
-           columnWidths,
-           row,
-         )
+         List.map2((col, cell) => wrapCell(col, cell), columnWidths, row)
        )
     /* At this point, the data is a list of rows, with a list of cells,
        with a list of lines in that cell */

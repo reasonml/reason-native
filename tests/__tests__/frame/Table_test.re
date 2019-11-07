@@ -150,44 +150,46 @@ describe("Frame.Table", ({test}) => {
     expect.string(actual).toEqualLines(expected);
   });
 
-  test("Formatted Table", ({expect}) => {
-    let bold_cell =
-      Pastel.useMode(HumanReadable, () => <Pastel bold=true> "b1" </Pastel>);
-    let wrapped_blue_cell =
-      Pastel.useMode(HumanReadable, () =>
-        <Pastel color=Blue> "b2 is a cell that needs to wrap" </Pastel>
-      );
-    let actual =
-      <Table
-        columns=[
-          <ColumnConfig width=8 />,
-          <ColumnConfig width=16 />,
-          <ColumnConfig width=8 />,
-        ]
-        pastelMode=HumanReadable>
-        <Row> "a1" bold_cell "c1" </Row>
-        <Row> "a2" wrapped_blue_cell "c2" </Row>
-        <Row> "a3" "b3" "c3" "d3" </Row>
-        <Row> "a4" "b4" </Row>
-        <Row> "a5" "b5" "c5" </Row>
-      </Table>;
-    let expected = [
-      "------------------------------------------",
-      "| a1       | <bold>b1              </resetDimAndBold> | c1       |",
-      "|----------+------------------+----------|",
-      "| a2       | <blue>b2 is a cell    </resetColor> | c2       |",
-      "|          | <blue>that needs to   </resetColor> |          |",
-      "|          | <blue>wrap            </resetColor> |          |",
-      "|----------+------------------+----------|",
-      "| a3       | b3               | c3       |",
-      "|----------+------------------+----------|",
-      "| a4       | b4               |          |",
-      "|----------+------------------+----------|",
-      "| a5       | b5               | c5       |",
-      "------------------------------------------",
-    ];
-    expect.string(actual).toEqualLines(expected);
-  });
+  test("Formatted Table", ({expect}) =>
+    Pastel.useMode(
+      HumanReadable,
+      () => {
+        let actual =
+          <Table
+            columns=[
+              <ColumnConfig width=8 />,
+              <ColumnConfig width=16 />,
+              <ColumnConfig width=8 />,
+            ]>
+            <Row> "a1" <Pastel bold=true> "b1" </Pastel> "c1" </Row>
+            <Row>
+              "a2"
+              <Pastel color=Blue> "b2 is a cell that needs to wrap" </Pastel>
+              "c2"
+            </Row>
+            <Row> "a3" "b3" "c3" "d3" </Row>
+            <Row> "a4" "b4" </Row>
+            <Row> "a5" "b5" "c5" </Row>
+          </Table>;
+        let expected = [
+          "------------------------------------------",
+          "| a1       | <bold>b1              </resetDimAndBold> | c1       |",
+          "|----------+------------------+----------|",
+          "| a2       | <blue>b2 is a cell    </resetColor> | c2       |",
+          "|          | <blue>that needs to   </resetColor> |          |",
+          "|          | <blue>wrap            </resetColor> |          |",
+          "|----------+------------------+----------|",
+          "| a3       | b3               | c3       |",
+          "|----------+------------------+----------|",
+          "| a4       | b4               |          |",
+          "|----------+------------------+----------|",
+          "| a5       | b5               | c5       |",
+          "------------------------------------------",
+        ];
+        expect.string(actual).toEqualLines(expected);
+      },
+    )
+  );
 });
 
 describe("Table styles", ({test}) => {
