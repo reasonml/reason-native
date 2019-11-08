@@ -31,7 +31,6 @@ let setMaxLength = l => {
  * ~maxLength: Length to examine before making a decision. Must correspond to
  * the printing max length.
  */
-external _out: string => unit = "native_out";
 let rec detectList: type o. (~maxLength: int, o) => bool =
   (~maxLength, o) =>
     if (maxLength === 0) {
