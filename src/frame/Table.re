@@ -57,10 +57,11 @@ let wrapCell = (width: int, cell: string): list(string) => {
     |> List.rev
     |> List.map(rightPad(width));
 
-  switch (Pastel.parse(cell)) {
+  switch (Pastel.unstable_parse(cell)) {
   | [] => splitToLines(cell)
   | [(style, text)] =>
-    splitToLines(text) |> List.map(line => Pastel.apply([(style, line)]))
+    splitToLines(text)
+    |> List.map(line => Pastel.unstable_apply([(style, line)]))
   | [fst, ...rest] =>
     raise(
       Invalid_argument(
