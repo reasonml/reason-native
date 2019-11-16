@@ -10,10 +10,10 @@ sidebar_label: Quickstart
 
 To install Refmterr in your project with esy, run
 ```sh
-esy add @reason-native/refmterr
+esy add refmterr
 ```
 
-This will add `@reason-native/refmterr` into your `package.json`.
+This will add `refmterr` into your `package.json`.
 
 ## Add to Build Pipeline
 
