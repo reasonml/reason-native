@@ -80,6 +80,10 @@
         "title": "Rely Introduction",
         "sidebar_label": "Introduction"
       },
+      "rely/mock-functions": {
+        "title": "Mock Functions",
+        "sidebar_label": "Mock Functions"
+      },
       "rely/quickstart": {
         "title": "Rely Quickstart",
         "sidebar_label": "Quickstart"

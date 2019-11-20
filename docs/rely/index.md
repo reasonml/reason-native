@@ -4,14 +4,15 @@ title: Rely Introduction
 sidebar_label: Introduction
 ---
 
-Rely is a strongly typed, [Jest-like](https://jestjs.io/) native test framework with blazing fast performance 🔥🔥🔥.
+Rely is a [Jest-inspired](https://jestjs.io/) native Reason testing framework. 
 
-It comes with built in support for both traditional and snapshot testing, and bootstraps tests in **milliseconds**.
+We took the things we loved about Jest (beautiful output, descriptive assertion framework, and snapshot testing), added some type safety, and built a library that can compile and run entire test suites both natively and in JS with [Js_of_ocaml](https://ocsigen.org/js_of_ocaml/3.1.0/manual/overview) in **milliseconds**.
+
 
 ```re
 describe("Example", ({test}) => {
   test("ints", ({expect}) =>
-    expect.int(7).toBe(5)
+    expect.int(1 + 1).toBe(3)
   );
   test("bools", ({expect}) =>
     expect.bool(true).not.toBe(false)

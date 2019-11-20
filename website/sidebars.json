@@ -1,33 +1,32 @@
 {
   "docs": {
-    "Overview": [
-      "introduction",
-      "native-basics",
-      "getting-started"
-    ],
+    "Overview": ["introduction", "native-basics", "getting-started"],
     "Rely": [
       "rely/index",
       "rely/quickstart",
-      "rely/api",
-      "rely/expect",
-      "rely/setup-teardown",
+      {
+        "type": "subcategory",
+        "label": "Guides",
+        "ids": ["rely/setup-teardown", "rely/mock-functions"]
+      },
+      {
+        "type": "subcategory",
+        "label": "API Reference",
+        "ids": [
+          "rely/api",
+          "rely/expect"
+        ]
+      },
       "rely/advanced"
     ],
-    "Console": [
-      "console/index",
-      "console/quickstart",
-      "console/api"
-    ],
+    "Console": ["console/index", "console/quickstart", "console/api"],
     "Pastel": [
       "pastel/index",
       "pastel/quickstart",
       "pastel/api",
       "pastel/console"
     ],
-    "Refmterr": [
-      "refmterr/index",
-      "refmterr/quickstart"
-    ],
+    "Refmterr": ["refmterr/index", "refmterr/quickstart"],
     "File Context Printer": [
       "file-context-printer/index",
       "file-context-printer/quickstart",
