@@ -7,5 +7,5 @@
 
 //Provides: is_cygpty_used
 function is_cygpty_used() {
-  return false;
+  return 0;
 }

@@ -11,7 +11,7 @@ let (>>=) = (o, f) =>
   };
 
 let getenv_opt = s =>
-  try (Some(Sys.getenv(s))) {
+  try(Some(Sys.getenv(s))) {
   | Not_found => None
   };
 
@@ -22,7 +22,7 @@ type level =
   | TrueColorSupport;
 
 let geEnvOpt = s =>
-  try (Some(Sys.getenv(s))) {
+  try(Some(Sys.getenv(s))) {
   | Not_found => None
   };
 
@@ -46,11 +46,10 @@ let isTTY = fileDescriptor =>
 let inferLevel = fileDescriptor =>
   if (disable) {
     NoSupport;
+  } else if (isTTY(fileDescriptor)) {
+    BasicColorSupport;
   } else {
-    switch (isTTY(fileDescriptor)) {
-    | false => minLevel
-    | true => BasicColorSupport
-    };
+    minLevel;
   };
 
 let stdin = inferLevel(Unix.stdin);
