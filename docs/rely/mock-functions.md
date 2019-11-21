@@ -4,7 +4,7 @@ title: Mock Functions
 sidebar_label: Mock Functions
 ---
 
-Mock functions (or "spies") in Rely can be used to track information about the arguments and return values of functions and allow for test-time configuration of return values. Rely has built in matchers for dealing with mock functions that are documented extensively [here](expect.md#expectmock).
+Mock functions (or "spies") in Rely can be used to track information about the arguments and return values of functions, and allow for test-time configuration of return values. Rely has built-in matchers for dealing with mock functions that are documented extensively [here](expect.md#expectmock).
 
 > Unlike Jest in JavaScript, module level mocking is not supported. The functionality available in Rely is analagous to what Jest offers via [`jest.fn` ](https://jestjs.io/docs/en/jest-object#jestfnimplementation) and there is no direct [`jest.mock`](https://jestjs.io/docs/en/jest-object#jestmockmodulename-factory-options) analogy. Many situations in which `jest.mock` would be useful can be addressed through dependency management and the structuring of side effects within your application. A simple example using functors is shown [below](#injecting-via-functor).
 
@@ -87,11 +87,11 @@ describe("Mock documentation", ({test}) => {
 
 ### Injecting via Functor
 
-When testing code with side effects such as talking to a database or making network requests, it is often desirable to be able to mock out these side effects. A straightforward way of achieving this is by passing the side effect performing functions as arguments, however this is not always desirable due to the problem of threading such arguments through deeply nested code. The use of module functions (functors) can accomplish a similar thing and somewhat alleviate this issue.
+When testing code with side effects such as talking to a database or making network requests, it is often desirable to be able to mock out these side effects. A straightforward way of achieving this is by passing functions that perform side effects as arguments. However, this is not always desirable due to the problem of threading such arguments through deeply nested code. The use of module functions (functors) can accomplish a similar thing and somewhat alleviate this issue.
 
-For example suppose that we have some code that uses a logger. In production we want the logger to make HTTP requests to some endpoint, however we deem this behavior undesirable for our test.
+For example, suppose that we have some code that uses a logger. In production we want the logger to make HTTP requests to some endpoint, but we deem this behavior undesirable for our test.
 
-Without abstracting away the dependendency on our http logger, our code might look like this.
+Without abstracting away the dependendency on our HTTP logger, our code might look like this.
 
 #### MyModule.re
 
@@ -125,7 +125,7 @@ include Make({
   /*
    * Generally it would be better practice to have some Logger module type and
    * specify that there is a logger module in the functor signature, but for the
-   * simplicity of this example a function instead
+   * simplicity of this example we use a function instead
    */
   let log = HTTPLogger.log;
 });
@@ -187,7 +187,7 @@ describe("Mock.changeImplementation", ({test}) => {
 
 ### Mock.reset(mock)
 
-Resets all information relating to stored calls and results as well as restoring the mock to the original implementation it was constructed with.
+Resets all information relating to stored calls and results, as well as restoring the mock to the original implementation it was constructed with.
 
 Equivalent to calling both [`Mock.resetHistory`](#mockresethistorymock) and [`Mock.resetImplementation`](#mockresetimplementationmock)
 
