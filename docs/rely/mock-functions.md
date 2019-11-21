@@ -87,46 +87,54 @@ describe("Mock documentation", ({test}) => {
 
 ### Injecting via Functor
 
-When testing code with side effects such as talking to a database or making network requests, it is often desirable to be able to mock out these side effects. A straightforward way of achieving this is by passing the side effect performing functions as arguments, however this is not always desirable due to the problem of threading such arguments through deeply nested code. The use of module functions (functors) can accomplish a similar thing and somewhat alleviate this issue. 
+When testing code with side effects such as talking to a database or making network requests, it is often desirable to be able to mock out these side effects. A straightforward way of achieving this is by passing the side effect performing functions as arguments, however this is not always desirable due to the problem of threading such arguments through deeply nested code. The use of module functions (functors) can accomplish a similar thing and somewhat alleviate this issue.
 
 For example suppose that we have some code that uses a logger. In production we want the logger to make HTTP requests to some endpoint, however we deem this behavior undesirable for our test.
 
 Without abstracting away the dependendency on our http logger, our code might look like this.
+
 #### MyModule.re
 
 ```reasonml
-module MyApp {
-  let doSomethingThatGetsLogged = ()  => {
+module MyApp = {
+  let doSomethingThatGetsLogged = () => {
     HTTPLogger.log("starting to do someting");
     SomeModule.doSomething();
     HTTPLogger.log("did the thing!");
-  }
-}
+  };
+};
 ```
 
 Instead we could inject the code via a functor (module function) or via an ordinary function.
 
 #### MyModule.re
+
 ```reason {
-module Make = (Dependencies: { let log: string => unit }) => {
-  let doSomethingThatGetsLogged = ()  => {
+module Make = (Dependencies: {let log: string => unit;}) => {
+  let doSomethingThatGetsLogged = () => {
     Dependencies.log("starting to do something");
     SomeModule.doSomething();
     Dependencies.log("did the thing!");
-  }
-}
-/* Making the "real" versions of the module could easily be handled elsewhere
- *  in the application but is shown here for simplicity */
+  };
+};
+/*
+ * Making the "real" versions of the module could easily be handled elsewhere
+ *  in the application but is shown here for simplicity
+ */
 include Make({
-  /* Generally it would be better practice to have some Logger module type and 
-   * specify that there is a logger module in the functor signature, but for the 
-   * simplicity of this example a function instead */
+  /*
+   * Generally it would be better practice to have some Logger module type and
+   * specify that there is a logger module in the functor signature, but for the
+   * simplicity of this example a function instead
+   */
   let log = HTTPLogger.log;
 });
 ```
 
 In your tests you can do this
+
 #### MyModuleTest.re
+
 ```reason {
 open TestFramework;
 
@@ -177,19 +185,20 @@ describe("Mock.changeImplementation", ({test}) => {
 });
 ```
 
-
-
 ### Mock.reset(mock)
+
 Resets all information relating to stored calls and results as well as restoring the mock to the original implementation it was constructed with.
 
 Equivalent to calling both [`Mock.resetHistory`](#mockresethistorymock) and [`Mock.resetImplementation`](#mockresetimplementationmock)
 
 ### Mock.resetHistory(mock)
+
 Resets all information relating to stored calls and results.
 
 Often this is useful when you want to clean up a mock's usage data between two assertions.
 
 ### Mock.resetImplementation(mock)
+
 Restores the original mock implementation to what it was first constructed with, regardless of how many times [`Mock.changeImplementation`](#mockchangeimplementationimplementation-mock) has been called.
 
 ### Mock.getCalls(mock)
@@ -201,9 +210,9 @@ Returns a list of the arguments that have been passed to the underlying function
 Returns a list of `Mock.result` from the underlying function. The calls are ordered from most to least recent. Generally the [built in mock matchers](expect.md#expectmock) should be used instead of `Mock.getResults`.
 
 ```reason
-module Mock {
-    type result('a) =
+module Mock = {
+  type result('a) =
     | Return('a)
     | Exception(exn, option(Printexc.location), string);
-}
+};
 ```
