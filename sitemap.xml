@@ -21,6 +21,7 @@
 <url> <loc>https://reason-native.com/docs/rely/api</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://reason-native.com/docs/rely/api" /> </url>
 <url> <loc>https://reason-native.com/docs/rely/expect</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://reason-native.com/docs/rely/expect" /> </url>
 <url> <loc>https://reason-native.com/docs/rely/</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://reason-native.com/docs/rely/" /> </url>
+<url> <loc>https://reason-native.com/docs/rely/mock-functions</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://reason-native.com/docs/rely/mock-functions" /> </url>
 <url> <loc>https://reason-native.com/docs/rely/quickstart</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://reason-native.com/docs/rely/quickstart" /> </url>
 <url> <loc>https://reason-native.com/docs/rely/setup-teardown</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://reason-native.com/docs/rely/setup-teardown" /> </url>
 </urlset>
