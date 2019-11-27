@@ -1,8 +1,8 @@
 {
   "scripts": {
     "examples": "docusaurus-examples",
-    "start": "docusaurus-start",
-    "build": "docusaurus-build",
+    "start": "docusaurus start",
+    "build": "docusaurus build",
     "publish-gh-pages": "docusaurus-publish",
     "write-translations": "docusaurus-write-translations",
     "version": "docusaurus-version",
@@ -10,9 +10,10 @@
     "regenerate-ansi": "node_modules/.bin/browserify -p tinyify --require 'ansi-to-html' > static/js/ansi-to-html.js"
   },
   "devDependencies": {
+    "@docusaurus/core": "^2.0.0-alpha.36",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.36",
     "browserify": "^16.2.3",
     "ansi-to-html": "^0.6.9",
-    "docusaurus": "^1.6.2",
     "tinyify": "^2.5.0"
   },
   "dependencies": {
