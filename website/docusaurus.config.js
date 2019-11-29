@@ -70,20 +70,8 @@ module.exports = {
 
   favicon: 'img/logo.png',
 
-  /* Colors for website */
-  // colors: {
-  //   primaryColor: '#222222',
-  //   secondaryColor: '#444444',
-  // },
-
   // Add custom scripts here that would be placed in <script> tags.
   scripts: ['/js/ansi-to-html.js', 'https://buttons.github.io/buttons.js', '/js/ansi.js'],
-
-  // Show documentation's last contributor's name.
-  // enableUpdateBy: true,
-
-  // Show documentation's last update time.
-  // enableUpdateTime: true,
 
   // preset which bundles most of the essential plugins present in Docusaurus 1
   presets: [
