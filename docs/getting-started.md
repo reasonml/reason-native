@@ -4,6 +4,7 @@ title: Getting Started
 ---
 
 ## Install Esy
+
 We recommend using [Esy](https://esy.sh) as your package manager in native Reason projects. Esy is a native, npm-esque package manager with built-in dependency isolation and fast, incremental builds.
 
 The easiest way to install **Esy** is with [npm](https://nodejs.org):
@@ -15,12 +16,14 @@ npm install -g esy
 ## Create a fresh project
 
 First, clone a copy of the [`esy-ocaml/hello-reason`](https://github.com/esy-ocaml/hello-reason.git) project:
+
 ```sh
 git clone https://github.com/esy-ocaml/hello-reason.git
 cd hello-reason
 ```
 
 Then, run `esy` to install relevant dependencies and build your app:
+
 ```sh
 esy
 ```
@@ -28,11 +31,13 @@ esy
 ## Run your first app
 
 Run
+
 ```sh
 esy x Hello.exe # runs Hello.exe
 ```
 
 If everything went as expected, you should see the following output:
+
 ```sh
 Running Test Program:
 [31mHello[39m, [32mWorld[39m!
@@ -86,6 +91,7 @@ Similarly, let's take a look at `bin/Hello.re`:
 Console.log("Running Test Program:");
 let () = print_endline(Lib.Util.hello());
 ```
+
 The [Console](console/index.md) package allows you to log nearly anything without having to define any printers. Let's try logging a nested tuple:
 
 ```re

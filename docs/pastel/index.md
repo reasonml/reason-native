@@ -1,11 +1,9 @@
 ---
 id: index
 title: Pastel Introduction
-sidebar_label: Introduction
 ---
 
 Pastel is a text formatting library that harnesses [Reason JSX](https://reasonml.github.io/docs/en/jsx) to provide intuitive terminal output. It's like React, but for your command line!
-
 
 ## Tips and Tricks
 
@@ -21,7 +19,7 @@ of `Pastel`'s features to the fullest.
 **Colors**:
 
 - Ensure you have configured your terminal color scheme so that "bright" colors
-  are noticibly different than non-bright colors.
+  are noticeably different than non-bright colors.
 - Background color isn't the same thing as "black". If using a dark color
   scheme, ensure that both "black" and "bright black" are different from
   "background", and different from each other.  Similarly, "white" is not the
@@ -33,10 +31,10 @@ of `Pastel`'s features to the fullest.
 - Make sure your terminal is set to render bold text in a bold font.
 - Configure your terminal to allow italics.
 
-
 Specific Terminal Configuration:
 
 **Iterm**:
+
 - iTerm often won't render underlines unless you enable ligatures (your font
   might need to declare support of ligatures).
 

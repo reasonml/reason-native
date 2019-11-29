@@ -1,19 +1,18 @@
 ---
 id: advanced
 title: Advanced Topics - Rely
-sidebar_label: Advanced
 ---
 
 ## Running with [Custom Run Config](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RunConfig.re)
 
-```reason
+```re
 let sampleRunConfig = Rely.RunConfig.initialize()
 TestFramework.run(sampleRunConfig);
 ```
 
 ## Running with [Custom Reporters](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/reporters/Reporter.re)
 
-```reason
+```re
 let myReporter: Rely.Reporter.t = {
   onTestSuiteStart: (testSuite) => {...},
   onTestSuiteResult: (testSuite, aggregatedResult, testSuiteResult) => {...},
@@ -34,7 +33,7 @@ TestFramework.run(customReporterConfig);
 
 It is recommended to use something like the following run configuration in CI
 
-```
+```re
 TestFramework.run(
   Rely.RunConfig.(
     initialize()

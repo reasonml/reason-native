@@ -1,11 +1,9 @@
 ---
 id: introduction
 title: Reason Native
-sidebar_label: Introduction
 ---
 
 Testing, printing, coloring, and other tools to effectively write native Reason code.
-
 
 ## Packages
 
@@ -26,9 +24,9 @@ released when their APIs are sufficiently stable.
 
 ## Contributing
 
-* install [esy](https://esy.sh/)
-* run `esy install` and `esy build`
-* test executables are currently defined in the respective .json files for each repository, to run them run `esy x ExecutableName.exe`
+- install [esy](https://esy.sh/)
+- run `esy install` and `esy build`
+- test executables are currently defined in the respective .json files for each repository, to run them run `esy x ExecutableName.exe`
 
 ## License
 

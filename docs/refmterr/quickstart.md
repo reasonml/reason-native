@@ -1,7 +1,6 @@
 ---
 id: quickstart
 title: Refmterr Quickstart
-sidebar_label: Quickstart
 ---
 
 > This quickstart builds off [Getting Started](../getting-started) and assumes you have a native Reason project set up.
@@ -9,7 +8,8 @@ sidebar_label: Quickstart
 ## Install Refmterr
 
 To install Refmterr in your project with esy, run
-```sh
+
+``sh
 esy add refmterr
 ```
 

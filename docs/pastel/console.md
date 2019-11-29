@@ -1,7 +1,6 @@
 ---
 id: console
 title: Pastel Console
-sidebar_label: Console
 ---
 
 `@reason-native/pastel-console` is a small library that adds pretty coloring to [Console](../console) output.
@@ -9,6 +8,7 @@ sidebar_label: Console
 ## Install Pastel Console
 
 To install Pastel Console in your project with esy, run
+
 ```sh
 esy add @reason-native/pastel-console
 ```
@@ -24,6 +24,7 @@ In order to use Pastel Console, you must add it to your build system. With dune,
 ## Initialize Pastel Console
 
 Pastel Console must be initialized with
+
 ```re
 PastelConsole.init();
 ```
@@ -37,6 +38,7 @@ PastelConsole.init();
 
 Console.log([{name: "joe", age: 100}, {name: "sue", age: 18}]);
 ```
+
 ```sh-stacked
 [{[32m"joe"[39m, [33m100[39m}, {[32m"sue"[39m, [33m18[39m}]
 ```

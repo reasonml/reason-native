@@ -1,7 +1,6 @@
 ---
 id: quickstart
 title: File Context Printer Quickstart
-sidebar_label: Quickstart
 ---
 
 > This quickstart builds off [Getting Started](../getting-started) and assumes you have a native Reason project set up.
@@ -9,6 +8,7 @@ sidebar_label: Quickstart
 ## Install Pastel
 
 To install File Context Printer in your project with esy, run
+
 ```sh
 esy add @reason-native/file-context-printer
 ```
@@ -24,6 +24,7 @@ In order to use File Context Printer, you must add it to your build system. With
 ## Sample Code
 
 Start by initializing a File Context Printer module:
+
 ```re
 module FCP =
   FileContextPrinter.Make({
@@ -33,6 +34,7 @@ module FCP =
 ```
 
 From there, extract and print file context like so:
+
 ```re
 let start = (
   7, /* start line */
@@ -47,6 +49,7 @@ FCP.printFile(
   (start, end),
 )
 ```
+
 ```sh-stacked
 [2m 4 ┆ [22m[2m * [22m[34m[2mThis[22m[39m[2m source code is licensed under the ...
 [2m 5 ┆ [22m[2m * [22m[34m[2mLICENSE[22m[39m[2m file in the root directory of ...

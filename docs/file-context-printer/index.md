@@ -1,7 +1,6 @@
 ---
 id: index
 title: File Context Printer Introduction
-sidebar_label: Introduction
 ---
 
 File Context Printer allows for quick and easy extraction of code snippets from Reason and OCaml files - it is used internally by [Rely](../rely) to print differing snapshot cases.
@@ -12,6 +11,7 @@ FCP.printFile(
   ((7, 1), (7, 11)),
 );
 ```
+
 ```sh-stacked
 [2m 4 ┆ [22m[2m * [22m[34m[2mThis[22m[39m[2m source code is licensed under the ...
 [2m 5 ┆ [22m[2m * [22m[34m[2mLICENSE[22m[39m[2m file in the root directory of ...

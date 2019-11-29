@@ -1,7 +1,6 @@
 ---
 id: quickstart
 title: Pastel Quickstart
-sidebar_label: Quickstart
 ---
 
 > This quickstart builds off [Getting Started](../getting-started) and assumes you have a native Reason project set up.
@@ -9,6 +8,7 @@ sidebar_label: Quickstart
 ## Install Pastel
 
 To install Pastel in your project with esy, run
+
 ```sh
 esy add @reason-native/pastel
 ```
@@ -35,6 +35,7 @@ let output =
   );
 print_endline(output);
 ```
+
 ```sh-stacked
 [32m[1mHello [22m[39m[32m[1m[3m[4mWorld[24m[23m[22m[39m
 ```

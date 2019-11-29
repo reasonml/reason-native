@@ -1,7 +1,6 @@
 ---
 id: quickstart
 title: Console Quickstart
-sidebar_label: Quickstart
 ---
 
 > This quickstart builds off [Getting Started](../getting-started) and assumes you have a native Reason project set up.
@@ -9,6 +8,7 @@ sidebar_label: Quickstart
 ## Install Console
 
 To install Console in your project with esy, run
+
 ```sh
 esy add @reason-native/console
 ```

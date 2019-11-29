@@ -1,7 +1,6 @@
 ---
 id: native-basics
 title: Native Reason Basics
-sidebar_label: Native Basics
 ---
 
 ## Relation to OCaml
@@ -10,6 +9,7 @@ The [ReasonML What and Why](https://reasonml.github.io/docs/en/what-and-why) pag
 > Reason is not a new language; it's a new syntax and toolchain powered by the battle-tested language, OCaml. Reason gives OCaml a familiar syntax geared toward JavaScript programmers, and caters to the existing NPM/Yarn workflow folks already know.
 
 What this effectively means is that
+
 - Reason projects **are** OCaml projects
 - Reason code **is** OCaml code
 - Projects are free to harness the power of the [OCaml ecosystem](https://opam.ocaml.org/packages/).

@@ -1,6 +1,6 @@
 ---
 id: index
-title: Console: No effort, universal logger
+title: "Console: No effort, universal logger"
 sidebar_label: Introduction
 ---
 

@@ -1,17 +1,17 @@
 ---
 id: api
 title: Console API
-sidebar_label: API
 ---
 
 ## `Console.log(anything)`
+
 Output a string or object to standard output followed by a newline. Suitable
 for writing to logs, or for outputting user messaging in command line
 applications. If you pass a string, it will not be wrapped in quotes. If you
 pass an object, `Console.log` will attempt to print the object dynamically.
 Strings deep in objects will be wrapped in quotes.
 
-```reason
+```re
 let log: 'a => unit;
 ```
 
@@ -21,7 +21,7 @@ Same as `Console.log` but attempts to avoid printing a final newline. Not all
 backends will support omitting the newline (such as in the browser where
 `console` only supports outputting with final newlines.)
 
-```reason
+```re
 let out: 'a => unit;
 ```
 
@@ -31,14 +31,15 @@ Suitable for writing to log files. In production mode, would typically be
 suppressed entirely. Custom `Console.t` implementations may implement custom
 behavior for `Console.debug` that behaves differently from `Console.log`.
 
-```reason
+```re
 let debug: 'a => unit;
 ```
 
 ## `Console.error(anything)`
+
 Same as `Console.log` but writes to `stderr`.
 
-```reason
+```re
 let error: 'a => unit;
 ```
 
@@ -47,6 +48,6 @@ let error: 'a => unit;
 Currently the same as `Console.error` but will eventually be able to be
 suppressed via a "log level".
 
-```reason
+```re
 let warn: 'a => unit;
 ```

@@ -12,7 +12,7 @@ Virtually all matchers below are negatable via prepending `.not` after the type 
 
 ## `expect.array`
 
-```reason
+```re
 type equalsFn('a) = ('a, 'a) => bool;
 
 type arrayMatchers('a) = {
@@ -41,7 +41,7 @@ let expect: {
 
 Use `expect.array(expected).toBeEmpty()` to check that an array is empty.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.array.toBeEmpty", ({test}) => {
@@ -55,7 +55,7 @@ describe("expect.array.toBeEmpty", ({test}) => {
 
 Use `expect.array(actual).toContain(expected)` when you want to check that an item is in an array. For testing items in the array, this uses `===`, a physical equality check.
 
-```reason
+```re
 open TestFramework;
 
 describe("Array example", ({test}) => {
@@ -69,7 +69,7 @@ describe("Array example", ({test}) => {
 
 Use `expect.array(actual).toContainEqual(~equals=?, expected)` when you want to check that an item is in an array. For testing items in the array, this uses `==` a structural equality check.
 
-```reason
+```re
 open TestFramework;
 
 type insect = {
@@ -89,7 +89,7 @@ describe("Array example", ({test}) => {
 
 Comparing types that need a custom comparator (such as floats) can be done using `expect.array(actual).toContainEqual(~equals, expected)`.
 
-```reason
+```re
 open TestFramework;
 
 let equals = (f1, f2) => abs_float(f1 -. f2) < 0.1;
@@ -105,7 +105,7 @@ describe("Array example", ({test}) => {
 
 Use `expect.array(actual).toEqual(~equals=?, expected)` to check that an array is equal to another array.
 
-```reason
+```re
 open TestFramework;
 
 describe("Array example", ({test}) => {
@@ -117,7 +117,7 @@ describe("Array example", ({test}) => {
 
 Comparing arrays of types that need a custom comparator (such as floats) can also be done.
 
-```reason
+```re
 open TestFramework;
 
 let equals = (f1, f2) => abs_float(f1 -. f2) < 0.1;
@@ -131,7 +131,7 @@ describe("Array example", ({test}) => {
 
 ## `expect.assertions` (as of Rely 3.1.0)
 
-```reason
+```re
 let expect: {
   ...
   assertions: int => bool,
@@ -144,7 +144,7 @@ let expect: {
 
 `expect.assertions(int)` verifies that a certain number of assertions are called during a test. This is often useful when testing code with callbacks, in order to make sure that assertions in a callback actually got called.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.assertions", ({test}) => {
@@ -167,7 +167,7 @@ describe("expect.assertions", ({test}) => {
 
 Suppose you have an application that allows for side effects to be dispatched on changes to its state via a callback. We could also use such a feature to test that all state changes in a certain path are valid by making an assertion inside that callback. If we want to do that and also ensure that at least one state change took place, we could write the following code:
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.hasAssertions", ({test}) => {
@@ -185,7 +185,7 @@ describe("expect.hasAssertions", ({test}) => {
 
 ## `expect.bool`
 
-```reason
+```re
 type boolMatchers = {
   toBe: bool => unit,
   toBeTrue: unit => unit,
@@ -211,7 +211,7 @@ Use `expect.bool(actual).toBe(expected)` to check that a boolean value is equal 
 
 For example this can be useful when writing tests inside of a `List.map` statement.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.bool", ({test}) => {
@@ -231,7 +231,7 @@ describe("expect.bool", ({test}) => {
 
 Use `expect.bool(actual).toBeTrue()` to check that a boolean value is equal to true.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.bool", ({test}) => {
@@ -245,7 +245,7 @@ describe("expect.bool", ({test}) => {
 
 Use `expect.bool(actual).toBeFalse()` to check that a boolean value is equal to false.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.bool", ({test}) => {
@@ -257,7 +257,7 @@ describe("expect.bool", ({test}) => {
 
 ## `expect.equal`
 
-```reasonml
+```reml
 type equalsFn('a) = ('a, 'a) => bool;
 
 let expect = {
@@ -274,7 +274,7 @@ Use `expect.equal(~equals=?, expected, actual)` to check that two values are equ
 
 For example to structurally compare two records you could write:
 
-```reasonml
+```reml
 open TestFramework;
 
 type myType = {
@@ -291,7 +291,7 @@ describe("expect.equal", ({test}) => {
 
 Comparing types that need a custom comparator (such as records that contain floats) can also be done by providing a custom equals function:
 
-```reasonml
+```reml
 open TestFramework;
 
 type myType = {
@@ -314,7 +314,7 @@ describe("expect.equal", ({test}) => {
 
 ## `expect.ext`
 
-```reason
+```re
 let expect('ext): {
   ...
   ext: 'ext
@@ -330,7 +330,7 @@ You can add your own custom matchers to Rely. The matchers you define are availa
 
 Use `expect.file(filename)` to make assertions about the contents of a file. `expect.file` provides the same API as [`expect.string`](#expectstring) and handles the work of reading from the file.
 
-```reason
+```re
 type stringMatchers = {
   toBeEmpty: unit => unit,
   toEqual: string => unit,
@@ -359,7 +359,7 @@ let expect: {
 
 Use `expect.file(filename).toBeEmpty` to check that a file is empty.
 
-```reason
+```re
 open TestFramework;
 
 describe("My awesome app", ({test}) => {
@@ -375,7 +375,7 @@ describe("My awesome app", ({test}) => {
 
 Use `expect.file(filename).toEqual(expected)` to check that the contents of a file are equal to some expected value.
 
-```reason
+```re
 open TestFramework;
 
 describe("Spaceballs", ({test}) => {
@@ -391,7 +391,7 @@ describe("Spaceballs", ({test}) => {
 
 Use `expect.file(actualFilename).toEqualFile(expectedFilename)` to check that the contents of a file are equal to the contents of another file.
 
-```reason
+```re
 open TestFramework;
 
 describe("Spaceballs", ({test}) => {
@@ -407,7 +407,7 @@ Use `expect.file(actualFilename).toEqualLines(expectedLines) to check that the c
 
 For example if you wanted to write a program to generate a particular poem into a file called `poem.txt`, you could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("Deep Thought", ({test}) => {
@@ -432,7 +432,7 @@ Use `expect.file(actualFilename).toMatch(regex)` to verify that a file matches a
 
 For example if we want to verify that the file `secretRecipe.txt` contains either `bacon` or `sausage` I could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("My recipe", ({test}) => {
@@ -446,7 +446,7 @@ describe("My recipe", ({test}) => {
 
 This ensures that the file matches the most recent snapshot. To generate a new snapshot or update an old one you can run Rely via the command line and pass the `-u` flag.
 
-```reason
+```re
 open TestFramework;
 
 describe("My config generator", ({test}) => {
@@ -461,7 +461,7 @@ describe("My config generator", ({test}) => {
 
 ## `expect.float`
 
-```reason
+```re
 type floatMatchers = {toBeCloseTo: (~digits: int=?, float) => unit};
 type floatMatchersWithNot = {
   toBeCloseTo: (~digits: int=?, float) => unit,
@@ -479,7 +479,7 @@ let expect: {
 
 Using exact equality with floating point numbers doesn't work in general. For example the following test fails:
 
-```reason
+```re
 open TestFramework;
 
 describe("float equality", ({test}) => {
@@ -493,7 +493,7 @@ This fails because `0.1 +. 0.2` is equal to `0.300000000000000044` in Reason due
 
 Instead, use `expect.float(actual).toBeCloseTo(~digits, expected)`. For example, if you want to be sure that 0.2 + 0.1 is equal ot 0.3 with a precision of 5 decimal digits you can use this test:
 
-```reason
+```re
 open TestFramework;
 
 describe("float equality", ({test}) => {
@@ -507,7 +507,7 @@ The optional `~digits` argument has a default value of `2`. The exact criterion 
 
 ## `expect.fn`
 
-```reason
+```re
 type negatableFnMatchers = {toThrow: unit => unit};
 type fnMatchersWithNot = {
   not: negatableFnMatchers,
@@ -526,7 +526,7 @@ let expect: {
 
 Use `expect.fn(function).toThrow()` to test that a function throws when it is called. For example, if we want to test that `ToothpasteFactory.makeFlavor("duck")` throws an exception because duck flavored toothpaste is too fowl, we could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("ToothpasteFactory", ({test}) => {
@@ -540,7 +540,7 @@ describe("ToothpasteFactory", ({test}) => {
 
 Use `expect.fn(function).toThrowException(exn)` to test that a function throws a specific exception when it is called. For example if we want to test that dividing by zero throws a `Division_by_zero` exception we could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("Arithmetic", ({test}) => {
@@ -554,7 +554,7 @@ describe("Arithmetic", ({test}) => {
 
 ## `expect.int`
 
-```reason
+```re
 type intMatchers = {toBe: int => unit};
 type intMatchersWithNot = {
   not: intMatchers,
@@ -572,7 +572,7 @@ let expect: {
 
 Use `expect.int(actual).toBe(expected)` to check that an integer is equal to a particular value. For example if you expect Deep Thought to return `42` when asked to calculate the answer to the ultimate question, you could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.int.toBe", ({test}) => {
@@ -588,7 +588,7 @@ describe("expect.int.toBe", ({test}) => {
 
 Use `expect.lines(lines)` to make assertions about lines of text. `expect.lines` provides the same API as [`expect.string`](#expectstring) and compares against the result of `String.concat("\n", lines)`.
 
-```reason
+```re
 type stringMatchers = {
   toBeEmpty: unit => unit,
   toEqual: string => unit,
@@ -617,7 +617,7 @@ let expect: {
 
 Use `expect.lines(actual).toBeEmpty` to check that a list of lines is empty.
 
-```reason
+```re
 open TestFramework;
 
 describe("Historical movies", ({test}) => {
@@ -631,7 +631,7 @@ describe("Historical movies", ({test}) => {
 
 Use `expect.lines(actual).toEqual(expected)` to check that some lines of text are equal to an expected string.
 
-```reason
+```re
 open TestFramework;
 
 describe("Lines", ({test}) => {
@@ -650,7 +650,7 @@ describe("Lines", ({test}) => {
 
 Use `expect.lines(actual).toEqualFile(filename)` to check that the some lines are equal to the contents of a file.
 
-```reason
+```re
 open TestFramework;
 
 describe("Deep Thought", ({test}) => {
@@ -664,7 +664,7 @@ describe("Deep Thought", ({test}) => {
 
 Use `expect.lines(actual).toEqualLines(expected)` to check that some lines are equal to another set of lines.
 
-```reason
+```re
 open TestFramework;
 
 describe("Deep Thought", ({test}) => {
@@ -689,7 +689,7 @@ Use `expect.lines(actual).toMatch(regex)` to verify that a file matches a PCRE r
 
 For example if we want to verify that the a recipe generator module generates a recipe that contains either `bacon` or `sausage` I could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("My recipe", ({test}) => {
@@ -705,7 +705,7 @@ describe("My recipe", ({test}) => {
 
 This ensures that the lines matches the most recent snapshot. To generate a new snapshot or update an old one you can run Rely via the command line and pass the `-u` flag.
 
-```reason
+```re
 open TestFramework;
 
 describe("My config generator", ({test}) => {
@@ -720,7 +720,7 @@ describe("My config generator", ({test}) => {
 
 ## `expect.list`
 
-```reason
+```re
 type equalsFn('a) = ('a, 'a) => bool;
 
 type listMatchers('a) = {
@@ -749,7 +749,7 @@ let expect: {
 
 Use `expect.list(expected).toBeEmpty()` to check that a list is empty.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.list.toBeEmpty", ({test}) => {
@@ -763,7 +763,7 @@ describe("expect.list.toBeEmpty", ({test}) => {
 
 Use `expect.list(actual).toContain(expected)` when you want to check that an item is in an list. For testing items in the list, this uses `===`, a physical equality check.
 
-```reason
+```re
 open TestFramework;
 
 describe("list example", ({test}) => {
@@ -777,7 +777,7 @@ describe("list example", ({test}) => {
 
 Use `expect.list(actual).toContainEqual(~equals=-?, 'a)` when you want to check that an item is in an list. For testing items in the list, this uses `==` a structural equality check.
 
-```reason
+```re
 open TestFramework;
 
 type insect = {
@@ -797,7 +797,7 @@ describe("list example", ({test}) => {
 
 Comparing types that need a custom comparator (such as floats) can be done using `expect.list(actual).toContainEqual`.
 
-```reason
+```re
 open TestFramework;
 
 let equals = (f1, f2) => abs_float(f1 -. f2) < 0.1;
@@ -813,7 +813,7 @@ describe("list example", ({test}) => {
 
 Use `expect.list(actual).toEqual(~equals=?, expected)` to check that an list is equal to another list.
 
-```reason
+```re
 open TestFramework;
 
 describe("list example", ({test}) => {
@@ -825,7 +825,7 @@ describe("list example", ({test}) => {
 
 Comparing lists of types that need a custom comparator (such as floats) can also be done.
 
-```reason
+```re
 open TestFramework;
 
 let equals = (f1, f2) => abs_float(f1 -. f2) < 0.1;
@@ -838,7 +838,7 @@ describe("List example", ({test}) => {
 ```
 ## `expect.mock`
 
-```reason
+```re
 type equalsFn('a) = ('a, 'a) => bool;
 
 type negatableMockMatchers('tupledArgs, 'ret) = {
@@ -882,7 +882,7 @@ let expect: {
 
 Use `expect.mock(mock).lastCalledWith(args)` to test what arguments a mock function was last called with.
 
-```reason
+```re
 open TestFramework;
 
 describe("Mock matchers", ({test}) => {
@@ -902,7 +902,7 @@ describe("Mock matchers", ({test}) => {
 
 Use `expect.mock(mock).lastCalledWith(args)` to test what arguments a mock function was last called with.
 
-```reason
+```re
 open TestFramework;
 
 describe("Mock matchers", ({test}) => {
@@ -922,7 +922,7 @@ describe("Mock matchers", ({test}) => {
 
 Use `expect.mock(mock).nthCalledWith(~equals=?, n, expected)` to test what arguments a mock function was called with for its nth call. For example suppose that you are implementing `map` for some data structure and want to verify that the function is called based on the order elements are added to the structure. You can write:
 
-```reason
+```re
 open TestFramework;
 
 describe("My data structure", ({test}) => {
@@ -944,7 +944,7 @@ describe("My data structure", ({test}) => {
 
 For dealing with floats or other situations in which custom equality is required, a custom equals function can be provided:
 
-```reason
+```re
 open TestFramework;
 
 describe("My data structure", ({test}) => {
@@ -969,7 +969,7 @@ describe("My data structure", ({test}) => {
 
 Use `expect.mock(mock).nthReturnedWith(~equals=?, n, expected)` to test the specific value that a mock function returned for the nth call. For example suppose that you are implementing `map` for some data structure and want to verify that the function is called based on the order elements are added to the structure. You can write:
 
-```reason
+```re
 open TestFramework;
 
 describe("My data structure", ({test}) => {
@@ -991,7 +991,7 @@ describe("My data structure", ({test}) => {
 
 For dealing with floats or other situations in which custom equality is required, a custom equals function can be provided:
 
-```reason
+```re
 open TestFramework;
 
 describe("My data structure", ({test}) => {
@@ -1018,7 +1018,7 @@ Use `expect.mock(mock).toBeCalled` to ensure that a mock function got called.
 
 For example suppose that you are implementing `map` for some data structure and want to verify that the function argument to map is actually called on a non empty structure. To test this, you could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("My data structure", ({test}) => {
@@ -1042,7 +1042,7 @@ Use `expect.mock(mock).toBeCalledTimes(int)` to ensure that a mock function got 
 
 For example suppose that you are implementing `map` for some data structure and want to verify that the function argument to map is called once per element in the structure. To test this, you could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("My data structure", ({test}) => {
@@ -1067,7 +1067,7 @@ Use `expect.mock(mock).toBeCalledWith(~equals=?, args)` to ensure that a mock fu
 
 For example suppose that you are implementing `map` for some data structure and want to verify that for a data structure with one element, the function passed to map is called with the value of that element.
 
-```reason
+```re
 open TestFramework;
 
 describe("My data structure", ({test}) => {
@@ -1088,7 +1088,7 @@ describe("My data structure", ({test}) => {
 
 For dealing with floats or other situations in which custom equality is required, a custom equals function can be provided:
 
-```reason
+```re
 describe("My data structure", ({test}) => {
   test("map actually uses the passed in function", ({expect}) => {
     let equals = (f1, f2) => abs_float(f1 -. f2) < 0.1;
@@ -1112,7 +1112,7 @@ Use `expect.mock(mock).toThrow()` to ensure that the implementation of a mock fu
 
 For example, if we want to test that our program can successfully handle a callback that raises an error, we could write:
 
-```reason
+```re
 open TestFramework;
 
 exception MyException;
@@ -1135,7 +1135,7 @@ Use `expect.mock(mock).toThrowException(exn)` to ensure that the implementation 
 
 For example, suppose we have a shipping logistics application that accepts a shipping strategy of type `(weight, location) => unit` and we want to verify that our `byCarrierPigeon` strategy throws a `TooHeavy` exception when asked to ship a grand piano.
 
-```reason
+```re
 open TestFramework;
 
 describe("My Shipping app", ({test}) => {
@@ -1155,7 +1155,7 @@ describe("My Shipping app", ({test}) => {
 
 Use `expect.mock(mock).toReturnTimes(numTimes)` to ensure that a mock function returned successfully (i.e. did not throw an error) an exact number of times. Any calls to the mock function that throw an exception are not counted toward the number of times the function returned.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.mock.toReturnTimes", ({test}) => {
@@ -1178,7 +1178,7 @@ Use `expect.mock(mock).toReturnWith(~equals=?, expected)` to ensure that a mock 
 
 For example suppose that you are implementing `map` for some data structure and want to verify that when passing the function `double` to `map` on a structure containing `1`, `2` will be returned.
 
-```reason
+```re
 open TestFramework;
 
 describe("My data structure", ({test}) => {
@@ -1198,7 +1198,7 @@ describe("My data structure", ({test}) => {
 
 For dealing with floats or other situations in which custom equality is required, a custom equals function can be provided:
 
-```reason
+```re
 describe("My data structure", ({test}) => {
   test("map actually uses the passed in function", ({expect}) => {
     let equals = (f1, f2) => abs_float(f1 -. f2) < 0.1;
@@ -1218,7 +1218,7 @@ describe("My data structure", ({test}) => {
 
 ## `expect.option`
 
-```reason
+```re
 type equalsFn('a) = ('a, 'a) => bool;
 
 type optionMatchers('a) = {
@@ -1245,7 +1245,7 @@ let expect: {
 
 Use `expect.option(actual).toBe(~equals=?, expected)` to test the value of an option.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.option.toBe", ({test}) => {
@@ -1266,7 +1266,7 @@ describe("expect.option.toBe", ({test}) => {
 
 Use `expect.option(actual).toBeNone()` to test that the value of an option is equal to `None`;
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.option.toBeNone", ({test}) => {
@@ -1282,7 +1282,7 @@ describe("expect.option.toBeNone", ({test}) => {
 
 Use `expect.option(actual).toBeSome()` to test that the value of an option is not equal to `None`. This is equivalent to `expect.option(actual).not.toBeNone()`.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.option.toBeNone", ({test}) => {
@@ -1296,7 +1296,7 @@ describe("expect.option.toBeNone", ({test}) => {
 
 ## `expect.result`
 
-```reason
+```re
 type equalsFn('a) = ('a, 'a) => bool;
 
 type resultMatchers('a, 'b) = {
@@ -1335,7 +1335,7 @@ let expect: {
 
 Use `expect.result(actual).toBe(~equalsOk=?, ~equalsError=?, expected)` to test the value of a result. The optional `~equalsOk` and `~equalsError`can be used when comparing values for which the default `==`is insufficient, such as with floats.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.result.toBe", ({test}) => {
@@ -1357,7 +1357,7 @@ describe("expect.result.toBe", ({test}) => {
 
 Use `expect.option(actual).toBeNone()` to test that the value of a result matches the `Ok` constructor.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.option.toBeOk", ({test}) => {
@@ -1373,7 +1373,7 @@ describe("expect.option.toBeOk", ({test}) => {
 
 Use `expect.option(actual).toBeNone()` to test that the value of a result matches the `Error` constructor.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.option.toBeError", ({test}) => {
@@ -1387,7 +1387,7 @@ describe("expect.option.toBeError", ({test}) => {
 
 ## `expect.same`
 
-```reason
+```re
 let expect: {
   ...
   same: 'a. ('a, 'a) => unit,
@@ -1404,7 +1404,7 @@ Use `expect.same(expected, actual)` to check that two values are equal using `==
 
 Use `expect.notSame(expected, actual)` to check that two values are not equal using `===`, a physical equality check.
 
-```reason
+```re
 open TestFramework;
 
 type person = {
@@ -1424,7 +1424,7 @@ describe("expect.notSame", ({test}) => {
 
 ## `expect.string`
 
-```reason
+```re
 type stringMatchers = {
   toBeEmpty: unit => unit,
   toEqual: string => unit,
@@ -1453,7 +1453,7 @@ let expect: {
 
 Use `expect.string(actual).toBeEmpty()` to check that a string is empty.
 
-```reason
+```re
 open TestFramework;
 
 describe("expect.string.toBeEmpty", ({test}) => {
@@ -1467,7 +1467,7 @@ describe("expect.string.toBeEmpty", ({test}) => {
 
 Use `expect.string(actual).toEqual(expected)` to test that a string is equal to a particular value.
 
-```reason
+```re
 open TestFramework;
 
 describe("Greeter", ({test}) => {
@@ -1481,7 +1481,7 @@ describe("Greeter", ({test}) => {
 
 Use `expect.string(actual).toEqualFile(filename)` to check that a string is equal to the contents of a file.
 
-```reason
+```re
 open TestFramework;
 
 describe("Spaceballs", ({test}) => {
@@ -1495,7 +1495,7 @@ describe("Spaceballs", ({test}) => {
 
 Use `expect.string(actual).toEqualLines(expected)` to check that a string is equal to a list of strings joined by a new line.
 
-```reason
+```re
 open TestFramework;
 
 describe("Deep Thought", ({test}) => {
@@ -1520,7 +1520,7 @@ Use `expect.string(actual).toMatch(regex)` to verify that a string matches a PCR
 
 For example if we want to verify that the a recipe generator module generates a recipe that contains either `bacon` or `sausage` I could write:
 
-```reason
+```re
 open TestFramework;
 
 describe("My recipe", ({test}) => {
@@ -1536,7 +1536,7 @@ describe("My recipe", ({test}) => {
 
 This ensures that the string matches the most recent snapshot. To generate a new snapshot or update an old one you can run Rely via the command line and pass the `-u` flag.
 
-```reason
+```re
 open TestFramework;
 
 describe("My config generator", ({test}) => {

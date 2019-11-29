@@ -1,7 +1,6 @@
 ---
 id: index
 title: Refmterr Introduction
-sidebar_label: Introduction
 ---
 
 Refmterr is an error formatter for Reason and OCaml builds. It takes raw error output from both the Reason and OCaml compilers and converts it to pretty output like so:
@@ -15,6 +14,7 @@ Error: The function applied to this argument has type
          customErrorParsers:(string * string list) list -> unit
 This argument cannot be applied with label ~raiseExceptionDuringParse
 ```
+
 ```sh-stacked
  ## After ##
 
