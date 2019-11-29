@@ -9,7 +9,7 @@ title: Refmterr Quickstart
 
 To install Refmterr in your project with esy, run
 
-``sh
+```sh
 esy add refmterr
 ```
 

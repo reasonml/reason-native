@@ -63,7 +63,7 @@ Now let's create a file to initialize the test framework. Here we are specifying
 │       TestFramework.re
 ```
 
-```re
+```reason
 /* TestFramework.re */
 include Rely.Make({
   let config =
@@ -83,7 +83,7 @@ Now we can finally write our first test!
 │       MyFirstTest.re
 ```
 
-```re
+```reason
 /* MyFirstTest.re */
 open TestFramework;
 
@@ -105,7 +105,7 @@ From here let's create an executable to actually run our tests (the name of this
 │   RunTests.re
 ```
 
-```re
+```reason
 /* RunTests.re */
 MyLibTest.TestFramework.cli()
 ```

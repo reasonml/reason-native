@@ -7,7 +7,7 @@ title: Basic API
 
 ## Basic Configuration
 
-```re
+```reason
 /* TestFramework.re */
 include Rely.Make({
   let config =
@@ -20,7 +20,7 @@ include Rely.Make({
 
 **Running with default CLI config:**
 
-```re
+```reason
 /* MyLibTest.re */
 TestFramework.cli(); /* default config */
 ```
@@ -29,7 +29,7 @@ TestFramework.cli(); /* default config */
 
 > For a full list of available matchers, visit the [expect documentation](expect.md)
 
-```re
+```reason
 /* MyFirstTest.re */
 open TestFramework;
 
@@ -91,7 +91,7 @@ describe(
 
 Custom matchers can also be created as below, the API is currently identical to the internal one, so additional examples can be found by looking at the [code for the built in matchers](https://github.com/facebookexperimental/reason-native/tree/master/src/rely/matchers).
 
-```re
+```reason
 /*IntExtensions.re*/
 type intExtensions = {toDivide: int => unit};
 
@@ -126,7 +126,7 @@ let intExtensions = (actual, {createMatcher}) => {
 };
 ```
 
-```re
+```reason
 /* DividesTest.re*/
 open TestFramework;
 open IntExtensions;

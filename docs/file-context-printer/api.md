@@ -13,7 +13,7 @@ sidebar_label: API
 Lines of code to show before specified context.
 From there, extract and print file context like so:
 
-```re
+```reason
 module FCP =
   FileContextPrinter.Make({
     let config =
@@ -38,7 +38,7 @@ FCP.printFile(
 Lines of code to show before specified context.
 From there, extract and print file context like so:
 
-```re
+```reason
 module FCP =
   FileContextPrinter.Make({
     let config =
@@ -66,7 +66,7 @@ Prints context from a file.
 
 #### Signature
 
-```re
+```reason
 let printFile: (~path: string, ~highlight: rowColumnRange) => option(string);
 ```
 
@@ -91,7 +91,7 @@ Prints context from a list of lines.
 
 #### Signature
 
-```re
+```reason
 let print: (list(string), ~highlight: rowColumnRange) => string;
 ```
 

@@ -49,7 +49,7 @@ Believe it or not, you're already using two Reason Native packages!
 
 Open up `lib/Util.re` and you might see something interesting:
 
-```re
+```reason
 /* lib/Util.re */
 let hello = () =>
   Pastel.(
@@ -66,7 +66,7 @@ let hello = () =>
 
 Let's try making `Hello` yellow:
 
-```re
+```reason
 /* lib/Util.re */
 /* ... */
     <Pastel>
@@ -86,7 +86,7 @@ Running Test Program:
 
 Similarly, let's take a look at `bin/Hello.re`:
 
-```re
+```reason
 /* bin/Hello.re */
 Console.log("Running Test Program:");
 let () = print_endline(Lib.Util.hello());
@@ -94,7 +94,7 @@ let () = print_endline(Lib.Util.hello());
 
 The [Console](console/index.md) package allows you to log nearly anything without having to define any printers. Let's try logging a nested tuple:
 
-```re
+```reason
 /* bin/Hello.re */
 Console.log((1, (2, 3)));
 let () = print_endline(Lib.Util.hello());

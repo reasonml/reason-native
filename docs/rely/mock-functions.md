@@ -14,13 +14,13 @@ Mock functions (or "spies") in Rely can be used to track information about the a
 
 There are constructors for creating mocks that take up to 7 arguments. A default implementation must be specified.
 
-```re
+```reason
 open TestFramework;
 
 let calculateInterest = Mock.mock3((p, r, t) => p *. exp(r *. t));
 ```
 
-```re
+```reason
 module Mock: {
   type t('fn, 'returnType, 'tupledArgs);
 
@@ -72,7 +72,7 @@ module Mock: {
 
 The `Mock.mockN` constructor returns a mutable opaque type for tracking call information. To access the underlying function, use `Mock.fn`.
 
-```re
+```reason
 open TestFramework;
 
 describe("Mock documentation", ({test}) => {
@@ -95,7 +95,7 @@ Without abstracting away the dependendency on our HTTP logger, our code might lo
 
 #### MyModule.re
 
-```reml
+```reason
 module MyApp = {
   let doSomethingThatGetsLogged = () => {
     HTTPLogger.log("starting to do someting");
@@ -109,7 +109,7 @@ Instead we could inject the code via a functor (module function) or via an ordin
 
 #### MyModule.re
 
-```re {
+```reason
 module Make = (Dependencies: {let log: string => unit;}) => {
   let doSomethingThatGetsLogged = () => {
     Dependencies.log("starting to do something");
@@ -117,6 +117,7 @@ module Make = (Dependencies: {let log: string => unit;}) => {
     Dependencies.log("did the thing!");
   };
 };
+
 /*
  * Making the "real" versions of the module could easily be handled elsewhere
  *  in the application but is shown here for simplicity
@@ -135,7 +136,7 @@ In your tests you can do this
 
 #### MyModuleTest.re
 
-```re {
+```reason
 open TestFramework;
 
 let mockLog = Mock.mock1(_ => ());
@@ -169,7 +170,7 @@ describe("MyModule", ({test}) => {
 
 Accepts an implementation to be used for calls to the underlying mock function. The original implementation passed to the Mock constructor can be restored via [`Mock.reset`](#mockresetmock) or [`Mock.resetImplementation`](#mockresetimplementationmock).
 
-```re
+```reason
 open TestFramework;
 
 describe("Mock.changeImplementation", ({test}) => {
@@ -209,7 +210,7 @@ Returns a list of the arguments that have been passed to the underlying function
 
 Returns a list of `Mock.result` from the underlying function. The calls are ordered from most to least recent. Generally the [built in mock matchers](expect.md#expectmock) should be used instead of `Mock.getResults`.
 
-```re
+```reason
 module Mock = {
   type result('a) =
     | Return('a)

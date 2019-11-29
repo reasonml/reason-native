@@ -13,7 +13,7 @@ All text formatting is accomplished through the `<Pastel [props] />` tag.
 
 The `color` prop specifies the color of the contained text. It can be any of the 16 [4-bit ANSI colors](https://en.wikipedia.org/wiki/ANSI_escape_code#3/4_bit):
 
-```re
+```reason
 color =
   | Black
   | Red
@@ -35,7 +35,7 @@ color =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   Pastel.(
     <Pastel color=Blue> "Hello World" </Pastel>
@@ -52,7 +52,7 @@ print_endline(
 
 The `backgroundColor` prop specifies the color of the contained text. It can be any of the 16 [4-bit ANSI colors](https://en.wikipedia.org/wiki/ANSI_escape_code#3/4_bit):
 
-```re
+```reason
 backgroundColor =
   | Black
   | Red
@@ -74,7 +74,7 @@ backgroundColor =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   Pastel.(
     <Pastel backgroundColor=Blue> "Hello World" </Pastel>
@@ -92,7 +92,7 @@ print_endline(
 
 The `bold` prop specifies if Pastel should bold the text:
 
-```re
+```reason
 bold =
   | true
   | false;
@@ -100,7 +100,7 @@ bold =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   "Hello " ++
   Pastel.(
@@ -119,7 +119,7 @@ Hello [1mWorld[22m
 
 The `dim` prop specifies if Pastel should dim the text:
 
-```re
+```reason
 dim =
   | true
   | false;
@@ -127,7 +127,7 @@ dim =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   "Hello " ++
   Pastel.(
@@ -146,7 +146,7 @@ Hello [90mWorld[39m
 
 The `italic` prop specifies if Pastel should italicize the text:
 
-```re
+```reason
 italic =
   | true
   | false;
@@ -154,7 +154,7 @@ italic =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   "Hello " ++
   Pastel.(
@@ -173,7 +173,7 @@ Hello [3mWorld[23m
 
 The `underline` prop specifies if Pastel should underline the text:
 
-```re
+```reason
 underline =
   | true
   | false;
@@ -181,7 +181,7 @@ underline =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   "Hello " ++
   Pastel.(
@@ -200,7 +200,7 @@ Hello [4mWorld[24m
 
 The `inverse` prop specifies if Pastel should invert the text:
 
-```re
+```reason
 inverse =
   | true
   | false;
@@ -208,7 +208,7 @@ inverse =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   "Hello " ++
   Pastel.(
@@ -227,7 +227,7 @@ Hello [30m[107mWorld[49m[39m
 
 The `hidden` prop specifies if Pastel should hide the text:
 
-```re
+```reason
 hidden =
   | true
   | false;
@@ -235,7 +235,7 @@ hidden =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   "Hello " ++
   Pastel.(
@@ -254,7 +254,7 @@ Hello [8mWorld[28m
 
 The `strikethrough` prop specifies if Pastel should strike-through the text:
 
-```re
+```reason
 strikethrough =
   | true
   | false;
@@ -262,7 +262,7 @@ strikethrough =
 
 **Example:**
 
-```re
+```reason
 print_endline(
   "Hello " ++
   Pastel.(
@@ -277,7 +277,7 @@ Hello [9mWorld[29m
 
 ## Modes
 
-```re
+```reason
 type mode =
   /* uses ANSI escape sequences to achieve lovely terminal coloring */
   | Terminal
@@ -288,7 +288,7 @@ type mode =
   | Disabled
 ```
 
-```re
+```reason
 /* returns the current mode */
 let getMode: unit => mode;
 /* sets the current mode (use with caution, prefer useMode) */

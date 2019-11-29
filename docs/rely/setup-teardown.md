@@ -25,7 +25,7 @@ Within that block they work as follows:
 
 For example:
 
-```re
+```reason
 open TestFramework;
 
 let {describe, describeSkip, describeOnly} =
@@ -84,7 +84,7 @@ Sometimes a single setup step is sufficient for a test suite. This can happen wh
 
 Suppose for example that we are testing a web scraping utility and need to both start and stop a test server for use in our tests.
 
-```re
+```reason
 open TestFramework;
 
 let {describe, describeSkip, describeOnly} =
@@ -110,7 +110,7 @@ describe("My web scraper", ({test}) => {
 
 Suppose that we wish to test a calendar application that interacts with a database of important historical events. Each test needs access to a fresh copy of a testing database.
 
-```re
+```reason
 let {describe, describeSkip, describeOnly} =
   describeConfig
   |> withLifecycle(testLifecycle =>
@@ -150,7 +150,7 @@ Sometimes there are setup operations you want to do once before any tests execut
 
 Suppose that we have a chatbot application that we want to test. We need to resolve the chatbot's credentials (which we can reuse) from a secure location because we don't want to source control them, but we want to ensure that each test runs in a separate session.
 
-```re
+```reason
 open TestFramework;
 
 type testData = {session: ChatBot.session};

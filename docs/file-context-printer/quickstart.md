@@ -25,7 +25,7 @@ In order to use File Context Printer, you must add it to your build system. With
 
 Start by initializing a File Context Printer module:
 
-```re
+```reason
 module FCP =
   FileContextPrinter.Make({
     let config =
@@ -35,7 +35,7 @@ module FCP =
 
 From there, extract and print file context like so:
 
-```re
+```reason
 let start = (
   7, /* start line */
   1 /* start char */

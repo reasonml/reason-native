@@ -8,7 +8,7 @@ Rely is a [Jest-inspired](https://jestjs.io/) native Reason testing framework.
 We took the things we loved about Jest (beautiful output, descriptive assertion framework, and snapshot testing), added some type safety, and built a library that can compile and run entire test suites both natively and in JS with [Js_of_ocaml](https://ocsigen.org/js_of_ocaml/3.1.0/manual/overview) in **milliseconds**.
 
 
-```re
+```reason
 describe("Example", ({test}) => {
   test("ints", ({expect}) =>
     expect.int(1 + 1).toBe(3)

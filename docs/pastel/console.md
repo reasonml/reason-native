@@ -25,7 +25,7 @@ In order to use Pastel Console, you must add it to your build system. With dune,
 
 Pastel Console must be initialized with
 
-```re
+```reason
 PastelConsole.init();
 ```
 
@@ -33,7 +33,7 @@ PastelConsole.init();
 
 That's it! Use the Console library as you usually would:
 
-```re
+```reason
 PastelConsole.init();
 
 Console.log([{name: "joe", age: 100}, {name: "sue", age: 18}]);

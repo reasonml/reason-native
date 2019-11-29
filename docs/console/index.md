@@ -33,7 +33,7 @@ Records/variant types that occupy more than one word in a block are all
 printed as their corresponding integer (if a payloadless variant), or `{x, y,
 ...z}` for a record or variant that contains data.
 
-```re
+```reason
 Console.log(Some("hi")); /* {"hi"} */
 Console.log(None); /* 0 */
 ```

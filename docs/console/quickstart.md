@@ -25,7 +25,7 @@ In order to use Pastel, you must add it to your build system. With dune, `consol
 
 Go ahead and `Console.log` anything you like! Check the [API documentation](./api) for all available methods.
 
-```re
+```reason
 Console.log((1, (2, 3)));
 Console.log(2.3323);
 
