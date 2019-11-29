@@ -58,7 +58,8 @@ module.exports = {
         {
           title: 'More',
           items: [
-            { href: 'https://github.com/facebookexperimental/reason-native', label: 'GitHub' }
+            { href: 'https://github.com/facebookexperimental/reason-native', label: 'GitHub' },
+            { html: '<a class="github-button" href="https://github.com/ntkme/github-buttons" data-icon="octicon-star" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>' }
           ]
         }
       ],
