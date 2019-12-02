@@ -50,7 +50,6 @@ module.exports = {
       ]
     },
     footer: {
-      style: 'dark',
       logo: {
         alt: 'Facebook Open Source',
         src: 'img/oss-logo.png',
