@@ -26,15 +26,26 @@ module.exports = {
 
   themeConfig: {
     navbar: {
-      title: 'Reason Native',
       logo: {
         alt: 'Reason Native',
         src: 'img/logo-inverted.svg'
       },
       links: [
-        { to: 'docs/introduction', label: 'Docs', position: 'left' },
-        { to: 'help', label: 'Help', position: 'left' },
-        { href: 'https://github.com/facebookexperimental/reason-native', label: 'GitHub', position: 'right' },
+        {
+          to: 'docs/introduction',
+          label: 'Docs',
+          position: 'right'
+        },
+        {
+          to: 'help',
+          label: 'Help',
+          position: 'right'
+        },
+        {
+          href: 'https://github.com/facebookexperimental/reason-native',
+          label: 'GitHub',
+          position: 'right'
+        },
         // { to: 'blog', label: 'Blog', position: 'left' }
       ]
     },
@@ -42,24 +53,45 @@ module.exports = {
       style: 'dark',
       logo: {
         alt: 'Facebook Open Source',
-        src: 'img/oss-logo.png'
+        src: 'img/oss-logo.png',
+        href: 'https://opensource.facebook.com/'
       },
       links: [
         {
           title: 'Projects',
           items: [
-            { to: 'docs/rely/index', label: 'Rely' },
-            { to: 'docs/console/index', label: 'Console' },
-            { to: 'docs/pastel/index', label: 'Pastel' },
-            { to: 'docs/refmterr/index', label: 'Refmterr' },
-            { to: 'docs/file-context-printer/index', label: 'File Context Printer' }
+            {
+              to: 'docs/rely/index',
+              label: 'Rely'
+            },
+            {
+              to: 'docs/console/index',
+              label: 'Console'
+            },
+            {
+              to: 'docs/pastel/index',
+              label: 'Pastel'
+            },
+            {
+              to: 'docs/refmterr/index',
+              label: 'Refmterr'
+            },
+            {
+              to: 'docs/file-context-printer/index',
+              label: 'File Context Printer'
+             }
           ]
         },
         {
           title: 'More',
           items: [
-            { href: 'https://github.com/facebookexperimental/reason-native', label: 'GitHub' },
-            { html: '<a class="github-button" href="https://github.com/ntkme/github-buttons" data-icon="octicon-star" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>' }
+            {
+              href: 'https://github.com/facebookexperimental/reason-native',
+              label: 'GitHub'
+            },
+            {
+              html: '<a class="github-button" href="https://github.com/ntkme/github-buttons" data-icon="octicon-star" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>'
+            }
           ]
         }
       ],
@@ -82,7 +114,10 @@ module.exports = {
           // docs folder path relative to website dir.
           path: '../docs',
           // sidebars file relative to website dir.
-          sidebarPath: require.resolve('./sidebars.json'),
+          sidebarPath: require.resolve('./sidebars.json')
+        },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css')
         }
       }
     ]
