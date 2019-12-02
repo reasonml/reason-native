@@ -25,7 +25,7 @@ function Help() {
             <p>Found an issue? Have a question?</p>
 
             <h2>File an Issue</h2>
-            <p>Check our <a href="https://github.com/facebookexperimental/reason-native/issues">GitHub issues page</a></p>
+            <p>Check our <a href="https://github.com/facebookexperimental/reason-native/issues">GitHub issues page</a>.</p>
 
             <h2>Join the Community</h2>
             <p>Join the <a href="https://discord.gg/reasonml">ReasonML Community Discord</a>!</p>
