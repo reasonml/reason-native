@@ -6,15 +6,14 @@
  */
 
 import React, {useCallback, useState} from 'react';
+import classnames from 'classnames';
+
 import Link from '@docusaurus/Link';
 import Head from '@docusaurus/Head';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
 import SearchBar from '@theme/SearchBar';
-
-import classnames from 'classnames';
-
 import useTheme from '@theme/hooks/useTheme';
 
 import styles from './styles.module.css';
@@ -44,7 +43,6 @@ function Navbar() {
   const context = useDocusaurusContext();
   const [sidebarShown, setSidebarShown] = useState(false);
   const [isSearchBarExpanded, setIsSearchBarExpanded] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [theme] = useTheme();
   const {siteConfig = {}} = context;
   const {baseUrl, themeConfig = {}} = siteConfig;
@@ -57,12 +55,6 @@ function Navbar() {
   const hideSidebar = useCallback(() => {
     setSidebarShown(false);
   }, [setSidebarShown]);
-  const showLogoBackground = useCallback(() => {
-    setIsHovered(true);
-  }, [setIsHovered]);
-  const hideLogoBackground = useCallback(() => {
-    setIsHovered(false);
-  }, [setIsHovered]);
 
   const logoUrl = useBaseUrl(logo.src);
   return (
@@ -103,11 +95,9 @@ function Navbar() {
             <Link className="navbar__brand" to={baseUrl}>
               {logo != null && (
                 <img
-                  className={classnames('navbar__logo', { [styles.navbarLogoHover]: isHovered })}
+                  className={classnames('navbar__logo', styles.navbarLogo)}
                   src={logoUrl}
                   alt={logo.alt}
-                  onMouseEnter={showLogoBackground}
-                  onMouseLeave={hideLogoBackground}
                 />
               )}
               {title != null && (

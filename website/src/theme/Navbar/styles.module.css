@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-.navbarLogoHover {
+.navbarLogo:hover {
   background: #0084db;
 }
 
