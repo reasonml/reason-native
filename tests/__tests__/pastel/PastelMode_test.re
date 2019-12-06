@@ -33,4 +33,13 @@ describe("Pastel modes", ({test}) => {
     let output = <Pastel color=Red> "Hello" </Pastel>;
     expect.string(output).toEqual("Hello");
   });
+  test("human readable mode should support allow for <hello>", ({expect}) => {
+    module Pastel =
+      Pastel.Make({});
+
+    Pastel.setMode(HumanReadable);
+    let result = <Pastel bold=true> "<hello>" </Pastel>;
+
+    expect.string(result).toEqual("<bold><hello></resetDimAndBold>");
+  });
 });
