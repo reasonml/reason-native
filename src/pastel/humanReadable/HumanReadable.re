@@ -47,34 +47,39 @@ type color = {
   whiteBright: style,
 };
 
+let tokens = ref([]);
+
 let makeStyle = name => {
   let start = String.concat("", ["<", name, ">"]);
   let stop = String.concat("", ["</", name, ">"]);
+  tokens.contents = [start, stop, ...tokens.contents];
   {start, stop};
+};
+
+let makeToken = token => {
+  tokens.contents = [token, ...tokens.contents];
+  token;
 };
 
 let modifier: modifier = {
   bold: {
-      start: "<bold>",
-      stop: "</resetDimAndBold>"
+    start: makeToken("<bold>"),
+    stop: makeToken("</resetDimAndBold>"),
   },
   dim: {
-    start: "<dim>",
-    stop: "</resetDimAndBold>"
-},
+    start: makeToken("<dim>"),
+    stop: "</resetDimAndBold>",
+  },
   italic: makeStyle("italic"),
   underline: makeStyle("underline"),
   inverse: makeStyle("inverse"),
   hidden: makeStyle("hidden"),
   strikethrough: makeStyle("strikethrough"),
-  reset: {
-    start: "<reset>",
-    stop: "</reset>"
-  }
+  reset: makeStyle("reset")
 };
 
 let color: color = {
-  stop: "</resetColor>",
+  stop: makeToken("</resetColor>"),
   black: makeStyle("black"),
   red: makeStyle("red"),
   green: makeStyle("green"),
@@ -94,7 +99,7 @@ let color: color = {
 };
 
 let bg: color = {
-  stop: "</resetBgColor>",
+  stop: makeToken("</resetBgColor>"),
   black: makeStyle("blackBg"),
   red: makeStyle("redBg"),
   green: makeStyle("greenBg"),

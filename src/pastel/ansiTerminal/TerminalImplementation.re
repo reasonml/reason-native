@@ -11,18 +11,6 @@ module TerminalStateMachine =
   StateMachine.Make({
     let lex = TerminalLexer.lex;
 
-    let makeCodesRegex = codes => {
-      let start = "\027\\[";
-      let codesExpr = String.concat("|", List.map(string_of_int, codes));
-      let stop = "m";
-      let regexString =
-        String.concat("", ["(", start, "(", codesExpr, ")", stop, ")"]);
-      Re.Pcre.regexp(regexString);
-    };
-
-    let startRegex = makeCodesRegex(Ansi.IntSet.elements(Ansi.starts));
-    let stopRegex = makeCodesRegex(Ansi.IntSet.elements(Ansi.stops));
-
     let applyCode = (modifier, s) => String.concat("", [modifier, s]);
     let tokenize = TerminalLexer.tokenize;
     let applyState = (stateDiff: StateMachine.state, s) => {
