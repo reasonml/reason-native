@@ -145,7 +145,7 @@ relativize(~source=/x/y/z, ~dest=./a/b/c) == ???
 relativize(~source=./x/y/z, ~dest=/a/b/c) == ???
 
 Exceptions:
-If it is impossible to create a relative path from `soure` to `dest` an
+If it is impossible to create a relative path from `source` to `dest` an
 exception is raised.
 If `source`/`dest` are absolute paths, the drive must match or an exception is
 thrown. If `source`/`dest` are relative paths, they both must be relative to
