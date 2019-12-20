@@ -1,3 +1,7 @@
+# December 20, 2019
+### Pastel 0.2.3
+* bugfix for input "<like>" "<this>" in human readable mode
+
 # July 23, 2019
 ### Rely 3.1.0
 * Add matchers for ensuring that a particular number of assertions have run (useful for testing assertions inside of callbacks)
