@@ -322,8 +322,7 @@ module Make =
         ~strikethrough: option(bool)=?,
         ~color: option(color)=?,
         ~backgroundColor: option(color)=?,
-        ~children: list(string),
-        (),
+        inputs: list(string),
       ) => {
     let state = {
       reset:
@@ -347,9 +346,9 @@ module Make =
       foreground: color,
       background: backgroundColor,
     };
-    let childrenStr = String.concat("", children);
-    let childStateRegions = parseStateRegions(childrenStr);
-    applyState(state, childStateRegions);
+    let inputsStr = String.concat("", inputs);
+    let inputsStateRegions = parseStateRegions(inputsStr);
+    applyState(state, inputsStateRegions);
   };
 
   let partitionFromStateRegions = (index: int, regions: list(stateRegion)) => {
@@ -418,75 +417,75 @@ module Make =
     s |> parseStateRegions |> unformattedTextFromStateRegions;
 
   let modifier: Decorators.modifier = {
-    bold: (s: string) => fromString(~bold=true, ~children=[s], ()),
-    dim: (s: string) => fromString(~dim=true, ~children=[s], ()),
-    italic: (s: string) => fromString(~italic=true, ~children=[s], ()),
+    bold: (s: string) => fromString(~bold=true, [s]),
+    dim: (s: string) => fromString(~dim=true, [s]),
+    italic: (s: string) => fromString(~italic=true, [s]),
     underline: (s: string) =>
-      fromString(~underline=true, ~children=[s], ()),
-    inverse: (s: string) => fromString(~inverse=true, ~children=[s], ()),
-    hidden: (s: string) => fromString(~hidden=true, ~children=[s], ()),
+      fromString(~underline=true, [s]),
+    inverse: (s: string) => fromString(~inverse=true, [s]),
+    hidden: (s: string) => fromString(~hidden=true, [s]),
     strikethrough: (s: string) =>
-      fromString(~strikethrough=true, ~children=[s], ()),
+      fromString(~strikethrough=true, [s]),
   };
 
   let color: Decorators.color = {
-    black: (s: string) => fromString(~color=Black, ~children=[s], ()),
-    red: (s: string) => fromString(~color=Red, ~children=[s], ()),
-    green: (s: string) => fromString(~color=Green, ~children=[s], ()),
-    yellow: (s: string) => fromString(~color=Yellow, ~children=[s], ()),
-    blue: (s: string) => fromString(~color=Blue, ~children=[s], ()),
-    magenta: (s: string) => fromString(~color=Magenta, ~children=[s], ()),
-    cyan: (s: string) => fromString(~color=Cyan, ~children=[s], ()),
-    white: (s: string) => fromString(~color=White, ~children=[s], ()),
+    black: (s: string) => fromString(~color=Black, [s]),
+    red: (s: string) => fromString(~color=Red, [s]),
+    green: (s: string) => fromString(~color=Green, [s]),
+    yellow: (s: string) => fromString(~color=Yellow, [s]),
+    blue: (s: string) => fromString(~color=Blue, [s]),
+    magenta: (s: string) => fromString(~color=Magenta, [s]),
+    cyan: (s: string) => fromString(~color=Cyan, [s]),
+    white: (s: string) => fromString(~color=White, [s]),
     blackBright: (s: string) =>
-      fromString(~color=BrightBlack, ~children=[s], ()),
+      fromString(~color=BrightBlack, [s]),
     redBright: (s: string) =>
-      fromString(~color=BrightRed, ~children=[s], ()),
+      fromString(~color=BrightRed, [s]),
     greenBright: (s: string) =>
-      fromString(~color=BrightGreen, ~children=[s], ()),
+      fromString(~color=BrightGreen, [s]),
     yellowBright: (s: string) =>
-      fromString(~color=BrightYellow, ~children=[s], ()),
+      fromString(~color=BrightYellow, [s]),
     blueBright: (s: string) =>
-      fromString(~color=BrightBlue, ~children=[s], ()),
+      fromString(~color=BrightBlue, [s]),
     magentaBright: (s: string) =>
-      fromString(~color=BrightMagenta, ~children=[s], ()),
+      fromString(~color=BrightMagenta, [s]),
     cyanBright: (s: string) =>
-      fromString(~color=BrightCyan, ~children=[s], ()),
+      fromString(~color=BrightCyan, [s]),
     whiteBright: (s: string) =>
-      fromString(~color=BrightWhite, ~children=[s], ()),
+      fromString(~color=BrightWhite, [s]),
   };
 
   let bg: Decorators.color = {
     black: (s: string) =>
-      fromString(~backgroundColor=Black, ~children=[s], ()),
-    red: (s: string) => fromString(~backgroundColor=Red, ~children=[s], ()),
+      fromString(~backgroundColor=Black, [s]),
+    red: (s: string) => fromString(~backgroundColor=Red, [s]),
     green: (s: string) =>
-      fromString(~backgroundColor=Green, ~children=[s], ()),
+      fromString(~backgroundColor=Green, [s]),
     yellow: (s: string) =>
-      fromString(~backgroundColor=Yellow, ~children=[s], ()),
+      fromString(~backgroundColor=Yellow, [s]),
     blue: (s: string) =>
-      fromString(~backgroundColor=Blue, ~children=[s], ()),
+      fromString(~backgroundColor=Blue, [s]),
     magenta: (s: string) =>
-      fromString(~backgroundColor=Magenta, ~children=[s], ()),
+      fromString(~backgroundColor=Magenta, [s]),
     cyan: (s: string) =>
-      fromString(~backgroundColor=Cyan, ~children=[s], ()),
+      fromString(~backgroundColor=Cyan, [s]),
     white: (s: string) =>
-      fromString(~backgroundColor=White, ~children=[s], ()),
+      fromString(~backgroundColor=White, [s]),
     blackBright: (s: string) =>
-      fromString(~backgroundColor=BrightBlack, ~children=[s], ()),
+      fromString(~backgroundColor=BrightBlack, [s]),
     redBright: (s: string) =>
-      fromString(~backgroundColor=BrightRed, ~children=[s], ()),
+      fromString(~backgroundColor=BrightRed, [s]),
     greenBright: (s: string) =>
-      fromString(~backgroundColor=BrightGreen, ~children=[s], ()),
+      fromString(~backgroundColor=BrightGreen, [s]),
     yellowBright: (s: string) =>
-      fromString(~backgroundColor=BrightYellow, ~children=[s], ()),
+      fromString(~backgroundColor=BrightYellow, [s]),
     blueBright: (s: string) =>
-      fromString(~backgroundColor=BrightBlue, ~children=[s], ()),
+      fromString(~backgroundColor=BrightBlue, [s]),
     magentaBright: (s: string) =>
-      fromString(~backgroundColor=BrightMagenta, ~children=[s], ()),
+      fromString(~backgroundColor=BrightMagenta, [s]),
     cyanBright: (s: string) =>
-      fromString(~backgroundColor=BrightCyan, ~children=[s], ()),
+      fromString(~backgroundColor=BrightCyan, [s]),
     whiteBright: (s: string) =>
-      fromString(~backgroundColor=BrightWhite, ~children=[s], ()),
+      fromString(~backgroundColor=BrightWhite, [s]),
   };
 };

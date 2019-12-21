@@ -136,7 +136,7 @@ let bg = TerminalStateMachine.bg;
 let modifier = TerminalStateMachine.modifier;
 let partition = TerminalStateMachine.partitionFromString;
 
-let createElement =
+let create =
     (
       ~reset: option(bool)=?,
       ~bold: option(bool)=?,
@@ -148,8 +148,7 @@ let createElement =
       ~strikethrough: option(bool)=?,
       ~color: option(ColorName.colorName)=?,
       ~backgroundColor: option(ColorName.colorName)=?,
-      ~children: list(string),
-      (),
+      inputs: list(string),
     ) => {
   let color = PastelUtils.(optionMap(color, colorNameToColor));
   let backgroundColor =
@@ -166,8 +165,7 @@ let createElement =
     ~strikethrough?,
     ~color?,
     ~backgroundColor?,
-    ~children,
-    (),
+    inputs,
   );
 };
 
@@ -178,7 +176,7 @@ let implementation: PastelImplementation.t = {
   length,
   unformattedText,
   partition,
-  createElement,
+  create,
   emptyStyle: StateMachine.initialState,
   parse: TerminalStateMachine.parseStateRegions,
   apply: TerminalStateMachine.resolveStateRegions,

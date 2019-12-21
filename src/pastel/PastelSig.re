@@ -85,6 +85,22 @@ module type PastelSig = {
   let unstable_parse: string => list((style, string));
   let unstable_apply: list((style, string)) => string;
 
+  let create:
+    (
+      ~reset: bool=?,
+      ~bold: bool=?,
+      ~dim: bool=?,
+      ~italic: bool=?,
+      ~underline: bool=?,
+      ~inverse: bool=?,
+      ~hidden: bool=?,
+      ~strikethrough: bool=?,
+      ~color: colorName=?,
+      ~backgroundColor: colorName=?,
+      list(string),
+    ) =>
+    string;
+
   let createElement:
     (
       ~reset: bool=?,

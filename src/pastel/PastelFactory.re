@@ -148,6 +148,35 @@ module Make = (()) => {
 
   let whiteBright = color.whiteBright;
 
+  let create =
+      (
+        ~reset: option(bool)=?,
+        ~bold: option(bool)=?,
+        ~dim: option(bool)=?,
+        ~italic: option(bool)=?,
+        ~underline: option(bool)=?,
+        ~inverse: option(bool)=?,
+        ~hidden: option(bool)=?,
+        ~strikethrough: option(bool)=?,
+        ~color: option(colorName)=?,
+        ~backgroundColor: option(colorName)=?,
+        inputs: list(string),
+      ) => {
+    selectedImplementation^.create(
+      ~reset?,
+      ~bold?,
+      ~dim?,
+      ~italic?,
+      ~underline?,
+      ~inverse?,
+      ~hidden?,
+      ~strikethrough?,
+      ~color?,
+      ~backgroundColor?,
+      inputs,
+    );
+  };
+
   let createElement =
       (
         ~reset: option(bool)=?,
@@ -163,7 +192,7 @@ module Make = (()) => {
         ~children: list(string),
         (),
       ) => {
-    selectedImplementation^.createElement(
+    create(
       ~reset?,
       ~bold?,
       ~dim?,
@@ -174,8 +203,7 @@ module Make = (()) => {
       ~strikethrough?,
       ~color?,
       ~backgroundColor?,
-      ~children,
-      (),
+      children,
     );
   };
 
