@@ -9,7 +9,7 @@
     "@opam/dune": "*",
     "@opam/re": "*",
     "@esy-ocaml/reason": "< 4.0.0",
-    "ocaml": " >= 4.2.0  < 4.9.0",
+    "ocaml": " >= 4.2.0  < 4.10.0",
     "@reason-native/pastel": "*",
     "@opam/atdgen": "*",
     "@reason-native/console": "*"
