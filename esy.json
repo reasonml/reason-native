@@ -15,6 +15,7 @@
         "val": "#{self.root}"
       }
     },
+    "release": {},
     "buildEnv": {
       "ODOC_SYNTAX": "re"
     },
