@@ -1,32 +1,15 @@
-parameters:
-  platform: "macOS"
+# Cross-platform set of build steps for building esy projects
 
 steps:
-  - script: 'npm install -g esy@0.5.6 --unsafe-perm'
-    displayName: 'npm install -g esy'
-
-  - script: 'esy install'
+  - template: utils/use-node.yml
+  - template: utils/use-esy.yml
+  - template: utils/restore-build-cache.yml
+  - script: esy install
     displayName: 'esy install'
-
-  - script: 'esy build'
+  - script: esy build
     displayName: 'esy build'
-
-  - script: 'esy test-ci'
-    displayName: 'esy test-ci'
-    continueOnError: true
-
-  - task: PublishTestResults@2
-    displayName: 'Publish JUnit file'
-    inputs:
-      testResultsFormat: JUnit
-      testResultsFiles: '**/junit.xml'
-      buildPlatform: ${{ parameters.platform }}
-      testRunTitle: ${{ parameters.platform }}
-      failTaskOnFailedTests: true
-
-  - script: |
-      :; set -e
-      :; ./scripts/run-all.cmd ./scripts/test-prepublish.cmd
-      :; exit 0
-      scripts\run-all.cmd scripts\test-prepublish.cmd || exit 1
-    displayName: 'esy test-prepublish'
+  - template: utils/publish-build-cache.yml
+  - script: esy x refmt --version
+    displayName: 'esy x refmt --version'
+  # Run tests or any additional steps here
+  # - script: esy b dune runtest
