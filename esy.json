@@ -15,6 +15,9 @@
         "val": "#{self.root}"
       }
     },
+    "buildEnv": {
+      "ODOC_SYNTAX": "re"
+    },
     "install": [
       "esy-installer console.install",
       "esy-installer file-context-printer.install",
@@ -34,7 +37,9 @@
     "bootstrap": "esy x bash -cx ./bootstrap.cmd",
     "all": "./scripts/run-all.sh",
     "test": "esy x bash -cx ./scripts/test-dev.cmd",
-    "test-ci": "esy x bash -cx ./scripts/test-ci.cmd"
+    "test-ci": "esy x bash -cx ./scripts/test-ci.cmd",
+    "doc": "esy refmterr dune build --profile=release @doc"
+
   },
   "dependencies": {
     "@opam/dune": "*",
@@ -52,7 +57,8 @@
     "ocaml": "~4.6.4",
     "@opam/dune": "1.10.0",
     "@opam/reason": "3.5.0",
-    "@opam/sexplib0": "*"
+    "@opam/sexplib0": "*",
+    "@opam/odoc": "*"
   },
   "resolutions": {
     "@opam/reason": "let-def/reason:reason.opam#474900e6d9d5ecef788fbe78e8a23cb20d151a72"
