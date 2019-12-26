@@ -1,6 +1,6 @@
 opam-version: "2.0"
-maintainer: "[object Object]"
-authors: ["[object Object]"]
+maintainer: "Facebook Engineering"
+authors: ["Facebook Engineering"]
 license: "undefined"
 homepage: "https://reason-native.com"
 doc: "https://reason-native.com"
