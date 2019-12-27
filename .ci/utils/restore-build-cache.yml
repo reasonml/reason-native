@@ -87,7 +87,7 @@ steps:
       targetType: 'inline' # Optional. Options: filePath, inline
       script: |
         ls ${ESY__CACHE_INSTALL_PATH}
-        rm -r ${ESY__CACHE_INSTALL_PATH}/opam__s__ocamlfind*
+        rm -rf ${ESY__CACHE_INSTALL_PATH}/opam__s__ocamlfind*
 
   - bash: 'rm -rf _import'
     continueOnError: true
