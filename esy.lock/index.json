@@ -30,19 +30,15 @@
       "overrides": [],
       "dependencies": [
         "refmterr@3.3.0@d41d8cd9", "ocaml@4.6.1000@d41d8cd9",
+        "@opam/sexplib0@opam:v0.13.0@3f54c2be",
         "@opam/reason@github:let-def/reason:reason.opam#474900e6d9d5ecef788fbe78e8a23cb20d151a72@d41d8cd9",
         "@opam/re@opam:1.9.0@d4d5e13d",
         "@opam/qcheck-core@opam:0.9@3f95f89d",
+        "@opam/odoc@opam:1.4.2@11b715bb", "@opam/merlin@opam:3.3.3@d653b06a",
         "@opam/junit@opam:2.0.1@1b4d302c", "@opam/dune@opam:1.10.0@a33f48e9",
         "@opam/atdgen@opam:2.0.0@46af0360"
       ],
-      "devDependencies": [
-        "ocaml@4.6.1000@d41d8cd9", "@opam/sexplib0@opam:v0.13.0@3f54c2be",
-        "@opam/reason@github:let-def/reason:reason.opam#474900e6d9d5ecef788fbe78e8a23cb20d151a72@d41d8cd9",
-        "@opam/qcheck-core@opam:0.9@3f95f89d",
-        "@opam/odoc@opam:1.4.2@11b715bb", "@opam/merlin@opam:3.3.3@d653b06a",
-        "@opam/dune@opam:1.10.0@a33f48e9"
-      ]
+      "devDependencies": []
     },
     "ocaml@4.6.1000@d41d8cd9": {
       "id": "ocaml@4.6.1000@d41d8cd9",
