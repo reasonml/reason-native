@@ -45,16 +45,10 @@
 
   },
   "dependencies": {
-    "@opam/dune": "*",
-    "@opam/reason": "< 4.0.0",
     "refmterr": "*",
-    "ocaml": "^4.2.0",
     "@opam/re": "*",
     "@opam/atdgen": "*",
     "@opam/junit": "*",
-    "@opam/qcheck-core": ">= 0.9 < 0.10"
-  },
-  "devDependencies": {
     "@opam/qcheck-core": "0.9",
     "@opam/merlin": "*",
     "ocaml": "~4.6.4",
