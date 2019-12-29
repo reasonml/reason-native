@@ -123,7 +123,7 @@ function Index() {
           </a>
         </div>
         <div className="col col--8">
-          <div className={classnames(styles.codeBlockMargin)}>
+          <div className={styles.codeBlockMargin}>
             <CodeBlock className={classnames(`language-${language}`)}>{example}</CodeBlock>
           </div>
           <div className="output">
@@ -138,10 +138,10 @@ function Index() {
 
   return (
     <Layout>
-      <div className={classnames('hero', 'hero--dark', styles.heroBanner)}>
+      <div className={classnames('hero', styles.heroBanner)}>
         <div className="container">
           <img alt={siteConfig.title} src="./img/full-inverted.svg" style={{ height: '8rem' }} />
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
+          <p className={classnames('hero__subtitle', styles.heroSubtitleColor)}>{siteConfig.tagline}</p>
         </div>
       </div>
       <div className="container">

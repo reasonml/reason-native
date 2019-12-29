@@ -9,6 +9,10 @@
   text-align: center;
 }
 
+.heroSubtitleColor {
+  color: #fff;
+}
+
 .blockBorder {
   border-top: 1px solid #ddd;
 }
