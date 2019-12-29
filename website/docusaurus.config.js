@@ -60,23 +60,23 @@ module.exports = {
           title: 'Projects',
           items: [
             {
-              to: 'docs/rely/index',
+              to: 'docs/rely/introduction',
               label: 'Rely'
             },
             {
-              to: 'docs/console/index',
+              to: 'docs/console/introduction',
               label: 'Console'
             },
             {
-              to: 'docs/pastel/index',
+              to: 'docs/pastel/introduction',
               label: 'Pastel'
             },
             {
-              to: 'docs/refmterr/index',
+              to: 'docs/refmterr/introduction',
               label: 'Refmterr'
             },
             {
-              to: 'docs/file-context-printer/index',
+              to: 'docs/file-context-printer/introduction',
               label: 'File Context Printer'
              }
           ]

@@ -1,5 +1,5 @@
 ---
-id: index
+id: introduction
 title: Pastel Introduction
 ---
 

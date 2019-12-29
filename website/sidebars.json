@@ -6,7 +6,7 @@
       "getting-started"
     ],
     "Rely": [
-      "rely/index",
+      "rely/introduction",
       "rely/quickstart",
       {
         "type": "category",
@@ -27,22 +27,22 @@
       "rely/advanced"
     ],
     "Console": [
-      "console/index",
+      "console/introduction",
       "console/quickstart",
       "console/api"
     ],
     "Pastel": [
-      "pastel/index",
+      "pastel/introduction",
       "pastel/quickstart",
       "pastel/api",
       "pastel/console"
     ],
     "Refmterr": [
-      "refmterr/index",
+      "refmterr/introduction",
       "refmterr/quickstart"
     ],
     "File Context Printer": [
-      "file-context-printer/index",
+      "file-context-printer/introduction",
       "file-context-printer/quickstart",
       "file-context-printer/api"
     ]

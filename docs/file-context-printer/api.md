@@ -1,7 +1,6 @@
 ---
 id: api
 title: File Context Printer API
-sidebar_label: API
 ---
 
 > Prefer reading code? Check out [FileContextPrinter.rei](https://github.com/facebookexperimental/reason-native/blob/master/src/file-context-printer/FileContextPrinter.rei)
