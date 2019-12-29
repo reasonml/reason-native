@@ -136,7 +136,7 @@ let bg = TerminalStateMachine.bg;
 let modifier = TerminalStateMachine.modifier;
 let partition = TerminalStateMachine.partitionFromString;
 
-let create =
+let make =
     (
       ~reset: option(bool)=?,
       ~bold: option(bool)=?,

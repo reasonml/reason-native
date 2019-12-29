@@ -168,7 +168,7 @@ let colorNameToColor: option(ColorName.colorName) => option(Token.color) =
       )
     };
 
-let create =
+let make =
     (
       ~reset: option(bool)=?,
       ~bold: option(bool)=?,

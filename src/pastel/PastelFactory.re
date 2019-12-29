@@ -148,7 +148,7 @@ module Make = (()) => {
 
   let whiteBright = color.whiteBright;
 
-  let create =
+  let make =
       (
         ~reset: option(bool)=?,
         ~bold: option(bool)=?,

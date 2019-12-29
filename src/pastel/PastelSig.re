@@ -85,7 +85,7 @@ module type PastelSig = {
   let unstable_parse: string => list((style, string));
   let unstable_apply: list((style, string)) => string;
 
-  let create:
+  let make:
     (
       ~reset: bool=?,
       ~bold: bool=?,
