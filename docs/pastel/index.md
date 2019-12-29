@@ -7,12 +7,13 @@ Pastel is a text formatting library that harnesses [Reason JSX](https://reasonml
 
 ## Tips and Tricks
 
-### Terminal Configuration Tips:
+### Terminal Configuration Tips
 
 This is a set of tips for configuring your terminal so that you take advantage
 of the full expressivity of the various stylings that modern terminals provide.
 If you build apps that use these features, keep in mind the kinds of
 configuration users will have enabled.
+
 These suggestions are not specific to `Pastel`, but will allow you to use all
 of `Pastel`'s features to the fullest.
 
@@ -33,19 +34,19 @@ of `Pastel`'s features to the fullest.
 
 Specific Terminal Configuration:
 
-**Iterm**:
+**iTerm**:
 
 - iTerm often won't render underlines unless you enable ligatures (your font
   might need to declare support of ligatures).
 
 The following shows the best way to configure iTerm:
 
-![iTerm optimal configuration](assets/pastel/itermConfig.png)
+![iTerm optimal configuration](/img/itermConfig.png)
 
 A reference colorscheme for iTerm that works well is
-[taste.itermcolors](assets/pastel/taste.itermcolors)
+[taste.itermcolors](/file/taste.itermcolors)
 
 **Others**:
 
-(Please help populate this document with suggestions for other popular
-terminals: (Kitty, Mintty)
+Please help populate this document with suggestions for other popular
+terminals: Kitty, Mintty
