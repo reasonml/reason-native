@@ -6,15 +6,13 @@
     "deploy": "docusaurus deploy",
     "regenerate-ansi": "node_modules/.bin/browserify -p tinyify --require 'ansi-to-html' > static/js/ansi-to-html.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "@docusaurus/core": "^2.0.0-alpha.40",
     "@docusaurus/preset-classic": "^2.0.0-alpha.40",
-    "ansi-to-html": "^0.6.9",
-    "browserify": "^16.2.3",
+    "ansi-to-react": "^5.1.0",
     "classnames": "^2.2.6",
     "react": "^16.10.2",
-    "react-dom": "^16.10.2",
-    "tinyify": "^2.5.0"
+    "react-dom": "^16.10.2"
   },
   "browserslist": {
     "production": [
