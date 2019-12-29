@@ -3,8 +3,7 @@
     "start": "docusaurus start",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy",
-    "regenerate-ansi": "node_modules/.bin/browserify -p tinyify --require 'ansi-to-html' > static/js/ansi-to-html.js"
+    "deploy": "docusaurus deploy"
   },
   "dependencies": {
     "@docusaurus/core": "^2.0.0-alpha.40",
