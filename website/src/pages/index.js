@@ -118,7 +118,7 @@ function Index() {
         <div className="col col--4">
           <h3>{title}</h3>
           <p>{content}</p>
-          <a className={classnames('button', styles.buttonOutline, styles.buttonMargin)} href={useBaseUrl(doc)} target="_self">
+          <a className={classnames('button', styles.buttonOutline, styles.buttonMargin)} href={useBaseUrl(`docs/${doc}`)} target="_self">
             Learn More
           </a>
         </div>
@@ -147,7 +147,7 @@ function Index() {
       <div className="container">
         <Block
           title="Rely"
-          doc="rely/index"
+          doc="rely/introduction"
           content="Fast, native, Jest-style test framework."
           language="reason"
           example={RelyExample}
@@ -155,7 +155,7 @@ function Index() {
         />
         <Block
           title="Console"
-          doc="console"
+          doc="console/introduction"
           content="A web-influenced polymorphic console API for native Console.log(anything) with runtime printing."
           language="reason"
           example={ConsoleExample}
@@ -163,7 +163,7 @@ function Index() {
         />
         <Block
           title="Pastel"
-          doc="pastel"
+          doc="pastel/introduction"
           content="Terminal highlighting with support for nesting and style propagation."
           language="reason"
           example={PastelExample}
@@ -171,7 +171,7 @@ function Index() {
         />
         <Block
           title="Refmterr"
-          doc="refmterr"
+          doc="refmterr/introduction"
           content="Utility for extracting structure from unstructured ocaml compiler errors, and displaying them."
           language="bash"
           example={RefmterrExample}
@@ -179,7 +179,7 @@ function Index() {
         />
         <Block
           title="File Context Printer"
-          doc="file-context-printer"
+          doc="file-context-printer/introduction"
           content="Utility for displaying snippets of files on the command line."
           language="reason"
           example={FilePrinterExample}
