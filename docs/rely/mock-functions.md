@@ -1,7 +1,6 @@
 ---
 id: mock-functions
 title: Mock Functions
-sidebar_label: Mock Functions
 ---
 
 Mock functions (or "spies") in Rely can be used to track information about the arguments and return values of functions, and allow for test-time configuration of return values. Rely has built-in matchers for dealing with mock functions that are documented extensively [here](expect.md#expectmock).
@@ -91,14 +90,12 @@ When testing code with side effects such as talking to a database or making netw
 
 For example, suppose that we have some code that uses a logger. In production we want the logger to make HTTP requests to some endpoint, but we deem this behavior undesirable for our test.
 
-Without abstracting away the dependendency on our HTTP logger, our code might look like this.
-
-#### MyModule.re
+Without abstracting away the dependency on our HTTP logger, our code might look like this.
 
 ```reason
 module MyApp = {
   let doSomethingThatGetsLogged = () => {
-    HTTPLogger.log("starting to do someting");
+    HTTPLogger.log("starting to do something");
     SomeModule.doSomething();
     HTTPLogger.log("did the thing!");
   };

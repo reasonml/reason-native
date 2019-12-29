@@ -1,8 +1,8 @@
 ---
 id: setup-teardown
 title: Setup and Teardown
-sidebar_label: Setup and Teardown
 ---
+
 As of version 3.0.0, Rely provides the `beforeEach`, `beforeAll`, `afterEach`, and `afterAll` test lifecycle functions to safely perform setup and teardown operations while discouraging the usage of patterns that unsafely share state between tests.
 
 In cases where teardown is not required, `beforeEach` and `beforeAll` can be helpful for code organization, but are not required to be used.

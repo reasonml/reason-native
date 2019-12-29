@@ -64,15 +64,15 @@ FCP.printFile(
 
 Prints context from a file.
 
-#### Signature
+Signature:
 
 ```reason
 let printFile: (~path: string, ~highlight: rowColumnRange) => option(string);
 ```
 
-#### Example
+Example:
 
-```
+```reason
 FCP.printFile(
   "src/file-context-printer/test/DummyFile.re",
   ((7, 1), (7, 11)),
@@ -89,15 +89,15 @@ FCP.printFile(
 
 Prints context from a list of lines.
 
-#### Signature
+Signature:
 
 ```reason
 let print: (list(string), ~highlight: rowColumnRange) => string;
 ```
 
-#### Example
+Example:
 
-```
+```reason
 FCP.print(
   [
     "/**",

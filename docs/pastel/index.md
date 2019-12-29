@@ -10,7 +10,7 @@ Pastel is a text formatting library that harnesses [Reason JSX](https://reasonml
 ### Terminal Configuration Tips:
 
 This is a set of tips for configuring your terminal so that you take advantage
-of the full expresivity of the various stylings that modern terminals provide.
+of the full expressivity of the various stylings that modern terminals provide.
 If you build apps that use these features, keep in mind the kinds of
 configuration users will have enabled.
 These suggestions are not specific to `Pastel`, but will allow you to use all
@@ -46,5 +46,6 @@ A reference colorscheme for iTerm that works well is
 [taste.itermcolors](assets/pastel/taste.itermcolors)
 
 **Others**:
+
 (Please help populate this document with suggestions for other popular
 terminals: (Kitty, Mintty)

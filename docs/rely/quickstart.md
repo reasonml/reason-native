@@ -1,13 +1,13 @@
 ---
 id: quickstart
 title: Rely Quickstart
-sidebar_label: Quickstart
 ---
 > This quickstart builds off [Getting Started](../getting-started) and assumes you have a native Reason project set up.
 
 ## Install Rely
 
 To install Rely in your project with esy, run
+
 ```sh
 esy add @reason-native/rely
 ```
@@ -23,6 +23,7 @@ In order to use Rely, you must add it to your build system. With dune, `rely.lib
 ## Create a test
 
 Let's start by creating a library for our tests. Create a directory called test and create a dune file for our library (if you wish to use another build system, the important thing here is to pass the -linkall flag to the compiler)
+
 ```sh
 ├─test/
 │   lib/
@@ -56,6 +57,7 @@ Let's start by creating a library for our tests. Create a directory called test 
 ```
 
 Now let's create a file to initialize the test framework. Here we are specifying where snapshots should be stored as well as the root directory of your project for the formatting of terminal output.
+
 ```sh
 ├─test/
 │   lib/
@@ -75,6 +77,7 @@ include Rely.Make({
 ```
 
 Now we can finally write our first test!
+
 ```sh
 ├─test/
 │   lib/
@@ -95,6 +98,7 @@ describe("my first test suite", ({test}) => {
 ```
 
 From here let's create an executable to actually run our tests (the name of this file corresponds to the name specified in the executable stanza in the dune file).
+
 ```sh
 │
 ├─my-lib-test.opam

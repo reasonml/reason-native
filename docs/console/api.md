@@ -26,6 +26,7 @@ let out: 'a => unit;
 ```
 
 ## `Console.debug(anything)`
+
 Same as `Console.log` but used for developer-facing messaging to standard out.
 Suitable for writing to log files. In production mode, would typically be
 suppressed entirely. Custom `Console.t` implementations may implement custom

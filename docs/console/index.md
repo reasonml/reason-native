@@ -10,6 +10,7 @@ accept any type of input. Record fields and variant label names are lost at
 compile time so they aren't printed.
 
 **Suitable For Developers or Users:**
+
 - Passing a single `string` (as in `Console.log("hello")`) will not print the
   quotes (just like in the browser)
 - Passing a deep structure will print the deep structure, and strings that
