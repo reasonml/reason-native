@@ -3,13 +3,16 @@ id: getting-started
 title: Getting Started
 ---
 
+<!-- MDX Magic: Used below to render ANSI code blocks -->
+import Ansi from 'ansi-to-react';
+
 ## Install Esy
 
 We recommend using [Esy](https://esy.sh) as your package manager in native Reason projects. Esy is a native, npm-esque package manager with built-in dependency isolation and fast, incremental builds.
 
 The easiest way to install **Esy** is with [npm](https://nodejs.org):
 
-```sh
+```bash
 npm install -g esy
 ```
 
@@ -17,14 +20,14 @@ npm install -g esy
 
 First, clone a copy of the [`esy-ocaml/hello-reason`](https://github.com/esy-ocaml/hello-reason.git) project:
 
-```sh
+```bash
 git clone https://github.com/esy-ocaml/hello-reason.git
 cd hello-reason
 ```
 
 Then, run `esy` to install relevant dependencies and build your app:
 
-```sh
+```bash
 esy
 ```
 
@@ -32,16 +35,16 @@ esy
 
 Run
 
-```sh
+```bash
 esy x Hello.exe # runs Hello.exe
 ```
 
 If everything went as expected, you should see the following output:
 
-```sh
+<Ansi>
 Running Test Program:
 [31mHello[39m, [32mWorld[39m!
-```
+</Ansi>
 
 Believe it or not, you're already using two Reason Native packages!
 
@@ -77,10 +80,10 @@ Let's try making `Hello` yellow:
 
 Run `esy build` to rebuild your app, and run `esy x Hello.exe` to see your changes:
 
-```sh
+<Ansi>
 Running Test Program:
 [33mHello[39m, [32mWorld[39m!
-```
+</Ansi>
 
 ### Console
 
@@ -102,7 +105,6 @@ let () = print_endline(Lib.Util.hello());
 
 Running `esy build && esy x Hello.exe` should produce the following:
 
-```sh
-{1, {2, 3}}
+<Ansi>
 [33mHello[39m, [32mWorld[39m!
-```
+</Ansi>
