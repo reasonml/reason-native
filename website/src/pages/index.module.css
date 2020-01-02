@@ -21,27 +21,6 @@
   padding: 50px 0;
 }
 
-.buttonOutline {
-  border: 1px solid #222;
-  border-radius: 3px;
-  color: #222;
-  display: inline-block;
-  font-weight: 400;
-  padding: 10px;
-  text-decoration: none !important;
-  text-transform: uppercase;
-  transition: background 0.3s, color 0.3s;
-}
-
-.buttonOutline:hover {
-  background: #222;
-  color: #fff;
-}
-
-.buttonMargin {
-  margin-bottom: 1em;
-}
-
 .codeBlockMargin {
   margin-bottom: 1em;
 }

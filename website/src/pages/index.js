@@ -118,7 +118,7 @@ function Index() {
         <div className="col col--6">
           <h3>{title}</h3>
           <p>{content}</p>
-          <a className={classnames('button', styles.buttonOutline, styles.buttonMargin)} href={useBaseUrl(`docs/${doc}`)} target="_self">
+          <a className="button button--outline button--lg button--secondary" href={useBaseUrl(`docs/${doc}`)} target="_self">
             Learn More
           </a>
         </div>
