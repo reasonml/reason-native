@@ -25,6 +25,7 @@ module.exports = {
   //   organizationName: 'JoelMarcey'
 
   themeConfig: {
+    disableDarkMode: true,
     navbar: {
       logo: {
         alt: 'Reason Native',
