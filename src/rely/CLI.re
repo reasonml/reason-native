@@ -5,22 +5,23 @@ type cliArgs = {
   filter: option(Re.Pcre.regexp),
 };
 
-let filterTestsByRegex = (tests: list(TestSuite.test('ext, 'env)), regex) => {
+let filterTestsByName =
+    (tests: list(TestSuite.test('ext, 'env)), nameFilter) => {
   tests
   |> List.filter((test: TestSuite.test('ext, 'env)) =>
-       Re.Pcre.pmatch(regex, test.name)
+       nameFilter(test.name)
      );
 };
 
-let rec filterDescribeByRegex =
-        (describeRecord: TestSuite.describeRecord('a, 'b), regex) => {
+let rec filterDescribeByName =
+        (describeRecord: TestSuite.describeRecord('a, 'b), nameFilter) => {
   let {TestSuite.name, tests, describes, mode} = describeRecord;
 
-  if (Re.Pcre.pmatch(regex, name)) {
+  if (nameFilter(name)) {
     Some(describeRecord);
   } else {
-    let tests = filterTestsByRegex(tests, regex);
-    let describes = filterDescribesByRegex(describes, regex);
+    let tests = filterTestsByName(tests, nameFilter);
+    let describes = filterDescribesByName(describes, nameFilter);
 
     switch (tests, describes) {
     | ([], []) => None
@@ -29,9 +30,9 @@ let rec filterDescribeByRegex =
     };
   };
 }
-and filterDescribesByRegex = (describes, regex) => {
+and filterDescribesByName = (describes, nameFilter) => {
   describes
-  |> List.map(describe => filterDescribeByRegex(describe, regex))
+  |> List.map(describe => filterDescribeByName(describe, nameFilter))
   |> List.fold_left(
        (acc, optDescribe) =>
          switch (optDescribe) {
@@ -42,25 +43,30 @@ and filterDescribesByRegex = (describes, regex) => {
      );
 };
 
-let filterSuiteByRegex = (testSuite, regex) => {
+let filterSuiteByName = (testSuite, nameFilter) => {
   let TestSuite.TestSuite(describeRecord, extensionFn, lifeCycle, context) = testSuite;
-  switch (filterDescribeByRegex(describeRecord, regex)) {
+  switch (filterDescribeByName(describeRecord, nameFilter)) {
   | Some(record) =>
     Some(TestSuite.TestSuite(record, extensionFn, lifeCycle, context))
   | None => None
-  };
+  }; 
 };
 
-let filterTestSuitesByRegex =
-    (testSuites: list(RelyInternal.TestSuite.t), regex: Re.Pcre.regexp) => {
+let filterTestSuitesByName =
+    (testSuites: list(TestSuite.t), nameFilter) => {
   testSuites
   |> List.fold_left(
        (acc, suite) => {
-         switch (filterSuiteByRegex(suite, regex)) {
+         switch (filterSuiteByName(suite, nameFilter)) {
          | Some(suite) => [suite, ...acc]
          | None => acc
          }
        },
        [],
      );
+};
+
+let filterTestSuitesByRegex = (testSuites, regex) => {
+  let filterFn = name => Re.Pcre.pmatch(regex, name);
+  filterTestSuitesByName(testSuites, filterFn);
 };
