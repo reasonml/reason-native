@@ -20,3 +20,16 @@
   --ifm-footer-link-color: #fffc;
   --ifm-footer-link-hover-color: #ffffff;
 }
+
+/**
+ * For ANSI output in the docs.
+ */
+.example-output {
+  background-color: #222;
+  border-radius: var(--ifm-global-radius);
+  color: #ffffff;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+  line-height: var(--ifm-pre-line-height);
+  padding: var(--ifm-pre-padding);
+}

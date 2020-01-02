@@ -10,7 +10,7 @@ sidebar_label: Quickstart
 
 To install Pastel in your project with esy, run
 
-```sh
+```bash
 esy add @reason-native/pastel
 ```
 
@@ -37,6 +37,6 @@ let output =
 print_endline(output);
 ```
 
-```sh-stacked
+```bash-ansi
 [32m[1mHello [22m[39m[32m[1m[3m[4mWorld[24m[23m[22m[39m
 ```

@@ -19,7 +19,7 @@ describe("Example", ({test}) => {
 });
 ```
 
-```sh-stacked
+```bash-ansi
 Running 1 test suite
 
 [31m[1m[7m FAIL [27m[22m[39m [97mExample[39m

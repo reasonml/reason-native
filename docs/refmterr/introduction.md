@@ -16,7 +16,7 @@ Error: The function applied to this argument has type
 This argument cannot be applied with label ~raiseExceptionDuringParse
 ```
 
-```sh-stacked
+```bash-ansi
  ## After ##
 
 [31m[1m[7m ERROR [27m[22m[39m [36m[4mtype_AppliedTooMany_3.ml[24m[39m[2m[4m:11 5-30[24m[22m

@@ -55,7 +55,7 @@ describe("test lifecycle order example", ({test, describe}) => {
 });
 ```
 outputs
-```shell
+```bashell
 before all
 before each
 test1

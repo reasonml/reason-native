@@ -25,7 +25,7 @@ FCP.printFile(
 )
 ```
 
-```sh-stacked
+```bash-ansi
 [2m 6 ┆ [22m[2m */;[22m
 [31m[2m 7 ┆ [22m[39m[31m[1m[4mlet myFunc[24m[22m[39m[2mtion = ()[22m[31m[2m => [22m[39m[2mprint_endline([22m[32m[2m"do something"[22m[39m[2m);[22m
 [2m 8 ┆ [22m
@@ -50,7 +50,7 @@ FCP.printFile(
 )
 ```
 
-```sh-stacked
+```bash-ansi
 [2m 4 ┆ [22m[2m * [22m[34m[2mThis[22m[39m[2m source code is licensed under the ...
 [2m 5 ┆ [22m[2m * [22m[34m[2mLICENSE[22m[39m[2m file in the root directory of ...
 [2m 6 ┆ [22m[2m */;[22m
@@ -79,7 +79,7 @@ FCP.printFile(
 )
 ```
 
-```sh-stacked
+```bash-ansi
 [2m 6 ┆ [22m[2m */;[22m
 [31m[2m 7 ┆ [22m[39m[31m[1m[4mlet myFunc[24m[22m[39m[2mtion = ()[22m[31m[2m => [22m[39m[2mprint_endline([22m[32m[2m"do something"[22m[39m[2m);[22m
 [2m 8 ┆ [22m
@@ -119,7 +119,7 @@ FCP.print(
 )
 ```
 
-```sh-stacked
+```bash-ansi
 [2m 6 ┆ [22m[2m */;[22m
 [31m[2m 7 ┆ [22m[39m[31m[1m[4mlet myFunc[24m[22m[39m[2mtion = ()[22m[31m[2m => [22m[39m[2mprint_endline([22m[32m[2m"do something"[22m[39m[2m);[22m
 [2m 8 ┆ [22m

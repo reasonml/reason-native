@@ -10,7 +10,7 @@ sidebar_label: Console
 
 To install Pastel Console in your project with esy, run
 
-```sh
+```bash
 esy add @reason-native/pastel-console
 ```
 
@@ -40,6 +40,6 @@ PastelConsole.init();
 Console.log([{name: "joe", age: 100}, {name: "sue", age: 18}]);
 ```
 
-```sh-stacked
+```bash-ansi
 [{[32m"joe"[39m, [33m100[39m}, {[32m"sue"[39m, [33m18[39m}]
 ```

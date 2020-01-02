@@ -10,7 +10,7 @@ sidebar_label: Quickstart
 
 To install Console in your project with esy, run
 
-```sh
+```bash
 esy add @reason-native/console
 ```
 
@@ -37,7 +37,7 @@ Console.warn(() => {/* anonymous function */});
 Console.log("\nI can be meta too:");
 Console.debug(Console.debug);
 ```
-```sh-stacked
+```bash-ansi
 {1, {2, 3}}
 2.3323
 

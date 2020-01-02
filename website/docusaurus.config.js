@@ -103,7 +103,7 @@ module.exports = {
   favicon: 'img/logo.png',
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: ['/js/ansi-to-html.js', 'https://buttons.github.io/buttons.js', '/js/ansi.js'],
 
   // preset which bundles most of the essential plugins present in Docusaurus 1
   presets: [

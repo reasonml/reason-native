@@ -44,7 +44,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 [34mHello World[39m
 ```
 ---
@@ -83,7 +83,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 [44mHello World[49m
 ```
 
@@ -110,7 +110,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 Hello [1mWorld[22m
 ```
 
@@ -137,7 +137,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 Hello [90mWorld[39m
 ```
 
@@ -164,7 +164,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 Hello [3mWorld[23m
 ```
 
@@ -191,7 +191,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 Hello [4mWorld[24m
 ```
 
@@ -218,7 +218,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 Hello [30m[107mWorld[49m[39m
 ```
 
@@ -245,7 +245,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 Hello [8mWorld[28m
 ```
 
@@ -272,7 +272,7 @@ print_endline(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 Hello [9mWorld[29m
 ```
 

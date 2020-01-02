@@ -13,7 +13,7 @@ FCP.printFile(
 );
 ```
 
-```sh-stacked
+```bash-ansi
 [2m 4 ┆ [22m[2m * [22m[34m[2mThis[22m[39m[2m source code is licensed under the ...
 [2m 5 ┆ [22m[2m * [22m[34m[2mLICENSE[22m[39m[2m file in the root directory of ...
 [2m 6 ┆ [22m[2m */;[22m
