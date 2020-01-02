@@ -1,6 +1,7 @@
 ---
 id: introduction
 title: Refmterr Introduction
+sidebar_label: Introduction
 ---
 
 Refmterr is an error formatter for Reason and OCaml builds. It takes raw error output from both the Reason and OCaml compilers and converts it to pretty output like so:

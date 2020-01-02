@@ -1,6 +1,7 @@
 ---
 id: console
 title: Pastel Console
+sidebar_label: Console
 ---
 
 `@reason-native/pastel-console` is a small library that adds pretty coloring to [Console](../console) output.

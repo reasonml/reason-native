@@ -1,6 +1,7 @@
 ---
 id: api
 title: Console API
+sidebar_label: API
 ---
 
 ## `Console.log(anything)`

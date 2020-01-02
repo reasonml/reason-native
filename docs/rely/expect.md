@@ -1,6 +1,7 @@
 ---
 id: expect
 title: Expect
+sidebar_label: Expect
 ---
 
 When you're writing tests, you often need to check that values meet certain conditions. Expect gives you access to a number of "matchers" that let you validate different things.

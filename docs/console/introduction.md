@@ -1,6 +1,7 @@
 ---
 id: introduction
 title: "Console: No effort, universal logger"
+sidebar_label: Introduction
 ---
 
 `Console` is modelled after the browser console. It

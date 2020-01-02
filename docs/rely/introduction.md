@@ -1,6 +1,7 @@
 ---
 id: introduction
 title: Rely Introduction
+sidebar_label: Introduction
 ---
 
 Rely is a [Jest-inspired](https://jestjs.io/) native Reason testing framework.

@@ -1,6 +1,7 @@
 ---
 id: api
 title: Pastel API
+sidebar_label: API
 ---
 
 > Prefer reading code? Check out [Pastel.rei](https://github.com/facebookexperimental/reason-native/blob/master/src/pastel/Pastel.rei)

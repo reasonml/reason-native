@@ -1,6 +1,7 @@
 ---
 id: advanced
 title: Advanced Topics - Rely
+sidebar_label: Advanced
 ---
 
 ## Running with [Custom Run Config](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RunConfig.re)

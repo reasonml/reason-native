@@ -1,6 +1,7 @@
 ---
 id: native-basics
 title: Native Reason Basics
+sidebar_label: Native Basics
 ---
 
 ## Relation to OCaml

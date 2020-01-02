@@ -1,6 +1,7 @@
 ---
 id: api
 title: Basic API
+sidebar_label: Basic API
 ---
 
 > Prefer reading code? Check out [RelyAPI.rei](https://github.com/facebookexperimental/reason-native/blob/master/src/rely/RelyAPI.rei)

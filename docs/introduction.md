@@ -1,6 +1,7 @@
 ---
 id: introduction
 title: Reason Native
+sidebar_label: Introduction
 ---
 
 Testing, printing, coloring, and other tools to effectively write native Reason code.

@@ -1,6 +1,7 @@
 ---
 id: mock-functions
 title: Mock Functions
+sidebar_label: Mock Functions
 ---
 
 Mock functions (or "spies") in Rely can be used to track information about the arguments and return values of functions, and allow for test-time configuration of return values. Rely has built-in matchers for dealing with mock functions that are documented extensively [here](expect.md#expectmock).
