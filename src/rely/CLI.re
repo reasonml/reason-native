@@ -58,8 +58,10 @@ let parseCIMode: (array(string), cliArgs) => cliArgs =
 
 let parseArgs: array(string) => cliArgs =
   argv => {
-    emptyArgs
+    let args = emptyArgs
     |> parseUpdateSnapshots(argv)
     |> parseOnlyPrintDetailsForFailedSuites(argv)
     |> parseCIMode(argv);
+
+    {...args, filter: Some(Re.Pcre.regexp("Rely"))}
   };

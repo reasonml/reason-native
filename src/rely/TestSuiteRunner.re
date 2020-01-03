@@ -13,6 +13,8 @@ open Describe;
 open Util;
 open RunConfig;
 open Reporter;
+open CommonOption.Infix;
+
 exception PendingTestException(string);
 exception InvalidInCIMode(string);
 
@@ -448,20 +450,30 @@ let run = (config: RunConfig.t, testSuites) =>
   });
 
 let cli = testSuites => {
-  let hasFlag = flag =>
-    Array.length(Sys.argv) >= 2 && Array.exists(arg => arg == flag, Sys.argv);
+  let cliArgs = CLI.parseArgs(Sys.argv);
 
-  let shouldUpdateSnapshots = hasFlag("-u");
+  let shouldUpdateSnapshots = cliArgs.updateSnapshots |?: false;
 
-  let ci = hasFlag("--ci");
+  let ci = cliArgs.ciMode |?: false;
 
   let onlyPrintDetailsForFailedSuites =
-    hasFlag("--onlyPrintDetailsForFailedSuites");
+    cliArgs.onlyPrintDetailsForFailedSuites |?: false;
+
+  let shouldRemoveUnusedSnapshots = ref(true);
+
+  let testSuites = switch(cliArgs.filter) {
+  | Some(filter) => { 
+    shouldRemoveUnusedSnapshots := false;
+    TestSuiteFilter.filterTestSuitesByRegex(testSuites, filter);
+  }
+  | None => testSuites
+  };
 
   let config =
     RunConfig.(
       initialize()
       |> updateSnapshots(shouldUpdateSnapshots)
+      |> removeUnusedSnapshots(shouldRemoveUnusedSnapshots.contents)
       |> ciMode(ci)
       |> withReporters([
            Custom(

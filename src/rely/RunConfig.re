@@ -17,6 +17,7 @@ type reporter =
   | Custom(Reporter.t);
 
 type t = {
+  removeUnusedSnapshots: bool,
   updateSnapshots: bool,
   onTestFrameworkFailure: unit => unit,
   reporters: list(reporter),
@@ -25,6 +26,7 @@ type t = {
 };
 
 let initialize = () => {
+  removeUnusedSnapshots: true,
   updateSnapshots: false,
   onTestFrameworkFailure: () => exit(1),
   reporters: [Default],
@@ -42,6 +44,11 @@ let withReporters = (reporters: list(reporter), config) => {
 let ciMode: (bool, t) => t = (ci, config) => {...config, ci};
 
 let internal_do_not_use_get_time = (fn, cfg: t) => {...cfg, getTime: fn};
+
+let removeUnusedSnapshots = (removeUnusedSnapshots, cfg) => {
+  ...cfg,
+  removeUnusedSnapshots,
+};
 
 let onTestFrameworkFailure = (onTestFrameworkFailure, config) => {
   ...config,
