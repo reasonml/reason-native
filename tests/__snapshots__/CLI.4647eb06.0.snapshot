@@ -1,0 +1,36 @@
+CLI › Help output without color
+
+  shipit 1.0.0
+
+    Ship an app
+
+  USAGE
+
+    shipit [command] [options] <app> [build]
+
+  COMMANDS
+
+    (default)     The default action, command is optional
+
+  ARGUMENTS
+
+    app       The app to deploy
+    build     Which build to ship, dev or prod
+
+  OPTIONS
+
+    --delay, -d     How long to wait in seconds before shipping (default 0)
+
+  BUILT-IN COMMANDS
+
+    help        Display help for a command
+    version     Display version
+
+  BUILT-IN OPTIONS
+
+    --help, -h        Display help
+    --version, -v     Display version
+    --no-color        Disable colors
+    --quiet           Quiet mode - will only display warn and error messages
+    --verbose         Verbose mode - will also display debug messages
+

@@ -1,0 +1,36 @@
+CLI › Help output
+
+  <cyan>shipit</resetColor> 1.0.0
+
+    Ship an app
+
+  <whiteBright>USAGE</resetColor>
+
+    shipit <red>[command]</resetColor><green> [options]</resetColor> <blue><app></resetColor> <blue>[build]</resetColor>
+
+  <whiteBright>COMMANDS</resetColor>
+
+    <red>(default)</resetColor>     The default action, command is optional
+
+  <whiteBright>ARGUMENTS</resetColor>
+
+    <blue>app</resetColor>       The app to deploy
+    <blue>build</resetColor>     Which build to ship, dev or prod
+
+  <whiteBright>OPTIONS</resetColor>
+
+    <green>--delay</resetColor>, <green>-d</resetColor>     How long to wait in seconds before shipping (default 0)
+
+  <whiteBright>BUILT-IN COMMANDS</resetColor>
+
+    <red>help</resetColor>        Display help for a command
+    <red>version</resetColor>     Display version
+
+  <whiteBright>BUILT-IN OPTIONS</resetColor>
+
+    <green>--help</resetColor>, <green>-h</resetColor>        Display help
+    <green>--version</resetColor>, <green>-v</resetColor>     Display version
+    <green>--no-color</resetColor>        Disable colors
+    <green>--quiet</resetColor>           Quiet mode - will only display warn and error messages
+    <green>--verbose</resetColor>         Verbose mode - will also display debug messages
+

@@ -1,0 +1,6 @@
+CLI › Logging
+[Warning] Both options `--quiet` and `--verbose` were specified. Using verbose behavior.
+[Debug] debug
+info
+[Warning] warn
+[Error] error

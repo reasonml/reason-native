@@ -1,0 +1,3 @@
+CLI › Invalid argument names
+<red>[Fatal] Invalid argument name: _app. Argument names must start with a letter then only letters, digits, dashes, or
+underscores.</resetColor>

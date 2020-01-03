@@ -1,0 +1,3 @@
+CLI › Conflicting command names
+<red>[Fatal] Provided command alias: foo for the command named: bar is the same as existing command: foo or one of its
+aliases.</resetColor>

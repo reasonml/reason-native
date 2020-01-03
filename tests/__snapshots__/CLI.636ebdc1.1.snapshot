@@ -1,0 +1,2 @@
+CLI › Duplicate version specification
+<red>[Fatal] Version already set as \"1.0.0\", do not set it multiple times. Recieved: \"2.0.0\"</resetColor>

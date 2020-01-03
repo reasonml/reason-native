@@ -1,0 +1,7 @@
+(library
+   (name CLI)
+   (public_name cli.lib)
+   (libraries re pastel.lib)
+)
+(copy_files# ../../shared-src/common/*)
+(include_subdirs unqualified)
