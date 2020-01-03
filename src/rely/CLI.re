@@ -9,14 +9,14 @@ type cliArgs = {
   updateSnapshots: option(bool),
   ciMode: option(bool),
   onlyPrintDetailsForFailedSuites: option(bool),
-  filter: option(Re.Pcre.regexp),
+  testNamePattern: option(string),
 };
 
 let emptyArgs: cliArgs = {
   updateSnapshots: None,
   ciMode: None,
   onlyPrintDetailsForFailedSuites: None,
-  filter: None,
+  testNamePattern: None,
 };
 
 let hasFlag = (flag, argv) =>
@@ -56,12 +56,16 @@ let parseCIMode: (array(string), cliArgs) => cliArgs =
     };
   };
 
+let parseTestNamePattern: (array(string), cliArgs) => cliArgs =
+  (argv, args) => {
+    {...args, testNamePattern: Some("rely")};
+  };
+
 let parseArgs: array(string) => cliArgs =
   argv => {
-    let args = emptyArgs
+    emptyArgs
     |> parseUpdateSnapshots(argv)
     |> parseOnlyPrintDetailsForFailedSuites(argv)
-    |> parseCIMode(argv);
-
-    {...args, filter: Some(Re.Pcre.regexp("Rely"))}
+    |> parseCIMode(argv)
+    |> parseTestNamePattern(argv);
   };

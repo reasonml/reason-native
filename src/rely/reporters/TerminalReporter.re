@@ -27,7 +27,7 @@ let createTerminalReporter =
 
   let indent = (~indent: string, s: string): string => {
     let lines = Re.Pcre.split(newLineRegex, s);
-    let lines = List.map(line => indent ++ line, lines);
+    let lines = List.map(line => String.concat("", [indent, line]), lines);
     String.concat("\n", lines);
   };
 
@@ -88,7 +88,9 @@ let createTerminalReporter =
              let titleBullet = "• ";
              let title =
                Pastel.bold(
-                 failFormatter(titleIndent ++ titleBullet ++ fullName),
+                 failFormatter(
+                   String.concat("", [titleIndent, titleBullet, fullName]),
+                 ),
                );
              let indentedMessage = indent(message, ~indent=messageIndent);
              let parts =
@@ -102,11 +104,16 @@ let createTerminalReporter =
              let titleBullet = "• ";
              let title =
                Pastel.bold(
-                 failFormatter(titleIndent ++ titleBullet ++ fullName),
+                 failFormatter(
+                   String.concat("", [titleIndent, titleBullet, fullName]),
+                 ),
                );
              let exceptionMessage =
                indent(
-                 "Exception " ++ Pastel.dim(Printexc.to_string(e)),
+                 String.concat(
+                   "",
+                   ["Exception ", Pastel.dim(Printexc.to_string(e))],
+                 ),
                  ~indent=messageIndent,
                );
              let parts =
@@ -143,22 +150,36 @@ let createTerminalReporter =
       [
         Some(
           testSuiteFailFormatter(
-            string_of_int(result.numFailedTestSuites) ++ " failed",
+            String.concat(
+              "",
+              [string_of_int(result.numFailedTestSuites), " failed"],
+            ),
           ),
         ),
         result.numSkippedTestSuites == 0
           ? None
           : Some(
               testSuiteSkipFormatter(
-                string_of_int(result.numSkippedTestSuites) ++ " skipped",
+                String.concat(
+                  "",
+                  [string_of_int(result.numSkippedTestSuites), " skipped"],
+                ),
               ),
             ),
         Some(
           testSuitePassFormatter(
-            string_of_int(result.numPassedTestSuites) ++ " passed",
+            String.concat(
+              "",
+              [string_of_int(result.numPassedTestSuites), " passed"],
+            ),
           ),
         ),
-        Some(string_of_int(result.numTotalTestSuites) ++ " total"),
+        Some(
+          String.concat(
+            "",
+            [string_of_int(result.numTotalTestSuites), " total"],
+          ),
+        ),
       ]
       |> List.fold_left(
            (acc, part) =>
@@ -180,22 +201,36 @@ let createTerminalReporter =
       [
         Some(
           testFailFormatter(
-            string_of_int(result.numFailedTests) ++ " failed",
+            String.concat(
+              "",
+              [string_of_int(result.numFailedTests), " failed"],
+            ),
           ),
         ),
         result.numSkippedTests == 0
           ? None
           : Some(
               testSkipFormatter(
-                string_of_int(result.numSkippedTests) ++ " skipped",
+                String.concat(
+                  "",
+                  [string_of_int(result.numSkippedTests), " skipped"],
+                ),
               ),
             ),
         Some(
           testPassFormatter(
-            string_of_int(result.numPassedTests) ++ " passed",
+            String.concat(
+              "",
+              [string_of_int(result.numPassedTests), " passed"],
+            ),
           ),
         ),
-        Some(string_of_int(result.numTotalTests) ++ " total"),
+        Some(
+          String.concat(
+            "",
+            [string_of_int(result.numTotalTests), " total"],
+          ),
+        ),
       ]
       |> List.fold_left(
            (acc, part) =>
@@ -305,14 +340,17 @@ let createTerminalReporter =
             ],
           );
         runningDisplayLength := String.length(update);
-        printer.printString("\r" ++ update);
+        printer.printString(String.concat("", ["\r", update]));
         printer.flush(stdout);
         ();
       },
     onTestSuiteResult: (aggregatedResult, testSuite, testSuiteResult) => {
       if (Pastel.getMode() == Terminal) {
         printer.printString(
-          "\027[" ++ string_of_int(runningDisplayLength^) ++ "D\027[K",
+          String.concat(
+            "",
+            ["\027[", string_of_int(runningDisplayLength^), "D\027[K"],
+          ),
         );
       };
       switch (testSuiteResult) {
@@ -346,15 +384,30 @@ let createTerminalReporter =
     },
     onRunStart: runStartInfo => {
       let numTestSuites = List.length(runStartInfo.testSuites);
+      let matchingText =
+        switch (runStartInfo.testNamePattern) {
+        | None => ""
+        | Some(pattern) =>
+          String.concat(
+            "",
+            [" matching ", <Pastel color=WhiteBright> pattern </Pastel>],
+          )
+        };
       printer.printEndline(
-        "Running "
-        ++ string_of_int(numTestSuites)
-        ++ (numTestSuites == 1 ? " test suite" : " test suites"),
+        String.concat(
+          "",
+          [
+            "Running ",
+            string_of_int(numTestSuites),
+            numTestSuites == 1 ? " test suite" : " test suites",
+            matchingText,
+          ],
+        ),
       );
     },
     onRunComplete: aggregatedResult => {
       printer.printEndline(
-        "\n" ++ createRunSummary(aggregatedResult) ++ "\n",
+        String.concat("", ["\n", createRunSummary(aggregatedResult), "\n"]),
       );
       let _ = aggregatedResult |> printSnapshotStatus >>| printer.printEndline;
       ();
