@@ -12,7 +12,7 @@ type t = {
   length: string => int,
   unformattedText: string => string,
   partition: (int, string) => (string, string),
-  create:
+  make:
     (
       ~reset: bool=?,
       ~bold: bool=?,

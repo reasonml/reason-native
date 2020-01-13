@@ -162,7 +162,7 @@ module Make = (()) => {
         ~backgroundColor: option(colorName)=?,
         inputs: list(string),
       ) => {
-    selectedImplementation^.create(
+    selectedImplementation^.make(
       ~reset?,
       ~bold?,
       ~dim?,
@@ -192,7 +192,7 @@ module Make = (()) => {
         ~children: list(string),
         (),
       ) => {
-    create(
+    make(
       ~reset?,
       ~bold?,
       ~dim?,

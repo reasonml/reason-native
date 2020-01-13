@@ -208,7 +208,7 @@ let implementation: PastelImplementation.t = {
   length,
   unformattedText,
   partition,
-  create,
+  make,
   emptyStyle: StateMachine.initialState,
   parse: HumanReadableStateMachine.parseStateRegions,
   apply: HumanReadableStateMachine.resolveStateRegions,

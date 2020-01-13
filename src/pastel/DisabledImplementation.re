@@ -79,7 +79,7 @@ let implementation: PastelImplementation.t = {
   length,
   unformattedText: identityDecorator,
   partition,
-  create:
+  make:
     (
       ~reset: option(bool)=?,
       ~bold: option(bool)=?,

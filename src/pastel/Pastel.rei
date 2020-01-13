@@ -100,9 +100,9 @@ let magentaBright: decorator;
 let cyanBright: decorator;
 let whiteBright: decorator;
 
-/** Pastel.create allows non-pxx users to use Pastel.
+/** Pastel.make allows non-pxx users to use Pastel.
    * If you are using Reason, we recommend that you use the JSX ppx along side with Pastel.
-   * `<Pastel italic=true> "World" </Pastel>` is equivalent to `Pastel.create("World", ~italic=true)` */
+   * `<Pastel italic=true> "World" </Pastel>` is equivalent to `Pastel.make("World", ~italic=true)` */
 let make:
   (
     ~reset: bool=?,
