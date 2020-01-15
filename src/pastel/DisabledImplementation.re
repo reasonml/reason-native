@@ -79,7 +79,7 @@ let implementation: PastelImplementation.t = {
   length,
   unformattedText: identityDecorator,
   partition,
-  createElement:
+  make:
     (
       ~reset: option(bool)=?,
       ~bold: option(bool)=?,
@@ -91,10 +91,9 @@ let implementation: PastelImplementation.t = {
       ~strikethrough: option(bool)=?,
       ~color: option(ColorName.colorName)=?,
       ~backgroundColor: option(ColorName.colorName)=?,
-      ~children: list(string),
-      (),
+      inputs,
     ) =>
-    String.concat("", children),
+    String.concat("", inputs),
   emptyStyle: StateMachine.initialState,
   parse: s => [(StateMachine.initialState, s)],
   apply: s =>

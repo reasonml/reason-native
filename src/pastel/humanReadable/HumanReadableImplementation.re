@@ -168,7 +168,7 @@ let colorNameToColor: option(ColorName.colorName) => option(Token.color) =
       )
     };
 
-let createElement =
+let make =
     (
       ~reset: option(bool)=?,
       ~bold: option(bool)=?,
@@ -180,8 +180,7 @@ let createElement =
       ~strikethrough: option(bool)=?,
       ~color: option(ColorName.colorName)=?,
       ~backgroundColor: option(ColorName.colorName)=?,
-      ~children: list(string),
-      (),
+      inputs: list(string),
     ) => {
   let color = PastelUtils.(optionMap(color, colorNameToColor));
   let backgroundColor =
@@ -198,8 +197,7 @@ let createElement =
     ~strikethrough?,
     ~color?,
     ~backgroundColor?,
-    ~children,
-    (),
+    inputs,
   );
 };
 
@@ -210,7 +208,7 @@ let implementation: PastelImplementation.t = {
   length,
   unformattedText,
   partition,
-  createElement,
+  make,
   emptyStyle: StateMachine.initialState,
   parse: HumanReadableStateMachine.parseStateRegions,
   apply: HumanReadableStateMachine.resolveStateRegions,

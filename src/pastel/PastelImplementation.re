@@ -12,7 +12,7 @@ type t = {
   length: string => int,
   unformattedText: string => string,
   partition: (int, string) => (string, string),
-  createElement:
+  make:
     (
       ~reset: bool=?,
       ~bold: bool=?,
@@ -24,8 +24,7 @@ type t = {
       ~strikethrough: bool=?,
       ~color: ColorName.colorName=?,
       ~backgroundColor: ColorName.colorName=?,
-      ~children: list(string),
-      unit
+      list(string),
     ) =>
     string,
   emptyStyle: StateMachine.state,
