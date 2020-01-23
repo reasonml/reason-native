@@ -1,3 +1,7 @@
+# January 15, 2020
+### Pastel 0.3.0
+* Add `Pastel.make` to provide better support for those not using the JSX PPX (e.g. OCaml)
+
 # December 20, 2019
 ### Pastel 0.2.3
 * bugfix for input "<like>" "<this>" in human readable mode

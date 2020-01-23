@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/pastel",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Native Reason ANSI terminal styling with an awesome API",
   "author": "Facebook Engineering",
   "homepage": "https://reason-native.com",
