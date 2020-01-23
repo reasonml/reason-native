@@ -12,6 +12,17 @@ type t('ext, 'env, 'describeConfigState);
 type testSuite =
   | TestSuite(t('ext, 'env, 'describeConfigState)): testSuite;
 
+type mode =
+  | Only
+  | Normal
+  | Skip;
+
+type customTest('ext, 'env) = {
+  mode,
+  name: string,
+  implementation: Rely.Test.testUtils('ext, 'env) => unit,
+};
+
 let withLifecycle:
   (
     RelyInternal.TestLifecycle.defaultLifecycle =>
@@ -48,6 +59,9 @@ let withPassingTests:
   t('ext, 'env, describeConfigFinalized);
 let withSkippedTests:
   (int, t('ext, 'env, 'describeConfigState)) =>
+  t('ext, 'env, describeConfigFinalized);
+let withCustomTest:
+  (customTest('ext, 'env), t('ext, 'env, 'describeConfigState)) =>
   t('ext, 'env, describeConfigFinalized);
 
 let skipSuite:
