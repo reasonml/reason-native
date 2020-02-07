@@ -1,0 +1,6 @@
+CLI › Logging
+<yellow>[Warning] Both options `--quiet` and `--verbose` were specified. Using verbose behavior.</resetColor>
+<blue>[Debug] debug</resetColor>
+info
+<yellow>[Warning] warn</resetColor>
+<red>[Error] error</resetColor>

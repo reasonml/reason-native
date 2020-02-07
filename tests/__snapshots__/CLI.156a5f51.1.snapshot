@@ -1,0 +1,3 @@
+CLI › Invalid option names
+<red>[Fatal] Invalid option name: app. Option names must start with one or two dashes (- or --), a letter, then only letters,
+digits, or dashes.</resetColor>

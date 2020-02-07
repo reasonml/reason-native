@@ -1,0 +1,4 @@
+CLI › Argument parsing
+--opt1: option 1 value
+arg1: true
+arg2: false

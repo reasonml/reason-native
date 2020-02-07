@@ -1,0 +1,2 @@
+CLI › Required argument after optional
+<red>[Fatal] Required arguments cannot appear after optional ones. Check argument: app</resetColor>

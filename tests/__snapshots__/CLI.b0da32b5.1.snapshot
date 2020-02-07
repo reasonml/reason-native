@@ -1,0 +1,2 @@
+CLI › Conflicting option names
+<red>[Fatal] Provided option name: -app is too similar to existing option: --app or one of its aliases.</resetColor>

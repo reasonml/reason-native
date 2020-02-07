@@ -1,0 +1,5 @@
+CLI › Logging
+<blue>[Debug] debug</resetColor>
+info
+<yellow>[Warning] warn</resetColor>
+<red>[Error] error</resetColor>

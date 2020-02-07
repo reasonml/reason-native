@@ -1,0 +1,5 @@
+CLI › Logging
+[Debug] debug
+info
+[Warning] warn
+[Error] error

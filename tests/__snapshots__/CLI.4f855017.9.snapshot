@@ -1,0 +1,3 @@
+CLI › Conflicting command names
+<red>[Fatal] Provided command name: help is the same as existing command: help or one of its aliases. (Note that command help
+is automatically added)</resetColor>

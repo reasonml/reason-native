@@ -1,0 +1,4 @@
+CLI › Logging
+info
+<yellow>[Warning] warn</resetColor>
+<red>[Error] error</resetColor>

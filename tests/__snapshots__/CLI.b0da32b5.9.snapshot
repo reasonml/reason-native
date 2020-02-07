@@ -1,0 +1,3 @@
+CLI › Conflicting option names
+<red>[Fatal] Provided option name: --help is too similar to existing option: --help or one of its aliases. (Note that option
+--help is automatically added)</resetColor>

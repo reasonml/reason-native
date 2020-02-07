@@ -1,0 +1,35 @@
+{
+    "name": "@reason-native/cli",
+    "version": "0.0.0",
+    "author": "Facebook Engineering",
+    "homepage": "https://reason-native.com",
+    "esy-prepublish-generate-opam": true,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/facebookexperimental/reason-native"
+    },
+    "license": "MIT",
+    "keywords": [
+      "cli",
+      "reasonml",
+      "reason",
+      "ocaml",
+      "esy"
+    ],
+    "esy": {
+      "build": "dune build -p cli"
+    },
+    "scripts": {
+      "release": "node ./scripts/esy-prepublish.js fs.json"
+    },
+    "dependencies": {
+      "@opam/dune": "*",
+      "@esy-ocaml/reason": "< 4.0.0",
+      "ocaml": "^4.2.0"
+    },
+    "devDependencies": {
+      "@opam/merlin": "*",
+      "ocaml": "~4.6.0"
+    }
+  }
+  

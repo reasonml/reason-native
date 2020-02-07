@@ -1,0 +1,2 @@
+CLI › Conflicting command names
+<red>[Fatal] Provided command name: foo is the same as existing command: foo or one of its aliases.</resetColor>
