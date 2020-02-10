@@ -433,14 +433,14 @@ let run = (runConfig: RunConfig.t, testSuites) =>
     let testNamePattern = ref(None);
     let testSuites =
       switch (runConfig.testNamePattern) {
-      | Some(pattern) => {
-        testNamePattern.contents = Some(String.concat("", ["\\", pattern, "\\i"]));
+      | Some(pattern) =>
+        testNamePattern.contents =
+          Some(String.concat("", ["\\", pattern, "\\i"]));
         TestSuiteFilter.filterTestSuitesByRegex(
           testSuites,
           Re.Pcre.regexp(~flags=[`CASELESS], pattern),
         );
-      }
-        
+
       | None => testSuites
       };
     module RunnerConfig = {
@@ -448,7 +448,8 @@ let run = (runConfig: RunConfig.t, testSuites) =>
       let maxNumStackFrames = 3;
       let updateSnapshots = runConfig.updateSnapshots;
       let ci = runConfig.ci;
-      let removeUnusedSnapshots = CommonOption.isNone(runConfig.testNamePattern)
+      let removeUnusedSnapshots =
+        CommonOption.isNone(runConfig.testNamePattern);
       let testNamePattern = testNamePattern.contents;
       let reporters =
         runConfig.reporters
@@ -474,36 +475,3 @@ let run = (runConfig: RunConfig.t, testSuites) =>
 
     Runner.runTestSuites(testSuites);
   });
-
-let cli = testSuites => {
-  let cliArgs = CLI.parseArgs(Sys.argv);
-
-  let shouldUpdateSnapshots = cliArgs.updateSnapshots |?: false;
-
-  let ci = cliArgs.ciMode |?: false;
-
-  let onlyPrintDetailsForFailedSuites =
-    cliArgs.onlyPrintDetailsForFailedSuites |?: false;
-
-  let config =
-    RunConfig.(
-      initialize()
-      |> updateSnapshots(shouldUpdateSnapshots)
-      |> ciMode(ci)
-      |> withTestNamePattern(cliArgs.testNamePattern)
-      |> withReporters([
-           Custom(
-             TerminalReporter.createTerminalReporter(
-               ~onlyPrintDetailsForFailedSuites,
-               {
-                 printEndline: print_endline,
-                 printNewline: print_newline,
-                 printString: print_string,
-                 flush,
-               },
-             ),
-           ),
-         ])
-    );
-  run(config, testSuites);
-};
