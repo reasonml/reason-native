@@ -13,6 +13,8 @@ open Describe;
 open Util;
 open RunConfig;
 open Reporter;
+open CommonOption.Infix;
+
 exception PendingTestException(string);
 exception InvalidInCIMode(string);
 
@@ -26,6 +28,8 @@ module SnapshotModuleSet =
 module type TestSuiteRunnerConfig = {
   let getTime: unit => Time.t;
   let updateSnapshots: bool;
+  let removeUnusedSnapshots: bool;
+  let testNamePattern: option(string);
   let maxNumStackFrames: int;
   let ci: bool;
   let reporters: list(Reporter.t);
@@ -320,12 +324,15 @@ module Make = (Config: TestSuiteRunnerConfig) => {
            snapshotModule;
          });
 
-    let _ =
-      List.iter(
-        (module SnapshotModule: Snapshot.Sig) =>
-          SnapshotModule.removeUnusedSnapshots(),
-        uniqueModules,
-      );
+    if (Config.removeUnusedSnapshots) {
+      let _ =
+        List.iter(
+          (module SnapshotModule: Snapshot.Sig) =>
+            SnapshotModule.removeUnusedSnapshots(),
+          uniqueModules,
+        );
+      ();
+    };
 
     let aggregateSnapshotResult =
       List.fold_left(
@@ -371,7 +378,12 @@ module Make = (Config: TestSuiteRunnerConfig) => {
            | TestSuite({name}, _, _, _) => {name: name}
            }
          );
-    notifyReporters(r => r.onRunStart({testSuites: reporterTestSuites}));
+    notifyReporters(r =>
+      r.onRunStart({
+        testSuites: reporterTestSuites,
+        testNamePattern: Config.testNamePattern,
+      })
+    );
     let result =
       testSuites
       |> List.fold_left(
@@ -416,20 +428,36 @@ module Make = (Config: TestSuiteRunnerConfig) => {
   };
 };
 
-let run = (config: RunConfig.t, testSuites) =>
+let run = (runConfig: RunConfig.t, testSuites) =>
   Util.withBacktrace(() => {
+    let testNamePattern = ref(None);
+    let testSuites =
+      switch (runConfig.testNamePattern) {
+      | Some(pattern) =>
+        testNamePattern.contents =
+          Some(String.concat("", ["\\", pattern, "\\i"]));
+        TestSuiteFilter.filterTestSuitesByRegex(
+          testSuites,
+          Re.Pcre.regexp(~flags=[`CASELESS], pattern),
+        );
+
+      | None => testSuites
+      };
     module RunnerConfig = {
-      let getTime = config.getTime;
+      let getTime = runConfig.getTime;
       let maxNumStackFrames = 3;
-      let updateSnapshots = config.updateSnapshots;
-      let ci = config.ci;
+      let updateSnapshots = runConfig.updateSnapshots;
+      let ci = runConfig.ci;
+      let removeUnusedSnapshots =
+        CommonOption.isNone(runConfig.testNamePattern);
+      let testNamePattern = testNamePattern.contents;
       let reporters =
-        config.reporters
+        runConfig.reporters
         |> List.map(reporter =>
              switch (reporter) {
              | RunConfig.Default =>
                TerminalReporter.createTerminalReporter(
-                 ~getTime=config.getTime,
+                 ~getTime=runConfig.getTime,
                  {
                    printEndline: print_endline,
                    printNewline: print_newline,
@@ -441,41 +469,9 @@ let run = (config: RunConfig.t, testSuites) =>
              | Custom(reporter) => reporter
              }
            );
-      let onTestFrameworkFailure = config.onTestFrameworkFailure;
+      let onTestFrameworkFailure = runConfig.onTestFrameworkFailure;
     };
     module Runner = Make(RunnerConfig);
+
     Runner.runTestSuites(testSuites);
   });
-
-let cli = testSuites => {
-  let hasFlag = flag =>
-    Array.length(Sys.argv) >= 2 && Array.exists(arg => arg == flag, Sys.argv);
-
-  let shouldUpdateSnapshots = hasFlag("-u");
-
-  let ci = hasFlag("--ci");
-
-  let onlyPrintDetailsForFailedSuites =
-    hasFlag("--onlyPrintDetailsForFailedSuites");
-
-  let config =
-    RunConfig.(
-      initialize()
-      |> updateSnapshots(shouldUpdateSnapshots)
-      |> ciMode(ci)
-      |> withReporters([
-           Custom(
-             TerminalReporter.createTerminalReporter(
-               ~onlyPrintDetailsForFailedSuites,
-               {
-                 printEndline: print_endline,
-                 printNewline: print_newline,
-                 printString: print_string,
-                 flush,
-               },
-             ),
-           ),
-         ])
-    );
-  run(config, testSuites);
-};

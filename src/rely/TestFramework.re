@@ -22,7 +22,7 @@ type combineResult = {
 let combine = libraries => {
   let testLibrary = List.flatten(libraries);
   let run = config => TestSuiteRunner.run(config, testLibrary);
-  let cli = () => TestSuiteRunner.cli(testLibrary);
+  let cli = () => RelyCLI.cli(Sys.argv, testLibrary);
 
   {testLibrary, run, cli};
 };
@@ -248,7 +248,7 @@ module MakeInternal =
   let run = (config: RunConfig.t) =>
     TestSuiteRunner.run(config, testSuites^);
 
-  let cli = () => TestSuiteRunner.cli(testSuites^);
+  let cli = () => RelyCLI.cli(Sys.argv, testSuites^);
 
   let toLibrary = () => testSuites^;
 };

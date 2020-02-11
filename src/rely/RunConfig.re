@@ -19,6 +19,7 @@ type reporter =
 type t = {
   updateSnapshots: bool,
   onTestFrameworkFailure: unit => unit,
+  testNamePattern: option(string),
   reporters: list(reporter),
   getTime: unit => Time.t,
   ci: bool,
@@ -30,6 +31,7 @@ let initialize = () => {
   reporters: [Default],
   getTime: Clock.getTime,
   ci: false,
+  testNamePattern: None,
 };
 
 let updateSnapshots: (bool, t) => t =
@@ -46,4 +48,9 @@ let internal_do_not_use_get_time = (fn, cfg: t) => {...cfg, getTime: fn};
 let onTestFrameworkFailure = (onTestFrameworkFailure, config) => {
   ...config,
   onTestFrameworkFailure,
+};
+
+let withTestNamePattern = (testNamePattern, config) => {
+  ...config,
+  testNamePattern,
 };

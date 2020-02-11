@@ -11,7 +11,8 @@ type testSuite = {
 };
 
 type relyRunInfo = {
-  testSuites: list(testSuite)
+  testSuites: list(testSuite),
+  testNamePattern: option(string),
 };
 
 type aggregatedResult = AggregatedResult.t;
