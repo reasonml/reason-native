@@ -26,8 +26,9 @@ let cli = (argv, testSuites) => {
          "Runs Rely in CI mode (errors on usage of testOnly and describeOnly)",
          Optional(Bool),
        )
-    |> argument(
-         "testNamePattern",
+    |> option(
+         "--filter",
+         ~aliases=["-f"],
          "Only run tests matching the passed in pattern",
          Optional(String),
        )
@@ -43,7 +44,7 @@ let cli = (argv, testSuites) => {
              |> updateSnapshots(shouldUpdateSnapshots)
              |> ciMode(ci)
              |> withTestNamePattern(
-                  args.optionalString("testNamePattern"),
+                  options.optionalString("--filter"),
                 )
              |> withReporters([
                   Custom(
