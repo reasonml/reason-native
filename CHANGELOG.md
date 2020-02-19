@@ -1,3 +1,9 @@
+# February 18, 2020
+### Rely 3.2.0
+* Better command line interface (documentation of available options is now available along with several aliases)
+* Ability to filter which tests are run from the command line using `--filter` or `-f`
+* Bugfix for the injection of time for non-native compilation targets
+
 # January 15, 2020
 ### Pastel 0.3.0
 * Add `Pastel.make` to provide better support for those not using the JSX PPX (e.g. OCaml)
