@@ -1,3 +1,10 @@
+# February 21, 2020
+### Cli 0.0.1-alpha
+* Alpha version of CLI package, released for Rely bugfix
+
+### Rely 3.2.1
+* Release cli package in alpha so the new version of Rely can build properly
+
 # February 18, 2020
 ### Rely 3.2.0
 * Better command line interface (documentation of available options is now available along with several aliases)

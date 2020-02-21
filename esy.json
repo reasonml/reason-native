@@ -23,6 +23,7 @@
     },
     "install": [
       "esy-installer console.install",
+      "esy-installer cli.install",
       "esy-installer file-context-printer.install",
       "esy-installer fp.install",
       "esy-installer fs.install",
