@@ -1,6 +1,6 @@
 {
   "name": "@reason-native/rely",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "A native Reason test runner that is heavily inspired by Jest",
   "author": "Facebook Engineering",
   "homepage": "https://reason-native.com",
@@ -34,6 +34,7 @@
     "@esy-ocaml/reason": "< 4.0.0",
     "@opam/re": "*",
     "ocaml": "^4.4.0",
+    "@reason-native/cli": "0.0.1-alpha",
     "@reason-native/pastel": "*",
     "@reason-native/file-context-printer": "*",
     "@opam/junit": "*"
