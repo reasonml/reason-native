@@ -13,7 +13,7 @@ depends: [
   "reason"   {< "4.0.0"}
   "re"
   "ocaml"   {>= "4.4.0" & < "5.0.0"}
-  "cli"   {0.0.1-alpha"}
+  "cli"   {"0.0.1-alpha"}
   "pastel"
   "file-context-printer"
   "junit"
