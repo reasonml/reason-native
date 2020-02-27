@@ -51,16 +51,15 @@ const opamifyVersion = v => {
       return '>= "' + postCaret + '" & < "' + (parseInt(postCaret) + 1) + '"';
     }
   } else {
-    return v.replace(/\s+<\s+/g, s => '" & < "')
+    return `"${v}"`.replace(/\s+<\s+/g, s => '" & < "')
         .replace(/\s+<=\s*/g, s => '" & <= "')
-        .replace(/^<\s+/g, s => '< "')
-        .replace(/^<=\s*/g, s => '<= "')
+        .replace(/^"<\s+/g, s => '< "')
+        .replace(/^"<=\s*/g, s => '<= "')
 
         .replace(/\s+>\s+/g, s => '" & > "')
         .replace(/\s+>=/g, s => '" & >= "')
-        .replace(/^>\s+/g, s => '> "')
-        .replace(/^>=\s*/g, s => '>= "')
-        + '"';
+        .replace(/^">\s+/g, s => '> "')
+        .replace(/^">=\s*/g, s => '>= "');
   }
 };
 const depMap = (o) => {
