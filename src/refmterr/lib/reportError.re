@@ -48,24 +48,38 @@ module Make = (Styl: Stylish.StylishSig) => {
     switch (refmttypePath) {
     | None => types
     | Some(path) =>
-      let types = concatList("\\\"", List.map(normalizeType, types));
-      let cmd = path ++ (sp({| "%s"|}))(types);
-      let input = Unix.open_process_in(cmd);
+      let typesIn = types;
+      /*  http://pleac.sourceforge.net/pleac_ocaml/processmanagementetc.html */
+      /* Create a pipe for the subprocess output. */
       let result = {contents: []};
-      try (
+      let types = concatList("\"", List.map(normalizeType, types));
+      let (readme, writeme) = Unix.pipe();
+      let pid =
+        Unix.create_process(
+          path,
+          [|path, types|],
+          Unix.stdin,
+          writeme,
+          Unix.stderr,
+        );
+      Unix.close(writeme);
+      let in_channel = Unix.in_channel_of_descr(readme);
+      let lines = ref([]);
+      try(
         while (true) {
           result.contents = [
             Re.Pcre.substitute(
               ~rex=refmttypeNewlineR,
               ~subst=_ => "\n",
-              input_line(input),
+              input_line(in_channel),
             ),
             ...result.contents,
           ];
         }
       ) {
-      | End_of_file => ignore(Unix.close_process_in(input))
+      | End_of_file => ()
       };
+      Unix.close(readme);
       List.rev(result^);
     };
 
