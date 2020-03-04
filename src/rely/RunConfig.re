@@ -13,7 +13,6 @@ type printer = {
 
 type reporter =
   | Default
-  | JUnit(string)
   | Custom(Reporter.t);
 
 type t = {

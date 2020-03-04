@@ -20,7 +20,6 @@ include (module type of Describe);
 module RunConfig: {
   type reporter =
     | Default
-    | JUnit(string)
     | Custom(Reporter.t);
 
   type t;

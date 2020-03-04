@@ -1,7 +1,7 @@
 {
-  "name": "@reason-native/rely",
-  "version": "4.0.0",
-  "description": "A native Reason test runner that is heavily inspired by Jest",
+  "name": "@reason-native/rely-junit-reporter",
+  "version": "1.0.0",
+  "description": "A reporter for logging Rely results to junit",
   "author": "Facebook Engineering",
   "homepage": "https://reason-native.com",
   "esy-prepublish-generate-opam": true,
@@ -20,23 +20,24 @@
     "snapshot",
     "rely",
     "reason-native",
-    "native"
+    "native",
+    "junit",
+    "rely-junit-reporter",
+    "ci",
   ],
   "esy": {
-    "build": "dune build -p rely",
-    "install": "esy-installer rely.install"
+    "build": "dune build -p rely-junit-reporter",
+    "install": "esy-installer rely-junit-reporter.install"
   },
   "scripts": {
-    "release": "node ./scripts/esy-prepublish.js rely.json"
+    "release": "node ./scripts/esy-prepublish.js rely-junit-reporter.json"
   },
   "dependencies": {
     "@opam/dune": "*",
     "@esy-ocaml/reason": "< 4.0.0",
-    "@opam/re": "*",
     "ocaml": "^4.4.0",
-    "@reason-native/cli": "0.0.1-alpha",
-    "@reason-native/pastel": "*",
-    "@reason-native/file-context-printer": "*"
+    "@reason-native/rely": "*",
+    "@opam/junit": "*"
   },
   "devDependencies": {
     "@esy-ocaml/merlin": "*"

@@ -18,6 +18,7 @@
     qcheck-core
     qcheck-rely
     sexplib0
+    rely-junit-reporter
   )
   (modules (:standard \ TestDev TestCi))
 )

@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */;
-let testResultToTestCase = (testResult: Reporter.testResult) => {
+let testResultToTestCase = (testResult: Rely.Reporter.testResult) => {
   let time =
     switch (testResult.duration) {
     | Some(Seconds(s)) => s
@@ -44,7 +44,7 @@ let testResultToTestCase = (testResult: Reporter.testResult) => {
   };
 };
 
-let createJUnitReporter = fileName: Reporter.t => {
+let createJUnitReporter = fileName: Rely.Reporter.t => {
   let suites = ref([]);
 
   {
