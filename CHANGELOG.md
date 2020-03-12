@@ -1,4 +1,10 @@
 # February 21, 2020
+### Rely 4.0.0
+* separate existing Rely junit reporter into separate package to remove transitive dependencies on tyxml and js_of_ocaml
+
+### rely-junit-reporter 1.0.0
+* spin off existing Rely junit reporter into separate package to remove transitive dependencies on tyxml and js_of_ocaml
+
 ### Cli 0.0.1-alpha
 * Alpha version of CLI package, released for Rely bugfix
 

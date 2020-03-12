@@ -1,0 +1,6 @@
+(library
+   (name RelyJUnitReporter)
+   (public_name rely-junit-reporter)
+   (libraries rely.lib junit)
+)
+(include_subdirs unqualified)

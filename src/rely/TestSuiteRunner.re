@@ -465,7 +465,6 @@ let run = (runConfig: RunConfig.t, testSuites) =>
                    flush,
                  },
                )
-             | JUnit(path) => JunitReporter.createJUnitReporter(path)
              | Custom(reporter) => reporter
              }
            );
