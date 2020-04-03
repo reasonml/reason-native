@@ -2,6 +2,7 @@
 [2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_IncompatibleType/type_IncompatibleType_1.ml", line 1, characters 3-6:[22m
 [2m# [22m[2mError: This expression has type int but an expression was expected of type[22m
 [2m# [22m[2m         bool[22m
+[2m# [22m[2m       because it is in the condition of an if-statement[22m
 
 
 [7m[24m[22m[1m[31m ERROR [27m[24m[22m[39m [27m[4m[22m[36mtests/__tests__/refmterr/__fixtures__/type_IncompatibleType/type_IncompatibleType_1.ml[27m[24m[22m[39m[27m[4m[22m[2m:1 3-6[27m[24m[22m 
@@ -10,8 +11,13 @@
 
 [1mThis type doesn't match what is expected.[22m
 
-  This type: [27m[24m[22m[1m[31mint[27m[24m[22m[39m
-  Expecting: [27m[24m[22m[1m[32mbool[27m[24m[22m[39m
+  This type:
+    [27m[24m[22m[1m[31mint[27m[24m[22m[39m
+
+  Expecting:
+    [27m[24m[22m[1m[32mML: bool[27m[24m[22m[39m[2m
+    Equals
+    [22m[27m[24m[22m[1m[32m       because it is in the condition of an if-statement[27m[24m[22m[39m
 
 
 
