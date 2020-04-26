@@ -45,6 +45,8 @@ Let's start by creating a library for our tests. First create an opam file for y
    ; the purposes of this example we are only depending on the test runner itself
    (libraries rely.lib )
    (modules (:standard \ RunTests))
+   ; Disable warnings conflicting with Rely syntax, see issue #38
+   (flags (:standard -w -9)) 
 )
 (executable
   ; the for the library is automatically detected because of the name, but we
@@ -56,6 +58,8 @@ Let's start by creating a library for our tests. First create an opam file for y
     my-lib-test.lib
   )
   (modules RunTests)
+  ; Disable warnings conflicting with Rely syntax, see issue #38
+  (flags (:standard -w -9)) 
 )
 ```
 
