@@ -21,15 +21,19 @@
 CAMLprim value sh_get_folder_path(value nFolder, value dwFlags)
 {
   CAMLparam2(nFolder, dwFlags);
+  CAMLlocal2(ret, path);
 #ifdef _WIN32
-  CAMLlocal1(path);
   TCHAR pszPath[MAX_PATH];
   if (SUCCEEDED(SHGetFolderPath(NULL, Int_val(nFolder), NULL, Int_val(dwFlags), pszPath))) {
     path = caml_copy_string(pszPath);
+    ret = caml_alloc(1, 0); /* Some */
+    Store_field(ret, 0, path);
   } else {
-    caml_failwith("sh_get_folder_path");
+    ret = Val_int(0); /* None */
   }
+#else
+  ret = Val_int(0); /* None */
 #endif
-  CAMLreturn(Val_unit);
+  CAMLreturn(ret);
 }
 
