@@ -17,9 +17,7 @@ describe("Dir", ({test}) => {
     let appData = Dir.App.data(~appIdentifier="the.best.app");
     module FreshDir =
       Dir.Snapshot({});
-    expect.string(Fp.toString(FreshDir.home())).toEqual(
-      Fp.toString(home),
-    );
+    expect.string(Fp.toString(FreshDir.home())).toEqual(Fp.toString(home));
     expect.string(Fp.toString(FreshDir.cache())).toEqual(
       Fp.toString(cache),
     );

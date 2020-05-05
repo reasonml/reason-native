@@ -128,7 +128,7 @@ let normalizeIfWindows = pathStr => {
 let getOptionalEnvAbsoluteExn = s => {
   switch (Sys.getenv(s)) {
   | exception Not_found => None
-  | txt => txt |> normalizeIfWindows |> Fp.absoluteExn |> (v => Some(v));
+  | txt => txt |> normalizeIfWindows |> Fp.absoluteExn |> (v => Some(v))
   };
 };
 
@@ -141,9 +141,10 @@ let getEnvAbsoluteExn = s =>
   | txt => txt |> normalizeIfWindows |> Fp.absoluteExn
   };
 
-let getOrThrow = fun
-| Some(v) => v
-| None => raise(Invalid_argument("Expected some"));
+let getOrThrow =
+  fun
+  | Some(v) => v
+  | None => raise(Invalid_argument("Expected some"));
 
 /**
  * Allows mocking out the windows variables on other platforms for testing.
