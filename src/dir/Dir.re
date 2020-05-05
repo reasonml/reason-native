@@ -128,7 +128,7 @@ let normalizeIfWindows = pathStr => {
 let getOptionalEnvAbsoluteExn = s => {
   switch (Sys.getenv(s)) {
   | exception Not_found => None
-  | txt => txt |> normalizeIfWindows |> Fp.absoluteExn |> Option.some
+  | txt => txt |> normalizeIfWindows |> Fp.absoluteExn |> (v => Some(v));
   };
 };
 
@@ -141,6 +141,10 @@ let getEnvAbsoluteExn = s =>
   | txt => txt |> normalizeIfWindows |> Fp.absoluteExn
   };
 
+let getOrThrow = fun
+| Some(v) => v
+| None => raise(Invalid_argument("Expected some"));
+
 /**
  * Allows mocking out the windows variables on other platforms for testing.
  */
@@ -149,7 +153,7 @@ let shGetFolderPath = code => {
   let envVarMock = WinConst.knownFolderToMockEnvVar(code);
   if (isWin) {
     let maybePath = sh_get_folder_path(csidl, shGetFolderPathCurrent);
-    maybePath |> Option.get |> normalizePathSeparator |> Fp.absoluteExn;
+    maybePath |> getOrThrow |> normalizePathSeparator |> Fp.absoluteExn;
   } else {
     let opt = getOptionalEnvAbsoluteExn(envVarMock);
     switch (opt) {
