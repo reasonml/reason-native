@@ -9,7 +9,12 @@ open TestFramework;
 
 external reraise: exn => _ = "%reraise";
 
-let unresolvedExePath = Fp.absoluteExn(Sys.executable_name);
+let normalizePathSeparator = {
+  let backSlashRegex = Str.regexp("\\\\");
+  pathStr => pathStr |> Str.global_replace(backSlashRegex, "/");
+};
+
+let unresolvedExePath = Fp.absoluteExn(Sys.executable_name |> normalizePathSeparator);
 let resolvedExePath = Fs.resolveLinkExn(unresolvedExePath);
 let exeDir = Fp.dirName(resolvedExePath);
 let testDir = Fp.At.(exeDir / "testDir");
