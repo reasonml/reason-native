@@ -12,42 +12,13 @@
  * All directories are returned as `Fp.t`.
  *
  */
-external sh_get_folder_path: (int, 'flags) => option(string) =
+external sh_get_folder_path : (int, 'flags) => option(string) =
   "sh_get_folder_path";
 let shGetFolderPathCurrent = 0;
 let shGetFolderPathDefault = 1;
 
-let getUname = () => {
-  let ic = Unix.open_process_in("uname");
-  let uname = String.trim(input_line(ic));
-  close_in(ic);
-  uname;
-};
-
-type windows =
-  | Cygwin
-  | Win32;
-type platform =
-  | Linux
-  | Windows(windows)
-  | Darwin;
-
-let platform =
-  lazy(
-    if (Sys.unix) {
-      switch (getUname()) {
-      | "Darwin" => Darwin
-      | _ => Linux
-      };
-    } else if (Sys.cygwin) {
-      Windows(Cygwin);
-    } else {
-      Windows(Win32);
-    }
-  );
-
 let isWin =
-  switch (Lazy.force(platform)) {
+  switch (Lazy.force(Fp.platform)) {
   | Windows(_) => true
   | _ => false
   };
@@ -108,29 +79,15 @@ module WinConst = {
 };
 
 /*
- * The [Fs] API expects all slashes to be normalized to forward slashes,
- * so we need to make sure we match that constraint for Windows.
- */
-let normalizePathSeparator = {
-  let backSlashRegex = Str.regexp("\\\\");
-  pathStr => pathStr |> Str.global_replace(backSlashRegex, "/");
-};
-
-let normalizeIfWindows = pathStr => {
-  Sys.win32 ? normalizePathSeparator(pathStr) : pathStr;
-};
-
-/*
  * Might want to rethink the ones that throw on invalid absolute paths in case
  * an application wants to let the app startup with a bad environment, then fix
  * it, and then reload all the env here.
  */
-let getOptionalEnvAbsoluteExn = s => {
+let getOptionalEnvAbsoluteExn = s =>
   switch (Sys.getenv(s)) {
   | exception Not_found => None
-  | txt => txt |> normalizeIfWindows |> Fp.absoluteExn |> (v => Some(v))
+  | txt => txt |> Fp.absoluteCurrentPlatformExn |> (v => Some(v))
   };
-};
 
 let getEnvAbsoluteExn = s =>
   switch (Sys.getenv(s)) {
@@ -138,7 +95,7 @@ let getEnvAbsoluteExn = s =>
     raise(
       Invalid_argument("Environment variable " ++ s ++ " does not exist."),
     )
-  | txt => txt |> normalizeIfWindows |> Fp.absoluteExn
+  | txt => txt |> Fp.absoluteCurrentPlatformExn
   };
 
 let getOrThrow = (~msg) =>
@@ -156,8 +113,7 @@ let shGetFolderPath = code => {
     let maybePath = sh_get_folder_path(csidl, shGetFolderPathCurrent);
     maybePath
     |> getOrThrow(~msg="Unable to get path for: " ++ envVarMock)
-    |> normalizePathSeparator
-    |> Fp.absoluteExn;
+    |> Fp.absoluteCurrentPlatformExn;
   } else {
     let opt = getOptionalEnvAbsoluteExn(envVarMock);
     switch (opt) {
@@ -250,9 +206,7 @@ module Snapshot = (()) => {
     /**
    * Doesn't fail on Windows, and can even be used on windows.
    */
-    let home = () => {
-      isWin ? Windows.home() : getEnvAbsoluteExn("HOME");
-    };
+    let home = () => isWin ? Windows.home() : getEnvAbsoluteExn("HOME");
     let cache = () =>
       switch (getOptionalEnvAbsoluteExn("XDG_CACHE_HOME")) {
       | None => Fp.At.(home() / ".cache")
@@ -354,7 +308,7 @@ module Snapshot = (()) => {
   };
 
   let platformMod =
-    switch (Lazy.force(platform)) {
+    switch (Lazy.force(Fp.platform)) {
     | Windows(windows) => ((module Windows): (module Base))
     | Darwin => (module Darwin)
     | Linux => (module Linux)
