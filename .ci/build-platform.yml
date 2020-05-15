@@ -70,8 +70,8 @@ jobs:
       - script: "esy build"
         displayName: "esy build"
       - template: utils/create-docs.yml
-      - script: "esy x TestDev.exe --filter Dir"
-        displayName: "TEMPORARY: Run subset of tests cross-platform"
+      - script: "esy x TestDev.exe
+        displayName: "esy x TestDev.exe"
       # TODO: Fix full test run!
       # - script: "esy test"
       #  displayName: "Test command"
