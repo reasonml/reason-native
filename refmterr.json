@@ -1,6 +1,6 @@
 {
   "name": "refmterr",
-  "version": "3.3.0",
+  "version": "3.3.2",
   "description": "Reason Formatting of Errors",
   "author": "Facebook Engineering",
   "homepage": "https://reason-native.com",
@@ -9,7 +9,7 @@
     "@opam/dune": "*",
     "@opam/re": "*",
     "@esy-ocaml/reason": "< 4.0.0",
-    "ocaml": " >= 4.2.0 < 4.10.0",
+    "ocaml": " >= 4.2.0 < 4.11.0",
     "@reason-native/pastel": "*",
     "@opam/atdgen": "*",
     "@reason-native/console": "*"
