@@ -72,9 +72,6 @@ jobs:
       - template: utils/create-docs.yml
       - script: "esy x TestDev.exe
         displayName: "esy x TestDev.exe"
-      # TODO: Fix full test run!
-      # - script: "esy test"
-      #  displayName: "Test command"
       - script: "esy release"
         displayName: "esy release"
       - template: utils/publish-build-cache.yml
