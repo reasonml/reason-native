@@ -70,7 +70,7 @@ jobs:
       - script: "esy build"
         displayName: "esy build"
       - template: utils/create-docs.yml
-      - script: "esy x TestDev.exe
+      - script: "esy x TestDev.exe"
         displayName: "esy x TestDev.exe"
       - script: "esy release"
         displayName: "esy release"
