@@ -75,7 +75,7 @@ jobs:
         condition: eq(variables['AGENT.OS'], 'Windows_NT')
       - script: "esy x TestDev.exe"
         displayName: "esy x TestDev.exe"
-        condition: neq(variables['AGENT.OS'], 'Windows_NT')
+        condition: ne(variables['AGENT.OS'], 'Windows_NT')
       - script: "esy release"
         displayName: "esy release"
       - template: utils/publish-build-cache.yml
