@@ -1,5 +1,6 @@
 (library
    (name PastelConsole)
+   (flags :standard -w -27 -w -9)
    (public_name pastel-console.lib)
    (libraries  console.lib pastel.lib )
   )

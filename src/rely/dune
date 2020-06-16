@@ -2,6 +2,7 @@
    (name Rely)
    (public_name rely.lib)
    (libraries rely.internal)
+   (flags :standard -w -23 -w -27 -w -32 -w -6 -w -9 -w -33)
    (modules Rely)
 )
 (
@@ -10,7 +11,7 @@
     (public_name rely.internal)
     (libraries pastel.lib file-context-printer.lib unix re cli.lib)
     (modules (:standard \ Rely))
-    (flags (:standard -w -30-9))
+    (flags (:standard -w -23 -w -27 -w -32 -w -6 -w -9 -w -30 -w -33))
 )
 (copy_files# ../../shared-src/common/*)
 ; objectPrinter lives separately from Common for now because Common has an

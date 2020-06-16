@@ -11,6 +11,7 @@
  (action  (run atdgen -t %{deps})))
 
 (library (name Refmterr)
+    (flags :standard -w -23 -w -27 -w -32 -w -33 -w -9 -w -6)
     (public_name refmterr.lib)
     (libraries atdgen re.pcre unix pastel.lib))
 (copy_files# ../../../shared-src/common/*)

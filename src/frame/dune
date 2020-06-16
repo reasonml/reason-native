@@ -1,5 +1,6 @@
 (library
    (name Frame)
    (public_name frame.lib)
+   (flags :standard -w -9 -w -27)
    (libraries pastel.lib re)
 )

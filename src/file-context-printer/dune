@@ -2,5 +2,6 @@
 (library
    (name FileContextPrinter)
    (public_name file-context-printer.lib)
+   (flags :standard -w -23 -w -27 -w -32 -w -6 -w -9)
    (libraries  str re pastel.lib )
 )

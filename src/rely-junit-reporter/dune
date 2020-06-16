@@ -1,6 +1,14 @@
 (library
    (name RelyJUnitReporter)
    (public_name rely-junit-reporter)
+   (flags :standard
+     ; Eventually fix the next line
+     -w -33 -w -6
+     ; Unused
+     -w -27
+     ; Allow incomplete record pattern
+     -w -9
+   )
    (libraries rely.lib junit)
 )
 (include_subdirs unqualified)

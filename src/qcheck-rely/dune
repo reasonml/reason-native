@@ -1,5 +1,6 @@
 (library
   (name QCheckRely)
   (public_name qcheck-rely)
+  (flags :standard -w -23 -w -27 -w -32)
   (libraries qcheck-core rely.lib console.lib)
 )

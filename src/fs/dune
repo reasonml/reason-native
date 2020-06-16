@@ -1,5 +1,6 @@
 (library
    (public_name fs.lib)
    (libraries fp unix)
+   (flags :standard -w -39 -w -27)
    (name Fs)
 )

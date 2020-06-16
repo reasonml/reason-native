@@ -2,6 +2,7 @@
 (library
    (name Pastel)
    (public_name pastel.lib)
+   (flags :standard -w -23 -w -27 -w -32 -w -33 -w -39)
    (libraries pastel.internal)
    (modules pastel)
 )
@@ -9,6 +10,7 @@
   (name PastelInternal)
   (public_name pastel.internal)
   (libraries re unix)
+  (flags :standard -w -23 -w -27 -w -32 -w -33)
   (c_names winCygPtySupport winConsoleColorsSupport)
   (js_of_ocaml
     (flags (--pretty))

@@ -3,6 +3,14 @@
   (public_name reason-native.tests)
   ; IMPORTANT: -linkall flag is required to include all tests.
   (ocamlopt_flags -linkall -g)
+  (flags :standard
+    ; Fix the following flags:
+    -w -33 -w -6 -w -39 -w -35
+    ; Unused
+    -w -27
+    ; Incomplete record pattern (okay)
+    -w -9
+    -w -33 -w -32)
   (libraries
     fp
     frame.lib

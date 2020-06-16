@@ -1,6 +1,7 @@
 (library
    (name Console)
    (public_name console.lib)
+   (flags :standard -w -23 -w -27 -w -32 -w -6 -w -9)
    (c_names  nativeChannels )
    (js_of_ocaml
      (flags ( --pretty ))
