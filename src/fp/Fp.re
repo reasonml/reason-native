@@ -1,7 +1,7 @@
 /**
  * Copyright 2004-present Facebook. All Rights Reserved.
  *
- * @emails oncall+ads_front_end_infra
+ * @emails oncall+ads_reason_infra
  */;
 
 let sep = "/";
