@@ -30,7 +30,7 @@ let folders = [
   ("type_RecordFieldNotBelong", 3, [], []),
   ("type_RecordFieldsUndefined", 1, [], []),
   ("type_UnboundModule", 2, [], []),
-  ("type_UnboundRecordField", 2, [], []),
+  ("type_UnboundRecordField", 3, [], []),
   ("type_UnboundTypeConstructor", 2, [], []),
   ("type_UnboundValue", 4, [], []),
   ("type_FunctionWrongLabel", 5, [], []),
