@@ -350,7 +350,7 @@ let type_UnboundModule = (err, _, _) => {
 
 /* need: if there's a hint, show which record type it is */
 let type_UnboundRecordField = (err, _, _) => {
-  let recordFieldR = {|Unbound record field (\w+)|};
+  let recordFieldR = {|Unbound record field ([\w.]+)|};
   get_match_maybe(recordFieldR, err)
   |>? (
     recordField => {
