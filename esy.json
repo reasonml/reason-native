@@ -51,7 +51,7 @@
     "@opam/junit": "*",
     "@opam/qcheck-core": "0.9",
     "@opam/merlin": "*",
-    "ocaml": "4.9.x",
+    "ocaml": " >= 4.2.0 < 4.11.0",
     "@opam/dune": "2.7.1",
     "@esy-ocaml/reason": "3.6.x",
     "@opam/sexplib0": "*",
