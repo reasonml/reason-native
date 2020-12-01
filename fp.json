@@ -27,9 +27,9 @@
     "release": "node ./scripts/esy-prepublish.js fp.json"
   },
   "dependencies": {
-    "@opam/dune": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
-    "ocaml": "^4.2.0"
+    "ocaml": " >= 4.2.0 < 4.11.0",
+    "@opam/dune": "< 2.8.0",
+    "@esy-ocaml/reason": "< 4.0.0"
   },
   "devDependencies": {
     "@opam/merlin": "*",
