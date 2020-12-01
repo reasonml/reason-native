@@ -22,7 +22,7 @@ module SnapshotModuleSet =
   Set.Make({
     type t = (TestSuite.contextId, module Snapshot.Sig);
     let compare = ((contextId1, module1), (contextId2, module2)) =>
-      Pervasives.compare(contextId1, contextId2);
+      compare(contextId1, contextId2);
   });
 
 module type TestSuiteRunnerConfig = {
