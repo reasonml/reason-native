@@ -37,3 +37,16 @@ CAMLprim value sh_get_folder_path(value nFolder, value dwFlags)
   CAMLreturn(ret);
 }
 
+CAMLprim value sh_is_osx(value vUnit)
+{
+  CAMLparam0();
+  CAMLlocal1(ret);
+
+#ifdef __APPLE__
+  ret = Val_bool(1);
+#else
+  ret = Val_bool(0);
+#endif
+
+  CAMLreturn(ret);
+}
