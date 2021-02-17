@@ -14,6 +14,9 @@
  */
 external sh_get_folder_path : (int, 'flags) => option(string) =
   "sh_get_folder_path";
+
+external sh_is_osx : unit => bool = "sh_is_osx";
+
 let shGetFolderPathCurrent = 0;
 let shGetFolderPathDefault = 1;
 
@@ -310,8 +313,7 @@ module Snapshot = (()) => {
   let platformMod =
     switch (Lazy.force(Fp.platform)) {
     | Windows(windows) => ((module Windows): (module Base))
-    | Darwin => (module Darwin)
-    | Linux => (module Linux)
+    | Posix => sh_is_osx() ? (module Darwin) : (module Linux)
     };
   include (val platformMod);
 };

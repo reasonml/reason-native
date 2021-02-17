@@ -59,13 +59,25 @@ let root: t(absolute);
 let home: t(relative);
 let dot: t(relative);
 
+/**
+The `platform` describes how path handling should be performed - using
+Windows-style paths, or Posix-style paths.
+
+In Windows-style Win32 paths, both the back-slash and forward-slash are considered
+viable path separators. In Posix style paths, only the forward-slash is used
+as a path separator
+
+Posix-style paths are used in the following systems:
+- Linux variants
+- Mac OSX
+- Cygwin on Windows
+*/
 type windows =
-  | Cygwin
-  | Win32;
+  | Win32
+  | Cygwin;
 type platform =
-  | Linux
   | Windows(windows)
-  | Darwin;
+  | Posix;
 
 let platform: Lazy.t(platform);
 

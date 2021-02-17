@@ -9,3 +9,7 @@
 function sh_get_folder_path(nFolder, dwFlags) {
   throw new Error("sh_get_folder_path not implemented for JS");
 }
+
+function sh_is_osx() {
+  return false;
+}
