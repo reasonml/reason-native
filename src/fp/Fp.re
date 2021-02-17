@@ -227,10 +227,7 @@ let parseFirstTokenRelative = token =>
   | DRIVE(l) => None
   };
 
-let normalizePathSeparator = {
-  let backSlashRegex = Str.regexp("\\\\");
-  pathStr => pathStr |> Str.global_replace(backSlashRegex, "/");
-};
+let normalizePathSeparator = pathStr => pathStr |> String.split_on_char('\\') |> String.concat("/");
 
 let absolutePlatform = (~fromPlatform, s) => {
   let s =
