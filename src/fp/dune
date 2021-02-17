@@ -2,4 +2,5 @@
    (public_name fp)
    (flags :standard -w -23 -w -27 -w -32 -w -39 -w -34)
    (name Fp)
+   (libraries str unix)
 )

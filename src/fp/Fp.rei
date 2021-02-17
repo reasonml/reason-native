@@ -59,6 +59,16 @@ let root: t(absolute);
 let home: t(relative);
 let dot: t(relative);
 
+type windows =
+  | Cygwin
+  | Win32;
+type platform =
+  | Linux
+  | Windows(windows)
+  | Darwin;
+
+let platform: Lazy.t(platform);
+
 /**
 Queries whether a path is absolute or relative. Use seldomly, and typically
 only on end-user input. Once queried, use the wrapped `t(absolute)/t(relative)`
@@ -101,8 +111,18 @@ let toDebugString: t('kind) => string;
 Parses an absolute path into a `Fp.t(absolute)` or returns `None` if the path
 is not a absolute, yet still valid. Raises Invalid_argument if the path is
 invalid.
+
+The `fromPlatform` argument specifies how the path should be parsed,
+as Windows supports backslashes as path separators.
  */
-let absolute: string => option(t(absolute));
+let absolutePlatform:
+  (~fromPlatform: platform, string) => option(t(absolute));
+
+/**
+Same as `Fp.absolutePlatform`, except `fromPlatform` is set to the current platform
+*/
+let absoluteCurrentPlatform: string => option(t(absolute));
+
 /**
  Parses a relative path into a `Fp.t(relative)` or returns `None` if the path
  is not a valid.
@@ -110,10 +130,18 @@ let absolute: string => option(t(absolute));
 let relative: string => option(t(relative));
 
 /**
- Same as `Fp.absolute` but raises a Invalid_argument if argument is not a
+ Same as `Fp.absolutePlatform` but raises a Invalid_argument if argument is not a
  valid absolute path.
+
+ The `fromPlatform` argument specifies how the path should be parsed,
+ as Windows supports backslashes as path separators.
  */
-let absoluteExn: string => t(absolute);
+let absolutePlatformExn: (~fromPlatform: platform, string) => t(absolute);
+
+/**
+ Same as `Fp.absolutePlatformPathExn`, with `fromPlatform` set to the current platform.
+ */
+let absoluteCurrentPlatformExn: string => t(absolute);
 
 /**
  Same as `Fp.relative` but raises a Invalid_argument if argument is not a
@@ -224,13 +252,11 @@ Tests whether or not an absolute path has a parent path. Absolute paths such as
 */
 let hasParentDir: t(absolute) => bool;
 
-
 /**
 Returns `true` if a path exists inside another path `~ofPath` or is equal to
 `~ofPath`.
 */
-let isDescendent: (~ofPath:t('kind), t('kind)) => bool;
-
+let isDescendent: (~ofPath: t('kind), t('kind)) => bool;
 
 /**
 Syntactic forms for utilities provided above. These are included in a separate

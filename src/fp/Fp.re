@@ -40,6 +40,35 @@ let root = (Abs(None), []);
 let home = (Rel(Home, 0), []);
 let dot = (Rel(Any, 0), []);
 
+let getUname = () => {
+  let ic = Unix.open_process_in("uname");
+  let uname = String.trim(input_line(ic));
+  close_in(ic);
+  uname;
+};
+
+type windows =
+  | Cygwin
+  | Win32;
+type platform =
+  | Linux
+  | Windows(windows)
+  | Darwin;
+
+let platform =
+  lazy (
+    if (Sys.unix) {
+      switch (getUname()) {
+      | "Darwin" => Darwin
+      | _ => Linux
+      };
+    } else if (Sys.cygwin) {
+      Windows(Cygwin);
+    } else {
+      Windows(Win32);
+    }
+  );
+
 let hasParentDir = ((Abs(_), lst): t(absolute)) => lst !== [];
 
 let rec revSegmentsAreInside = (~ofSegments, l) =>
@@ -133,7 +162,7 @@ let lex = s => {
   let prevEsc = {contents: false};
   for (i in 0 to len - 1) {
     let ch = String.unsafe_get(s, i);
-    if (ch === '/' && !prevEsc.contents) {
+    if (ch === '/' && ! prevEsc.contents) {
       if (j.contents !== i - 1) {
         let tok =
           makeToken(String.sub(s, j.contents + 1, i - j.contents - 1));
@@ -142,7 +171,7 @@ let lex = s => {
       revTokens.contents = [SLASH, ...revTokens.contents];
       j.contents = i;
     };
-    prevEsc.contents = ch === '\\' && !prevEsc.contents;
+    prevEsc.contents = ch === '\\' && ! prevEsc.contents;
   };
   let rev =
     j.contents === len - 1 ?
@@ -198,7 +227,18 @@ let parseFirstTokenRelative = token =>
   | DRIVE(l) => None
   };
 
-let absolute = s =>
+let normalizePathSeparator = {
+  let backSlashRegex = Str.regexp("\\\\");
+  pathStr => pathStr |> Str.global_replace(backSlashRegex, "/");
+};
+
+let absolutePlatform = (~fromPlatform, s) => {
+  let s =
+    switch (fromPlatform) {
+    | Windows(Win32) => normalizePathSeparator(s)
+    | _ => s
+    };
+
   switch (lex(s)) {
   /* Cannot pass empty string for absolute path */
   | [] => None
@@ -209,8 +249,20 @@ let absolute = s =>
       Some(List.fold_left(parseNextToken, initAbsPath, tl))
     }
   };
+};
 
-let absoluteExn = s =>
+let absoluteCurrentPlatform = s => {
+  let fromPlatform = Lazy.force(platform);
+  absolutePlatform(~fromPlatform, s);
+};
+
+let absolutePlatformExn = (~fromPlatform, s) => {
+  let s =
+    switch (fromPlatform) {
+    | Windows(Win32) => normalizePathSeparator(s)
+    | _ => s
+    };
+
   switch (lex(s)) {
   /* Cannot pass empty string for absolute path */
   | [] => raise(Invalid_argument("Empty path is not a valid absolute path."))
@@ -223,6 +275,12 @@ let absoluteExn = s =>
     | Some(initAbsPath) => List.fold_left(parseNextToken, initAbsPath, tl)
     }
   };
+};
+
+let absoluteCurrentPlatformExn = s => {
+  let fromPlatform = Lazy.force(platform);
+  absolutePlatformExn(~fromPlatform, s);
+};
 
 let relative = s => {
   let (tok, tl) =
@@ -383,7 +441,7 @@ let absoluteEq = eq;
 let relativeEq = eq;
 
 let testForPath = s =>
-  switch (absolute(s)) {
+  switch (absoluteCurrentPlatform(s)) {
   | Some(abs) => Some(Absolute(abs))
   | None =>
     switch (relative(s)) {

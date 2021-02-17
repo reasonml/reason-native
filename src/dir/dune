@@ -1,7 +1,7 @@
 (library
   (public_name dir.lib)
   (name Dir)
-  (libraries fp unix)
+  (libraries str fp unix)
   (c_names  dir )
   (js_of_ocaml (javascript_files dir.js ))
   (flags :standard -w -27 -w -32 -w -9)

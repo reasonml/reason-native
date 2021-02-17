@@ -9,7 +9,7 @@ open TestFramework;
 
 external reraise: exn => _ = "%reraise";
 
-let unresolvedExePath = Fp.absoluteExn(Sys.executable_name);
+let unresolvedExePath = Fp.absoluteCurrentPlatformExn(Sys.executable_name);
 let resolvedExePath = Fs.resolveLinkExn(unresolvedExePath);
 let exeDir = Fp.dirName(resolvedExePath);
 let testDir = Fp.At.(exeDir / "testDir");

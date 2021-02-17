@@ -88,32 +88,32 @@ let describe =
 
 describe("Path", ({test}) => {
   test("Basic creation", ({expect}) => {
-    let path = Fp.absoluteExn("/foo/bar/baz");
+    let path = Fp.absoluteCurrentPlatformExn("/foo/bar/baz");
     expect.string(path |> Fp.toString).toEqual("/foo/bar/baz");
 
-    let path = Fp.absoluteExn("C:/foo/bar/baz");
+    let path = Fp.absoluteCurrentPlatformExn("C:/foo/bar/baz");
     expect.string(path |> Fp.toString).toEqual("C:/foo/bar/baz");
 
-    let path = Fp.absoluteExn("/foo");
+    let path = Fp.absoluteCurrentPlatformExn("/foo");
     expect.string(path |> Fp.toString).toEqual("/foo");
 
-    let path = Fp.absoluteExn("C:/foo");
+    let path = Fp.absoluteCurrentPlatformExn("C:/foo");
     expect.string(path |> Fp.toString).toEqual("C:/foo");
 
-    let path = Fp.absoluteExn("/");
+    let path = Fp.absoluteCurrentPlatformExn("/");
     expect.string(path |> Fp.toString).toEqual("/");
 
-    let path = Fp.absoluteExn("C:/");
+    let path = Fp.absoluteCurrentPlatformExn("C:/");
     expect.string(path |> Fp.toString).toEqual("C:/");
   });
 
   test("Parent directory", ({expect}) => {
-    let cDrive = Fp.absoluteExn("C:/");
-    let cFoo = Fp.absoluteExn("C:/foo");
-    let cFooBar = Fp.absoluteExn("C:/foo/bar/");
-    let root = Fp.absoluteExn("/");
-    let foo = Fp.absoluteExn("/foo");
-    let fooBar = Fp.absoluteExn("/foo/bar/");
+    let cDrive = Fp.absoluteCurrentPlatformExn("C:/");
+    let cFoo = Fp.absoluteCurrentPlatformExn("C:/foo");
+    let cFooBar = Fp.absoluteCurrentPlatformExn("C:/foo/bar/");
+    let root = Fp.absoluteCurrentPlatformExn("/");
+    let foo = Fp.absoluteCurrentPlatformExn("/foo");
+    let fooBar = Fp.absoluteCurrentPlatformExn("/foo/bar/");
     expect.bool(cDrive |> Fp.hasParentDir).toBeFalse();
     expect.bool(cFoo |> Fp.hasParentDir).toBeTrue();
     expect.bool(cFooBar |> Fp.hasParentDir).toBeTrue();
@@ -139,13 +139,13 @@ describe("Path", ({test}) => {
      * Currently, spaces don't need to be escaped in the convention and some
      * files might start with a space! Who would do that to their computer?
      */
-    let path = Fp.absoluteExn(" / ");
+    let path = Fp.absoluteCurrentPlatformExn(" / ");
     expect.string(path |> Fp.toString).toEqual("/");
 
-    let path = Fp.absoluteExn(" C:/ ");
+    let path = Fp.absoluteCurrentPlatformExn(" C:/ ");
     expect.string(path |> Fp.toString).toEqual("C:/");
 
-    let path = Fp.absoluteExn("/C:/");
+    let path = Fp.absoluteCurrentPlatformExn("/C:/");
     expect.string(path |> Fp.toString).toEqual("/C:");
 
     let path = Fp.relativeExn(".../a");
@@ -154,7 +154,7 @@ describe("Path", ({test}) => {
     let path = Fp.relativeExn("../C:/");
     expect.string(path |> Fp.toDebugString).toEqual("./../C:");
 
-    let path = Fp.absoluteExn("/a/C:/");
+    let path = Fp.absoluteCurrentPlatformExn("/a/C:/");
     expect.string(path |> Fp.toString).toEqual("/a/C:");
 
     let path = Fp.relativeExn("./a/C:/");
@@ -163,15 +163,15 @@ describe("Path", ({test}) => {
     let path = Fp.relativeExn("./a/C:/../");
     expect.string(path |> Fp.toDebugString).toEqual("./a");
 
-    let path = Fp.absoluteExn("/foo\\/");
+    let path = Fp.absoluteCurrentPlatformExn("/foo\\/");
     expect.string(path |> Fp.toString).toEqual("/foo\\/");
 
-    let path = Fp.absoluteExn(" C:/\\/");
+    let path = Fp.absoluteCurrentPlatformExn(" C:/\\/");
     expect.string(path |> Fp.toString).toEqual("C:/\\/");
   });
 
   test("Relative/absolute inference", ({expect}) => {
-    expect.fn(() => Fp.absoluteExn("/../../")).not.toThrow();
+    expect.fn(() => Fp.absoluteCurrentPlatformExn("/../../")).not.toThrow();
 
     expect.fn(() => Fp.relativeExn("./../../")).not.toThrow();
 
@@ -185,31 +185,31 @@ describe("Path", ({test}) => {
 
     expect.fn(() => Fp.relativeExn("~/a/../../")).not.toThrow();
 
-    expect.fn(() => Fp.absoluteExn("C:/../")).not.toThrow();
+    expect.fn(() => Fp.absoluteCurrentPlatformExn("C:/../")).not.toThrow();
 
-    expect.fn(() => Fp.absoluteExn("")).toThrow();
+    expect.fn(() => Fp.absoluteCurrentPlatformExn("")).toThrow();
 
     expect.fn(() => Fp.relativeExn("/foo")).toThrow();
 
     expect.fn(() => Fp.relativeExn("C:/foo")).toThrow();
 
-    expect.fn(() => Fp.absoluteExn("a/b")).toThrow();
+    expect.fn(() => Fp.absoluteCurrentPlatformExn("a/b")).toThrow();
   });
 
   test("Path compression", ({expect}) => {
     let path = Fp.relativeExn("a/../..//");
     expect.string(path |> Fp.toDebugString).toEqual("./..");
 
-    let path = Fp.absoluteExn("C:/../..//");
+    let path = Fp.absoluteCurrentPlatformExn("C:/../..//");
     expect.string(path |> Fp.toDebugString).toEqual("C:/");
 
-    let path = Fp.absoluteExn("C://");
+    let path = Fp.absoluteCurrentPlatformExn("C://");
     expect.string(path |> Fp.toDebugString).toEqual("C:/");
 
-    let path = Fp.absoluteExn("//");
+    let path = Fp.absoluteCurrentPlatformExn("//");
     expect.string(path |> Fp.toDebugString).toEqual("/");
 
-    let path = Fp.absoluteExn("/../..//");
+    let path = Fp.absoluteCurrentPlatformExn("/../..//");
     expect.string(path |> Fp.toDebugString).toEqual("/");
 
     let path = Fp.relativeExn("a/../../");
@@ -224,7 +224,7 @@ describe("Path", ({test}) => {
     let path = Fp.relativeExn("~/../../");
     expect.string(path |> Fp.toDebugString).toEqual("~/../..");
 
-    let path = Fp.absoluteExn("/../../");
+    let path = Fp.absoluteCurrentPlatformExn("/../../");
     expect.string(path |> Fp.toString).toEqual("/");
 
     /* Should not compress ../ for relatives beyond what is possible */
@@ -240,7 +240,7 @@ describe("Path", ({test}) => {
     let path = Fp.relativeExn("./~");
     expect.string(path |> Fp.toDebugString).toEqual("./~");
 
-    let path = Fp.absoluteExn("/~");
+    let path = Fp.absoluteCurrentPlatformExn("/~");
     expect.string(path |> Fp.toDebugString).toEqual("/~");
 
     let relativePath = Fp.relativeExn("");
@@ -262,7 +262,7 @@ describe("Path", ({test}) => {
      * Currently, spaces don't need to be escaped in the convention and some
      * files might start with a space! Who would do that to their computer?
      */
-    let path = Fp.absoluteExn(" C:/ ");
+    let path = Fp.absoluteCurrentPlatformExn(" C:/ ");
     expect.string(path |> Fp.toString).toEqual("C:/");
 
     /**
@@ -272,10 +272,10 @@ describe("Path", ({test}) => {
      * mean an escaped forward slash. Similarly, a backslash followed
      * immediately by a backslash should also be considered a path separator.
      */
-    let path = Fp.absoluteExn("/foo\\/");
+    let path = Fp.absoluteCurrentPlatformExn("/foo\\/");
     expect.string(path |> Fp.toString).toEqual("/foo\\/");
 
-    let path = Fp.absoluteExn(" C:/\\/");
+    let path = Fp.absoluteCurrentPlatformExn(" C:/\\/");
     expect.string(path |> Fp.toString).toEqual("C:/\\/");
 
     let path = Fp.relativeExn("./\\./foo");
@@ -287,13 +287,13 @@ describe("Path", ({test}) => {
     let path = Fp.relativeExn("./.\\./foo");
     expect.string(path |> Fp.toDebugString).toEqual("./.\\./foo");
 
-    let path = Fp.absoluteExn("C:/./\\./foo");
+    let path = Fp.absoluteCurrentPlatformExn("C:/./\\./foo");
     expect.string(path |> Fp.toString).toEqual("C:/\\./foo");
 
-    let path = Fp.absoluteExn("C:/\\/foo");
+    let path = Fp.absoluteCurrentPlatformExn("C:/\\/foo");
     expect.string(path |> Fp.toString).toEqual("C:/\\/foo");
 
-    let path = Fp.absoluteExn("/\\/foo");
+    let path = Fp.absoluteCurrentPlatformExn("/\\/foo");
     expect.string(path |> Fp.toString).toEqual("/\\/foo");
   });
 

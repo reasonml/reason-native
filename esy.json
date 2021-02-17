@@ -58,6 +58,9 @@
     "@opam/sexplib0": "*",
     "@opam/odoc": "*"
   },
+  "devDependencies": {
+    "ocaml": "~4.7.1"
+  },
   "resolutions": {
     "@opam/reason": "let-def/reason:reason.opam#474900e6d9d5ecef788fbe78e8a23cb20d151a72"
   }

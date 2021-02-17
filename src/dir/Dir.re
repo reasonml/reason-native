@@ -12,41 +12,13 @@
  * All directories are returned as `Fp.t`.
  *
  */
-external sh_get_folder_path: (int, 'flags) => string = "sh_get_folder_path";
+external sh_get_folder_path : (int, 'flags) => option(string) =
+  "sh_get_folder_path";
 let shGetFolderPathCurrent = 0;
 let shGetFolderPathDefault = 1;
 
-let getUname = () => {
-  let ic = Unix.open_process_in("uname");
-  let uname = String.trim(input_line(ic));
-  close_in(ic);
-  uname;
-};
-
-type windows =
-  | Cygwin
-  | Win32;
-type platform =
-  | Linux
-  | Windows(windows)
-  | Darwin;
-
-let platform =
-  lazy (
-    if (Sys.unix) {
-      switch (getUname()) {
-      | "Darwin" => Darwin
-      | _ => Linux
-      };
-    } else if (Sys.cygwin) {
-      Windows(Cygwin);
-    } else {
-      Windows(Win32);
-    }
-  );
-
 let isWin =
-  switch (Lazy.force(platform)) {
+  switch (Lazy.force(Fp.platform)) {
   | Windows(_) => true
   | _ => false
   };
@@ -114,16 +86,22 @@ module WinConst = {
 let getOptionalEnvAbsoluteExn = s =>
   switch (Sys.getenv(s)) {
   | exception Not_found => None
-  | txt => Some(Fp.absoluteExn(txt))
+  | txt => txt |> Fp.absoluteCurrentPlatformExn |> (v => Some(v))
   };
+
 let getEnvAbsoluteExn = s =>
   switch (Sys.getenv(s)) {
   | exception Not_found =>
     raise(
       Invalid_argument("Environment variable " ++ s ++ " does not exist."),
     )
-  | txt => Fp.absoluteExn(txt)
+  | txt => txt |> Fp.absoluteCurrentPlatformExn
   };
+
+let getOrThrow = (~msg) =>
+  fun
+  | Some(v) => v
+  | None => raise(Invalid_argument(msg));
 
 /**
  * Allows mocking out the windows variables on other platforms for testing.
@@ -131,30 +109,30 @@ let getEnvAbsoluteExn = s =>
 let shGetFolderPath = code => {
   let csidl = WinConst.knownFolderToCSIDL(code);
   let envVarMock = WinConst.knownFolderToMockEnvVar(code);
-  isWin ?
-    /*
-     * TODO: This should call a special form for parsing windows paths.
-     */
-    Fp.absoluteExn(sh_get_folder_path(csidl, shGetFolderPathCurrent)) :
-    {
-      let opt = getOptionalEnvAbsoluteExn(envVarMock);
-      switch (opt) {
-      | None => getEnvAbsoluteExn("PWD")
-      | Some(abs) => abs
-      };
+  if (isWin) {
+    let maybePath = sh_get_folder_path(csidl, shGetFolderPathCurrent);
+    maybePath
+    |> getOrThrow(~msg="Unable to get path for: " ++ envVarMock)
+    |> Fp.absoluteCurrentPlatformExn;
+  } else {
+    let opt = getOptionalEnvAbsoluteExn(envVarMock);
+    switch (opt) {
+    | None => getEnvAbsoluteExn("PWD")
+    | Some(abs) => abs
     };
+  };
 };
 
 module type User = {
-  let audio: option(Fp.t(Fp.absolute));
-  let desktop: option(Fp.t(Fp.absolute));
-  let document: option(Fp.t(Fp.absolute));
+  let audio: unit => option(Fp.t(Fp.absolute));
+  let desktop: unit => option(Fp.t(Fp.absolute));
+  let document: unit => option(Fp.t(Fp.absolute));
   /* let download: option(Fp.t(Fp.absolute)); */
-  let font: option(Fp.t(Fp.absolute));
+  let font: unit => option(Fp.t(Fp.absolute));
   /* let picture: option(Fp.t(Fp.absolute)); */
   /* let public: option(Fp.t(Fp.absolute)); */
-  let template: option(Fp.t(Fp.absolute));
-  let video: option(Fp.t(Fp.absolute));
+  let template: unit => option(Fp.t(Fp.absolute));
+  let video: unit => option(Fp.t(Fp.absolute));
 };
 
 module type App = {
@@ -166,13 +144,13 @@ module type App = {
 };
 
 module type Base = {
-  let home: Fp.t(Fp.absolute);
-  let cache: Fp.t(Fp.absolute);
-  let config: Fp.t(Fp.absolute);
-  let data: Fp.t(Fp.absolute);
-  let dataLocal: Fp.t(Fp.absolute);
-  let executable: option(Fp.t(Fp.absolute));
-  let runtime: option(Fp.t(Fp.absolute));
+  let home: unit => Fp.t(Fp.absolute);
+  let cache: unit => Fp.t(Fp.absolute);
+  let config: unit => Fp.t(Fp.absolute);
+  let data: unit => Fp.t(Fp.absolute);
+  let dataLocal: unit => Fp.t(Fp.absolute);
+  let executable: unit => option(Fp.t(Fp.absolute));
+  let runtime: unit => option(Fp.t(Fp.absolute));
   module User: User;
   module App: App;
 };
@@ -183,25 +161,25 @@ module Snapshot = (()) => {
    * Defaults to `$HOME` variable if set, and otherwise `FOLDERID_Profile`.
    * See discussion on https://github.com/dbuenzli/bos/issues/77
    */
-    let home =
+    let home = () =>
       switch (getOptionalEnvAbsoluteExn("HOME")) {
       | None => shGetFolderPath(FOLDERID_Profile)
       | Some(abs) => abs
       };
-    let cache = shGetFolderPath(FOLDERID_LocalAppData);
-    let config = shGetFolderPath(FOLDERID_RoamingAppData);
-    let data = shGetFolderPath(FOLDERID_RoamingAppData);
-    let dataLocal = shGetFolderPath(FOLDERID_LocalAppData);
-    let executable = None;
-    let runtime = None;
+    let cache = () => shGetFolderPath(FOLDERID_LocalAppData);
+    let config = () => shGetFolderPath(FOLDERID_RoamingAppData);
+    let data = () => shGetFolderPath(FOLDERID_RoamingAppData);
+    let dataLocal = () => shGetFolderPath(FOLDERID_LocalAppData);
+    let executable = () => None;
+    let runtime = () => None;
 
     module User = {
-      let audio = Some(shGetFolderPath(FOLDERID_Music));
-      let desktop = Some(shGetFolderPath(FOLDERID_Desktop));
-      let document = Some(shGetFolderPath(FOLDERID_Documents));
-      let font = None;
-      let template = Some(shGetFolderPath(FOLDERID_Templates));
-      let video = Some(shGetFolderPath(FOLDERID_Videos));
+      let audio = () => Some(shGetFolderPath(FOLDERID_Music));
+      let desktop = () => Some(shGetFolderPath(FOLDERID_Desktop));
+      let document = () => Some(shGetFolderPath(FOLDERID_Documents));
+      let font = () => None;
+      let template = () => Some(shGetFolderPath(FOLDERID_Templates));
+      let video = () => Some(shGetFolderPath(FOLDERID_Videos));
     };
 
     module App = {
@@ -228,66 +206,66 @@ module Snapshot = (()) => {
     /**
    * Doesn't fail on Windows, and can even be used on windows.
    */
-    let home = isWin ? Windows.home : getEnvAbsoluteExn("HOME");
-    let cache =
+    let home = () => isWin ? Windows.home() : getEnvAbsoluteExn("HOME");
+    let cache = () =>
       switch (getOptionalEnvAbsoluteExn("XDG_CACHE_HOME")) {
-      | None => Fp.At.(home / ".cache")
+      | None => Fp.At.(home() / ".cache")
       | Some(abs) => abs
       };
-    let config =
+    let config = () =>
       switch (getOptionalEnvAbsoluteExn("XDG_CONFIG_HOME")) {
-      | None => Fp.At.(home / ".config")
+      | None => Fp.At.(home() / ".config")
       | Some(abs) => abs
       };
-    let data =
+    let data = () =>
       switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-      | None => Fp.At.(home / ".local" / "share")
+      | None => Fp.At.(home() / ".local" / "share")
       | Some(abs) => abs
       };
-    let dataLocal =
+    let dataLocal = () =>
       switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-      | None => Fp.At.(home / ".local" / "share")
+      | None => Fp.At.(home() / ".local" / "share")
       | Some(abs) => abs
       };
-    let executable =
+    let executable = () =>
       switch (getOptionalEnvAbsoluteExn("XDG_BIN_HOME")) {
       | None =>
         switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-        | None => Some(Fp.At.(home /../ "bin"))
+        | None => Some(Fp.At.(home() /../ "bin"))
         | Some(abs) => Some(Fp.At.(abs /../ "bin"))
         }
       | Some(abs) => Some(Fp.At.(abs / ".local" / "bin"))
       };
 
-    let runtime = getOptionalEnvAbsoluteExn("XDG_RUNTIME_DIR");
+    let runtime = () => getOptionalEnvAbsoluteExn("XDG_RUNTIME_DIR");
 
     module User = {
-      let audio = getOptionalEnvAbsoluteExn("XDG_MUSIC_DIR");
-      let desktop = getOptionalEnvAbsoluteExn("XDG_DESKTOP_DIR");
-      let document = getOptionalEnvAbsoluteExn("XDG_DOCUMENTS_DIR");
-      let font =
+      let audio = () => getOptionalEnvAbsoluteExn("XDG_MUSIC_DIR");
+      let desktop = () => getOptionalEnvAbsoluteExn("XDG_DESKTOP_DIR");
+      let document = () => getOptionalEnvAbsoluteExn("XDG_DOCUMENTS_DIR");
+      let font = () =>
         switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-        | None => Some(Fp.At.(home / ".local" / "share" / "fonts"))
+        | None => Some(Fp.At.(home() / ".local" / "share" / "fonts"))
         | Some(datHome) => Some(Fp.At.(datHome / "fonts"))
         };
-      let template = getOptionalEnvAbsoluteExn("XDG_TEMPLATES_DIR");
-      let video = getOptionalEnvAbsoluteExn("XDG_VIDEOS_DIR");
+      let template = () => getOptionalEnvAbsoluteExn("XDG_TEMPLATES_DIR");
+      let video = () => getOptionalEnvAbsoluteExn("XDG_VIDEOS_DIR");
     };
 
     module App = {
       let cache = (~appIdentifier) =>
         switch (getOptionalEnvAbsoluteExn("XDG_CACHE_HOME")) {
-        | None => Fp.At.(home / ".cache" / appIdentifier)
+        | None => Fp.At.(home() / ".cache" / appIdentifier)
         | Some(abs) => Fp.At.(abs / appIdentifier)
         };
       let config = (~appIdentifier) =>
         switch (getOptionalEnvAbsoluteExn("XDG_CONFIG_HOME")) {
-        | None => Fp.At.(home / ".config" / appIdentifier)
+        | None => Fp.At.(home() / ".config" / appIdentifier)
         | Some(abs) => Fp.At.(abs / appIdentifier)
         };
       let data = (~appIdentifier) =>
         switch (getOptionalEnvAbsoluteExn("XDG_DATA_HOME")) {
-        | None => Fp.At.(home / ".local" / "share" / appIdentifier)
+        | None => Fp.At.(home() / ".local" / "share" / appIdentifier)
         | Some(abs) => Fp.At.(abs / appIdentifier)
         };
       let dataLocal = data;
@@ -299,38 +277,38 @@ module Snapshot = (()) => {
     };
   };
   module Darwin: Base = {
-    let home = getEnvAbsoluteExn("HOME");
-    let cache = Fp.At.(home / "Library" / "Caches");
-    let config = Fp.At.(home / "Library" / "Preferences");
-    let data = Fp.At.(home / " Library" / "Application Support");
+    let home = () => getEnvAbsoluteExn("HOME");
+    let cache = () => Fp.At.(home() / "Library" / "Caches");
+    let config = () => Fp.At.(home() / "Library" / "Preferences");
+    let data = () => Fp.At.(home() / " Library" / "Application Support");
     let dataLocal = data;
-    let executable = None;
-    let runtime = None;
+    let executable = () => None;
+    let runtime = () => None;
 
     module User = {
-      let audio = Some(Fp.At.(home / "Music"));
-      let desktop = Some(Fp.At.(home / "Desktop"));
-      let document = Some(Fp.At.(home / "Documents"));
-      let downloads = Some(Fp.At.(home / "Downloads"));
-      let font = Some(Fp.At.(home / "Library" / "Fonts"));
-      let template = None;
-      let video = Some(Fp.At.(home / "Movies"));
+      let audio = () => Some(Fp.At.(home() / "Music"));
+      let desktop = () => Some(Fp.At.(home() / "Desktop"));
+      let document = () => Some(Fp.At.(home() / "Documents"));
+      let downloads = () => Some(Fp.At.(home() / "Downloads"));
+      let font = () => Some(Fp.At.(home() / "Library" / "Fonts"));
+      let template = () => None;
+      let video = () => Some(Fp.At.(home() / "Movies"));
     };
 
     module App = {
       let cache = (~appIdentifier) =>
-        Fp.At.(home / "Library" / "Caches" / appIdentifier);
+        Fp.At.(home() / "Library" / "Caches" / appIdentifier);
       let config = (~appIdentifier) =>
-        Fp.At.(home / "Library" / "Preferences" / appIdentifier);
+        Fp.At.(home() / "Library" / "Preferences" / appIdentifier);
       let data = (~appIdentifier) =>
-        Fp.At.(home / "Library" / "Application Support" / appIdentifier);
+        Fp.At.(home() / "Library" / "Application Support" / appIdentifier);
       let dataLocal = data;
       let runtime = (~appIdentifier) => None;
     };
   };
 
   let platformMod =
-    switch (Lazy.force(platform)) {
+    switch (Lazy.force(Fp.platform)) {
     | Windows(windows) => ((module Windows): (module Base))
     | Darwin => (module Darwin)
     | Linux => (module Linux)
