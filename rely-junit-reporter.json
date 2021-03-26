@@ -23,7 +23,7 @@
     "native",
     "junit",
     "rely-junit-reporter",
-    "ci",
+    "ci"
   ],
   "esy": {
     "build": "dune build -p rely-junit-reporter",
@@ -34,12 +34,18 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
+    "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.4.0",
-    "@reason-native/rely": "*",
+    "@reason-native/rely": "jfrolich/reason-native:rely.json",
     "@opam/junit": "*"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*"
+    "@opam/merlin": "*"
+  },
+  "resolutions": {
+    "@reason-native/rely": "./rely.json",
+    "@reason-native/pastel": "./pastel.json",
+    "@reason-native/cli": "./cli.json",
+    "@reason-native/file-context-printer": "./file-context-printer.json"
   }
 }

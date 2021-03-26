@@ -21,9 +21,19 @@
   "dependencies": {
     "@opam/dune": "*",
     "@opam/qcheck-core": ">= 0.9 < 0.10",
-    "@esy-ocaml/reason": "*",
+    "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0",
-    "@reason-native/rely": "*",
+    "@reason-native/rely": "jfrolich/reason-native:rely.json",
     "@reason-native/console": "*"
+  },
+  "devDependencies": {
+    "@reason-native/rely": "jfrolich/reason-native:rely.json"
+  },
+  "resolutions": {
+    "@reason-native/rely": "./rely.json",
+    "@reason-native/console": "./console.json",
+    "@reason-native/pastel": "./pastel.json",
+    "@reason-native/cli": "./cli.json",
+    "@reason-native/file-context-printer": "./file-context-printer.json"
   }
 }

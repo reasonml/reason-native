@@ -43,7 +43,6 @@
     "test": "esy x bash -cx ./scripts/test-dev.cmd",
     "test-ci": "esy x bash -cx ./scripts/test-ci.cmd",
     "doc": "esy refmterr dune build --profile=release @doc"
-
   },
   "dependencies": {
     "refmterr": "*",
@@ -53,15 +52,17 @@
     "@opam/qcheck-core": "0.9",
     "@opam/merlin": "*",
     "ocaml": "~4.6.4",
-    "@opam/dune": "1.10.0",
-    "@opam/reason": "3.5.0",
+    "@opam/dune": "2.8.4",
+    "@opam/reason": "3.7.0",
     "@opam/sexplib0": "*",
     "@opam/odoc": "*"
   },
   "devDependencies": {
-    "ocaml": "~4.7.1"
+    "ocaml": "~4.12.0"
   },
   "resolutions": {
-    "@opam/reason": "let-def/reason:reason.opam#474900e6d9d5ecef788fbe78e8a23cb20d151a72"
+    "refmterr": "./refmterr.json",
+    "@reason-native/pastel": "./pastel.json",
+    "@reason-native/console": "./console.json"
   }
 }
