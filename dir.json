@@ -26,7 +26,7 @@
     "release": "node ./scripts/esy-prepublish.js dir.json"
   },
   "dependencies": {
-    "@reason-native/fp": "jfrolich/reason-native:fp.json",
+    "@reason-native/fp": "*",
     "@opam/dune": "*",
     "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0"

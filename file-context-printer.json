@@ -22,7 +22,7 @@
     "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0",
     "@opam/re": "*",
-    "@reason-native/pastel": "jfrolich/reason-native:pastel.json"
+    "@reason-native/pastel": "*"
   },
   "resolutions": {
     "@reason-native/pastel": "./pastel.json"

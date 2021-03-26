@@ -34,9 +34,9 @@
     "@opam/reason": ">= 3.6.0",
     "@opam/re": "*",
     "ocaml": "^4.4.0",
-    "@reason-native/cli": "jfrolich/reason-native:cli.json",
-    "@reason-native/pastel": "jfrolich/reason-native:pastel.json",
-    "@reason-native/file-context-printer": "jfrolich/reason-native:file-context-printer.json",
+    "@reason-native/cli": "*",
+    "@reason-native/pastel": "*",
+    "@reason-native/file-context-printer": "*",
     "@opam/stdlib-shims": "*"
   },
   "devDependencies": {

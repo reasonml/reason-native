@@ -23,11 +23,11 @@
     "@opam/qcheck-core": ">= 0.9 < 0.10",
     "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0",
-    "@reason-native/rely": "jfrolich/reason-native:rely.json",
+    "@reason-native/rely": "*",
     "@reason-native/console": "*"
   },
   "devDependencies": {
-    "@reason-native/rely": "jfrolich/reason-native:rely.json"
+    "@reason-native/rely": "*"
   },
   "resolutions": {
     "@reason-native/rely": "./rely.json",

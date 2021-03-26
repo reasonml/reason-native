@@ -10,9 +10,9 @@
     "@opam/re": "*",
     "@opam/reason": ">= 3.6.0",
     "ocaml": " >= 4.2.0",
-    "@reason-native/pastel": "jfrolich/reason-native:pastel.json",
+    "@reason-native/pastel": "*",
     "@opam/atdgen": "*",
-    "@reason-native/console": "jfrolich/reason-native:console.json"
+    "@reason-native/console": "*"
   },
   "devDependencies": {
     "@opam/merlin": "*",

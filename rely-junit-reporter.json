@@ -36,7 +36,7 @@
     "@opam/dune": "*",
     "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.4.0",
-    "@reason-native/rely": "jfrolich/reason-native:rely.json",
+    "@reason-native/rely": "*",
     "@opam/junit": "*"
   },
   "devDependencies": {
