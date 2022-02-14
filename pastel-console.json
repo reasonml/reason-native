@@ -17,13 +17,15 @@
     "@reason-native/console": "*",
     "@reason-native/pastel": "*",
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
+    "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*",
-    "ocaml": "~4.6.0",
-    "@reason-native/console": "link:../console",
-    "@reason-native/pastel": "link:../pastel"
+    "@opam/merlin": "*",
+    "ocaml": "~4.12.0"
+  },
+  "resolutions": {
+    "@reason-native/console": "./console.json",
+    "@reason-native/pastel": "./pastel.json"
   }
 }

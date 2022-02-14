@@ -8,20 +8,23 @@
   "dependencies": {
     "@opam/dune": "*",
     "@opam/re": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
-    "ocaml": " >= 4.2.0 < 4.10.0",
+    "@opam/reason": ">= 3.6.0",
+    "ocaml": " >= 4.2.0",
     "@reason-native/pastel": "*",
     "@opam/atdgen": "*",
     "@reason-native/console": "*"
   },
   "devDependencies": {
     "@opam/merlin": "*",
-    "ocaml": ">= 4.2.0 < 4.10.0",
-    "@esy-ocaml/reason": "^3.3.0"
+    "ocaml": ">= 4.2.0",
+    "@opam/reason": "3.7.0"
+  },
+  "resolutions": {
+    "@reason-native/pastel": "./pastel.json",
+    "@reason-native/console": "./console.json"
   },
   "esy": {
-    "build": "dune build -p refmterr",
-    "install": "esy-installer refmterr.install"
+    "build": "dune build -p refmterr"
   },
   "scripts": {
     "test": "esy src/refmterr/runTests.cmd",

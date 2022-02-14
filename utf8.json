@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
+    "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*",
+    "@opam/merlin": "*",
     "ocaml": "~4.6.0"
   }
 }

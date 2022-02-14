@@ -19,9 +19,12 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
+    "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0",
     "@opam/re": "*",
     "@reason-native/pastel": "*"
+  },
+  "resolutions": {
+    "@reason-native/pastel": "./pastel.json"
   }
 }

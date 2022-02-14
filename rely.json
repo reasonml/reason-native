@@ -31,14 +31,20 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
+    "@opam/reason": ">= 3.6.0",
     "@opam/re": "*",
     "ocaml": "^4.4.0",
-    "@reason-native/cli": "0.0.1-alpha",
+    "@reason-native/cli": "*",
     "@reason-native/pastel": "*",
-    "@reason-native/file-context-printer": "*"
+    "@reason-native/file-context-printer": "*",
+    "@opam/stdlib-shims": "*"
   },
   "devDependencies": {
-    "@esy-ocaml/merlin": "*"
+    "@opam/merlin": "*"
+  },
+  "resolutions": {
+    "@reason-native/cli": "./cli.json",
+    "@reason-native/file-context-printer": "./file-context-printer.json",
+    "@reason-native/pastel": "./pastel.json"
   }
 }

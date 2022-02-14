@@ -27,14 +27,21 @@
     "release": "node ./scripts/esy-prepublish.js fs.json"
   },
   "dependencies": {
-    "@reason-native/fp": ">= 0.0.0 < 1.0.0",
+    "@reason-native/fp": "*",
     "@opam/dune": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
+    "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0"
   },
   "devDependencies": {
     "@opam/merlin": "*",
-    "ocaml": "~4.6.0",
+    "ocaml": "~4.12.0",
     "@reason-native/rely": "*"
+  },
+  "resolutions": {
+    "@reason-native/fp": "./fp.json",
+    "@reason-native/rely": "./rely.json",
+    "@reason-native/pastel": "./pastel.json",
+    "@reason-native/cli": "./cli.json",
+    "@reason-native/file-context-printer": "./file-context-printer.json"
   }
 }

@@ -10,13 +10,7 @@
     "url": "https://github.com/facebookexperimental/reason-native"
   },
   "license": "MIT",
-  "keywords": [
-    "cli",
-    "reasonml",
-    "reason",
-    "ocaml",
-    "esy"
-  ],
+  "keywords": ["cli", "reasonml", "reason", "ocaml", "esy"],
   "esy": {
     "build": "dune build -p cli"
   },
@@ -27,10 +21,13 @@
     "@opam/dune": "*",
     "@opam/re": "*",
     "@reason-native/pastel": "*",
-    "@esy-ocaml/reason": "< 4.0.0",
+    "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0"
   },
   "devDependencies": {
     "@opam/merlin": "*"
+  },
+  "resolutions": {
+    "@reason-native/pastel": "./pastel.json"
   }
 }
