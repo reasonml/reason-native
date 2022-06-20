@@ -53,7 +53,7 @@
     "@opam/merlin": "*",
     "ocaml": "~4.6.4",
     "@opam/dune": "2.8.4",
-    "@opam/reason": "3.7.0",
+    "@opam/reason": "3.8.0",
     "@opam/sexplib0": "*",
     "@opam/odoc": "*"
   },
