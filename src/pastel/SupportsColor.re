@@ -26,6 +26,11 @@ let geEnvOpt = s =>
   | Not_found => None
   };
 
+let bool_of_string_opt = x =>
+  try (Some(bool_of_string(x))) {
+  | Invalid_argument(_) => None
+  };
+
 let forceColor = geEnvOpt("FORCE_COLOR") >>= bool_of_string_opt;
 let (disable, minLevel) =
   switch (forceColor) {
