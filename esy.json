@@ -49,7 +49,7 @@
     "@opam/re": "*",
     "@opam/atdgen": "*",
     "@opam/junit": "*",
-    "@opam/qcheck-core": "0.9",
+    "@opam/qcheck-core": "0.20",
     "@opam/merlin": "*",
     "ocaml": "~4.6.4",
     "@opam/dune": "2.8.4",

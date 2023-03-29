@@ -40,7 +40,8 @@ let long_ =
 module Matchers = {
   type extension = {
     qCheckTest:
-      (~long: bool=?, ~rand: Random.State.t=?, QCheck.Test.t) => unit,
+      'a.
+      (~long: bool=?, ~rand: Random.State.t=?, QCheck.Test.cell('a)) => unit,
     qCheckCell:
       'a.
       (~long: bool=?, ~rand: Random.State.t=?, QCheck.Test.cell('a)) => unit,
@@ -58,7 +59,7 @@ module Matchers = {
 
   let makeTestMatcher = (createMatcher, accessorPath) =>
     createMatcher(({formatReceived, indent, _}, actualThunk, _) => {
-      let (QCheck.Test.Test(cell), rand: Random.State.t, long: bool) =
+      let (cell, rand: Random.State.t, long: bool) =
         actualThunk();
 
       switch (QCheck.Test.check_cell_exn(~long, ~rand, cell)) {

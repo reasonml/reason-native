@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@opam/dune": "*",
-    "@opam/qcheck-core": ">= 0.9 < 0.10",
+    "@opam/qcheck-core": ">= 0.20 < 0.21",
     "@opam/reason": ">= 3.6.0",
     "ocaml": "^4.2.0",
     "@reason-native/rely": "*",

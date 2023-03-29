@@ -30,7 +30,8 @@
 module Matchers: {
   type extension = {
     qCheckTest:
-      (~long: bool=?, ~rand: Random.State.t=?, QCheck.Test.t) => unit,
+      'a.
+      (~long: bool=?, ~rand: Random.State.t=?, QCheck.Test.cell('a)) => unit,
     qCheckCell:
       'a.
       (~long: bool=?, ~rand: Random.State.t=?, QCheck.Test.cell('a)) => unit,
