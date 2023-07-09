@@ -16,7 +16,6 @@ depends: [
   "cli"   {"0.0.1-alpha"}
   "pastel"
   "file-context-printer"
-  "junit"
 ]
 synopsis: "A native Reason test runner that is heavily inspired by Jest"
 description: "A native Reason test runner that is heavily inspired by Jest"
