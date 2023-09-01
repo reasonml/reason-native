@@ -1,0 +1,15 @@
+[27m[24m[2m[1m# Unformatted Error Output:[27m[24m[22m
+[2m# [22m[2mFile "tests/__tests__/refmterr/__fixtures__/type_UnboundRecordField/type_UnboundRecordField_3.ml", line 1, characters 26-35:[22m
+[2m# [22m[2mError: Unbound record field Complex.z[22m
+
+
+[7m[24m[22m[1m[31m ERROR [27m[24m[22m[39m [27m[4m[22m[36mtests/__tests__/refmterr/__fixtures__/type_UnboundRecordField/type_UnboundRecordField_3.ml[27m[24m[22m[39m[27m[4m[22m[2m:1 26-35[27m[24m[22m 
+
+[27m[24m[22m[2m[31m1 ┆ [27m[24m[22m[39m[27m[24m[22m[2m[35mlet[27m[24m[22m[39m[27m[24m[22m[2m f (x : [27m[24m[22m[27m[24m[22m[2m[34mComplex[27m[24m[22m[39m[27m[24m[22m[2m.t) = x.[27m[24m[22m[27m[4m[22m[1m[31mComplex.z[27m[24m[22m[39m[27m[24m[22m[2m;[27m[24m[22m
+
+Record field [27m[24m[22m[1m[31mComplex.z[27m[24m[22m[39m can't be found in any record type.
+
+Record fields must be "in scope". That means you need to `open TheModule` where the record type is defined.
+Alternatively, instead of opening a module, you can prefix the record field name like {TheModule.x: 0, y: 100}.
+
+
